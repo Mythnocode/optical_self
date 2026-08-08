@@ -1,0 +1,56 @@
+schema_version: "1.2"
+
+enabled: true
+provider: llama_cpp_server
+audience: professional
+
+server:
+  host: 127.0.0.1
+  port: 18080
+  health_path: /health
+  chat_path: /v1/chat/completions
+  startup_timeout_s: 60
+  request_timeout_s: 90
+  max_response_bytes: 1048576
+  auto_start: true
+  bundled_runtime_dir: help_runtime/llm/runtime
+  idle_shutdown_s: 90
+  executable_path: null
+  executable_env_var: LLAMA_CPP_SERVER_PATH
+  executable_name: llama-server
+  extra_args: ["--reasoning", "off"]
+  api_key: null
+
+runtime:
+  device: auto
+  gpu_fallback_to_cpu: true
+  gpu_layers: 99
+
+remote_api:
+  base_url: https://api.openai.com
+  chat_path: /v1/chat/completions
+  health_path: null
+  models_path: /v1/models
+  request_timeout_s: 90
+  max_response_bytes: 1048576
+  api_key_env: HELP_LLM_API_KEY
+  api_key: null
+
+generation:
+  max_output_tokens: 384
+  temperature: 0.0
+  seed: 20260726
+  context_size: 4096
+  schema_mode: json_schema
+
+model:
+  path: help_runtime/llm/Qwen3-1.7B-Q8_0.gguf
+  model_name: Qwen3-1.7B-Q8_0
+  expected_sha256: 061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a
+
+guard:
+  max_summary_chars: 600
+  max_explanation_chars: 1200
+  max_length_ratio: 3.0
+  require_exact_numeric_tokens: true
+  require_known_technical_terms: true

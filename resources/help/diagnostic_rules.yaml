@@ -1,0 +1,374 @@
+rules:
+  - id: rule.result_failed
+    severity: critical
+    condition:
+      any:
+        - path: result_status
+          operator: equals
+          value: failed
+        - path: diagnostics.has_errors
+          operator: truthy
+    finding:
+      title: 当前正式任务失败
+      text: 当前结果状态为失败或包含错误对象，不能把空结果、部分结果或旧结果当作本次正式结论。
+    sources:
+      - faq.results.failed_or_not_converged
+    actions:
+      - tasks.open_current
+    evidence_paths:
+      - result_status
+      - errors
+
+  - id: rule.result_not_converged
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.converged
+          operator: exists
+        - path: diagnostics.converged
+          operator: falsy
+    finding:
+      title: 当前结果未通过收敛标志
+      text: 当前正式结果的 converged 标志为 false，应检查网格、光瞳采样、窗口、功率闭合和求解器警告。
+    sources:
+      - faq.results.failed_or_not_converged
+      - diagnostics.numerical.sampling_convergence
+    actions:
+      - optimization.open_convergence
+      - tasks.open_current
+    evidence_paths:
+      - diagnostics.converged
+
+  - id: rule.edge_power_high
+    severity: critical
+    applies_to:
+      - coupling
+      - field_propagation
+      - psf
+      - wavefront
+    condition:
+      all:
+        - path: diagnostics.edge_power_fraction
+          operator: exists
+        - path: diagnostics.edge_power_threshold
+          operator: exists
+        - path: diagnostics.edge_power_fraction
+          operator: greater_than
+          value_path: diagnostics.edge_power_threshold
+    fields:
+      actual:
+        path: diagnostics.edge_power_fraction
+        format: percent
+      threshold:
+        path: diagnostics.edge_power_threshold
+        format: percent
+    finding:
+      title: 计算窗口可能不足
+      text: 当前边缘功率为 {actual}，高于本次计算配置阈值 {threshold}；结果可能受到窗口截断或 FFT 周期回卷影响。
+    sources:
+      - parameters.numerical.edge_power
+      - diagnostics.numerical.window_too_small
+    actions:
+      - optimization.open_convergence
+      - simulation.open_sampling_settings
+    evidence_paths:
+      - diagnostics.edge_power_fraction
+      - diagnostics.edge_power_threshold
+
+  - id: rule.energy_closure_high
+    severity: critical
+    condition:
+      all:
+        - path: diagnostics.energy_closure_error
+          operator: exists
+        - path: diagnostics.energy_closure_threshold
+          operator: exists
+        - path: diagnostics.energy_closure_error
+          operator: greater_than
+          value_path: diagnostics.energy_closure_threshold
+    fields:
+      actual:
+        path: diagnostics.energy_closure_error
+        format: percent
+      threshold:
+        path: diagnostics.energy_closure_threshold
+        format: percent
+    finding:
+      title: 能量闭合误差超限
+      text: 当前能量闭合误差为 {actual}，高于本次计算配置阈值 {threshold}；应检查窗口、掩膜、权重、缩放和离散积分。
+    sources:
+      - parameters.numerical.energy_closure
+      - principles.field.common_cartesian
+    actions:
+      - optimization.open_convergence
+      - simulation.open_sampling_settings
+    evidence_paths:
+      - diagnostics.energy_closure_error
+      - diagnostics.energy_closure_threshold
+
+  - id: rule.nyquist_margin_low
+    severity: critical
+    condition:
+      all:
+        - path: diagnostics.nyquist_margin_min
+          operator: exists
+        - path: diagnostics.nyquist_required_min
+          operator: exists
+        - path: diagnostics.nyquist_margin_min
+          operator: less_than
+          value_path: diagnostics.nyquist_required_min
+    fields:
+      actual:
+        path: diagnostics.nyquist_margin_min
+        format: float
+      required:
+        path: diagnostics.nyquist_required_min
+        format: float
+    finding:
+      title: Nyquist 采样余量不足
+      text: 当前最小 Nyquist 余量为 {actual}，低于本次计算要求 {required}；高空间频率可能无法被当前网格可靠表示。
+    sources:
+      - parameters.numerical.nyquist_margin
+      - diagnostics.numerical.sampling_convergence
+    actions:
+      - simulation.open_sampling_settings
+      - optimization.open_convergence
+    evidence_paths:
+      - diagnostics.nyquist_margin_min
+      - diagnostics.nyquist_required_min
+
+  - id: rule.sampling_not_converged
+    severity: critical
+    condition:
+      all:
+        - path: diagnostics.sampling_convergence_pass
+          operator: exists
+        - path: diagnostics.sampling_convergence_pass
+          operator: falsy
+    finding:
+      title: 采样收敛未通过
+      text: 当前结果明确标记采样收敛未通过，不能把该网格结果当作网格无关的正式结论。
+    sources:
+      - diagnostics.numerical.sampling_convergence
+    actions:
+      - optimization.open_convergence
+    evidence_paths:
+      - diagnostics.sampling_convergence_pass
+
+  - id: rule.focus_scan_boundary
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.best_focus_at_boundary
+          operator: exists
+        - path: diagnostics.best_focus_at_boundary
+          operator: truthy
+    finding:
+      title: 最佳焦面落在扫描边界
+      text: 当前最佳焦面位于搜索区间边界，现有扫描范围不足，不能把该边界点认定为可信最优耦合面。
+    sources:
+      - guides.focus.best_coupling_plane
+      - diagnostics.coupling.axial_defocus
+    actions:
+      - optimization.open_focus_scan
+    evidence_paths:
+      - diagnostics.best_focus_at_boundary
+
+  - id: rule.mode_size_mismatch_x
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.mode_size_ratio_x
+          operator: exists
+        - path: diagnostics.mode_size_ratio_tolerance
+          operator: exists
+        - path: diagnostics.mode_size_ratio_x
+          operator: outside_relative_band
+          value_path: diagnostics.mode_size_ratio_tolerance
+    fields:
+      ratio:
+        path: diagnostics.mode_size_ratio_x
+        format: float
+    finding:
+      title: X 方向模场尺寸可能不匹配
+      text: 当前入射场与目标模式的 X 方向 RMS 尺寸比为 {ratio}，超出本次诊断设置的匹配带宽；需要查看实际二维复场和中心截面。
+    sources:
+      - diagnostics.coupling.size_mismatch
+    actions:
+      - simulation.open_receiver
+    evidence_paths:
+      - diagnostics.mode_size_ratio_x
+      - diagnostics.mode_size_ratio_tolerance
+
+  - id: rule.mode_size_mismatch_y
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.mode_size_ratio_y
+          operator: exists
+        - path: diagnostics.mode_size_ratio_tolerance
+          operator: exists
+        - path: diagnostics.mode_size_ratio_y
+          operator: outside_relative_band
+          value_path: diagnostics.mode_size_ratio_tolerance
+    fields:
+      ratio:
+        path: diagnostics.mode_size_ratio_y
+        format: float
+    finding:
+      title: Y 方向模场尺寸可能不匹配
+      text: 当前入射场与目标模式的 Y 方向 RMS 尺寸比为 {ratio}，超出本次诊断设置的匹配带宽；需要查看实际二维复场和中心截面。
+    sources:
+      - diagnostics.coupling.size_mismatch
+    actions:
+      - simulation.open_receiver
+    evidence_paths:
+      - diagnostics.mode_size_ratio_y
+      - diagnostics.mode_size_ratio_tolerance
+
+  - id: rule.phase_matching_low
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.phase_matching_efficiency
+          operator: exists
+        - path: diagnostics.phase_matching_efficiency_min
+          operator: exists
+        - path: diagnostics.phase_matching_efficiency
+          operator: less_than
+          value_path: diagnostics.phase_matching_efficiency_min
+    fields:
+      actual:
+        path: diagnostics.phase_matching_efficiency
+        format: percent
+      required:
+        path: diagnostics.phase_matching_efficiency_min
+        format: percent
+    finding:
+      title: 相位匹配效率低于诊断阈值
+      text: 当前相位匹配效率为 {actual}，低于本次诊断阈值 {required}；应检查倾角、离焦、曲率和高阶像差。
+    sources:
+      - diagnostics.coupling.angular_tilt
+      - diagnostics.coupling.curvature_mismatch
+    actions:
+      - optimization.open_focus_scan
+      - simulation.open_formal_analysis
+    evidence_paths:
+      - diagnostics.phase_matching_efficiency
+      - diagnostics.phase_matching_efficiency_min
+
+  - id: rule.valid_ray_fraction_low
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.valid_ray_fraction
+          operator: exists
+        - path: diagnostics.valid_ray_fraction_min
+          operator: exists
+        - path: diagnostics.valid_ray_fraction
+          operator: less_than
+          value_path: diagnostics.valid_ray_fraction_min
+    fields:
+      actual:
+        path: diagnostics.valid_ray_fraction
+        format: percent
+      required:
+        path: diagnostics.valid_ray_fraction_min
+        format: percent
+    finding:
+      title: 有效光线比例低于诊断阈值
+      text: 当前有效光线比例为 {actual}，低于本次诊断阈值 {required}；应检查孔径截光、全反射失败和追迹异常。
+    sources:
+      - principles.geometric.sequential_trace
+    actions:
+      - simulation.open_formal_analysis
+    evidence_paths:
+      - diagnostics.valid_ray_fraction
+      - diagnostics.valid_ray_fraction_min
+
+  - id: rule.receiver_na_exceeded
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.warning_text
+          operator: exists
+        - path: diagnostics.warning_text
+          operator: contains
+          value: exceeds receiver NA
+    finding:
+      title: Gaussian 等效模式 NA 超出接收器 NA
+      text: 当前正式结果警告中明确记录了等效模式 NA 超出接收器 NA；应核对接收模式、折射率、MFD 和接收器数值孔径设置。
+    sources:
+      - parameters.receiver.fiber_mode
+      - parameters.receiver.mode_field_diameter
+    actions:
+      - simulation.open_receiver
+    evidence_paths:
+      - warnings
+
+  - id: rule.feature_contract_mismatch
+    severity: critical
+    condition:
+      all:
+        - path: diagnostics.feature_contract_match
+          operator: exists
+        - path: diagnostics.feature_contract_match
+          operator: falsy
+    finding:
+      title: 模型特征契约不一致
+      text: 当前模型输入未通过特征契约校验，预测结果不能使用；请核对 manifest、字段名称、顺序、单位和版本。
+    sources:
+      - diagnostics.machine_learning.feature_contract
+    actions:
+      - machine_learning.open_dataset
+      - machine_learning.open_prediction
+    evidence_paths:
+      - diagnostics.feature_contract_match
+
+  - id: rule.out_of_training_domain
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.in_training_domain
+          operator: exists
+        - path: diagnostics.in_training_domain
+          operator: falsy
+    finding:
+      title: 输入样本超出训练域
+      text: 当前预测输入被标记为超出训练域，模型输出属于未验证外推，应回到正式仿真验证或补充训练数据。
+    sources:
+      - diagnostics.machine_learning.out_of_domain
+    actions:
+      - machine_learning.open_dataset
+      - simulation.open_formal_analysis
+    evidence_paths:
+      - diagnostics.in_training_domain
+
+  - id: rule.shap_additivity_high
+    severity: warning
+    condition:
+      all:
+        - path: diagnostics.shap_additivity_error
+          operator: exists
+        - path: diagnostics.shap_additivity_tolerance
+          operator: exists
+        - path: diagnostics.shap_additivity_error
+          operator: abs_greater_than
+          value_path: diagnostics.shap_additivity_tolerance
+    fields:
+      actual:
+        path: diagnostics.shap_additivity_error
+        format: abs_float
+      tolerance:
+        path: diagnostics.shap_additivity_tolerance
+        format: float
+    finding:
+      title: SHAP 加性误差超出当前容差
+      text: 当前 SHAP 加性误差绝对值为 {actual}，高于本次解释配置容差 {tolerance}；应检查输出空间、基值和模型包装器。
+    sources:
+      - diagnostics.explainability.shap_additivity
+    actions:
+      - explainability.open_shap
+    evidence_paths:
+      - diagnostics.shap_additivity_error
+      - diagnostics.shap_additivity_tolerance

@@ -1,0 +1,32 @@
+# 界面
+PySide6==6.11.1
+PySide6-Addons==6.11.1
+PySide6-Essentials==6.11.1
+shiboken6==6.11.1
+
+# 数值计算与绘图
+numpy==2.3.5
+scipy==1.17.0
+pandas==2.2.3
+matplotlib==3.10.8
+cycler==0.12.1
+openpyxl==3.1.5
+
+# 机器学习
+scikit-learn==1.8.0
+shap==0.50.0
+xgboost==3.1.3
+torch==2.10.0
+joblib==1.5.3
+cloudpickle==3.1.2
+threadpoolctl==3.6.0
+
+# 后端通信
+fastapi==0.128.2
+uvicorn==0.48.0
+websockets==16.0
+httpx==0.28.1
+pydantic==2.13.4
+
+# 配置读取
+PyYAML==6.0.3

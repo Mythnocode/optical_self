@@ -1,0 +1,35 @@
+<RCC>
+  <qresource prefix="/frontend">
+    <file>icons/about.svg</file>
+    <file>icons/add.svg</file>
+    <file>icons/advantage.svg</file>
+    <file>icons/application.svg</file>
+    <file>icons/chart.svg</file>
+    <file>icons/check.svg</file>
+    <file>icons/chevron_left.svg</file>
+    <file>icons/chevron_right.svg</file>
+    <file>icons/copy.svg</file>
+    <file>icons/delete.svg</file>
+    <file>icons/explainability.svg</file>
+    <file>icons/function.svg</file>
+    <file>icons/guide.svg</file>
+    <file>icons/help.svg</file>
+    <file>icons/home.svg</file>
+    <file>icons/list.svg</file>
+    <file>icons/logo.svg</file>
+    <file>icons/machine_learning.svg</file>
+    <file>icons/next.svg</file>
+    <file>icons/optimization.svg</file>
+    <file>icons/overview.svg</file>
+    <file>icons/previous.svg</file>
+    <file>icons/properties.svg</file>
+    <file>icons/reset.svg</file>
+    <file>icons/result.svg</file>
+    <file>icons/simulation.svg</file>
+    <file>icons/tasks.svg</file>
+    <file>icons/teaching.svg</file>
+    <file>icons/warning.svg</file>
+    <file>icons/workflow.svg</file>
+    <file>qss/light.qss</file>
+  </qresource>
+</RCC>

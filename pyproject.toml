@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "optical-ml-platform"
+version = "1.5.0"
+description = "基于激光耦合的仿真与参数优化研究平台"
+requires-python = ">=3.11,<3.14"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements/requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+  "backend*",
+  "frontend_pyside*",
+  "help_runtime*",
+  "machine_learning*",
+  "optical_core*",
+  "optical_runtime*",
+  "shared_contracts*",
+  "shared_ports*",
+  "teaching_runtime*",
+]
