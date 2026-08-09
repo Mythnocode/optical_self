@@ -93,6 +93,7 @@ def _definitions() -> list[AnalysisDefinition]:
     h = AnalysisCategory.HYBRID
     items: list[AnalysisDefinition] = [
         AnalysisDefinition("raytrace", g, aliases=("ray_trace",), requires_trace=True),
+        AnalysisDefinition("scene_raytrace", g, aliases=("teaching_scene_raytrace", "free_scene_raytrace")),
         AnalysisDefinition("spot", g, aliases=("spot_diagram", "spot_analysis"), requires_trace=True),
         AnalysisDefinition("throughput", g, requires_trace=True),
         AnalysisDefinition("power_audit", g, aliases=("throughput_audit",), requires_trace=True),
@@ -171,6 +172,8 @@ def _definitions() -> list[AnalysisDefinition]:
         if item.category is g:
             if item.name == "ghost_stray_light":
                 executor = "geometric_ghost_stray_light"
+            elif item.name == "scene_raytrace":
+                executor = "geometric_scene_raytrace"
             else:
                 executor = f"geometric_{item.name}" if item.name in geometric_trace else "geometric_native"
         elif item.category is w:

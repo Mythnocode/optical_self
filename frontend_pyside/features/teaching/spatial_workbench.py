@@ -133,7 +133,7 @@ class SpatialExperimentModel(base.ExperimentModel):
         self._counter = 0
         self.add_node("laser", 120, base.MAIN_RAIL_Y, node_id="laser", label="激光器", record=False, rotation_deg=0.0)
         self.add_node("isolator", 300, base.MAIN_RAIL_Y, node_id="isolator", label="光隔离器", record=False, rotation_deg=0.0)
-        self.add_node("splitter", 495, base.MAIN_RAIL_Y, node_id="splitter", label="分束器", record=False, rotation_deg=0.0)
+        self.add_node("splitter", 495, base.MAIN_RAIL_Y, node_id="splitter", label="分束器", record=False, rotation_deg=90.0)
         self.add_node("lens", 710, base.MAIN_RAIL_Y, node_id="lens_1", label="L1", params={"focal_mm": 12.0}, record=False, rotation_deg=0.0)
         self.add_node("lens", 910, base.MAIN_RAIL_Y, node_id="lens_2", label="L2", params={"focal_mm": 12.0}, record=False, rotation_deg=0.0)
         self.add_node("fiber", 1160, base.MAIN_RAIL_Y, node_id="fiber", label="五轴光纤架", record=False, rotation_deg=180.0)

@@ -559,11 +559,13 @@ class ExperimentModel:
                 waist_shift_y_um += (0.08 * module_offset + 3.0 * detune) * 1000.0
             elif node.kind == "cylindrical_lens":
                 focal = float(node.params.get("focal_mm", 50.0))
-                axis = math.radians(float(node.params.get("axis_angle_deg", 0.0)))
+                # axis_angle_deg 表示传统柱面轴（零光焦度方向），光焦度方向与其正交。
+                cylinder_axis = math.radians(float(node.params.get("axis_angle_deg", node.params.get("cylinder_axis_deg", 0.0)) or 0.0))
+                power_axis = cylinder_axis + math.pi * 0.5
                 power = 50.0 / max(abs(focal), 1.0)
                 signed = 1.0 if focal >= 0.0 else -1.0
-                effect_x = math.cos(axis) ** 2
-                effect_y = math.sin(axis) ** 2
+                effect_x = math.cos(power_axis) ** 2
+                effect_y = math.sin(power_axis) ** 2
                 radius_x_mm *= max(0.45, 1.0 - 0.16 * signed * power * effect_x)
                 radius_y_mm *= max(0.45, 1.0 - 0.16 * signed * power * effect_y)
                 separation = float(node.params.get("pair_spacing_mm", 60.0))

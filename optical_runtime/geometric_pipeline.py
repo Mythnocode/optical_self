@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+import math
 
 import numpy as np
 
@@ -85,6 +86,8 @@ class GeometricPipeline:
                 result.merge(self._evaluate_focus_search(trace=trace, analyses=[spec], global_options=global_options))
             elif executor == "geometric_ghost_stray_light":
                 result.merge(self._evaluate_ghost_stray_light(system=system, analyses=[spec], global_options=global_options))
+            elif executor == "geometric_scene_raytrace":
+                result.merge(self._evaluate_scene_raytrace(system=system, analyses=[spec], global_options=global_options))
             elif executor == "geometric_native":
                 result.merge(self._run_native_geometric_analysis(name=spec.name, system=system, analyses=[spec], global_options=global_options))
             else:
@@ -232,6 +235,159 @@ class GeometricPipeline:
 
         return trace_ray_batch(system, rays, trace_options)
 
+
+    def _evaluate_scene_raytrace(
+        self,
+        *,
+        system: Any,
+        analyses: list[AnalysisSpec],
+        global_options: dict[str, Any],
+    ) -> EnginePartialResult:
+        from optical_core.physics.nonsequential.scene_tracer import trace_scene_ray_tree
+
+        options = self._options_for(
+            name="scene_raytrace", analyses=analyses, global_options=global_options
+        )
+        source_position = np.asarray(
+            tuple(float(v) for v in options.get("scene_source_position_mm", (0.0, 0.0, -1.0))),
+            dtype=float,
+        )
+        source_direction = np.asarray(
+            tuple(float(v) for v in options.get("scene_source_direction", (0.0, 0.0, 1.0))),
+            dtype=float,
+        )
+        direction_norm = float(np.linalg.norm(source_direction))
+        if not np.isfinite(direction_norm) or direction_norm <= 1.0e-15:
+            raise ValueError("场景光源方向必须为有限非零向量。")
+        source_direction = source_direction / direction_norm
+
+        sample_count = max(1, min(81, int(options.get("scene_bundle_sample_count", 1))))
+        radius_x = max(0.0, float(options.get("scene_bundle_radius_x_mm", 0.0)))
+        radius_y = max(0.0, float(options.get("scene_bundle_radius_y_mm", radius_x)))
+        pattern = str(options.get("scene_bundle_pattern", "fibonacci_disk")).strip().lower()
+
+        reference = np.asarray([0.0, 1.0, 0.0], dtype=float)
+        if abs(float(np.dot(reference, source_direction))) > 0.96:
+            reference = np.asarray([1.0, 0.0, 0.0], dtype=float)
+        basis_u = np.cross(reference, source_direction)
+        basis_u /= max(float(np.linalg.norm(basis_u)), 1.0e-30)
+        basis_v = np.cross(source_direction, basis_u)
+        basis_v /= max(float(np.linalg.norm(basis_v)), 1.0e-30)
+
+        normalized_offsets: list[tuple[float, float]] = [(0.0, 0.0)]
+        if sample_count > 1:
+            if pattern == "rings" and sample_count in {9, 21}:
+                if sample_count == 9:
+                    normalized_offsets.extend([
+                        (math.cos(2.0 * math.pi * i / 8.0), math.sin(2.0 * math.pi * i / 8.0))
+                        for i in range(8)
+                    ])
+                else:
+                    normalized_offsets.extend([
+                        (0.5 * math.cos(2.0 * math.pi * i / 8.0), 0.5 * math.sin(2.0 * math.pi * i / 8.0))
+                        for i in range(8)
+                    ])
+                    normalized_offsets.extend([
+                        (math.cos(2.0 * math.pi * i / 12.0), math.sin(2.0 * math.pi * i / 12.0))
+                        for i in range(12)
+                    ])
+            else:
+                golden_angle = math.pi * (3.0 - math.sqrt(5.0))
+                for index in range(1, sample_count):
+                    radius = math.sqrt(index / max(sample_count - 1, 1))
+                    angle = index * golden_angle
+                    normalized_offsets.append((radius * math.cos(angle), radius * math.sin(angle)))
+        normalized_offsets = normalized_offsets[:sample_count]
+
+        source_rays: list[tuple[str, tuple[float, float, float], tuple[float, float, float], float, tuple[float, float]]] = []
+        gaussian_edge = max(1.0e-12, float(options.get("scene_bundle_gaussian_edge_fraction", math.exp(-2.0))))
+        gaussian_scale = -math.log(gaussian_edge)
+        raw_weights: list[float] = []
+        for index, (nx, ny) in enumerate(normalized_offsets):
+            offset = basis_u * (float(nx) * radius_x) + basis_v * (float(ny) * radius_y)
+            position = source_position + offset
+            radial2 = float(nx) ** 2 + float(ny) ** 2
+            weight = math.exp(-gaussian_scale * radial2) if sample_count > 1 else 1.0
+            raw_weights.append(weight)
+            source_rays.append((
+                f"R{index:02d}",
+                tuple(float(v) for v in position),
+                tuple(float(v) for v in source_direction),
+                weight,
+                (float(nx), float(ny)),
+            ))
+        weight_sum = max(sum(raw_weights), 1.0e-30)
+        source_rays = [
+            (ray_id, position, direction, weight / weight_sum, offset)
+            for ray_id, position, direction, weight, offset in source_rays
+        ]
+
+        all_paths = []
+        all_ray_ids: list[str] = []
+        warnings: list[str] = []
+        interaction_count = 0
+        terminal_count = 0
+        for ray_id, position, direction, source_weight, _normalized_offset in source_rays:
+            traced = trace_scene_ray_tree(
+                system,
+                source_position_mm=position,
+                source_direction=direction,
+                wavelength_nm=float(options.get("wavelength_nm", getattr(system, "wavelength_nm", 550.0))),
+                max_interactions=int(options.get("scene_max_interactions", 24)),
+                max_branches=int(options.get("scene_max_branches", 32)),
+                min_power_fraction=float(options.get("scene_min_power_fraction", 1.0e-5)),
+                escape_distance_mm=float(options.get("scene_escape_distance_mm", 160.0)),
+                epsilon_mm=float(options.get("scene_intersection_epsilon_mm", 1.0e-5)),
+                temperature_c=float(options.get("environment_temperature_c", 20.0)),
+            )
+            interaction_count += int(traced.interaction_count)
+            warnings.extend(traced.warnings)
+            for path in traced.paths:
+                prefix = f"{ray_id}:"
+                path.path_id = prefix + str(path.path_id)
+                if path.parent_id not in {None, ""}:
+                    path.parent_id = prefix + str(path.parent_id)
+                path.power_fraction = float(path.power_fraction) * float(source_weight)
+                all_paths.append(path)
+                all_ray_ids.append(ray_id)
+                if path.termination_reason == "terminal_hit":
+                    terminal_count += 1
+
+        partial = EnginePartialResult.empty()
+        partial.metrics.update({
+            "scene_path_count": len(all_paths),
+            "scene_interaction_count": int(interaction_count),
+            "scene_reached_terminal_count": int(terminal_count),
+            "scene_source_ray_count": len(source_rays),
+        })
+        partial.arrays.update({
+            "scene_path_ids": [path.path_id for path in all_paths],
+            "scene_path_parent_ids": [path.parent_id for path in all_paths],
+            "scene_path_signatures": [path.signature for path in all_paths],
+            "scene_path_power_fractions": [float(path.power_fraction) for path in all_paths],
+            "scene_path_points_mm": [path.points_mm for path in all_paths],
+            "scene_path_surface_indices": [path.surface_indices for path in all_paths],
+            "scene_path_node_ids": [path.node_ids for path in all_paths],
+            "scene_path_directions": [path.directions for path in all_paths],
+            "scene_path_termination_reasons": [path.termination_reason for path in all_paths],
+            "scene_path_ray_ids": list(all_ray_ids),
+            "scene_source_ray_ids": [item[0] for item in source_rays],
+            "scene_source_ray_positions_mm": [list(item[1]) for item in source_rays],
+            "scene_source_ray_directions": [list(item[2]) for item in source_rays],
+            "scene_source_ray_weights": [float(item[3]) for item in source_rays],
+            "scene_source_ray_normalized_offsets": [list(item[4]) for item in source_rays],
+        })
+        partial.metadata.update({
+            "scene_raytrace_done": True,
+            "scene_geometry": "nearest_physical_surface_in_3d",
+            "scene_solver": "native_scene_ray_tree",
+            "scene_bundle_pattern": pattern,
+            "scene_bundle_sample_count": len(source_rays),
+            "zemax_data_used_as_input": False,
+            "reference_data_used_as_input": False,
+        })
+        partial.warnings.extend(dict.fromkeys(warnings))
+        return partial
 
     def _evaluate_ghost_stray_light(
         self,

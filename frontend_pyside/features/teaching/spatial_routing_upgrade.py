@@ -5,12 +5,23 @@ from dataclasses import dataclass
 import math
 from typing import Any
 
-from PySide6.QtCore import QPointF, QRectF, Qt, Signal
-from PySide6.QtGui import QColor, QCursor, QMouseEvent, QPainter, QPen
+from PySide6.QtCore import QPointF, QRectF, Qt, Signal, QTimer
+from PySide6.QtGui import (
+    QColor,
+    QCursor,
+    QLinearGradient,
+    QMouseEvent,
+    QPainter,
+    QPainterPath,
+    QPainterPathStroker,
+    QPen,
+    QPolygonF,
+)
 from PySide6.QtWidgets import (
     QCheckBox,
     QDoubleSpinBox,
     QFrame,
+    QGraphicsObject,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -27,6 +38,14 @@ from . import spatial_workbench as spatial
 from . import unified_workbench as base
 from . import component_catalog as catalog
 from . import experiment_presets
+from teaching_runtime.physical_scene import (
+    TeachingEngineTrace,
+    TeachingOpticalEngineBridge,
+    TeachingPhysicalNode,
+    TeachingPhysicalScene,
+    resolve_teaching_optical_params,
+)
+from teaching_runtime.trace_scheduler import TeachingTraceScheduler
 
 
 ORIGINAL_EXPERIMENT_MODEL = base.ExperimentModel
@@ -39,9 +58,29 @@ MEASUREMENT_LABELS = {kind: catalog.NODE_LABELS[kind] for kind in MEASUREMENT_KI
 @dataclass(frozen=True, slots=True)
 class BeamSegmentInfo:
     edge_id: str
-    source_id: str
-    target_id: str
+    source_id: str | None
+    target_id: str | None
     angle_deg: float
+    start_x: float
+    start_y: float
+    start_z_mm: float
+    end_x: float
+    end_y: float
+    end_z_mm: float
+    power_fraction: float = 1.0
+    path_id: str = ""
+    ray_id: str = ""
+    is_chief_ray: bool = False
+    signature: str = ""
+    termination_reason: str = ""
+
+    @property
+    def start_point(self) -> QPointF:
+        return QPointF(float(self.start_x), float(self.start_y))
+
+    @property
+    def end_point(self) -> QPointF:
+        return QPointF(float(self.end_x), float(self.end_y))
 
 
 def _segment_fraction(point: QPointF, start: QPointF, end: QPointF) -> float:
@@ -71,6 +110,18 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
 
     def __init__(self) -> None:
         self._segment_info: dict[str, BeamSegmentInfo] = {}
+        self._physical_segments: list[BeamSegmentInfo] = []
+        self._engine_bridge = TeachingOpticalEngineBridge()
+        self._trace_scheduler = TeachingTraceScheduler(self._engine_bridge)
+        self._trace_generation = 0
+        self._trace_applied_generation = -1
+        self._trace_pending_quality = ""
+        self._engine_trace_result: TeachingEngineTrace | None = None
+        self._engine_trace_errors: tuple[str, ...] = ()
+        self._engine_trace_warnings: tuple[str, ...] = ()
+        self._engine_trace_elapsed_ms: float = 0.0
+        self._engine_trace_metadata: dict[str, Any] = {}
+        self._engine_trace_frame = None
         self.active_experiment_key = ""
         super().__init__()
 
@@ -82,9 +133,33 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
             values.setdefault("beam_target_id", "")
             values.setdefault("beam_t", 0.50)
             values.setdefault("follow_beam_orientation", True)
+        if kind in {"lens", "cylindrical_lens"}:
+            values.setdefault("optical_model", "physical_surface")
+            values.setdefault("material", "N-BK7")
+            values.setdefault("diameter_mm", 12.7)
+            values.setdefault("center_thickness_mm", 2.0)
+            values.setdefault("design_refractive_index", 1.5168)
+            values.setdefault("conic1", 0.0)
+            values.setdefault("conic2", 0.0)
+            values.setdefault("asphere_a2_1", 0.0)
+            values.setdefault("asphere_a2_2", 0.0)
+            values.setdefault("geometry_source", "focal_derived_physical")
+        if kind == "cylindrical_lens":
+            # axis_angle_deg 是界面输入，统一表示传统柱面轴（零光焦度方向）。
+            values["axis_angle_deg"] = float(values.get("axis_angle_deg", 0.0) or 0.0) % 180.0
+            values.setdefault("surface_geometry", "cylindrical")
+        if kind == "mirror":
+            values.setdefault("diameter_mm", 25.4)
         if kind in {"splitter", "pbs", "beam_sampler"}:
+            values.setdefault("diameter_mm", 20.0)
             values.setdefault("split_ratio", float(values.get("monitor_fraction", 0.05)))
             values.setdefault("branch_offset_deg", 90.0)
+        if kind == "fiber":
+            values.setdefault("diameter_mm", 4.0)
+            values.setdefault("mode_field_diameter_um", float(self.receiver_mode_radius_um) * 2.0 if hasattr(self, "receiver_mode_radius_um") else 5.6)
+            values.setdefault("na", float(self.receiver_na) if hasattr(self, "receiver_na") else 0.12)
+        if kind == "laser":
+            values.setdefault("beam_radius_y_mm", float(values.get("beam_radius_mm", 0.72) or 0.72))
         return values
 
     def snapshot(self) -> dict[str, Any]:
@@ -142,73 +217,252 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                 node.params["beam_attached"] = False
                 continue
             t = max(0.08, min(0.92, float(node.params.get("beam_t", 0.5))))
-            node.x = source.x + (target.x - source.x) * t
-            node.y = source.y + (target.y - source.y) * t
-            source_z = float(source.params.get("z_mm", 82.0))
-            target_z = float(target.params.get("z_mm", 82.0))
-            node.params["z_mm"] = source_z + (target_z - source_z) * t
+            segment = next((
+                info for info in self._physical_segments
+                if info.is_chief_ray and info.source_id == source.id and info.target_id == target.id
+            ), None)
+            if segment is None:
+                start_x, start_y = float(source.x), float(source.y)
+                end_x, end_y = float(target.x), float(target.y)
+                start_z = float(source.params.get("z_mm", 82.0))
+                end_z = float(target.params.get("z_mm", 82.0))
+                incoming = math.degrees(math.atan2(end_y - start_y, end_x - start_x)) % 360.0
+            else:
+                start_x, start_y = segment.start_x, segment.start_y
+                end_x, end_y = segment.end_x, segment.end_y
+                start_z, end_z = segment.start_z_mm, segment.end_z_mm
+                incoming = segment.angle_deg
+            node.x = start_x + (end_x - start_x) * t
+            node.y = start_y + (end_y - start_y) * t
+            node.params["z_mm"] = start_z + (end_z - start_z) * t
             if bool(node.params.get("follow_beam_orientation", True)):
-                incoming = math.degrees(math.atan2(target.y - source.y, target.x - source.x)) % 360.0
                 node.rotation_deg = (incoming + 180.0) % 360.0
 
-    def rebuild_auto_paths(self) -> None:
+    def _physical_scene(self, *, generation: int | None = None, quality: str = "settled") -> TeachingPhysicalScene:
+        physical_nodes: list[TeachingPhysicalNode] = []
+        for node in self.nodes.values():
+            physical = TeachingPhysicalNode(
+                node_id=node.id,
+                kind=node.kind,
+                label=node.label,
+                scene_x=float(node.x),
+                scene_y=float(node.y),
+                height_mm=float(node.params.get("z_mm", 82.0)),
+                yaw_deg=float(node.rotation_deg),
+                pitch_deg=float(node.params.get("pitch_deg", 0.0)),
+                roll_deg=float(node.params.get("roll_deg", 0.0)),
+                enabled=spatial._enabled(node),
+                params=dict(node.params),
+            )
+            if node.kind in {"lens", "cylindrical_lens"}:
+                resolved = resolve_teaching_optical_params(physical)
+                physical = TeachingPhysicalNode(
+                    node_id=physical.node_id, kind=physical.kind, label=physical.label,
+                    scene_x=physical.scene_x, scene_y=physical.scene_y, height_mm=physical.height_mm,
+                    yaw_deg=physical.yaw_deg, pitch_deg=physical.pitch_deg, roll_deg=physical.roll_deg,
+                    enabled=physical.enabled, params=resolved,
+                )
+            physical_nodes.append(physical)
+        nodes = tuple(physical_nodes)
+        return TeachingPhysicalScene(
+            nodes=nodes,
+            wavelength_nm=float(self.wavelength_nm),
+            input_power_mw=float(self.input_power_mw),
+            max_system_length_mm=float(self.max_system_length_mm),
+            scene_width_units=float(base.SCENE_RECT.width()),
+            scene_height_units=float(base.SCENE_RECT.height()),
+            generation=int(self._trace_generation if generation is None else generation),
+            trace_quality=str(quality),
+        )
 
+    def beam_segments(self) -> tuple[BeamSegmentInfo, ...]:
+        self.rebuild_auto_paths()
+        return tuple(self._physical_segments)
 
+    def engine_trace_status(self) -> dict[str, Any]:
+        frame = self._engine_trace_frame
+        result = self._engine_trace_result
+        return {
+            "errors": self._engine_trace_errors,
+            "warnings": self._engine_trace_warnings,
+            "elapsed_ms": self._engine_trace_elapsed_ms,
+            "engine": "OpticalSimulationEngine",
+            "analysis": "scene_raytrace",
+            "generation": int(self._trace_generation),
+            "applied_generation": int(self._trace_applied_generation),
+            "pending_quality": str(self._trace_pending_quality),
+            "quality": "" if result is None else str(result.quality),
+            "sample_count": 0 if result is None else int(result.sample_count),
+            "ray_count": 0 if result is None else len(result.rays),
+            "metadata": dict(self._engine_trace_metadata),
+            "coordinate_frame": None if frame is None else {
+                "origin_scene": (frame.laser_scene_x, frame.laser_scene_y, frame.laser_height_mm),
+                "laser_yaw_deg": frame.laser_yaw_deg,
+                "mm_per_scene_unit": frame.mm_per_scene_unit,
+                "axial_shift_mm": frame.axial_shift_mm,
+            },
+        }
+
+    def node_physical_position_mm(self, node_id: str) -> tuple[float, float, float] | None:
+        node = self.nodes.get(node_id)
+        frame = self._engine_trace_frame
+        if node is None or frame is None:
+            return None
+        return frame.scene_to_world(node.x, node.y, float(node.params.get("z_mm", 82.0)))
+
+    def _next_trace_generation(self) -> int:
+        self._trace_generation += 1
+        return int(self._trace_generation)
+
+    def teaching_trace_result(self) -> TeachingEngineTrace | None:
+        return self._engine_trace_result
+
+    def resolved_optical_parameters(self, node_id: str) -> dict[str, Any]:
+        node = self.nodes.get(node_id)
+        if node is None:
+            return {}
+        physical = TeachingPhysicalNode(
+            node_id=node.id, kind=node.kind, label=node.label,
+            scene_x=float(node.x), scene_y=float(node.y),
+            height_mm=float(node.params.get("z_mm", 82.0)),
+            yaw_deg=float(node.rotation_deg),
+            pitch_deg=float(node.params.get("pitch_deg", 0.0)),
+            roll_deg=float(node.params.get("roll_deg", 0.0)),
+            enabled=spatial._enabled(node), params=dict(node.params),
+        )
+        return resolve_teaching_optical_params(physical)
+
+    def _request_engine_trace(self, quality: str = "settled", *, synchronous: bool = False) -> int:
         if self._suspend_auto:
-            return
+            return int(self._trace_generation)
         self._apply_beam_attachments()
+        generation = self._next_trace_generation()
+        scene = self._physical_scene(generation=generation, quality=quality)
+        self._trace_pending_quality = str(quality)
+        # 当前场景已经提交给完整引擎，避免视图刷新再次提交同一状态。
+        self._routing_dirty = False
+        if synchronous:
+            traced = self._engine_bridge.trace(scene)
+            self._apply_engine_trace(traced)
+        else:
+            self._trace_scheduler.submit(scene, generation=generation, quality=quality)
+        return generation
+
+    def request_live_trace(self) -> int:
+        return self._request_engine_trace("live", synchronous=False)
+
+    def request_settled_trace(self) -> int:
+        return self._request_engine_trace("settled", synchronous=False)
+
+    def poll_trace_update(self) -> bool:
+        traced = self._trace_scheduler.poll_latest()
+        if traced is None:
+            return False
+        if int(traced.generation) < int(self._trace_generation):
+            return False
+        return self._apply_engine_trace(traced)
+
+    def close_trace_scheduler(self) -> None:
+        self._trace_scheduler.close()
+
+    def rebuild_auto_paths(self) -> None:
+        if self._suspend_auto or not self._routing_dirty:
+            return
+        # 初次构造需要立刻拥有可用拓扑；之后的交互全部异步执行。
+        if self._engine_trace_result is None:
+            self._request_engine_trace("settled", synchronous=True)
+        else:
+            self._request_engine_trace("settled", synchronous=False)
+
+    def _apply_engine_trace(self, traced: TeachingEngineTrace) -> bool:
+        if int(traced.generation) < int(self._trace_applied_generation):
+            return False
+        self._engine_trace_result = traced
+        self._trace_applied_generation = int(traced.generation)
+        self._trace_pending_quality = "" if int(traced.generation) >= int(self._trace_generation) else self._trace_pending_quality
+        self._engine_trace_errors = tuple(traced.errors)
+        self._engine_trace_warnings = tuple(traced.warnings)
+        self._engine_trace_elapsed_ms = float(traced.elapsed_ms)
+        self._engine_trace_metadata = dict(traced.metadata)
+        self._engine_trace_frame = traced.frame
+
         self.edges.clear()
         self._incident_angles.clear()
         self._auto_path_segments.clear()
         self._segment_info.clear()
+        self._physical_segments.clear()
+        if not traced.success:
+            self._routing_dirty = False
+            return True
 
+        seen_physical: set[tuple[Any, ...]] = set()
+        logical_pairs: dict[tuple[str, str, str], str] = {}
+        physical_counter = 0
         edge_counter = 0
-        rays: list[tuple[str, QPointF, float, frozenset[str], int]] = []
-        for laser in self.nodes.values():
-            if laser.kind == "laser" and spatial._enabled(laser):
-                rays.append((laser.id, QPointF(laser.x, laser.y), laser.rotation_deg % 360.0, frozenset({laser.id}), 0))
 
-        
-        
-        
-        visited_states: set[tuple[str, int, int]] = set()
-        while rays and edge_counter < 120:
-            source_id, origin, angle, visited, depth = rays.pop(0)
-            if depth > 18:
+        for path in traced.paths:
+            points = list(path.points)
+            if len(points) < 2:
                 continue
-            state_key = (source_id, int(round(angle * 2.0)) % 720, depth)
-            if state_key in visited_states:
-                continue
-            visited_states.add(state_key)
+            is_chief = str(path.ray_id) == "R00"
+            for index in range(len(points) - 1):
+                start_point = points[index]
+                end_point = points[index + 1]
+                dx = float(end_point.scene_x - start_point.scene_x)
+                dy = float(end_point.scene_y - start_point.scene_y)
+                if math.hypot(dx, dy) <= 1.0e-7 and abs(float(end_point.height_mm - start_point.height_mm)) <= 1.0e-7:
+                    continue
+                source_id = start_point.node_id if start_point.node_id in self.nodes else None
+                target_id = end_point.node_id if end_point.node_id in self.nodes else None
+                angle = math.degrees(math.atan2(dy, dx)) % 360.0
+                dedupe_key = (
+                    str(path.ray_id),
+                    round(float(start_point.scene_x), 4), round(float(start_point.scene_y), 4), round(float(start_point.height_mm), 4),
+                    round(float(end_point.scene_x), 4), round(float(end_point.scene_y), 4), round(float(end_point.height_mm), 4),
+                    source_id, target_id,
+                )
+                if dedupe_key in seen_physical:
+                    continue
+                seen_physical.add(dedupe_key)
+                physical_counter += 1
+                segment_id = f"engine_segment_{physical_counter}"
 
-            hit = self._ray_hit(origin, angle, excluded=set(visited))
-            if hit is None:
-                continue
-            target, _distance = hit
-            edge_counter += 1
-            edge_id = f"auto_edge_{edge_counter}"
-            self.edges[edge_id] = base.ExperimentEdge(edge_id, source_id, target.id)
-            self._incident_angles[target.id] = angle % 360.0
-            self._auto_path_segments.append((source_id, target.id, angle % 360.0))
-            self._segment_info[edge_id] = BeamSegmentInfo(edge_id, source_id, target.id, angle % 360.0)
+                logical_edge_id = ""
+                # 代表光线用于显示光束，不参与教学拓扑；拓扑只由中心光线定义。
+                if is_chief and source_id is not None and target_id is not None and source_id != target_id:
+                    logical_key = (source_id, target_id, path.signature[: max(0, index + 1)])
+                    logical_edge_id = logical_pairs.get(logical_key, "")
+                    if not logical_edge_id:
+                        edge_counter += 1
+                        logical_edge_id = f"engine_edge_{edge_counter}"
+                        logical_pairs[logical_key] = logical_edge_id
+                        self.edges[logical_edge_id] = base.ExperimentEdge(logical_edge_id, source_id, target_id)
+                        self._incident_angles[target_id] = angle
+                        self._auto_path_segments.append((source_id, target_id, angle))
 
-            next_visited = frozenset(set(visited) | {target.id})
-            if target.kind in base.TERMINAL_TYPES or target.kind == "oscilloscope":
-                continue
-            target_point = QPointF(target.x, target.y)
-            if target.kind == "mirror":
-                outgoing = self._mirror_outgoing_angle(target, angle)
-                rays.append((target.id, target_point, outgoing, next_visited, depth + 1))
-            elif target.kind in {"splitter", "pbs", "beam_sampler"}:
-                transmitted = angle % 360.0
-                reflected = self._splitter_branch_angle(target, angle)
-                rays.append((target.id, target_point, transmitted, next_visited, depth + 1))
-                if abs(((reflected - transmitted + 180.0) % 360.0) - 180.0) > 1.0:
-                    rays.append((target.id, target_point, reflected, next_visited, depth + 1))
-            else:
-                rays.append((target.id, target_point, angle % 360.0, next_visited, depth + 1))
+                info = BeamSegmentInfo(
+                    edge_id=logical_edge_id or segment_id,
+                    source_id=source_id,
+                    target_id=target_id,
+                    angle_deg=angle,
+                    start_x=float(start_point.scene_x),
+                    start_y=float(start_point.scene_y),
+                    start_z_mm=float(start_point.height_mm),
+                    end_x=float(end_point.scene_x),
+                    end_y=float(end_point.scene_y),
+                    end_z_mm=float(end_point.height_mm),
+                    power_fraction=float(path.power_fraction),
+                    path_id=str(path.path_id),
+                    ray_id=str(path.ray_id),
+                    is_chief_ray=bool(is_chief),
+                    signature=str(path.signature),
+                    termination_reason=str(path.termination_reason if index == len(points) - 2 else ""),
+                )
+                self._physical_segments.append(info)
+                self._segment_info[info.edge_id] = info
+                if logical_edge_id:
+                    self._segment_info[logical_edge_id] = info
 
-        
         reached = ORIGINAL_EXPERIMENT_MODEL.reached_nodes(self) if self.edges else set()
         scopes = [node for node in self.nodes.values() if node.kind == "oscilloscope" and spatial._enabled(node)]
         detectors = [node for node in self.nodes.values() if node.kind == "photodetector" and node.id in reached]
@@ -220,20 +474,18 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                 edge_counter += 1
                 edge_id = f"auto_signal_{edge_counter}"
                 self.edges[edge_id] = base.ExperimentEdge(edge_id, detector.id, scope.id)
+        self._routing_dirty = False
+        return True
 
     def segment_info(self, edge_id: str) -> BeamSegmentInfo | None:
         self.rebuild_auto_paths()
         return self._segment_info.get(edge_id)
 
     def edge_fraction(self, edge_id: str, point: QPointF) -> float:
-        edge = self.edges.get(edge_id)
-        if edge is None:
+        info = self.segment_info(edge_id)
+        if info is None:
             return 0.5
-        source = self.nodes.get(edge.source)
-        target = self.nodes.get(edge.target)
-        if source is None or target is None:
-            return 0.5
-        return _segment_fraction(point, QPointF(source.x, source.y), QPointF(target.x, target.y))
+        return _segment_fraction(point, info.start_point, info.end_point)
 
     def nearest_beam_segment(
         self,
@@ -245,39 +497,34 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
 
         self.rebuild_auto_paths()
         best: tuple[str, float, float] | None = None
-        for edge_id in self._segment_info:
-            edge = self.edges.get(edge_id)
-            if edge is None:
+        for info in self._physical_segments:
+            if info.edge_id not in self.edges:
                 continue
-            source = self.nodes.get(edge.source)
-            target = self.nodes.get(edge.target)
-            if source is None or target is None:
+            if info.source_id is None or info.target_id is None or info.source_id == info.target_id:
                 continue
-            distance, fraction = _distance_to_segment(
-                point,
-                QPointF(source.x, source.y),
-                QPointF(target.x, target.y),
-            )
+            distance, fraction = _distance_to_segment(point, info.start_point, info.end_point)
             if distance > float(max_distance):
                 continue
             if best is None or distance < best[2]:
-                best = (edge_id, fraction, distance)
+                best = (info.edge_id, fraction, distance)
         return best
 
     def attach_instrument_to_edge(self, kind: str, edge_id: str, t: float = 0.50) -> str | None:
         if kind not in MEASUREMENT_KINDS:
             return None
         edge = self.edges.get(edge_id)
-        if edge is None:
+        info = self.segment_info(edge_id)
+        if edge is None or info is None:
             return None
         source = self.nodes.get(edge.source)
         target = self.nodes.get(edge.target)
         if source is None or target is None:
             return None
         t = max(0.08, min(0.92, float(t)))
-        x = source.x + (target.x - source.x) * t
-        y = source.y + (target.y - source.y) * t
-        incoming = math.degrees(math.atan2(target.y - source.y, target.x - source.x)) % 360.0
+        x = info.start_x + (info.end_x - info.start_x) * t
+        y = info.start_y + (info.end_y - info.start_y) * t
+        z_mm = info.start_z_mm + (info.end_z_mm - info.start_z_mm) * t
+        incoming = info.angle_deg
         node_id = self.add_node(
             kind,
             x,
@@ -287,6 +534,7 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                 "beam_source_id": source.id,
                 "beam_target_id": target.id,
                 "beam_t": t,
+                "z_mm": z_mm,
                 "follow_beam_orientation": True,
             },
             rotation_deg=(incoming + 180.0) % 360.0,
@@ -302,9 +550,11 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         if node is None or not bool(node.params.get("beam_attached", False)):
             return
         node.params["beam_t"] = max(0.08, min(0.92, float(fraction)))
-        self.rebuild_auto_paths()
+        self.mark_changed()
         if record:
             self.record(f"沿光束移动{node.label}。")
+        else:
+            self.request_live_trace()
 
     def detach_instrument(self, node_id: str, *, record: bool = True) -> None:
         node = self.nodes.get(node_id)
@@ -318,14 +568,102 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
 
     def move_node(self, node_id: str, x: float, y: float, *, record: bool = True) -> None:
         node = self.nodes.get(node_id)
-        if node is not None and node.kind in base.INSTRUMENT_TYPES and bool(node.params.get("beam_attached", False)):
+        if node is None:
+            return
+        if node.kind in base.INSTRUMENT_TYPES and bool(node.params.get("beam_attached", False)):
             source = self.nodes.get(str(node.params.get("beam_source_id", "")))
             target = self.nodes.get(str(node.params.get("beam_target_id", "")))
             if source is not None and target is not None:
-                fraction = _segment_fraction(QPointF(float(x), float(y)), QPointF(source.x, source.y), QPointF(target.x, target.y))
+                info = next((
+                    item for item in self._physical_segments
+                    if item.is_chief_ray and item.source_id == source.id and item.target_id == target.id
+                ), None)
+                start = info.start_point if info is not None else QPointF(source.x, source.y)
+                end = info.end_point if info is not None else QPointF(target.x, target.y)
+                fraction = _segment_fraction(QPointF(float(x), float(y)), start, end)
                 self.set_attachment_fraction(node_id, fraction, record=record)
                 return
-        super().move_node(node_id, x, y, record=record)
+        old = (float(node.x), float(node.y))
+        node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(x)))
+        node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(y)))
+        if self.mode == "layout":
+            if node.kind in base.OPTICAL_TYPES:
+                node.y = base.MAIN_RAIL_Y
+            elif node.kind != "oscilloscope":
+                node.y = base.BRANCH_RAIL_Y
+        changed = abs(old[0] - node.x) > 0.1 or abs(old[1] - node.y) > 0.1
+        if not changed:
+            return
+        self.mark_changed()
+        if record:
+            self.record(f"移动{node.label}；系统已重新追迹光路。")
+        else:
+            self.request_live_trace()
+
+    def move_node_3d(self, node_id: str, x: float, y: float, z_mm: float, *, record: bool = True) -> None:
+        node = self.nodes.get(node_id)
+        if node is None:
+            return
+        node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(x)))
+        node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(y)))
+        node.params["z_mm"] = max(12.0, min(180.0, float(z_mm)))
+        self.mark_changed()
+        if record:
+            self.record(f"在3D平台中移动{node.label}。")
+        else:
+            self.request_live_trace()
+
+    def set_orientation(
+        self,
+        node_id: str,
+        *,
+        yaw_deg: float | None = None,
+        pitch_deg: float | None = None,
+        roll_deg: float | None = None,
+        record: bool = True,
+    ) -> None:
+        node = self.nodes.get(node_id)
+        if node is None:
+            return
+        if yaw_deg is not None:
+            node.rotation_deg = float(yaw_deg) % 360.0
+        if pitch_deg is not None:
+            node.params["pitch_deg"] = max(-89.0, min(89.0, float(pitch_deg)))
+        if roll_deg is not None:
+            node.params["roll_deg"] = float(roll_deg) % 360.0
+        self.mark_changed()
+        if record:
+            self.record(f"调整{node.label}的空间姿态。")
+        else:
+            self.request_live_trace()
+
+    def update_node_params(self, node_id: str, changes: dict[str, Any], *, record: bool = True) -> None:
+        node = self.nodes.get(node_id)
+        if node is None:
+            return
+        spatial_changes = dict(changes)
+        if "rotation_deg" in spatial_changes:
+            node.rotation_deg = float(spatial_changes.pop("rotation_deg")) % 360.0
+        node.params.update(spatial_changes)
+        if node.kind == "cylindrical_lens":
+            if "cylinder_axis_deg" in spatial_changes:
+                axis_deg = float(spatial_changes["cylinder_axis_deg"]) % 180.0
+            elif "axis_angle_deg" in spatial_changes:
+                axis_deg = float(spatial_changes["axis_angle_deg"]) % 180.0
+            elif "cylinder_power_axis_deg" in spatial_changes:
+                axis_deg = (float(spatial_changes["cylinder_power_axis_deg"]) - 90.0) % 180.0
+            else:
+                axis_deg = float(node.params.get("cylinder_axis_deg", node.params.get("axis_angle_deg", 0.0)) or 0.0) % 180.0
+            node.params["axis_angle_deg"] = axis_deg
+            node.params["cylinder_axis_deg"] = axis_deg
+            node.params["cylinder_power_axis_deg"] = (axis_deg + 90.0) % 180.0
+            node.params["cylinder_axis_definition"] = "zero_power_axis"
+        self.mark_changed()
+        if record:
+            description = "、".join(f"{key}={value}" for key, value in changes.items())
+            self.record(f"更新{node.label}：{description}。")
+        else:
+            self.request_live_trace()
 
     
     def _replace_with_nodes(self, specs: list[tuple[str, float, float, float, str, dict[str, Any]]], description: str) -> None:
@@ -451,18 +789,158 @@ class SelectableBeamSegmentItem(base.OpticalConnectionItem):
             painter.drawPath(self._path())
 
 
+class PhysicalBeamSegmentItem(QGraphicsObject):
+    segmentActivated = Signal(str, QPointF)
+
+    def __init__(
+        self,
+        info: BeamSegmentInfo,
+        *,
+        source_radius: float = 6.0,
+        target_radius: float = 6.0,
+        ideal_source_radius: float | None = None,
+        ideal_target_radius: float | None = None,
+        display_layer: str = "overlay",
+        placement_active: bool = False,
+        selectable: bool = False,
+        parent=None,
+    ) -> None:
+        super().__init__(parent)
+        self.info = info
+        self.edge_id = info.edge_id
+        self.source_radius = max(2.0, float(source_radius))
+        self.target_radius = max(2.0, float(target_radius))
+        self.ideal_source_radius = max(2.0, float(ideal_source_radius if ideal_source_radius is not None else source_radius))
+        self.ideal_target_radius = max(2.0, float(ideal_target_radius if ideal_target_radius is not None else target_radius))
+        self.display_layer = display_layer if display_layer in base.DISPLAY_LAYER_LABELS else "overlay"
+        self.placement_active = bool(placement_active)
+        self.selectable = bool(selectable)
+        self._hovered = False
+        self.setZValue(2.0)
+        buttons = Qt.MouseButton.LeftButton | Qt.MouseButton.RightButton if self.selectable else Qt.MouseButton.NoButton
+        self.setAcceptedMouseButtons(buttons)
+        self.setAcceptHoverEvents(self.selectable)
+
+    def _path(self) -> QPainterPath:
+        path = QPainterPath(self.info.start_point)
+        path.lineTo(self.info.end_point)
+        return path
+
+    def _envelope(self, source_radius: float, target_radius: float) -> QPolygonF | None:
+        start = self.info.start_point
+        end = self.info.end_point
+        dx = end.x() - start.x()
+        dy = end.y() - start.y()
+        length = math.hypot(dx, dy)
+        if length < 1.0e-8:
+            return None
+        nx, ny = -dy / length, dx / length
+        r0 = max(2.0, min(18.0, float(source_radius)))
+        r1 = max(2.0, min(18.0, float(target_radius)))
+        return QPolygonF([
+            QPointF(start.x() + nx * r0, start.y() + ny * r0),
+            QPointF(end.x() + nx * r1, end.y() + ny * r1),
+            QPointF(end.x() - nx * r1, end.y() - ny * r1),
+            QPointF(start.x() - nx * r0, start.y() - ny * r0),
+        ])
+
+    def boundingRect(self) -> QRectF:
+        margin = max(self.source_radius, self.target_radius, self.ideal_source_radius, self.ideal_target_radius) + 24.0
+        return self._path().boundingRect().adjusted(-margin, -margin, margin, margin)
+
+    def shape(self) -> QPainterPath:
+        stroker = QPainterPathStroker()
+        stroker.setWidth(max(20.0, 2.0 * max(self.source_radius, self.target_radius)))
+        return stroker.createStroke(self._path())
+
+    def hoverEnterEvent(self, event) -> None:
+        self._hovered = True
+        self.update()
+        super().hoverEnterEvent(event)
+
+    def hoverLeaveEvent(self, event) -> None:
+        self._hovered = False
+        self.update()
+        super().hoverLeaveEvent(event)
+
+    def mousePressEvent(self, event) -> None:
+        if self.selectable:
+            self.segmentActivated.emit(self.edge_id, event.scenePos())
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
+    def paint(self, painter: QPainter, option, widget=None) -> None:
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        start = self.info.start_point
+        end = self.info.end_point
+        power = max(0.04, min(1.0, float(self.info.power_fraction)))
+        alpha = int(34 + 58 * math.sqrt(power))
+        polygon = self._envelope(self.source_radius, self.target_radius)
+        if polygon is not None:
+            gradient = QLinearGradient(start, end)
+            gradient.setColorAt(0.0, QColor(255, 74, 74, max(24, alpha - 14)))
+            gradient.setColorAt(0.55, QColor(255, 52, 52, alpha))
+            gradient.setColorAt(1.0, QColor(255, 104, 104, max(22, alpha - 18)))
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(gradient)
+            painter.drawPolygon(polygon)
+        if self.display_layer in {"principle", "overlay"}:
+            ideal = self._envelope(self.ideal_source_radius, self.ideal_target_radius)
+            if ideal is not None:
+                painter.setBrush(Qt.BrushStyle.NoBrush)
+                painter.setPen(QPen(QColor(33, 118, 180, 145), 1.2, Qt.PenStyle.DashLine))
+                painter.drawPolygon(ideal)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.setPen(QPen(QColor(theme.ERROR), 2.15, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+        painter.drawLine(start, end)
+        if self.placement_active or self._hovered:
+            painter.setPen(QPen(QColor(theme.PRIMARY), 5.0 if self.placement_active else 3.0, Qt.PenStyle.DashLine, Qt.PenCapStyle.RoundCap))
+            painter.drawLine(start, end)
+
+
 class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
     beamSegmentActivated = Signal(str, float, float)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self._instrument_placement_kind: str | None = None
+        self._live_trace_timer = QTimer(self)
+        self._live_trace_timer.setSingleShot(True)
+        self._live_trace_timer.setInterval(35)
+        self._live_trace_timer.timeout.connect(self._submit_live_trace)
+
+    def _submit_live_trace(self) -> None:
+        model = self._model
+        if isinstance(model, FlexibleSpatialExperimentModel):
+            model.mark_changed()
+            model.request_live_trace()
+
+    def _stop_live_trace_timer(self, *_args) -> None:
+        self._live_trace_timer.stop()
 
     def set_instrument_placement_kind(self, kind: str | None) -> None:
         self._instrument_placement_kind = kind if kind in MEASUREMENT_KINDS else None
         self.viewport().setCursor(Qt.CursorShape.CrossCursor if self._instrument_placement_kind else Qt.CursorShape.ArrowCursor)
         if self._model is not None:
             self.set_model(self._model, preserve_view=True)
+
+    def _on_item_position_changed(self, node_id: str) -> None:
+        model = self._model
+        item = self._node_items.get(node_id)
+        if isinstance(model, FlexibleSpatialExperimentModel) and item is not None and node_id in model.nodes:
+            node = model.nodes[node_id]
+            node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(item.pos().x())))
+            node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(item.pos().y())))
+            if model.mode == "layout":
+                if node.kind in base.OPTICAL_TYPES:
+                    node.y = base.MAIN_RAIL_Y
+                elif node.kind != "oscilloscope":
+                    node.y = base.BRANCH_RAIL_Y
+            if not self._live_trace_timer.isActive():
+                self._live_trace_timer.start()
+        for edge_item in self._edge_items.values():
+            edge_item.update()
 
     def set_model(
         self,
@@ -489,35 +967,32 @@ class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
             item = spatial.SpatialOpticalNodeItem(node, node_movable, display_layer=self._display_layer)
             item.activated.connect(self.nodeActivated)
             item.positionChanged.connect(self._on_item_position_changed)
+            item.movementFinished.connect(self._stop_live_trace_timer)
             item.movementFinished.connect(self.nodeMoved)
             self.scene_obj.addItem(item)
             self._node_items[node.id] = item
-        for edge in model.edges.values():
-            source = self._node_items.get(edge.source)
-            target = self._node_items.get(edge.target)
-            source_node = model.nodes.get(edge.source)
-            target_node = model.nodes.get(edge.target)
-            if source is None or target is None or source_node is None or target_node is None:
-                continue
-            if source_node.kind == "photodetector" and target_node.kind == "oscilloscope":
-                continue
-            active = edge.source in reached and edge.target in reached
-            item = SelectableBeamSegmentItem(
-                edge,
-                source,
-                target,
-                active,
-                False,
-                source_radius=current_radii.get(edge.source, 6.0),
-                target_radius=current_radii.get(edge.target, 6.0),
-                ideal_source_radius=ideal_radii.get(edge.source, 6.0),
-                ideal_target_radius=ideal_radii.get(edge.target, 6.0),
+        for info in model.beam_segments():
+            source_id = info.source_id or ""
+            target_id = info.target_id or ""
+            source_radius = current_radii.get(source_id, current_radii.get(target_id, 6.0))
+            target_radius = current_radii.get(target_id, source_radius)
+            ideal_source_radius = ideal_radii.get(source_id, ideal_radii.get(target_id, source_radius))
+            ideal_target_radius = ideal_radii.get(target_id, ideal_source_radius)
+            selectable = info.edge_id in model.edges and source_id != target_id
+            item = PhysicalBeamSegmentItem(
+                info,
+                source_radius=source_radius,
+                target_radius=target_radius,
+                ideal_source_radius=ideal_source_radius,
+                ideal_target_radius=ideal_target_radius,
                 display_layer=self._display_layer,
-                placement_active=bool(self._instrument_placement_kind),
+                placement_active=bool(self._instrument_placement_kind and selectable),
+                selectable=selectable,
             )
-            item.segmentActivated.connect(lambda edge_id, point: self.beamSegmentActivated.emit(edge_id, point.x(), point.y()))
+            if selectable:
+                item.segmentActivated.connect(lambda edge_id, point: self.beamSegmentActivated.emit(edge_id, point.x(), point.y()))
             self.scene_obj.addItem(item)
-            self._edge_items[edge.id] = item
+            self._edge_items[info.edge_id] = item
         if model.selected_node_id in self._node_items:
             self._node_items[model.selected_node_id].setSelected(True)
         if preserve_view and self._initial_fit_done:
@@ -534,6 +1009,16 @@ class FlexibleSpatial3DView(spatial.SpatialExperiment3DView):
         super().__init__(parent)
         self._instrument_placement_kind: str | None = None
         self._beam_screen_segments: dict[str, tuple[QPointF, QPointF]] = {}
+        self._live_trace_timer = QTimer(self)
+        self._live_trace_timer.setSingleShot(True)
+        self._live_trace_timer.setInterval(35)
+        self._live_trace_timer.timeout.connect(self._submit_live_trace)
+
+    def _submit_live_trace(self) -> None:
+        model = self._model
+        if isinstance(model, FlexibleSpatialExperimentModel) and self._interaction in {"move_node", "rotate_node"}:
+            model.mark_changed()
+            model.request_live_trace()
 
     def set_instrument_placement_kind(self, kind: str | None) -> None:
         self._instrument_placement_kind = kind if kind in MEASUREMENT_KINDS else None
@@ -553,26 +1038,18 @@ class FlexibleSpatial3DView(spatial.SpatialExperiment3DView):
         if not self._layer_flags["beam"]:
             return
         current_radii, _ideal = base.ExperimentGraphicsView._beam_radii(self._model)
-        for edge in self._model.edges.values():
-            source = self._model.nodes.get(edge.source)
-            target = self._model.nodes.get(edge.target)
-            if source is None or target is None or (source.kind == "photodetector" and target.kind == "oscilloscope"):
-                continue
-            if source.id not in reached or target.id not in reached:
-                continue
-            sz = float(source.params.get("z_mm", 82.0))
-            tz = float(target.params.get("z_mm", 82.0))
-            a = self._project(source.x, source.y, sz)[0]
-            b = self._project(target.x, target.y, tz)[0]
-            self._beam_screen_segments[edge.id] = (a, b)
-            if self._instrument_placement_kind:
+        for info in self._model.beam_segments():
+            a = self._project(info.start_x, info.start_y, info.start_z_mm)[0]
+            b = self._project(info.end_x, info.end_y, info.end_z_mm)[0]
+            selectable = info.edge_id in self._model.edges and info.source_id != info.target_id
+            if selectable:
+                self._beam_screen_segments[info.edge_id] = (a, b)
+            if self._instrument_placement_kind and selectable:
                 painter.setPen(QPen(QColor(76, 187, 236, 105), 18.0, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
                 painter.drawLine(a, b)
-            self._draw_beam_segment(
-                painter, a, b,
-                current_radii.get(source.id, 8.0),
-                current_radii.get(target.id, 8.0),
-            )
+            source_radius = current_radii.get(info.source_id or "", current_radii.get(info.target_id or "", 8.0))
+            target_radius = current_radii.get(info.target_id or "", source_radius)
+            self._draw_beam_segment(painter, a, b, source_radius, target_radius)
 
     def _beam_at(self, pos: QPointF) -> tuple[str, float] | None:
         best: tuple[str, float, float] | None = None
@@ -590,6 +1067,16 @@ class FlexibleSpatial3DView(spatial.SpatialExperiment3DView):
                 event.accept()
                 return
         super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        interaction_before = self._interaction
+        super().mouseMoveEvent(event)
+        if interaction_before in {"move_node", "rotate_node"} and not self._live_trace_timer.isActive():
+            self._live_trace_timer.start()
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        self._live_trace_timer.stop()
+        super().mouseReleaseEvent(event)
 
     def align_to_selected_beam(self) -> None:
         if self._model is None:
@@ -625,7 +1112,15 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         self.graphics_view.beamSegmentActivated.connect(self._on_2d_beam_segment)
         self.view_3d.beamSegmentActivated.connect(self._on_3d_beam_segment)
         self._create_measurement_placement_hint()
+        self._trace_poll_timer = QTimer(self)
+        self._trace_poll_timer.setInterval(33)
+        self._trace_poll_timer.timeout.connect(self._poll_engine_trace)
+        self._trace_poll_timer.start()
         self._refresh_all(preserve_view=True)
+
+    def _poll_engine_trace(self) -> None:
+        if isinstance(self.model, FlexibleSpatialExperimentModel) and self.model.poll_trace_update():
+            self._refresh_all(preserve_view=True)
 
     def _create_measurement_placement_hint(self) -> None:
         self.measurement_hint = QFrame(self.overlay_host)
@@ -740,6 +1235,25 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         action_layout.addWidget(clear)
         self.left_drawer.body_layout.addWidget(action_group)
         self.left_drawer.body_layout.addStretch(1)
+
+    def _on_node_moved(self, node_id: str, x: float, y: float) -> None:
+        if self.model.mode == "standard" or node_id not in self.model.nodes:
+            self._refresh_views(preserve_view=True)
+            return
+        node = self.model.nodes[node_id]
+        if node.kind in base.INSTRUMENT_TYPES and bool(node.params.get("beam_attached", False)):
+            self.model.move_node(node_id, x, y, record=True)
+        else:
+            node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(x)))
+            node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(y)))
+            if self.model.mode == "layout":
+                if node.kind in base.OPTICAL_TYPES:
+                    node.y = base.MAIN_RAIL_Y
+                elif node.kind != "oscilloscope":
+                    node.y = base.BRANCH_RAIL_Y
+            self.model.mark_changed()
+            self.model.record(f"移动{node.label}；系统已重新追迹光路。")
+        self._refresh_all(preserve_view=True)
 
     def _update_experiment_info(self, preset_key: str) -> None:
         label = getattr(self, "experiment_info_label", None)
@@ -870,9 +1384,35 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
     def _populate_object_drawer(self) -> None:
         super()._populate_object_drawer()
         node = self.model.nodes.get(self.model.selected_node_id or "")
-        if node is None or node.kind not in base.INSTRUMENT_TYPES or node.kind == "oscilloscope":
+        if node is None:
             return
         layout = self.right_drawer.body_layout
+        if node.kind == "cylindrical_lens":
+            if layout.count() and layout.itemAt(layout.count() - 1).spacerItem() is not None:
+                layout.takeAt(layout.count() - 1)
+            group, group_layout = self._group_box("柱面轴")
+            row = QHBoxLayout()
+            row.addWidget(QLabel("轴角"))
+            axis = QDoubleSpinBox()
+            axis.setRange(0.0, 179.9)
+            axis.setDecimals(1)
+            axis.setSingleStep(1.0)
+            axis.setSuffix(" °")
+            axis.setValue(float(node.params.get("axis_angle_deg", node.params.get("cylinder_axis_deg", 0.0)) or 0.0) % 180.0)
+            axis.setToolTip("柱面轴为零光焦度方向；实际光焦度方向与柱面轴正交。")
+            axis.valueChanged.connect(lambda value, nid=node.id: self.model.update_node_params(nid, {"axis_angle_deg": float(value)}, record=False))
+            axis.editingFinished.connect(lambda nid=node.id, box=axis: self.model.update_node_params(nid, {"axis_angle_deg": float(box.value())}, record=True))
+            row.addWidget(axis)
+            group_layout.addLayout(row)
+            hint = QLabel("轴角按传统柱面镜定义：沿柱面轴方向无光焦度，光焦度方向 = 轴角 + 90°。")
+            hint.setWordWrap(True)
+            hint.setObjectName("helperText")
+            group_layout.addWidget(hint)
+            self.right_drawer.body_layout.addWidget(group)
+            self.right_drawer.body_layout.addStretch(1)
+            return
+        if node.kind not in base.INSTRUMENT_TYPES or node.kind == "oscilloscope":
+            return
         if layout.count() and layout.itemAt(layout.count() - 1).spacerItem() is not None:
             layout.takeAt(layout.count() - 1)
         group, group_layout = self._group_box("测量位置")
@@ -920,6 +1460,14 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         super().set_view_kind(kind)
         self.graphics_view.set_instrument_placement_kind(self._pending_instrument_kind)
         self.view_3d.set_instrument_placement_kind(self._pending_instrument_kind)
+
+    def closeEvent(self, event) -> None:
+        timer = getattr(self, "_trace_poll_timer", None)
+        if timer is not None:
+            timer.stop()
+        if isinstance(getattr(self, "model", None), FlexibleSpatialExperimentModel):
+            self.model.close_trace_scheduler()
+        super().closeEvent(event)
 
     def keyPressEvent(self, event) -> None:  
         if event.key() == Qt.Key.Key_Escape and self._pending_instrument_kind:

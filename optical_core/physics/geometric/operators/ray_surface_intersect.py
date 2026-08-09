@@ -38,9 +38,26 @@ def intersect_ray_with_surface(
     t = (float(vertex_z_mm) - p0[2]) / d[2]
     if not np.isfinite(t):
         return SurfaceIntersection(p0, 0.0, False, "初值求交失败")
+    surface_type = str(getattr(surface, "surface_type", "")).strip().lower()
+    metadata = dict(getattr(surface, "metadata", {}) or {})
+    cylindrical = surface_type in {"cylindrical", "cylinder", "cylindrical_refractive"}
+    if "cylinder_power_axis_deg" in metadata:
+        power_axis_deg = float(90.0 if metadata.get("cylinder_power_axis_deg") is None else metadata.get("cylinder_power_axis_deg"))
+    else:
+        cylinder_axis_deg = float(metadata.get("cylinder_axis_deg", metadata.get("axis_angle_deg", 0.0)) or 0.0)
+        power_axis_deg = cylinder_axis_deg + 90.0
+    power_axis_rad = np.radians(power_axis_deg % 180.0)
+    cylinder_cos = float(np.cos(power_axis_rad))
+    cylinder_sin = float(np.sin(power_axis_rad))
+
     for _ in range(max_iterations):
         point = p0 + t * d
-        radial = float(np.hypot(point[0], point[1]))
+        if cylindrical:
+            signed_coordinate = float(point[0] * cylinder_cos + point[1] * cylinder_sin)
+            radial = abs(signed_coordinate)
+        else:
+            signed_coordinate = 0.0
+            radial = float(np.hypot(point[0], point[1]))
         sag = float(sag_conic_asphere(
             radial,
             radius_mm=surface.radius_mm,
@@ -60,8 +77,14 @@ def intersect_ray_with_surface(
             asphere_a2=surface.asphere_a2,
             asphere_coefficients=surface.asphere_coefficients,
         ))
-        radial_rate = 0.0 if radial <= 1.0e-15 else (point[0] * d[0] + point[1] * d[1]) / radial
-        jacobian = d[2] - derivative * radial_rate
+        if cylindrical:
+            sign = 0.0 if abs(signed_coordinate) <= 1.0e-15 else (1.0 if signed_coordinate > 0.0 else -1.0)
+            coordinate_rate = float(d[0] * cylinder_cos + d[1] * cylinder_sin)
+            sag_rate = derivative * sign * coordinate_rate
+        else:
+            radial_rate = 0.0 if radial <= 1.0e-15 else (point[0] * d[0] + point[1] * d[1]) / radial
+            sag_rate = derivative * radial_rate
+        jacobian = d[2] - sag_rate
         if abs(jacobian) <= 1.0e-14:
             break
         t -= residual / jacobian

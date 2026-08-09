@@ -154,7 +154,7 @@ _add(
 )
 _add(
     key="cylindrical_astigmatism", group="模场整形", label="柱面整形与像散",
-    active_control="柱面镜间距、整体旋转角和模块位置",
+    active_control="柱面镜间距、柱面轴角（零光焦度方向）和模块位置",
     coupled_quantities="椭圆率、X/Y 发散角、两方向束腰位置与像散共同变化",
     diagnostics="多位置 w_x(z)、w_y(z) 与波前像散",
     compensation="分别拟合 q_x、q_y，再优化光纤 Z",
