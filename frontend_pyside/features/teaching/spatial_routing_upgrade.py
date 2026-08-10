@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import math
 from typing import Any
+from uuid import uuid4
 
 from PySide6.QtCore import QPointF, QRectF, Qt, Signal, QTimer
 from PySide6.QtGui import (
@@ -21,6 +22,7 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QDoubleSpinBox,
     QFrame,
+    QGraphicsItem,
     QGraphicsObject,
     QGridLayout,
     QHBoxLayout,
@@ -33,6 +35,8 @@ from PySide6.QtWidgets import (
 )
 
 from frontend_pyside.resources import theme_tokens as theme
+from frontend_pyside.api.job_client import JobClient
+from frontend_pyside.api.simulation_client import SimulationClient
 
 from . import spatial_workbench as spatial
 from . import unified_workbench as base
@@ -206,8 +210,6 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         return outgoing
 
     def _apply_beam_attachments(self) -> None:
-
-
         for node in self.nodes.values():
             if node.kind not in base.INSTRUMENT_TYPES or not bool(node.params.get("beam_attached", False)):
                 continue
@@ -222,21 +224,13 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                 if info.is_chief_ray and info.source_id == source.id and info.target_id == target.id
             ), None)
             if segment is None:
-                start_x, start_y = float(source.x), float(source.y)
-                end_x, end_y = float(target.x), float(target.y)
-                start_z = float(source.params.get("z_mm", 82.0))
-                end_z = float(target.params.get("z_mm", 82.0))
-                incoming = math.degrees(math.atan2(end_y - start_y, end_x - start_x)) % 360.0
-            else:
-                start_x, start_y = segment.start_x, segment.start_y
-                end_x, end_y = segment.end_x, segment.end_y
-                start_z, end_z = segment.start_z_mm, segment.end_z_mm
-                incoming = segment.angle_deg
-            node.x = start_x + (end_x - start_x) * t
-            node.y = start_y + (end_y - start_y) * t
-            node.params["z_mm"] = start_z + (end_z - start_z) * t
+                # 真实追迹结果里没有该段的被跟踪主光线时保持原位，不再回退到节点间直线插值。
+                continue
+            node.x = segment.start_x + (segment.end_x - segment.start_x) * t
+            node.y = segment.start_y + (segment.end_y - segment.start_y) * t
+            node.params["z_mm"] = segment.start_z_mm + (segment.end_z_mm - segment.start_z_mm) * t
             if bool(node.params.get("follow_beam_orientation", True)):
-                node.rotation_deg = (incoming + 180.0) % 360.0
+                node.rotation_deg = (segment.angle_deg + 180.0) % 360.0
 
     def _physical_scene(self, *, generation: int | None = None, quality: str = "settled") -> TeachingPhysicalScene:
         physical_nodes: list[TeachingPhysicalNode] = []
@@ -578,9 +572,10 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                     item for item in self._physical_segments
                     if item.is_chief_ray and item.source_id == source.id and item.target_id == target.id
                 ), None)
-                start = info.start_point if info is not None else QPointF(source.x, source.y)
-                end = info.end_point if info is not None else QPointF(target.x, target.y)
-                fraction = _segment_fraction(QPointF(float(x), float(y)), start, end)
+                if info is None:
+                    # 没有真实追迹段时无法计算沿光束位置，保持吸附位置不动。
+                    return
+                fraction = _segment_fraction(QPointF(float(x), float(y)), info.start_point, info.end_point)
                 self.set_attachment_fraction(node_id, fraction, record=record)
                 return
         old = (float(node.x), float(node.y))
@@ -937,10 +932,13 @@ class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
                     node.y = base.MAIN_RAIL_Y
                 elif node.kind != "oscilloscope":
                     node.y = base.BRANCH_RAIL_Y
-            if not self._live_trace_timer.isActive():
-                self._live_trace_timer.start()
-        for edge_item in self._edge_items.values():
-            edge_item.update()
+        if not self._live_trace_timer.isActive():
+            self._live_trace_timer.start()
+        # 只刷新与移动节点相邻的光路图元；其余静态图元由 DeviceCoordinateCache 提供缓存。
+        for edge_id, edge_item in self._edge_items.items():
+            info = getattr(edge_item, "info", None)
+            if info is not None and (info.source_id == node_id or info.target_id == node_id):
+                edge_item.update()
 
     def set_model(
         self,
@@ -965,6 +963,8 @@ class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
         for node in model.nodes.values():
             node_movable = movable and not (model.mode == "layout" and node.kind in {"laser", "isolator", "half_wave_plate", "pbs", "splitter"})
             item = spatial.SpatialOpticalNodeItem(node, node_movable, display_layer=self._display_layer)
+            if not node_movable:
+                item.setCacheMode(QGraphicsItem.CacheMode.DeviceCoordinateCache)
             item.activated.connect(self.nodeActivated)
             item.positionChanged.connect(self._on_item_position_changed)
             item.movementFinished.connect(self._stop_live_trace_timer)
@@ -989,6 +989,8 @@ class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
                 placement_active=bool(self._instrument_placement_kind and selectable),
                 selectable=selectable,
             )
+            # 光束图元在拖拽期间几何不变，设备坐标缓存避免逐帧重绘。
+            item.setCacheMode(QGraphicsItem.CacheMode.DeviceCoordinateCache)
             if selectable:
                 item.segmentActivated.connect(lambda edge_id, point: self.beamSegmentActivated.emit(edge_id, point.x(), point.y()))
             self.scene_obj.addItem(item)
@@ -1116,11 +1118,160 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         self._trace_poll_timer.setInterval(33)
         self._trace_poll_timer.timeout.connect(self._poll_engine_trace)
         self._trace_poll_timer.start()
+        # 正式仿真：提交后台任务，轮询状态并在完成后展示带来源标注的结果。
+        self._formal_job_id = ""
+        self._formal_status_text = "未提交正式仿真。"
+        self._formal_poll_timer = QTimer(self)
+        self._formal_poll_timer.setInterval(700)
+        self._formal_poll_timer.timeout.connect(self._poll_formal_job)
+        self.context.api_client.completed.connect(self._on_api_completed)
+        self.context.api_client.failed.connect(self._on_api_failed)
+        # 复场验证：解析复场模式重叠，settle 完成后自动刷新结果。
+        self._field_verification_result: dict[str, Any] | None = None
         self._refresh_all(preserve_view=True)
 
     def _poll_engine_trace(self) -> None:
         if isinstance(self.model, FlexibleSpatialExperimentModel) and self.model.poll_trace_update():
             self._refresh_all(preserve_view=True)
+            if self.model.engine_trace_status().get("quality") in {"settled", "formal"}:
+                self._auto_field_verification()
+
+    def _run_field_verification(self) -> None:
+        model = self.model
+        if not isinstance(model, FlexibleSpatialExperimentModel):
+            return
+        result = model.field_verification()
+        self._field_verification_result = result
+        efficiency = float(result.get("coupling_efficiency", 0.0))
+        model.record(f"完成复场验证：模式重叠耦合效率 {efficiency * 100.0:.1f}%。")
+        self._update_field_label()
+
+    def _auto_field_verification(self) -> None:
+        self._field_verification_result = self.model.field_verification()
+        self._update_field_label()
+
+    def _update_field_label(self) -> None:
+        label = getattr(self, "field_result_label", None)
+        result = self._field_verification_result
+        if label is None:
+            return
+        if not result or not result.get("ok"):
+            label.setText("复场验证：光路未连通，无法计算。")
+            return
+        efficiency = float(result.get("coupling_efficiency", 0.0))
+        side = int(result.get("sample_side", 0))
+        lines = [
+            f"复场验证 · 解析高斯复场与光纤模场模式重叠（{side}×{side} 采样）",
+            f"耦合效率 η = {efficiency * 100.0:.1f}%",
+            f"接收面束腰 {float(result['waist_x_um']):.2f}×{float(result['waist_y_um']):.2f} μm"
+            f" · 模场半径 {float(result['fiber_mode_radius_um']):.2f} μm",
+        ]
+        label.setText("\n".join(lines))
+
+    def _submit_formal_simulation(self) -> None:
+        model = self.model
+        if not isinstance(model, FlexibleSpatialExperimentModel):
+            return
+        if self._formal_job_id:
+            self._formal_status_text = f"已有后台任务 #{self._formal_job_id} 运行中，请等待完成。"
+            self._update_formal_label()
+            return
+        try:
+            scene = model._physical_scene(quality="formal")
+            project, engine_options = model._engine_bridge.compile_project(scene)
+        except Exception as exc:
+            self._formal_status_text = f"场景编译失败：{exc}"
+            self._update_formal_label()
+            return
+        request_id = f"teaching-formal-{uuid4().hex[:8]}"
+        payload = {
+            "request_id": request_id,
+            "project": project.model_dump(mode="json"),
+            "analyses": ["scene_raytrace"],
+            "precision": "high",
+            "random_seed": 0,
+            "options": dict(engine_options),
+        }
+        self._formal_status_text = "已提交正式仿真，等待后台任务响应……"
+        self._update_formal_label()
+        SimulationClient(self.context.api_client).submit(
+            f"teaching.formal.submit:{request_id}", payload
+        )
+
+    def _poll_formal_job(self) -> None:
+        job_id = self._formal_job_id
+        if not job_id:
+            self._formal_poll_timer.stop()
+            return
+        JobClient(self.context.api_client).get_status(f"teaching.formal.status:{job_id}", job_id)
+
+    def _on_api_completed(self, key: str, data: object) -> None:
+        if not key.startswith("teaching.formal."):
+            return
+        payload = data.get("data") if isinstance(data, dict) else None
+        if key.startswith("teaching.formal.submit:"):
+            job_id = str((payload or {}).get("job_id", ""))
+            if job_id:
+                self._formal_job_id = job_id
+                self._formal_status_text = f"正式仿真任务 #{job_id} 已排队，等待完成……"
+                self._formal_poll_timer.start()
+            else:
+                self._formal_status_text = "后台未返回任务编号。"
+            self._update_formal_label()
+            return
+        if key.startswith("teaching.formal.status:"):
+            status = str((payload or {}).get("status", ""))
+            if status == "completed":
+                job_id = self._formal_job_id
+                self._formal_poll_timer.stop()
+                JobClient(self.context.api_client).get_result(
+                    f"teaching.formal.result:{job_id}", job_id
+                )
+            elif status in {"failed", "cancelled"}:
+                self._formal_poll_timer.stop()
+                error = (payload or {}).get("error") or {}
+                detail = str(error.get("message", "") or "") if isinstance(error, dict) else ""
+                self._formal_status_text = f"正式仿真任务已{status}。{detail}"
+                self._formal_job_id = ""
+                self._update_formal_label()
+            return
+        if key.startswith("teaching.formal.result:"):
+            self._formal_poll_timer.stop()
+            self._show_formal_result(payload if isinstance(payload, dict) else {})
+
+    def _on_api_failed(self, key: str, error: str) -> None:
+        if not key.startswith("teaching.formal."):
+            return
+        self._formal_poll_timer.stop()
+        self._formal_job_id = ""
+        self._formal_status_text = f"后台正式仿真不可用：{str(error)[:120]}"
+        self._update_formal_label()
+
+    def _show_formal_result(self, result: dict) -> None:
+        metrics = dict(result.get("metrics") or {})
+        lines = [f"正式结果 · 后台任务 #{self._formal_job_id} · 完整 optical_core 链路"]
+        engine = str(result.get("engine_name", "") or "")
+        version = str(result.get("engine_version", "") or "")
+        if engine:
+            lines.append(f"引擎：{engine}" + (f" v{version}" if version else ""))
+        elapsed = result.get("elapsed_ms")
+        if elapsed is not None:
+            lines.append(f"耗时：{float(elapsed):.0f} ms")
+        shown = 0
+        for name, value in metrics.items():
+            if isinstance(value, (str, int, float)) and not isinstance(value, bool):
+                lines.append(f"{name} = {value}")
+                shown += 1
+                if shown >= 6:
+                    break
+        self._formal_job_id = ""
+        self._formal_status_text = "\n".join(lines)
+        self._update_formal_label()
+
+    def _update_formal_label(self) -> None:
+        label = getattr(self, "formal_result_label", None)
+        if label is not None:
+            label.setText(self._formal_status_text)
 
     def _create_measurement_placement_hint(self) -> None:
         self.measurement_hint = QFrame(self.overlay_host)
@@ -1233,6 +1384,23 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         clear.setEnabled(self.model.mode == "free")
         clear.clicked.connect(self._clear_free_platform)
         action_layout.addWidget(clear)
+        field = QPushButton("复场验证（模式重叠）")
+        field.setEnabled(self.model.mode == "free")
+        field.clicked.connect(self._run_field_verification)
+        action_layout.addWidget(field)
+        self.field_result_label = QLabel("复场验证：尚未计算。")
+        self.field_result_label.setObjectName("helperText")
+        self.field_result_label.setWordWrap(True)
+        action_layout.addWidget(self.field_result_label)
+        self._update_field_label()
+        formal = QPushButton("提交正式仿真（后台任务）")
+        formal.setEnabled(self.model.mode == "free")
+        formal.clicked.connect(self._submit_formal_simulation)
+        action_layout.addWidget(formal)
+        self.formal_result_label = QLabel(self._formal_status_text)
+        self.formal_result_label.setObjectName("helperText")
+        self.formal_result_label.setWordWrap(True)
+        action_layout.addWidget(self.formal_result_label)
         self.left_drawer.body_layout.addWidget(action_group)
         self.left_drawer.body_layout.addStretch(1)
 
@@ -1465,6 +1633,9 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         timer = getattr(self, "_trace_poll_timer", None)
         if timer is not None:
             timer.stop()
+        formal_timer = getattr(self, "_formal_poll_timer", None)
+        if formal_timer is not None:
+            formal_timer.stop()
         if isinstance(getattr(self, "model", None), FlexibleSpatialExperimentModel):
             self.model.close_trace_scheduler()
         super().closeEvent(event)

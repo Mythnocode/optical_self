@@ -1,0 +1,39 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# ===== 构建产物 =====
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ===== 虚拟环境 =====
+.venv/
+venv/
+envs/
+
+# ===== 运行时数据（本地任务、日志、用量统计，不入库） =====
+user_data/
+logs/
+
+# ===== 环境与密钥 =====
+.env
+.env.*
+!.env.example
+
+# ===== IDE / 编辑器 / 系统 =====
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

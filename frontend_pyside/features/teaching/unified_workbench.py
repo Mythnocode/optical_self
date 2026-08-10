@@ -610,6 +610,75 @@ class ExperimentModel:
             "ellipticity": max(radius_plane_x, radius_plane_y) / max(min(radius_plane_x, radius_plane_y), 1e-9),
         }
 
+    def field_verification(self, *, sample_side: int = 257) -> dict[str, Any]:
+        """复场验证：在光纤接收平面用解析高斯复场与光纤模场做模式重叠积分。
+
+        属于教学预览阶段的“复场”验证：用低复杂度解析传播模型构造端面复场
+        （振幅 + 二次相位 + 倾斜线性相位），与光纤模场做重叠积分得到耦合效率。
+        """
+        import numpy as np
+
+        path = self.shortest_path("fiber")
+        if not path:
+            return {
+                "ok": False,
+                "reason": "光路未连通，无法进行复场验证。",
+                "coupling_efficiency": 0.0,
+                "sample_side": 0,
+            }
+        state = self.beam_state()
+        fiber = next((node for node in self.nodes.values() if node.kind == "fiber"), None)
+        fp = fiber.params if fiber is not None else {}
+        wavelength_um = max(self.wavelength_nm / 1000.0, 1e-9)
+        k = 2.0 * math.pi / wavelength_um
+
+        waist_x = max(float(state["waist_x_um"]), 1e-6)
+        waist_y = max(float(state["waist_y_um"]), 1e-6)
+        zx = float(state["waist_x_z_um"]) + float(fp.get("offset_z_um", 0.0))
+        zy = float(state["waist_y_z_um"]) + float(fp.get("offset_z_um", 0.0))
+        zrx = max(float(state["rayleigh_x_um"]), 1e-6)
+        zry = max(float(state["rayleigh_y_um"]), 1e-6)
+        wfx = max(float(state["plane_radius_x_um"]), 1e-6)
+        wfy = max(float(state["plane_radius_y_um"]), 1e-6)
+        inv_rx = zx / max(zx * zx + zrx * zrx, 1e-9)
+        inv_ry = zy / max(zy * zy + zry * zry, 1e-9)
+        wf = max(0.2, float(self.receiver_mode_radius_um))
+        dx = float(fp.get("offset_x_um", 0.0))
+        dy = float(fp.get("offset_y_um", 0.0))
+        theta_x = float(fp.get("yaw_mrad", 0.0)) * 1e-3
+        theta_y = float(fp.get("pitch_mrad", 0.0)) * 1e-3
+
+        span_x = 5.0 * max(wfx, wf)
+        span_y = 5.0 * max(wfy, wf)
+        xs = np.linspace(-span_x, span_x, int(sample_side))
+        ys = np.linspace(-span_y, span_y, int(sample_side))
+        xg, yg = np.meshgrid(xs, ys, indexing="ij")
+        xm = xg - dx
+        ym = yg - dy
+
+        beam_amp = np.exp(-(xm * xm) / (wfx * wfx) - (ym * ym) / (wfy * wfy))
+        beam_phase = -0.5 * k * (inv_rx * xm * xm + inv_ry * ym * ym) - k * (theta_x * xm + theta_y * ym)
+        beam = beam_amp * np.exp(1j * beam_phase)
+        fiber_mode = np.exp(-(xg * xg + yg * yg) / (wf * wf))
+
+        numerator = np.abs(np.sum(np.conj(beam) * fiber_mode)) ** 2
+        denominator = np.sum(np.abs(beam) ** 2) * np.sum(fiber_mode * fiber_mode)
+        efficiency = float(min(1.0, max(0.0, numerator / max(denominator, 1e-30))))
+
+        return {
+            "ok": True,
+            "coupling_efficiency": efficiency,
+            "sample_side": int(sample_side),
+            "waist_x_um": float(state["waist_x_um"]),
+            "waist_y_um": float(state["waist_y_um"]),
+            "plane_radius_x_um": wfx,
+            "plane_radius_y_um": wfy,
+            "fiber_mode_radius_um": wf,
+            "position_offset_um": (dx, dy),
+            "axial_offset_um": float(fp.get("offset_z_um", 0.0)),
+            "tilt_mrad": (theta_x * 1e3, theta_y * 1e3),
+        }
+
     def _evaluate_uncached(self) -> WorkbenchMetrics:
         reached = self.reached_nodes()
         path = self.shortest_path("fiber")

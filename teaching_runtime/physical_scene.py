@@ -558,6 +558,11 @@ class TeachingOpticalEngineBridge:
     def __init__(self, engine: OpticalSimulationEngine | None = None) -> None:
         self.engine = engine or OpticalSimulationEngine(trace_cache_max_bytes=96 * 1024**2)
 
+    def compile_project(self, scene: TeachingPhysicalScene) -> tuple[ProjectSnapshot, dict[str, Any]]:
+        """将教学场景编译为正式 ProjectSnapshot 与引擎选项，供后台正式仿真任务复用。"""
+        project, _frame, _warnings, engine_options = _compile_project(scene)
+        return project, dict(engine_options)
+
     def trace(self, scene: TeachingPhysicalScene) -> TeachingEngineTrace:
         quality = _trace_quality_profile(scene.trace_quality)
         try:
