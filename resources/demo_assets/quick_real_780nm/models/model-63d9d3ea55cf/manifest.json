@@ -1,0 +1,615 @@
+{
+  "model_id": "model-63d9d3ea55cf",
+  "dataset_id": "dataset-880bdde6c292",
+  "model_type": "random_forest",
+  "feature_paths": [
+    "receiver.offset_x_mm",
+    "receiver.axial_offset_z_mm"
+  ],
+  "feature_units": [
+    "mm",
+    "mm"
+  ],
+  "target_names": [
+    "coupling_efficiency"
+  ],
+  "engine_name": "headless",
+  "engine_version": "native-optical-core-v3.2",
+  "validation_metrics": {
+    "mae": 0.029424368242599735,
+    "rmse": 0.03671628460134126,
+    "r2": 0.9073218817927924,
+    "max_absolute_error": 0.08726319087223289
+  },
+  "test_metrics": {
+    "mae": 0.028451853080106705,
+    "rmse": 0.035492194063622466,
+    "r2": 0.9402176386041832,
+    "max_absolute_error": 0.10432318276798469
+  },
+  "physics_baseline": null,
+  "training_role": "random_forest_baseline",
+  "source_project": {
+    "schema_version": "2.0",
+    "project_id": "demo-video-780nm-four-lens",
+    "surfaces": [
+      {
+        "index": 0,
+        "surface_type": "aspheric",
+        "radius_mm": 5.11,
+        "distance_to_next_mm": 3.0,
+        "material_before": "AIR",
+        "material_after": "N-BK7",
+        "clear_aperture_mm": 3.0,
+        "conic": -1.068158491228596,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L1 前表面",
+          "group_id": "L1",
+          "element_id": "element_716de35286d84d54b442544f6d1704d2",
+          "surface_id": "surface_dfea0cd0c77b44aeaa39a3861ad1f577",
+          "frontend_surface_type": "非球面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      },
+      {
+        "index": 1,
+        "surface_type": "plane",
+        "radius_mm": null,
+        "distance_to_next_mm": 14.843576053563464,
+        "material_before": "N-BK7",
+        "material_after": "AIR",
+        "clear_aperture_mm": 3.0,
+        "conic": 0.0,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L1 后表面",
+          "group_id": "L1",
+          "element_id": "element_cb050cbcd9d344b4b4e346a691aee61d",
+          "surface_id": "surface_0011c43f1bc348c58808adb135ef7713",
+          "frontend_surface_type": "平面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      },
+      {
+        "index": 2,
+        "surface_type": "aspheric",
+        "radius_mm": 4.088,
+        "distance_to_next_mm": 4.0,
+        "material_before": "AIR",
+        "material_after": "N-BK7",
+        "clear_aperture_mm": 3.0,
+        "conic": -1.0118,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L2 前表面",
+          "group_id": "L2",
+          "element_id": "element_77e628228cc240209f3c155836e7762b",
+          "surface_id": "surface_01b5efb3e70f4a39af79fc104e205468",
+          "frontend_surface_type": "非球面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      },
+      {
+        "index": 3,
+        "surface_type": "plane",
+        "radius_mm": null,
+        "distance_to_next_mm": 27.374376240007166,
+        "material_before": "N-BK7",
+        "material_after": "AIR",
+        "clear_aperture_mm": 3.0,
+        "conic": 0.0,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L2 后表面",
+          "group_id": "L2",
+          "element_id": "element_eee4f7b566f54d88ae7cb90c006b642a",
+          "surface_id": "surface_1df8e28219e747d896d825403daeff01",
+          "frontend_surface_type": "平面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      },
+      {
+        "index": 4,
+        "surface_type": "aspheric",
+        "radius_mm": 25.55,
+        "distance_to_next_mm": 3.0,
+        "material_before": "AIR",
+        "material_after": "N-BK7",
+        "clear_aperture_mm": 3.0,
+        "conic": -1.0118,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L3 前表面",
+          "group_id": "L3",
+          "element_id": "element_52103de759104782a7667637d08213aa",
+          "surface_id": "surface_9d03962cb4314363a4b62762a80f7cf3",
+          "frontend_surface_type": "非球面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      },
+      {
+        "index": 5,
+        "surface_type": "plane",
+        "radius_mm": null,
+        "distance_to_next_mm": 15.674091779008947,
+        "material_before": "N-BK7",
+        "material_after": "AIR",
+        "clear_aperture_mm": 3.0,
+        "conic": 0.0,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L3 后表面",
+          "group_id": "L3",
+          "element_id": "element_e6e97a27cc6d4cff814011937e8d8bd1",
+          "surface_id": "surface_76ac23de4ccf44ce92cace2bbb6311b4",
+          "frontend_surface_type": "平面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      },
+      {
+        "index": 6,
+        "surface_type": "aspheric",
+        "radius_mm": 6.132,
+        "distance_to_next_mm": 3.0,
+        "material_before": "AIR",
+        "material_after": "N-BK7",
+        "clear_aperture_mm": 3.0,
+        "conic": -0.8385398893571219,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L4 前表面",
+          "group_id": "L4",
+          "element_id": "element_68ce4232725d4cf991f01dd6cf3af777",
+          "surface_id": "surface_f6fe13c9664f49538460b1ec88d7cff2",
+          "frontend_surface_type": "非球面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      },
+      {
+        "index": 7,
+        "surface_type": "plane",
+        "radius_mm": null,
+        "distance_to_next_mm": 0.0,
+        "material_before": "N-BK7",
+        "material_after": "AIR",
+        "clear_aperture_mm": 3.0,
+        "conic": 0.0,
+        "asphere_a2": 0.0,
+        "asphere_coefficients": [],
+        "coating_layers": [],
+        "surface_absorption_fraction": 0.0,
+        "roughness_rms_nm": 0.0,
+        "grating_period_um": null,
+        "grating_orders": [],
+        "grating_efficiencies": [],
+        "aperture_type": "circular",
+        "mechanical_diameter_mm": 6.0,
+        "enabled": true,
+        "decenter_x_mm": 0.0,
+        "decenter_y_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "tilt_z_deg": 0.0,
+        "metadata": {
+          "name": "L4 后表面",
+          "group_id": "L4",
+          "element_id": "element_a4c3ed3a1b2f4b088bf47a284caec060",
+          "surface_id": "surface_55b72d91a58542458aed09530dd74f22",
+          "frontend_surface_type": "平面",
+          "coating_preset": "无",
+          "note": "",
+          "type_parameters": {}
+        }
+      }
+    ],
+    "object_distance_mm": 18.182441199500627,
+    "image_distance_mm": 8.973730675077647,
+    "pupil_radius_mm": 3.0,
+    "source": {
+      "wavelength_nm": 780.0,
+      "source_type": "gaussian",
+      "object_na_x": 0.00018,
+      "object_na_y": 0.00018,
+      "field_x_deg": 0.0,
+      "field_y_deg": 0.0,
+      "waist_x_mm": 0.893,
+      "waist_y_mm": 1.05,
+      "beam_quality_m2": 1.0,
+      "beam_quality_m2_x": 3.05,
+      "beam_quality_m2_y": 1.33,
+      "waist_position_x_mm": 0.0,
+      "waist_position_y_mm": 0.0,
+      "center_x_mm": 0.0,
+      "center_y_mm": 0.0,
+      "axis_tilt_x_rad": 0.0,
+      "axis_tilt_y_rad": 0.0,
+      "spectral_wavelengths_nm": [
+        780.0
+      ],
+      "spectral_power_weights": [
+        1.0
+      ],
+      "power_value": 1.0,
+      "power_unit": "mW"
+    },
+    "receiver": {
+      "na_x": 0.13,
+      "na_y": 0.13,
+      "mode_field_diameter_x_um": 5.0,
+      "mode_field_diameter_y_um": 5.0,
+      "offset_x_mm": 0.0,
+      "offset_y_mm": 0.0,
+      "axial_offset_z_mm": 0.0,
+      "tilt_x_deg": 0.0,
+      "tilt_y_deg": 0.0,
+      "receiver_type": "single_mode_fiber",
+      "mode_model": "gaussian",
+      "core_diameter_um": 3.0,
+      "core_refractive_index": 1.45,
+      "cladding_refractive_index": 1.44,
+      "outside_refractive_index": 1.0,
+      "endface_transmission": 0.995,
+      "fiber_length_m": 0.0,
+      "attenuation_db_per_km": 0.0,
+      "connector_loss_db": 0.0
+    },
+    "aperture": {
+      "radius_mm": 3.0,
+      "type": "circular"
+    },
+    "analysis_settings": {
+      "frontend_version": "v1",
+      "system_field_x_deg": 0.0,
+      "system_field_y_deg": 0.0,
+      "auto_best_focus": false,
+      "thermal_compensation": false,
+      "requested_analyses": [
+        "raytrace",
+        "coupling"
+      ],
+      "demo_profile": "video_3min_20260818"
+    },
+    "fingerprint": "demo-video-780nm-four-lens-v1"
+  },
+  "analytic_coupling_baseline": false,
+  "evaluation": {
+    "sample_ids": [
+      "sample-000117",
+      "sample-000042",
+      "sample-000023",
+      "sample-000020",
+      "sample-000036",
+      "sample-000065",
+      "sample-000048",
+      "sample-000114",
+      "sample-000110",
+      "sample-000013",
+      "sample-000054",
+      "sample-000108",
+      "sample-000015",
+      "sample-000014",
+      "sample-000067",
+      "sample-000037",
+      "sample-000098",
+      "sample-000066",
+      "sample-000078",
+      "sample-000009"
+    ],
+    "actual": [
+      [
+        0.5132623802592191
+      ],
+      [
+        0.8874614145425197
+      ],
+      [
+        0.6060797500464191
+      ],
+      [
+        0.7348990641860834
+      ],
+      [
+        0.46741070315419747
+      ],
+      [
+        0.8438749095788303
+      ],
+      [
+        0.5402162689087097
+      ],
+      [
+        0.8797257680233034
+      ],
+      [
+        0.5953672567633399
+      ],
+      [
+        0.49573386196791114
+      ],
+      [
+        0.8856329283707791
+      ],
+      [
+        0.7430818097380388
+      ],
+      [
+        0.6856525049855543
+      ],
+      [
+        0.8612466028255882
+      ],
+      [
+        0.8188743684654703
+      ],
+      [
+        0.6969437717783342
+      ],
+      [
+        0.8919723277439054
+      ],
+      [
+        0.5654684606569627
+      ],
+      [
+        0.5960830363998387
+      ],
+      [
+        0.5805433866874843
+      ]
+    ],
+    "predicted": [
+      [
+        0.6175855630272038
+      ],
+      [
+        0.8908461001422641
+      ],
+      [
+        0.6429794184543898
+      ],
+      [
+        0.7071410537963118
+      ],
+      [
+        0.492689267657886
+      ],
+      [
+        0.7976834589140809
+      ],
+      [
+        0.5296401724334533
+      ],
+      [
+        0.8940378079285282
+      ],
+      [
+        0.5423267150214264
+      ],
+      [
+        0.5151911935693896
+      ],
+      [
+        0.878723831505243
+      ],
+      [
+        0.7650703671402852
+      ],
+      [
+        0.6591512908745852
+      ],
+      [
+        0.8884629298098516
+      ],
+      [
+        0.7896077974651923
+      ],
+      [
+        0.6714559019779894
+      ],
+      [
+        0.8749975942797484
+      ],
+      [
+        0.5803674499554217
+      ],
+      [
+        0.6158848244016835
+      ],
+      [
+        0.5417730440712313
+      ]
+    ],
+    "residual": [
+      [
+        0.10432318276798469
+      ],
+      [
+        0.0033846855997443637
+      ],
+      [
+        0.036899668407970654
+      ],
+      [
+        -0.02775801038977166
+      ],
+      [
+        0.02527856450368854
+      ],
+      [
+        -0.04619145066474939
+      ],
+      [
+        -0.010576096475256369
+      ],
+      [
+        0.014312039905224783
+      ],
+      [
+        -0.05304054174191353
+      ],
+      [
+        0.019457331601478445
+      ],
+      [
+        -0.006909096865536091
+      ],
+      [
+        0.021988557402246367
+      ],
+      [
+        -0.026501214110969062
+      ],
+      [
+        0.02721632698426346
+      ],
+      [
+        -0.029266571000278074
+      ],
+      [
+        -0.025487869800344787
+      ],
+      [
+        -0.01697473346415701
+      ],
+      [
+        0.014898989298459009
+      ],
+      [
+        0.019801788001844733
+      ],
+      [
+        -0.038770342616253006
+      ]
+    ]
+  },
+  "training_summary": {
+    "requested_units": 300,
+    "actual_units": 300,
+    "best_iteration": null,
+    "early_stopped": false,
+    "early_stopping_rounds": 0,
+    "convergence": "not_applicable"
+  },
+  "name": "model-63d9d3ea55cf",
+  "created_at": "2026-08-17T19:21:53.187703+00:00"
+}

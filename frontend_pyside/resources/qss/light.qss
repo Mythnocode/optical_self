@@ -1,6 +1,7 @@
 
 QWidget {
     color: #101828;
+    font-size: 12.5pt;
 }
 QMainWindow, QWidget#centralRoot, QScrollArea#pageScroll > QWidget > QWidget {
     background: #EEF1F5;
@@ -10,7 +11,7 @@ QToolTip {
     background: #FFFFFF;
     border: 1px solid #98A2B3;
     padding: 6px 8px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 
 
@@ -21,7 +22,7 @@ QWidget#topBar {
 QLabel#topProject {
     color: #101828;
     font-weight: 700;
-    font-size: 12pt;
+    font-size: 13.25pt;
 }
 QLabel#topMeta {
     color: #344054;
@@ -29,14 +30,14 @@ QLabel#topMeta {
     border: 1px solid #C7CDD6;
     border-radius: 12px;
     padding: 4px 9px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 QLabel#topMetric {
     color: #0A327A;
     background: #D6E4FF;
     border-radius: 11px;
     padding: 4px 9px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 QWidget#navPanel { background: #101828; }
 QLabel#brand {
@@ -47,13 +48,13 @@ QLabel#brand {
 }
 QLabel#brandSubtitle {
     color: #98A2B3;
-    font-size: 9.5pt;
+    font-size: 12pt;
     padding: 0 18px 11px 18px;
 }
 QLabel#navGroup {
     color: #98A2B3;
     padding: 11px 18px 5px 18px;
-    font-size: 9.5pt;
+    font-size: 12pt;
     font-weight: 700;
 }
 QPushButton#navButton {
@@ -64,7 +65,7 @@ QPushButton#navButton {
     border-radius: 0;
     padding: 0 18px;
     background: transparent;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
 }
 QPushButton#navButton:hover { background: #263548; color: #FFFFFF; }
 QPushButton#navButton:checked {
@@ -78,14 +79,14 @@ QLabel#connectionStatus {
     color: #98A2B3;
     padding: 11px 18px 14px 18px;
     line-height: 1.35;
-    font-size: 10pt;
+    font-size: 12pt;
 }
 QStatusBar {
-    min-height: 27px;
+    min-height: 30px;
     background: #FFFFFF;
     color: #667085;
     border-top: 1px solid #C7CDD6;
-    font-size: 10pt;
+    font-size: 12pt;
 }
 
 
@@ -97,17 +98,17 @@ QLabel#pageTitle {
 }
 QLabel#pageSubtitle {
     color: #475467;
-    font-size: 10.5pt;
+    font-size: 12pt;
     line-height: 1.35;
 }
 QLabel#sectionTitle {
     color: #101828;
-    font-size: 13pt;
+    font-size: 14.5pt;
     font-weight: 700;
     padding-top: 1px;
 }
 QLabel#mutedText, QLabel#metricTitle, QLabel#metricUnit { color: #667085; }
-QLabel#helperText { color: #667085; font-size: 9.5pt; }
+QLabel#helperText { color: #667085; font-size: 12pt; }
 
 
 QFrame#summaryStrip {
@@ -115,8 +116,8 @@ QFrame#summaryStrip {
     border: 1px solid #98A2B3;
     border-radius: 8px;
 }
-QLabel#summaryKey { color: #667085; font-size: 10pt; }
-QLabel#summaryValue { color: #101828; font-weight: 700; font-size: 10.5pt; }
+QLabel#summaryKey { color: #667085; font-size: 12pt; }
+QLabel#summaryValue { color: #101828; font-weight: 700; font-size: 13.25pt; }
 QFrame#summaryDivider { color: #98A2B3; }
 
 
@@ -128,7 +129,7 @@ QFrame#card, QFrame#resultPane, QFrame#toolbarCard {
 QFrame#card:hover { border-color: #667085; }
 QLabel#cardTitle, QLabel#resultTitle {
     color: #101828;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
     font-weight: 700;
 }
 QLabel#metricValue {
@@ -136,14 +137,14 @@ QLabel#metricValue {
     font-weight: 700;
     color: #155EEF;
 }
-QLabel#metricUnit { padding-top: 5px; font-size: 10pt; }
+QLabel#metricUnit { padding-top: 5px; font-size: 12pt; }
 
 
 QPushButton {
-    min-height: 34px;
+    min-height: 38px;
     border-radius: 6px;
     padding: 0 12px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 QPushButton[kind="primary"] {
     background: #155EEF;
@@ -176,14 +177,14 @@ QToolButton {
 }
 
 
-QLabel[tone="success"] { background:#DDF5E8; color:#087A41; border-radius:11px; padding:4px 9px; font-size:10pt; }
-QLabel[tone="warning"] { background:#FFF0D5; color:#A65300; border-radius:11px; padding:4px 9px; font-size:10pt; }
-QLabel[tone="info"] { background:#D6E4FF; color:#155EEF; border-radius:11px; padding:4px 9px; font-size:10pt; }
-QLabel[tone="danger"] { background:#FDE3E2; color:#C5221F; border-radius:11px; padding:4px 9px; font-size:10pt; }
+QLabel[tone="success"] { background:#E8F5EC; color:#166534; border-radius:11px; padding:4px 9px; font-size:12pt; }
+QLabel[tone="warning"] { background:#FFF4E5; color:#9A4A00; border-radius:11px; padding:4px 9px; font-size:12pt; }
+QLabel[tone="info"] { background:#E8F0FF; color:#1D4ED8; border-radius:11px; padding:4px 9px; font-size:12pt; }
+QLabel[tone="danger"] { background:#FDECEC; color:#B91C1C; border-radius:11px; padding:4px 9px; font-size:12pt; }
 
 
 QGroupBox {
-    font-size: 11pt;
+    font-size: 13.25pt;
     font-weight: 700;
     border: 1px solid #98A2B3;
     border-radius: 8px;
@@ -196,14 +197,14 @@ QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QTextEdit, QPlainTextEdit {
     background: #FFFFFF;
     border: 1px solid #98A2B3;
     border-radius: 6px;
-    min-height: 32px;
+    min-height: 36px;
     padding: 1px 7px;
     selection-background-color: #155EEF;
 }
 QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus,
 QTextEdit:focus, QPlainTextEdit:focus { border: 1px solid #155EEF; }
 QComboBox::drop-down { width: 26px; border: 0; }
-QRadioButton, QCheckBox { min-height: 27px; spacing: 6px; }
+QRadioButton, QCheckBox { min-height: 30px; spacing: 6px; }
 QFormLayout QLabel { color: #344054; }
 
 
@@ -214,14 +215,14 @@ QTabWidget::pane {
     top: -1px;
 }
 QTabBar::tab {
-    min-height: 35px;
+    min-height: 39px;
     background: #E6EAF0;
     color: #475467;
     padding: 0 16px;
     margin-right: 2px;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 QTabBar::tab:hover { background: #F7F8FA; }
 QTabBar::tab:selected {
@@ -241,7 +242,7 @@ QTableWidget, QTreeWidget, QListWidget {
     outline: none;
 }
 QTableWidget::item, QTreeWidget::item, QListWidget::item {
-    min-height: 32px;
+    min-height: 36px;
     padding: 3px 6px;
 }
 QTableWidget::item:selected, QTreeWidget::item:selected, QListWidget::item:selected {
@@ -254,7 +255,7 @@ QHeaderView::section {
     border: 0;
     border-right: 1px solid #C7CDD6;
     border-bottom: 1px solid #C7CDD6;
-    min-height: 35px;
+    min-height: 39px;
     padding: 4px 7px;
     font-weight: 700;
 }
@@ -265,12 +266,12 @@ QSplitter::handle:horizontal { width: 6px; }
 QSplitter::handle:vertical { height: 6px; }
 QSplitter::handle:hover { background: #667085; }
 QScrollBar:vertical { width: 12px; background: #E6EAF0; margin: 0; }
-QScrollBar::handle:vertical { background: #98A2B3; min-height: 32px; border-radius: 6px; }
+QScrollBar::handle:vertical { background: #98A2B3; min-height: 36px; border-radius: 6px; }
 QScrollBar:horizontal { height: 12px; background: #E6EAF0; }
 QScrollBar::handle:horizontal { background: #98A2B3; min-width: 32px; border-radius: 6px; }
 QScrollBar::add-line, QScrollBar::sub-line { width: 0; height: 0; }
 QFrame#resultToolbar { background: #F7F8FA; border: 1px solid #98A2B3; border-radius: 7px; }
-QLabel#emptyHint { color: #667085; font-size: 11pt; }
+QLabel#emptyHint { color: #667085; font-size: 13.25pt; }
 
 
 QWidget#navPanel {
@@ -283,19 +284,19 @@ QWidget#brandRow {
 }
 QLabel#brand {
     color: #FFFFFF;
-    font-size: 13pt;
+    font-size: 14.5pt;
     font-weight: 700;
     padding: 0;
 }
 QLabel#brandSubtitle {
     color: #98A2B3;
-    font-size: 10pt;
+    font-size: 12pt;
     padding: 0;
 }
 QToolButton#sidebarToggle {
     min-width: 32px;
     max-width: 32px;
-    min-height: 32px;
+    min-height: 36px;
     max-height: 32px;
     border-radius: 6px;
     background: #344054;
@@ -305,7 +306,7 @@ QToolButton#sidebarToggle:hover { background: #475467; }
 QLabel#navGroup {
     color: #98A2B3;
     padding: 11px 16px 5px 16px;
-    font-size: 10pt;
+    font-size: 12pt;
     font-weight: 700;
 }
 QToolButton#navButton {
@@ -317,7 +318,7 @@ QToolButton#navButton {
     border-radius: 0;
     padding: 0 14px;
     background: transparent;
-    font-size: 12pt;
+    font-size: 13.25pt;
     font-weight: 500;
 }
 QToolButton#navButton:hover {
@@ -334,7 +335,7 @@ QToolButton#navButton::menu-indicator { image: none; }
 QLabel#connectionStatus {
     color: #98A2B3;
     padding: 12px 16px 15px 16px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 
 QFrame#sectionNavigator {
@@ -348,7 +349,7 @@ QWidget#sectionNavigatorHeader {
 }
 QLabel#sectionNavigatorTitle {
     color: #344054;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
     font-weight: 700;
 }
 QToolButton#sectionToggle {
@@ -365,7 +366,7 @@ QListWidget#sectionList {
     border: 0;
     border-radius: 0;
     background: #FFFFFF;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
     outline: none;
 }
 QListWidget#sectionList::item {
@@ -398,26 +399,26 @@ QSplitter#surfaceEditorSplitter::handle:horizontal { width: 7px; }
 QTabBar::tab {
     min-height: 38px;
     padding: 0 15px;
-    font-size: 11pt;
+    font-size: 13.25pt;
 }
 QFormLayout QLabel {
     color: #344054;
-    font-size: 11pt;
+    font-size: 13.25pt;
 }
 QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QTextEdit, QPlainTextEdit {
-    min-height: 34px;
-    font-size: 11pt;
+    min-height: 38px;
+    font-size: 13.25pt;
 }
 QTableWidget::item, QTreeWidget::item, QListWidget::item {
-    min-height: 34px;
-    font-size: 10.5pt;
+    min-height: 38px;
+    font-size: 12pt;
 }
 QHeaderView::section {
     min-height: 37px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 QLabel#helperText {
-    font-size: 10pt;
+    font-size: 12pt;
     line-height: 1.35;
 }
 QToolButton#navButton:focus {
@@ -428,7 +429,7 @@ QListWidget#sectionList:focus {
     border: 1px solid #155EEF;
 }
 QPushButton {
-    font-size: 11pt;
+    font-size: 13.25pt;
 }
 
 
@@ -454,14 +455,14 @@ QTabWidget#simulationParameterTabs::pane {
     background: #FFFFFF;
 }
 QTableWidget#lensDataTable {
-    font-size: 11.25pt;
+    font-size: 12pt;
     border: 1px solid #98A2B3;
     border-radius: 6px;
     alternate-background-color: #F7F8FA;
     selection-background-color: #155EEF;
 }
 QTableWidget#lensDataTable::item {
-    min-height: 35px;
+    min-height: 39px;
     padding: 4px 7px;
 }
 QTableWidget#lensDataTable::item:selected {
@@ -472,7 +473,7 @@ QTableWidget#lensDataTable QHeaderView::section {
     min-height: 39px;
     background: #E6EAF0;
     color: #344054;
-    font-size: 10.75pt;
+    font-size: 12pt;
     font-weight: 700;
     border-right: 1px solid #C7CDD6;
     border-bottom: 1px solid #98A2B3;
@@ -480,7 +481,7 @@ QTableWidget#lensDataTable QHeaderView::section {
 }
 QLabel#propertyFieldLabel {
     color: #344054;
-    font-size: 10.5pt;
+    font-size: 12pt;
     font-weight: 700;
 }
 QTabWidget#simulationParameterTabs QTabBar::tab {
@@ -498,7 +499,7 @@ QFrame#livePreviewToolbar {
 QToolButton#simulationModeButton,
 QToolButton#previewToolButton,
 QToolButton#editorActionButton {
-    min-height: 32px;
+    min-height: 36px;
     border: 1px solid #667085;
     border-radius: 6px;
     background: #FFFFFF;
@@ -539,7 +540,7 @@ QLabel#previewStatus {
     border: 1px solid #98A2B3;
     border-radius: 6px;
     padding: 6px 8px;
-    font-size: 10pt;
+    font-size: 12pt;
 }
 QSplitter#simulationMainSplitter::handle:horizontal {
     width: 7px;
@@ -563,11 +564,11 @@ QLabel#lensEditorTitle {
 }
 QLabel#diagnosticText {
     color: #344054;
-    font-size: 10.5pt;
+    font-size: 12pt;
     line-height: 1.25;
 }
 QTreeWidget#lensDataTree {
-    font-size: 12pt;
+    font-size: 13.25pt;
 }
 QTreeWidget#lensDataTree::item {
     min-height: 39px;
@@ -575,21 +576,21 @@ QTreeWidget#lensDataTree::item {
 }
 QTreeWidget#lensDataTree QHeaderView::section {
     min-height: 40px;
-    font-size: 12pt;
+    font-size: 13.25pt;
     font-weight: 700;
 }
 QWidget#tasksPage QTableWidget::item {
     min-height: 38px;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
     padding: 4px 7px;
 }
 QWidget#tasksPage QHeaderView::section {
     min-height: 40px;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
 }
 QWidget#tasksPage QTabBar::tab {
     min-height: 40px;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
 }
 
 
@@ -603,7 +604,7 @@ QFrame#simulationResultSummary {
 }
 QLabel#resultSummaryNote {
     color: #667085;
-    font-size: 10pt;
+    font-size: 12pt;
     line-height: 1.35;
     padding: 2px 8px;
 }
@@ -611,17 +612,17 @@ QFrame#resultPane {
     min-width: 240px;
 }
 QFrame#resultPane QLabel#resultTitle {
-    font-size: 12pt;
+    font-size: 13.25pt;
 }
 QFrame#livePreviewToolbar QComboBox {
-    min-height: 32px;
-    font-size: 10.5pt;
+    min-height: 36px;
+    font-size: 12pt;
 }
 
 
 QLabel#errorSummary {
     color: #C5221F;
-    font-size: 12pt;
+    font-size: 13.25pt;
     font-weight: 700;
     padding: 4px 0;
 }
@@ -630,7 +631,7 @@ QPlainTextEdit#errorDetails {
     border: 1px solid #C5221F;
     color: #101828;
     font-family: Consolas, "Microsoft YaHei UI";
-    font-size: 10pt;
+    font-size: 12pt;
 }
 QLabel#connectionStatus[tone="success"] { color: #DDF5E8; background: transparent; }
 QLabel#connectionStatus[tone="warning"] { color: #FFF0D5; background: transparent; }
@@ -639,13 +640,13 @@ QStackedWidget#featureStack { background: #EEF1F5; }
 
 
 QPushButton[kind="plotTool"] {
-    min-height: 25px;
+    min-height: 29px;
     padding: 2px 7px;
     color: #344054;
     background: transparent;
     border: 1px solid transparent;
     border-radius: 5px;
-    font-size: 9.2pt;
+    font-size: 12pt;
 }
 QPushButton[kind="plotTool"]:hover {
     color: #155EEF;
@@ -654,6 +655,23 @@ QPushButton[kind="plotTool"]:hover {
 }
 QPushButton[kind="plotTool"]:pressed {
     background: #D6E4FF;
+}
+QToolButton#plotIconTool,
+QToolButton#plotMoreTool {
+    min-height: 29px;
+    padding: 2px 7px;
+    color: #344054;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    font-size: 12pt;
+}
+QToolButton#plotIconTool { min-width: 30px; max-width: 34px; }
+QToolButton#plotIconTool:hover,
+QToolButton#plotMoreTool:hover {
+    color: #155EEF;
+    background: #F7F8FA;
+    border-color: #98A2B3;
 }
 QFrame#resultValidityBar {
     background: #FFFFFF;
@@ -675,16 +693,16 @@ QFrame#raySectionControls QLabel {
 
 
 QLabel#pageTitle { font-size: 18pt; }
-QLabel#pageSubtitle { font-size: 10.5pt; }
+QLabel#pageSubtitle { font-size: 12pt; }
 QFrame#inlineMetric {
     background: #FFFFFF;
     border: 1px solid #98A2B3;
     border-radius: 7px;
 }
-QLabel#inlineMetricTitle { color: #667085; font-size: 10pt; }
+QLabel#inlineMetricTitle { color: #667085; font-size: 12pt; }
 QLabel#inlineMetricValue { color: #155EEF; font-size: 14pt; font-weight: 700; }
-QLabel#inlineMetricUnit { color: #667085; font-size: 9.5pt; }
-QLabel#inlineMetricNote { color: #667085; font-size: 9.5pt; }
+QLabel#inlineMetricUnit { color: #667085; font-size: 12pt; }
+QLabel#inlineMetricNote { color: #667085; font-size: 12pt; }
 QFrame#compactResultStrip { background: transparent; border: 0; }
 QFrame#workspaceSurface {
     background: #FFFFFF;
@@ -696,7 +714,7 @@ QFrame#subtlePanel {
     border: 1px solid #C7CDD6;
     border-radius: 7px;
 }
-QLabel#compactContext { color: #475467; font-size: 10.5pt; }
+QLabel#compactContext { color: #475467; font-size: 12pt; }
 QLabel#largeResultValue { color: #155EEF; font-size: 23pt; font-weight: 700; }
 QWidget#topBar { min-height: 42px; max-height: 48px; }
 QLabel#topMeta, QLabel#topMetric { padding: 3px 8px; }
@@ -706,7 +724,7 @@ QFrame#livePreviewToolbar { min-height: 38px; max-height: 46px; }
 
 
 QFrame#metricSummaryBar {
-    min-height: 34px;
+    min-height: 38px;
     max-height: 40px;
     background: #FFFFFF;
     border: 1px solid #98A2B3;
@@ -714,7 +732,7 @@ QFrame#metricSummaryBar {
 }
 QLabel#metricSummaryItem {
     color: #344054;
-    font-size: 10.5pt;
+    font-size: 12pt;
     font-weight: 600;
 }
 QFrame#summaryDivider {
@@ -737,7 +755,7 @@ QToolButton#expandableSectionHeader {
     background: #F7F8FA;
     border: 0;
     border-radius: 6px;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
     font-weight: 700;
     text-align: left;
 }
@@ -755,7 +773,7 @@ QScrollArea#homeIntroScroll {
 }
 QLabel#compactTaskText {
     color: #344054;
-    font-size: 10.5pt;
+    font-size: 12pt;
     line-height: 1.25;
 }
 
@@ -782,7 +800,7 @@ QPushButton#thumbnailButton {
     background: #FFFFFF;
     border: 1px solid #d5e0e8;
     border-radius: 6px;
-    font-size: 9.5pt;
+    font-size: 12pt;
 }
 QPushButton#thumbnailButton:hover {
     border-color: #76a9cc;
@@ -801,7 +819,7 @@ QFrame#detailDrawer {
     border-radius: 7px;
 }
 QFrame#detailDrawerHeader {
-    min-height: 32px;
+    min-height: 36px;
     max-height: 38px;
     background: #f7fafc;
     border: 0;
@@ -811,13 +829,13 @@ QToolButton#detailDrawerToggle {
     color: #344054;
     background: transparent;
     border: 0;
-    font-size: 10.5pt;
+    font-size: 12pt;
     font-weight: 700;
 }
 QLabel#drawerText, QLabel#diagnosticRow {
     color: #344054;
     padding: 5px 8px;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 
 QWidget#emptyState {
@@ -830,7 +848,7 @@ QLabel#emptyStateTitle {
 }
 QLabel#emptyStateText {
     color: #6b7f8d;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 
 QFrame#livePreviewToolbar,
@@ -905,7 +923,7 @@ QLabel#taskCompactSummary {
     background: #FFFFFF;
     border: 1px solid #98A2B3;
     border-radius: 7px;
-    font-size: 11pt;
+    font-size: 13.25pt;
     font-weight: 700;
 }
 QLabel#datasetConfigSummary,
@@ -913,7 +931,7 @@ QLabel#scanRangePreview,
 QLabel#resultDetailText {
     padding: 6px 5px;
     color: #344054;
-    font-size: 10.5pt;
+    font-size: 12pt;
     line-height: 1.35;
 }
 QLabel#homeSystemTitle {
@@ -936,12 +954,12 @@ QWidget#homePlatformWorkflowImage {
 }
 QLabel#articleBodyText {
     color: #344054;
-    font-size: 11pt;
+    font-size: 13.25pt;
     line-height: 1.45;
 }
 QLabel#articleSubheading {
     color: #344054;
-    font-size: 12pt;
+    font-size: 13.25pt;
     font-weight: 700;
     padding-top: 5px;
 }
@@ -951,13 +969,13 @@ QLabel#articleStatus {
     border: 1px solid #c8e2f3;
     border-radius: 8px;
     padding: 2px 8px;
-    font-size: 9.5pt;
+    font-size: 12pt;
     font-weight: 700;
 }
 
 
 QWidget#shapLinkagePanel QLabel {
-    font-size: 11.5pt;
+    font-size: 13.25pt;
 }
 QWidget#shapLinkagePanel QLabel#cardTitle,
 QWidget#shapLinkagePanel QLabel#sectionTitle {
@@ -966,13 +984,13 @@ QWidget#shapLinkagePanel QLabel#sectionTitle {
 }
 QWidget#shapLinkagePanel QLabel#mutedText,
 QWidget#shapLinkagePanel QLabel#helperText {
-    font-size: 10.8pt;
+    font-size: 12pt;
 }
 QListWidget#weightedFeatureList {
-    font-size: 11pt;
+    font-size: 13.25pt;
 }
 QListWidget#weightedFeatureList::item {
-    min-height: 34px;
+    min-height: 38px;
     padding: 4px 8px;
     border-bottom: 1px solid #E6EAF0;
 }
@@ -989,7 +1007,7 @@ QToolButton#sideDetailDrawerToggle {
     background: #f7fafc;
     border: 0;
     border-right: 1px solid #C7CDD6;
-    font-size: 10.5pt;
+    font-size: 12pt;
     font-weight: 700;
     padding: 4px 2px;
 }
@@ -1018,7 +1036,7 @@ QSplitter#machineLearningModelSplitter::handle:horizontal:hover {
 }
 QLabel#compactAssetText {
     color: #344054;
-    font-size: 10.5pt;
+    font-size: 12pt;
     line-height: 1.35;
     padding: 3px 1px;
 }
@@ -1028,13 +1046,13 @@ QFrame#resultPane {
 
 
 QPushButton#workflowStepButton {
-    min-height: 32px;
+    min-height: 36px;
     padding: 4px 14px;
     color: #38566a;
     background: #E6EAF0;
     border: 1px solid #98A2B3;
     border-radius: 7px;
-    font-size: 11pt;
+    font-size: 13.25pt;
     font-weight: 600;
 }
 QPushButton#workflowStepButton:hover {
@@ -1051,7 +1069,7 @@ QPushButton#workflowStepButton:checked {
 QTableWidget#quickLensTable {
     background: #FFFFFF;
     gridline-color: #e3e9ee;
-    font-size: 10.5pt;
+    font-size: 12pt;
 }
 QFrame#quickSurfacePanel,
 QFrame#lensWindowToolbar,
@@ -1063,7 +1081,7 @@ QFrame#lensWindowFooter {
 QTreeWidget#lensElementTree {
     background: #FFFFFF;
     border: 0;
-    font-size: 10.8pt;
+    font-size: 12pt;
 }
 QTreeWidget#lensElementTree::item {
     min-height: 30px;
@@ -1075,7 +1093,7 @@ QTreeWidget#lensElementTree::item:selected {
     border-left: 4px solid #155EEF;
 }
 QFrame#livePreviewToolbar {
-    min-height: 34px;
+    min-height: 38px;
 }
 QLabel#previewStatus {
     min-height: 0;
@@ -1090,7 +1108,7 @@ QToolButton#expandableSectionHeader[variant="primary"] {
     border: 1px solid #145d96;
     border-radius: 7px;
     padding: 4px 12px;
-    font-size: 11.5pt;
+    font-size: 13.25pt;
     font-weight: 700;
     text-align: left;
 }
@@ -1204,7 +1222,7 @@ QFrame#trainingConfigCard QLabel#cardTitle {
 QFrame#trainingConfigCard QComboBox,
 QFrame#trainingConfigCard QSpinBox,
 QFrame#trainingConfigCard QDoubleSpinBox {
-    min-height: 34px;
+    min-height: 38px;
 }
 QGroupBox#measurementResultCard {
     background: #FFFFFF;
@@ -1222,4 +1240,514 @@ QGroupBox#measurementResultCard::title {
 QLabel#measurementMetric {
     color: #155EEF;
     font-weight: 700;
+}
+
+QFrame#inlineMetric { background:#FFFFFF; border:1px solid #C7CDD6; border-radius:8px; }
+QLabel#inlineMetricTitle { color:#475467; font-size:12pt; }
+QLabel#inlineMetricValue { color:#0A327A; font-size:15pt; font-weight:700; }
+QLabel#inlineMetricUnit { color:#475467; font-size:12pt; }
+QLabel#inlineMetricNote { color:#475467; font-size:12pt; }
+QProgressBar { min-height:32px; border:1px solid #98A2B3; border-radius:7px; background:#FFFFFF; text-align:center; font-size:12pt; font-weight:700; color:#101828; }
+QProgressBar::chunk { background:#1D4ED8; border-radius:6px; }
+QLabel[statusTone="current"] { color:#166534; font-weight:700; }
+QLabel[statusTone="warning"] { color:#9A4A00; font-weight:700; }
+QLabel[statusTone="danger"] { color:#B91C1C; font-weight:700; }
+QLabel[statusTone="muted"] { color:#667085; font-weight:700; }
+
+/* 录屏/投屏可读性：状态标签不低于普通正文的次级字号。 */
+QLabel[tone="success"], QLabel[tone="warning"], QLabel[tone="danger"], QLabel[tone="info"] {
+    font-size: 12pt;
+    font-weight: 700;
+}
+
+/* AI research navigation: temporary highlight after one-click contextual navigation. */
+QWidget[assistantHighlight="true"] {
+    border: 2px solid #F79009;
+    border-radius: 7px;
+}
+
+/* -------------------------------------------------------------------------
+   2026-08-17 紧凑工程工作台壳层
+   高对比、较大字号；永久区域只承担导航/文档/状态，不承载第二主内容。
+   ------------------------------------------------------------------------- */
+QFrame#compactTopBar {
+    background: #FFFFFF;
+    border-bottom: 1px solid #98A2B3;
+    min-height: 42px;
+    max-height: 42px;
+}
+QToolButton#shellIconButton, QToolButton#shellMenuButton,
+QToolButton#footerActionButton, QToolButton#drawerCloseButton,
+QToolButton#railHomeButton, QToolButton#railCategoryButton {
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 6px;
+    min-width: 30px;
+    min-height: 30px;
+}
+QToolButton#shellIconButton:hover, QToolButton#shellMenuButton:hover,
+QToolButton#footerActionButton:hover, QToolButton#drawerCloseButton:hover {
+    background: #E6EAF0;
+    border-color: #98A2B3;
+}
+QFrame#compactNavRail {
+    background: #17202D;
+    border-right: 1px solid #0F1722;
+}
+QToolButton#railHomeButton, QToolButton#railCategoryButton {
+    min-width: 42px;
+    max-width: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    border-radius: 8px;
+}
+QToolButton#railHomeButton:hover, QToolButton#railCategoryButton:hover {
+    background: #263548;
+    border-color: #667085;
+}
+QToolButton#railCategoryButton:checked {
+    background: #155EEF;
+    border-color: #FFFFFF;
+}
+QFrame#railSeparator {
+    color: #667085;
+    background: #667085;
+    min-height: 1px;
+    max-height: 1px;
+    margin: 2px 5px 4px 5px;
+}
+QFrame#compactToolDrawer {
+    background: #FFFFFF;
+    border-right: 1px solid #667085;
+}
+QLabel#drawerTitle {
+    color: #101828;
+    font-size: 16pt;
+    font-weight: 800;
+}
+QLabel#drawerGroupTitle {
+    color: #344054;
+    font-size: 12.5pt;
+    font-weight: 700;
+    padding-top: 3px;
+}
+QPushButton#drawerActionButton {
+    background: #FFFFFF;
+    color: #101828;
+    border: 1px solid #98A2B3;
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12.75pt;
+    font-weight: 650;
+}
+QPushButton#drawerActionButton:hover {
+    background: #D6E4FF;
+    color: #0A327A;
+    border-color: #155EEF;
+}
+QPushButton#drawerActionButton:pressed {
+    background: #B7CEFF;
+    border-color: #0040C1;
+}
+QTabBar#documentTabBar {
+    background: #FFFFFF;
+}
+QTabBar#documentTabBar::tab {
+    background: #F7F8FA;
+    color: #344054;
+    border: 1px solid #C7CDD6;
+    border-bottom: 0;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    min-width: 104px;
+    max-width: 210px;
+    min-height: 30px;
+    padding: 5px 10px;
+    margin-right: 3px;
+    font-size: 12.5pt;
+    font-weight: 600;
+}
+QTabBar#documentTabBar::tab:selected {
+    background: #FFFFFF;
+    color: #0A327A;
+    border-color: #667085;
+    border-top: 3px solid #155EEF;
+    font-weight: 800;
+}
+QTabBar#documentTabBar::tab:hover:!selected {
+    background: #E6EAF0;
+    color: #101828;
+}
+QLabel#compactConnectionStatus {
+    color: #344054;
+    background: #F7F8FA;
+    border: 1px solid #C7CDD6;
+    border-radius: 7px;
+    padding: 4px 8px;
+    font-size: 12.5pt;
+    font-weight: 700;
+}
+QLabel#compactConnectionStatus[tone="success"] { color: #05603A; border-color: #12B76A; background: #DDF5E8; }
+QLabel#compactConnectionStatus[tone="warning"] { color: #7A2E0E; border-color: #D97706; background: #FFF0D5; }
+QLabel#compactConnectionStatus[tone="danger"] { color: #912018; border-color: #C5221F; background: #FDE3E2; }
+QFrame#compactFooter {
+    background: #FFFFFF;
+    border-top: 1px solid #98A2B3;
+    min-height: 34px;
+    max-height: 34px;
+}
+QLabel#footerMetric {
+    color: #0A327A;
+    font-size: 12.5pt;
+    font-weight: 800;
+}
+QLabel#footerNotice {
+    color: #475467;
+    font-size: 12.5pt;
+    font-weight: 600;
+}
+QWidget#centralRoot, QStackedWidget#featureStack {
+    background: #EEF1F5;
+}
+
+/* ===== 分析器关键指标：像成熟光学软件一样把数值归属于当前图，而非新增菜单 ===== */
+QFrame#analysisMetricStrip {
+    background: #F8FAFC;
+    border: 1px solid #98A2B3;
+    border-radius: 7px;
+}
+QLabel#analysisMetricItem {
+    color: #101828;
+    font-size: 13.5pt;
+    font-weight: 650;
+    padding: 2px 4px;
+}
+QToolButton#analysisMetricDetailsButton {
+    color: #344054;
+    background: #FFFFFF;
+    border: 1px solid #98A2B3;
+    border-radius: 6px;
+    padding: 5px 9px;
+    font-size: 12.5pt;
+    font-weight: 600;
+}
+QToolButton#analysisMetricDetailsButton:hover,
+QToolButton#analysisMetricDetailsButton:checked {
+    color: #FFFFFF;
+    background: #155EEF;
+    border-color: #155EEF;
+}
+QLabel#analysisMetricDetails {
+    color: #344054;
+    background: #FFFFFF;
+    border-top: 1px solid #D0D5DD;
+    padding: 7px 5px 3px 5px;
+    font-size: 12.5pt;
+    line-height: 1.35;
+}
+
+/* 2026-08-17 canvas-first command strip: no permanent feature rail or fake document tabs. */
+QToolButton#shellHomeButton {
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 5px;
+    min-width: 32px;
+    min-height: 32px;
+}
+QToolButton#shellHomeButton:hover {
+    background: #E6EAF0;
+    border-color: #98A2B3;
+}
+QFrame#shellCommandDivider {
+    color: #C7CDD6;
+    background: #C7CDD6;
+    min-width: 1px;
+    max-width: 1px;
+    margin: 5px 5px;
+}
+QToolButton#shellCommandButton {
+    background: transparent;
+    color: #1D2939;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 5px 9px;
+    min-height: 32px;
+    font-size: 12.5pt;
+    font-weight: 700;
+}
+QToolButton#shellCommandButton:hover,
+QToolButton#shellCommandButton::menu-button:hover {
+    background: #EAF1FF;
+    color: #0A327A;
+    border-color: #98B8F8;
+}
+QToolButton#shellCommandButton:pressed {
+    background: #D6E4FF;
+}
+QToolButton#shellCommandButton:checked {
+    background: #EAF1FF;
+    color: #0A327A;
+    border-color: #6F9EF0;
+}
+QToolButton#shellCommandButton::menu-indicator {
+    image: none;
+    width: 0px;
+}
+
+/* Teaching: experiment-first navigation and compact 3D camera controls. */
+QWidget#teachingExperimentNavigation {
+    background: transparent;
+}
+QToolButton#teachingMismatchButton {
+    background: #FFFFFF;
+    color: #1D2939;
+    border: 1px solid #98A2B3;
+    border-radius: 7px;
+    padding: 6px 13px;
+    min-height: 30px;
+    font-size: 12.5pt;
+    font-weight: 700;
+}
+QToolButton#teachingMismatchButton:hover,
+QToolButton#teachingMismatchButton:pressed {
+    background: #EAF1FF;
+    color: #0A327A;
+    border-color: #6695F5;
+}
+QToolButton#teachingSecondaryAction {
+    background: transparent;
+    color: #344054;
+    border: 1px solid #98A2B3;
+    border-radius: 7px;
+    padding: 5px 11px;
+    min-height: 30px;
+    font-size: 12pt;
+    font-weight: 650;
+}
+QLabel#teachingProcessHint {
+    color: #475467;
+    font-size: 11.5pt;
+    padding: 1px 2px 4px 2px;
+}
+QFrame#teachingCameraBar {
+    background: rgba(248,250,252,238);
+    border: 1px solid #98A2B3;
+    border-radius: 8px;
+}
+QToolButton#teachingCameraPresetButton,
+QToolButton#teachingCameraDisplayButton {
+    background: #FFFFFF;
+    color: #1D2939;
+    border: 1px solid #B8C0CC;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-height: 26px;
+    font-size: 11.5pt;
+    font-weight: 650;
+}
+QToolButton#teachingCameraPresetButton:hover,
+QToolButton#teachingCameraDisplayButton:hover {
+    background: #EAF1FF;
+    color: #0A327A;
+    border-color: #6695F5;
+}
+
+/* 2026-08-17 floating toolbox: capability catalogue, not a permanent nav rail. */
+QToolButton#toolboxFloatingButton {
+    background: #FFFFFF;
+    color: #0A327A;
+    border: 2px solid #155EEF;
+    border-radius: 23px;
+    font-size: 11.5pt;
+    font-weight: 800;
+}
+QToolButton#toolboxFloatingButton:hover {
+    background: #EAF1FF;
+    border-color: #0040C1;
+}
+QToolButton#toolboxFloatingButton:pressed {
+    background: #D6E4FF;
+}
+QLineEdit#toolboxSearch {
+    min-height: 32px;
+    border: 1px solid #98A2B3;
+    border-radius: 7px;
+    padding: 4px 8px;
+    background: #FFFFFF;
+    color: #101828;
+    font-size: 11.5pt;
+}
+QScrollArea#toolboxScroll { background: transparent; border: 0; }
+QLabel#drawerCategoryTitle {
+    color: #101828;
+    font-size: 12.5pt;
+    font-weight: 800;
+    padding-top: 7px;
+    padding-bottom: 2px;
+}
+QLabel#drawerEmptyText { color: #667085; padding: 12px 4px; }
+QPushButton#drawerActionButton {
+    min-height: 34px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 11.5pt;
+}
+QLabel#homePlatformTitle {
+    color: #102A56;
+    font-size: 20pt;
+    font-weight: 800;
+    padding: 4px 0 8px 0;
+}
+QTextBrowser#analysisDetailReport {
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #101828;
+    selection-background-color: #B2CCFF;
+}
+
+/* 2026-08-17 layout tightening + task feedback */
+QPushButton[kind="primary"][taskState="submitted"],
+QPushButton[kind="primary"][taskState="running"] {
+    background:#155EEF; color:#FFFFFF; border-color:#004EEB;
+}
+QPushButton[kind="primary"][taskState="success"] {
+    background:#15803D; color:#FFFFFF; border-color:#166534;
+}
+QPushButton[kind="primary"][taskState="error"] {
+    background:#B42318; color:#FFFFFF; border-color:#912018;
+}
+QPushButton[kind="primary"][taskState="pending"] {
+    background:#B54708; color:#FFFFFF; border-color:#93370D;
+}
+QFrame#taskPreviewBanner {
+    background:#FFF7E8; border:1px solid #F79009; border-radius:7px;
+}
+QLabel#taskPreviewTitle { color:#93370D; font-weight:800; }
+QLabel#taskPreviewText { color:#7A2E0E; }
+QFrame#taskProgressPanel {
+    background:#F5F8FF; border:1px solid #84ADFF; border-radius:7px;
+}
+QLabel#taskProgressTitle { color:#0A327A; font-weight:800; }
+QProgressBar#taskProgressBar {
+    min-height:24px; max-height:24px; border:1px solid #84ADFF; border-radius:6px;
+    background:#FFFFFF; color:#102A56; font-size:11pt; font-weight:700; text-align:center;
+}
+QProgressBar#taskProgressBar::chunk { background:#155EEF; border-radius:5px; }
+
+/* The toolbox is a compact capability index, not a wall of cards. */
+QFrame#compactToolDrawer { border-right:1px solid #98A2B3; }
+QPushButton#drawerActionButton {
+    min-height:30px; max-height:34px; padding:3px 7px; margin:0;
+    border:1px solid transparent; border-radius:5px; background:transparent;
+    color:#101828; font-size:11.25pt; font-weight:600; text-align:left;
+}
+QPushButton#drawerActionButton:hover {
+    background:#EAF1FF; border-color:#B2CCFF; color:#0A327A;
+}
+QPushButton#drawerActionButton:pressed {
+    background:#D6E4FF; border-color:#84ADFF;
+}
+QLabel#drawerCategoryTitle {
+    color:#344054; font-size:11.5pt; font-weight:800; padding:5px 2px 1px 2px;
+}
+QLabel#drawerGroupTitle {
+    color:#667085; font-size:10.75pt; font-weight:700; padding:2px 2px 0 2px;
+}
+
+QFrame#optimizationTaskHeader {
+    background:#FFFFFF; border-bottom:1px solid #D0D5DD;
+}
+QLabel#optimizationTaskTitle { color:#101828; font-size:16pt; font-weight:800; }
+QLabel#optimizationTaskSubtitle { color:#667085; font-size:11.5pt; }
+QFrame#optimizationResultHost { background:#FFFFFF; }
+QFrame#simulationCompactMetric {
+    background:transparent; border:0; border-radius:0;
+}
+QFrame#simulationCompactMetric QLabel#inlineMetricTitle { color:#475467; font-size:11.25pt; }
+QFrame#simulationCompactMetric QLabel#inlineMetricValue { color:#0A327A; font-size:14pt; font-weight:800; }
+QFrame#simulationCompactMetric QLabel#inlineMetricUnit { color:#475467; font-size:11pt; }
+QFrame#simulationResultSummary {
+    background:#FFFFFF; border:1px solid #D0D5DD; border-radius:7px;
+}
+
+/* Simulation object/parameter navigator: compact hierarchy, not four giant blue cards. */
+QToolButton#expandableSectionHeader[variant="navigation"] {
+    min-height: 32px;
+    max-height: 34px;
+    padding: 2px 8px;
+    color: #344054;
+    background: #F7F8FA;
+    border: 0;
+    border-radius: 5px;
+    font-size: 12.5pt;
+    font-weight: 700;
+    text-align: left;
+}
+QToolButton#expandableSectionHeader[variant="navigation"]:hover {
+    color: #0A327A;
+    background: #EAF2FF;
+}
+QToolButton#expandableSectionHeader[variant="navigation"]:checked {
+    color: #0A327A;
+    background: #DDEAFF;
+    border-left: 3px solid #155EEF;
+}
+QScrollArea#simulationParameterAccordion QFrame#expandableSection {
+    border-radius: 5px;
+    border-color: #C7CDD6;
+}
+QScrollArea#simulationParameterAccordion QWidget#expandableSectionContent {
+    background: #FFFFFF;
+}
+QScrollArea#simulationParameterAccordion QFrame#card {
+    border-color: #D0D5DD;
+    border-radius: 6px;
+}
+QScrollArea#simulationParameterAccordion QLabel#cardTitle {
+    font-size: 12.5pt;
+}
+QScrollArea#simulationParameterAccordion QDoubleSpinBox,
+QScrollArea#simulationParameterAccordion QSpinBox,
+QScrollArea#simulationParameterAccordion QComboBox,
+QScrollArea#simulationParameterAccordion QLineEdit,
+QScrollArea#simulationParameterAccordion QPushButton[kind="secondary"] {
+    min-height: 30px;
+    max-height: 34px;
+}
+QToolButton#teachingMismatchButton:checked {
+    background: #DDEAFF;
+    color: #0A327A;
+    border-color: #155EEF;
+}
+
+/* Compact optical-object rows: narrow sidebars must not contain wide Surface tables. */
+QPushButton#lensObjectButton {
+    text-align: left;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: #102A56;
+}
+QPushButton#lensObjectButton:hover {
+    background: #EEF4FF;
+    border-color: #B8CCF3;
+}
+QPushButton#lensObjectButton:checked {
+    background: #DCE9FF;
+    border-color: #8FB3F4;
+    color: #073A89;
+}
+QToolButton#compactTextTool {
+    border: 0;
+    background: transparent;
+    color: #174EA6;
+    padding: 3px 4px;
+}
+QToolButton#compactTextTool:hover {
+    color: #0B63D9;
+    text-decoration: underline;
 }

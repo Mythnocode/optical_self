@@ -15,28 +15,29 @@ class SimulationStatusMixin:
             ))
         except Exception:
             self.formal_button.setEnabled(True)
-            self.formal_button.setText("提交正式计算")
+            self.formal_button.setText("开始计算")
             return
 
         missing = sorted(planned - cached)
         if self.session.dirty.is_dirty:
-            self.formal_state.setText(self.session.dirty.reason)
+            self.formal_state.setText("⚠ 上一次结果 · 需更新")
+            self.formal_state.setToolTip(self.session.dirty.reason)
             self.formal_state.set_tone("warning")
             self.formal_button.setEnabled(True)
-            self.formal_button.setText("提交正式计算")
+            self.formal_button.setText("开始计算")
             self.results.set_result_stale(
                 self.session.dirty.reason,
                 version=str(getattr(self.context.project.project, "version", "")),
             )
         elif missing:
-            self.formal_state.setText("当前视图尚未计算")
+            self.formal_state.setText("— 当前视图未计算")
             self.formal_state.set_tone("warning")
             self.formal_button.setEnabled(True)
             self.formal_button.setText("补算当前视图")
             if self._formal_store is None:
                 self.results.set_result_pending("当前视图尚未计算")
         else:
-            self.formal_state.setText("正式结果已是最新")
+            self.formal_state.setText("✓ 正式结果 · 当前")
             self.formal_state.set_tone("success")
             self.formal_button.setText("结果已是最新")
             self.formal_button.setEnabled(False)
@@ -52,13 +53,13 @@ class SimulationStatusMixin:
         receiver_efficiency = read_metric(metrics, "receiver_efficiency")
         if system_efficiency is not None:
             self.cards["system_eff"].set_value(
-                f"{100.0 * float(system_efficiency):.2f}", "%", note="正式结果"
+                f"{100.0 * float(system_efficiency):.2f}", "%", note=""
             )
         if receiver_efficiency is not None:
             self.cards["receiver_eff"].set_value(
-                f"{100.0 * float(receiver_efficiency):.2f}", "%", note="正式结果"
+                f"{100.0 * float(receiver_efficiency):.2f}", "%", note=""
             )
         if efficiency is not None:
             self.cards["coupling_eff"].set_value(
-                f"{100.0 * float(efficiency):.2f}", "%", note="正式复场"
+                f"{100.0 * float(efficiency):.2f}", "%", note=""
             )

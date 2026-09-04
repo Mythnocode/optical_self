@@ -33,7 +33,7 @@ def get_job(job_id: str, request: Request):
             status_code=404,
             code="JOB_NOT_FOUND",
             stage="job.lookup",
-            message="job not found",
+            message="未找到任务",
             context={"job_id": job_id},
         )
 
@@ -48,7 +48,7 @@ def get_result(job_id: str, request: Request):
             status_code=404,
             code="JOB_NOT_FOUND",
             stage="job.result",
-            message="job not found",
+            message="未找到任务",
             context={"job_id": job_id},
         )
     except RuntimeError:
@@ -57,7 +57,7 @@ def get_result(job_id: str, request: Request):
             status_code=409,
             code="JOB_RESULT_NOT_AVAILABLE",
             stage="job.result",
-            message="job result is not available",
+            message="任务尚无可用正式结果",
             context={"job_id": job_id},
         )
 
@@ -72,12 +72,12 @@ def get_result_summary(job_id: str, request: Request):
     except FileNotFoundError:
         return failure(
             request, status_code=404, code="JOB_NOT_FOUND", stage="job.result.summary",
-            message="job not found", context={"job_id": job_id},
+            message="未找到任务", context={"job_id": job_id},
         )
     except RuntimeError:
         return failure(
             request, status_code=409, code="JOB_RESULT_NOT_AVAILABLE", stage="job.result.summary",
-            message="job result is not available", context={"job_id": job_id},
+            message="任务尚无可用正式结果", context={"job_id": job_id},
         )
 
 
@@ -92,12 +92,12 @@ def get_live_result_local(job_id: str, request: Request):
     except FileNotFoundError:
         return failure(
             request, status_code=404, code="JOB_NOT_FOUND", stage="job.result.local",
-            message="job not found", context={"job_id": job_id},
+            message="未找到任务", context={"job_id": job_id},
         )
     except RuntimeError:
         return failure(
             request, status_code=409, code="JOB_LIVE_RESULT_NOT_AVAILABLE", stage="job.result.local",
-            message="local live result is not available", context={"job_id": job_id},
+            message="任务尚无可用实时结果", context={"job_id": job_id},
         )
 
 
@@ -111,18 +111,38 @@ def get_result_analysis(job_id: str, analysis: str, request: Request):
     except FileNotFoundError:
         return failure(
             request, status_code=404, code="JOB_NOT_FOUND", stage="job.result.analysis",
-            message="job not found", context={"job_id": job_id, "analysis": analysis},
+            message="未找到任务", context={"job_id": job_id, "analysis": analysis},
         )
     except KeyError:
         return failure(
             request, status_code=404, code="ANALYSIS_NOT_FOUND", stage="job.result.analysis",
-            message="analysis result is not available", context={"job_id": job_id, "analysis": analysis},
+            message="指定分析结果不可用", context={"job_id": job_id, "analysis": analysis},
         )
     except RuntimeError:
         return failure(
             request, status_code=409, code="JOB_RESULT_NOT_AVAILABLE", stage="job.result.analysis",
-            message="job result is not available", context={"job_id": job_id, "analysis": analysis},
+            message="任务尚无可用正式结果", context={"job_id": job_id, "analysis": analysis},
         )
+
+
+@router.post("/jobs/{job_id}/retry", status_code=status.HTTP_202_ACCEPTED)
+def retry_job(job_id: str, request: Request):
+    task_manager = request.app.state.services["task_manager"]
+    try:
+        retried = task_manager.retry(job_id)
+    except FileNotFoundError:
+        return failure(request, status_code=409, code="JOB_RETRY_NOT_AVAILABLE", stage="job.retry",
+            message="该任务没有可重放的提交信息，请返回原功能页重新提交", retryable=False, context={"job_id": job_id})
+    except PermissionError:
+        return failure(request, status_code=409, code="JOB_NOT_RETRYABLE", stage="job.retry",
+            message="该失败类型不建议直接重试，请先修正失败原因", retryable=False, context={"job_id": job_id})
+    except ValueError:
+        return failure(request, status_code=409, code="JOB_CANNOT_RETRY", stage="job.retry",
+            message="只有失败或已取消的任务可以重新运行", retryable=False, context={"job_id": job_id})
+    except Exception as exc:
+        return failure(request, status_code=500, code="JOB_RETRY_FAILED", stage="job.retry",
+            message=f"重新提交任务失败：{exc}", retryable=True, context={"job_id": job_id})
+    return success(request, retried, status_code=status.HTTP_202_ACCEPTED, message="任务已重新提交")
 
 
 @router.post("/jobs/{job_id}/cancel")
@@ -141,7 +161,7 @@ def cancel_job(job_id: str, request: Request):
             status_code=404,
             code="JOB_NOT_FOUND",
             stage="job.cancel",
-            message="job not found",
+            message="未找到任务",
             context={"job_id": job_id},
         )
 
@@ -151,7 +171,7 @@ def cancel_job(job_id: str, request: Request):
             status_code=409,
             code="JOB_CANNOT_CANCEL",
             stage="job.cancel",
-            message=f"job is in '{existing_status.status}' state and cannot be cancelled",
+            message=f"任务当前状态为 {existing_status.status}，不能取消",
             context={"job_id": job_id, "current_status": existing_status.status},
         )
 
@@ -161,7 +181,7 @@ def cancel_job(job_id: str, request: Request):
             status_code=500,
             code="CANCEL_FAILED",
             stage="job.cancel",
-            message="failed to cancel job",
+            message="取消任务失败",
             context={"job_id": job_id},
         )
 
@@ -174,5 +194,5 @@ def cancel_job(job_id: str, request: Request):
             "status": job_status.status,
         },
         status_code=status.HTTP_202_ACCEPTED,
-        message="cancel request accepted",
+        message="已接受取消请求",
     )

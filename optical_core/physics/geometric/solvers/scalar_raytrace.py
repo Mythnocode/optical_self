@@ -248,6 +248,7 @@ def trace_single_ray_detailed(
                 n_after=n_after,
                 temperature_c=options.environment_temperature_c,
                 include_group_delay=options.include_group_delay,
+                polarization_sensitive=options.polarization_sensitive,
             )
             diagnostics = dict(interaction.diagnostics)
             diagnostics["surface_pose"] = {

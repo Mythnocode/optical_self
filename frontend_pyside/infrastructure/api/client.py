@@ -8,6 +8,7 @@ from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequ
 
 from frontend_pyside.core.constants import DEFAULT_API_BASE
 from frontend_pyside.infrastructure.workers.worker import FunctionWorker
+from frontend_pyside.infrastructure.api.errors import ApiError
 from frontend_pyside.shared.performance import record_perf
 
 
@@ -16,6 +17,7 @@ class ApiClient(QObject):
 
     completed = Signal(str, object)
     failed = Signal(str, str)
+    failed_detail = Signal(str, object)
     binary_completed = Signal(str, bytes)
 
     def __init__(self, base_url: str = DEFAULT_API_BASE, parent=None):
@@ -91,7 +93,7 @@ class ApiClient(QObject):
         )
         self._workers.add(worker)
         worker.signals.result.connect(self._json_decoded)
-        worker.signals.error.connect(lambda message, request_keys=keys: self._emit_failed_many(request_keys, message))
+        worker.signals.error.connect(lambda message, request_keys=keys: self._emit_failed_many(request_keys, message, ApiError(code="INVALID_RESPONSE", message="后端返回了无法解析的响应，请查看后端日志。", raw_message=str(message))))
         worker.signals.finished.connect(lambda w=worker: self._workers.discard(w))
         QThreadPool.globalInstance().start(worker)
 
@@ -121,16 +123,21 @@ class ApiClient(QObject):
             bytes=len(raw_text.encode("utf-8")), coalesced=len(keys),
         )
         if network_error:
-            message = body.get("message") if isinstance(body, dict) else None
-            self._emit_failed_many(keys, str(message or raw_text or error_string))
+            if isinstance(body, dict) and (body.get("error") or body.get("code")):
+                detail = ApiError.from_response(body, fallback_message=str(raw_text or error_string or "请求失败"))
+            else:
+                detail = ApiError.network(str(raw_text or error_string or "请求失败"))
+            self._emit_failed_many(keys, detail.user_message(), detail)
             return
         data = body.get("data", body) if isinstance(body, dict) else body
         for key in keys:
             self.completed.emit(str(key), data)
 
-    def _emit_failed_many(self, keys, message: str) -> None:
+    def _emit_failed_many(self, keys, message: str, detail: ApiError | None = None) -> None:
+        error = detail or ApiError.network(str(message))
         for key in tuple(keys):
-            self.failed.emit(str(key), str(message))
+            self.failed_detail.emit(str(key), error)
+            self.failed.emit(str(key), str(message or error.user_message()))
 
     def _finish_binary_get(self, path: str, reply: QNetworkReply) -> None:
         keys = tuple(self._inflight_binary_gets.pop(str(path), []) or [str(path)])
@@ -149,7 +156,8 @@ class ApiClient(QObject):
                 coalesced=len(keys),
             )
         if reply.error() != QNetworkReply.NetworkError.NoError:
-            self._emit_failed_many(keys, reply.errorString())
+            detail = ApiError.network(reply.errorString())
+            self._emit_failed_many(keys, detail.user_message(), detail)
         else:
             payload = bytes(reply.readAll())
             for key in keys:

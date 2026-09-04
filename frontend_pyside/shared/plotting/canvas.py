@@ -8,16 +8,18 @@ from matplotlib import rcParams
 from cycler import cycler
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Signal, Qt
 from PySide6.QtWidgets import QSizePolicy
 
 from frontend_pyside.resources import theme_tokens as theme
 from frontend_pyside.shared.performance import record_perf
+from frontend_pyside.shared.components.safe_inputs import forward_wheel_to_page
 from frontend_pyside.shared.font_fallback import matplotlib_font_config
 from frontend_pyside.shared.plotting.canvas_3d_interaction import (
     Optical3DInteractionController,
 )
 from frontend_pyside.shared.plotting.canvas_view import (
+    apply_optical_scene_3d_zoom,
     fit_optical_scene_3d,
     fit_optical_section_2d,
 )
@@ -27,13 +29,13 @@ from frontend_pyside.shared.plotting.scene_cache import DualQualitySceneCache
 rcParams.update(
     {
         **matplotlib_font_config(),
-        "font.size": 12.0,
-        "axes.titlesize": 16.0,
+        "font.size": 13.0,
+        "axes.titlesize": 17.0,
         "axes.titleweight": "semibold",
-        "axes.labelsize": 13.0,
-        "xtick.labelsize": 11.0,
-        "ytick.labelsize": 11.0,
-        "legend.fontsize": 11.0,
+        "axes.labelsize": 14.0,
+        "xtick.labelsize": 12.0,
+        "ytick.labelsize": 12.0,
+        "legend.fontsize": 12.0,
         "axes.formatter.useoffset": False,
         "figure.facecolor": theme.CHART_BACKGROUND,
         "savefig.facecolor": theme.CHART_BACKGROUND,
@@ -63,6 +65,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
     surfaceSelected = Signal(int)
     surfaceActivated = Signal(int)
     itemSelected = Signal(str)
+    pointSelected = Signal(float, float)
     viewChanged = Signal()
 
     def __init__(self, parent=None):
@@ -107,6 +110,21 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
         self._raytrace_signature = None
         self.mpl_connect("scroll_event", self._on_scroll)
         self.mpl_connect("button_press_event", self._on_button_press)
+        self.mpl_connect("motion_notify_event", self._on_motion)
+        self.mpl_connect("button_release_event", self._on_button_release)
+        self._pan_start = None
+
+    def wheelEvent(self, event) -> None:  # noqa: N802
+        """页面中的普通滚轮只负责页面导航。
+
+        图表缩放必须使用 Ctrl+滚轮；独立科研图窗可通过 freeWheelZoom 属性恢复
+        普通滚轮缩放。这样用户滚动长页面时不会无意改变二维/三维结果视图。
+        """
+        free_zoom = bool(self.property("freeWheelZoom"))
+        if free_zoom or bool(event.modifiers() & Qt.KeyboardModifier.ControlModifier):
+            super().wheelEvent(event)
+            return
+        forward_wheel_to_page(self, event)
 
     @property
     def data(self) -> dict:
@@ -286,6 +304,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
                 self._reusable_2d_artists = [patch for patch, _label in self._item_artists]
                 self._reusable_2d_labels = [label for _patch, label in self._item_artists]
         self._apply_high_contrast_axes(self.figure)
+        self._apply_safe_plot_margins(kind)
         self.draw_idle()
         record_perf(
             "plot_update",
@@ -293,6 +312,47 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
             kind=str(kind),
             mode="rebuild",
         )
+
+
+    def _apply_safe_plot_margins(self, kind: str) -> None:
+        """Reserve predictable room for labels inside embedded result workspaces.
+
+        Embedded plots have a fixed visual slot.  A chart must adapt to that slot rather
+        than draw labels outside it and rely on clipping.  Composite plots keep their
+        own hand-tuned layouts; ordinary 2-D charts use a shared safe margin.
+        """
+        if kind in {"heatmap_pair", "phase_comparison", "multi_plane_evolution", "before_after", "profile_pair", "adjustment_trajectory", "teaching_scan"}:
+            return
+        if kind in {"optical_scene_3d", "raytrace3d"}:
+            return
+        try:
+            custom_bottom = self._data.get("plot_bottom_margin") if isinstance(self._data, dict) else None
+            # Embedded Qt canvases need *inside-the-figure* safety space.  Using
+            # tight_layout alone is not enough because the surrounding result card
+            # can clip the title/axis labels before Matplotlib gets another resize.
+            # Keep a deliberately larger title band and x/y label band instead of
+            # shrinking fonts.  This is shared by training diagnostics, research
+            # plots, validation plots and ordinary result charts.
+            if custom_bottom is not None:
+                bottom = min(0.42, max(0.18, float(custom_bottom)))
+                self.figure.subplots_adjust(left=0.15, right=0.965, bottom=bottom, top=0.86)
+                return
+            if kind == "research_preview":
+                self.figure.subplots_adjust(left=0.145, right=0.965, bottom=0.23, top=0.87)
+            elif kind == "correlation_heatmap":
+                self.figure.subplots_adjust(left=0.27, right=0.90, bottom=0.19, top=0.86)
+            elif kind in {"candidate_compare", "bar", "bar_grouped", "target_achievement"}:
+                self.figure.subplots_adjust(left=0.15, right=0.965, bottom=0.20, top=0.86)
+            elif kind == "histogram":
+                self.figure.subplots_adjust(left=0.14, right=0.965, bottom=0.22, top=0.86)
+            elif kind in {"parameter_response", "validation_scatter", "residual", "scatter_formula", "convergence_curve", "line", "line_multi", "scatter"}:
+                self.figure.subplots_adjust(left=0.15, right=0.965, bottom=0.24, top=0.86)
+            elif kind in {"beeswarm", "mismatch_budget", "waterfall", "barh"}:
+                self.figure.subplots_adjust(left=0.235, right=0.965, bottom=0.22, top=0.86)
+            else:
+                self.figure.subplots_adjust(left=0.155, right=0.96, bottom=0.22, top=0.86)
+        except Exception:
+            pass
 
     def _try_update_reusable_2d(self, new_data: dict) -> bool:
         kind = str(new_data.get("kind", "empty"))
@@ -397,7 +457,8 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
             return
         kind = self._data.get("kind", "empty")
         if kind in {"optical_scene_3d", "raytrace3d"}:
-            fit_optical_scene_3d(self._axis, self._data)
+            self._optical_3d_zoom = 1.0
+            fit_optical_scene_3d(self._axis, self._data, zoom=self._optical_3d_zoom)
             self._axis.view_init(elev=18, azim=-66)
         elif kind in {"raytrace", "raytrace_section"}:
             fit_optical_section_2d(self._axis, self._data)
@@ -406,6 +467,75 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
             self._axis.autoscale_view()
         self.draw_idle()
         self.viewChanged.emit()
+
+    def set_optical_3d_view(self, preset: str = "all") -> bool:
+        """Fit the formal Matplotlib 3D optical result to a useful axial region.
+
+        This deliberately changes only the formal simulation plot.  The teaching
+        centre uses Qt Quick 3D and has an independent camera controller.
+        """
+        if self._axis is None or self._data.get("kind") not in {"optical_scene_3d", "raytrace3d"}:
+            return False
+        preset = str(preset or "all").strip().lower()
+        self._optical_3d_zoom = 1.0
+        fit_optical_scene_3d(self._axis, self._data, zoom=self._optical_3d_zoom)
+        if preset in {"all", "fit", "适应全部", "全部光路"}:
+            self._axis.view_init(elev=18, azim=-66)
+            self.draw_idle(); self.viewChanged.emit(); return True
+
+        surfaces = [dict(item) for item in self._data.get("surfaces", []) or [] if item.get("visible", True) is not False]
+        objects = [dict(item) for item in self._data.get("objects", []) or [] if item.get("visible", True) is not False]
+        if not surfaces and not objects:
+            return False
+        full_left, full_right = map(float, self._axis.get_xlim())
+        full_span = max(abs(full_right - full_left), 1e-6)
+
+        groups: list[tuple[str, list[dict]]] = []
+        for item in surfaces:
+            gid = str(item.get("group_id", "") or item.get("label", "") or "").strip()
+            if not gid:
+                continue
+            for existing_gid, records in groups:
+                if existing_gid == gid:
+                    records.append(item); break
+            else:
+                groups.append((gid, [item]))
+        groups.sort(key=lambda rec: min(float(x.get("z", 0.0) or 0.0) for x in rec[1]))
+
+        z_values: list[float] = []
+        if preset in {"l1-l2", "l1_l2", "front", "前组"}:
+            chosen = groups[:2] if groups else []
+            z_values = [float(x.get("z", 0.0) or 0.0) for _, recs in chosen for x in recs]
+        elif preset in {"l3-l4", "l3_l4", "rear", "后组"}:
+            chosen = groups[-2:] if groups else []
+            z_values = [float(x.get("z", 0.0) or 0.0) for _, recs in chosen for x in recs]
+        elif preset in {"fiber", "fiber_end", "receiver", "光纤端面"}:
+            receiver_values = []
+            for item in objects:
+                text = " ".join(str(item.get(key, "") or "") for key in ("kind", "type", "label", "name", "id")).lower()
+                if any(token in text for token in ("fiber", "receiver", "image", "detector", "光纤", "端面")):
+                    receiver_values.append(float(item.get("z", 0.0) or 0.0))
+            if not receiver_values:
+                receiver_values = [float(item.get("z", 0.0) or 0.0) for item in objects]
+            if receiver_values:
+                centre = max(receiver_values)
+                width = max(0.24 * full_span, 1e-3)
+                z_values = [centre - 0.82 * width, centre + 0.18 * width]
+
+        if not z_values and surfaces:
+            ordered = sorted(float(item.get("z", 0.0) or 0.0) for item in surfaces)
+            if preset in {"l1-l2", "l1_l2", "front", "前组"}:
+                z_values = ordered[: max(2, len(ordered)//2)]
+            elif preset in {"l3-l4", "l3_l4", "rear", "后组"}:
+                z_values = ordered[len(ordered)//2 :]
+        if not z_values:
+            return False
+        z_low, z_high = min(z_values), max(z_values)
+        region_span = max(z_high - z_low, 0.08 * full_span, 1e-6)
+        margin = 0.16 * region_span
+        self._axis.set_xlim(z_low - margin, z_high + margin)
+        apply_optical_scene_3d_zoom(self._axis, zoom=self._optical_3d_zoom)
+        self.draw_idle(); self.viewChanged.emit(); return True
 
     def save_figure(self, path: str | Path) -> Path:
         output = Path(path)

@@ -8,7 +8,8 @@ from PySide6.QtCore import QSettings
 
 
 METRIC_LABELS: dict[str, str] = {
-    "coupling_efficiency": "耦合效率",
+    "coupling_efficiency": "模式耦合效率",
+    "total_coupling_efficiency": "总耦合效率",
     "system_efficiency": "系统效率",
     "receiver_efficiency": "接收效率",
     "geometric_throughput": "几何透过率",
@@ -122,9 +123,8 @@ def readable_dataset_name(record: dict[str, Any], index: int = 0, *, aliases: Re
     if raw and not raw.lower().startswith("dataset-") and len(raw) <= 42:
         return raw
     target = metric_label((record.get("target_names") or [record.get("target_column") or ""])[0])
-    samples = int(record.get("sample_count", 0) or 0)
     if target and target != "输出":
-        return f"{target}训练数据 · {samples}个样本"
+        return f"{target}训练数据"
     created = _short_time(record.get("created_at"))
     return f"训练数据 · {created or f'#{index + 1}'}"
 
@@ -194,6 +194,11 @@ def parameter_label(name: object) -> str:
         "lens_count": "镜片数量",
         "lens_type": "镜片类型",
         "lens_order": "镜片排列",
+        "fiber_axial": "光纤轴向位置",
+        "fiber lateral": "光纤横向位置",
+        "fiber_lateral": "光纤横向位置",
+        "fiber tilt": "光纤角度倾斜",
+        "fiber_tilt": "光纤角度倾斜",
     }
     return aliases.get(text, text.replace("_", " ") or "参数")
 

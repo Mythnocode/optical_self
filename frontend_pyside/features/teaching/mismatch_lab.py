@@ -201,6 +201,7 @@ class MismatchVisualWidget(QWidget):
         self.lesson = LESSONS[0]
         self.value = self.lesson.default
         self.efficiency = 1.0
+        self.display_mode = "overlay"
         self.setMinimumSize(420, 250)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setObjectName("mismatchVisual")
@@ -209,6 +210,11 @@ class MismatchVisualWidget(QWidget):
         self.lesson = lesson
         self.value = float(value)
         self.efficiency = _clip01(efficiency)
+        self.update()
+
+    def set_display_mode(self, mode: str) -> None:
+        mode = str(mode or "overlay").lower()
+        self.display_mode = mode if mode in {"intensity", "phase", "overlay"} else "overlay"
         self.update()
 
     def paintEvent(self, event) -> None:  
@@ -220,14 +226,17 @@ class MismatchVisualWidget(QWidget):
         painter.drawRoundedRect(QRectF(rect), 10, 10)
         self._draw_title(painter, rect)
         diagram = QRectF(rect.left() + 18, rect.top() + 56, rect.width() - 36, rect.height() - 88)
-        if self.lesson.visual_mode == "endpoint":
-            self._draw_endpoint(painter, diagram)
-        elif self.lesson.visual_mode == "defocus":
-            self._draw_defocus(painter, diagram)
-        elif self.lesson.visual_mode == "angle":
-            self._draw_angle(painter, diagram)
-        else:
-            self._draw_curvature(painter, diagram)
+        if self.display_mode != "phase":
+            if self.lesson.visual_mode == "endpoint":
+                self._draw_endpoint(painter, diagram)
+            elif self.lesson.visual_mode == "defocus":
+                self._draw_defocus(painter, diagram)
+            elif self.lesson.visual_mode == "angle":
+                self._draw_angle(painter, diagram)
+            else:
+                self._draw_curvature(painter, diagram)
+        if self.display_mode in {"phase", "overlay"}:
+            self._draw_phase_overlay(painter, diagram)
         self._draw_legend(painter, rect)
 
     def _draw_title(self, painter: QPainter, rect) -> None:
@@ -393,6 +402,36 @@ class MismatchVisualWidget(QWidget):
         painter.drawText(QRectF(left, rect.top() + 16, 170, 24), Qt.AlignmentFlag.AlignLeft, "光纤目标波前")
         painter.setPen(QColor(theme.ERROR))
         painter.drawText(QRectF(rect.right() - 190, rect.top() + 16, 180, 24), Qt.AlignmentFlag.AlignRight, "入射波前")
+
+    def _draw_phase_overlay(self, painter: QPainter, rect: QRectF) -> None:
+        painter.save()
+        painter.setClipRect(rect)
+        color = QColor("#6D28D9")
+        color.setAlpha(170 if self.display_mode == "phase" else 105)
+        painter.setPen(QPen(color, 1.6))
+        level = abs(float(self.value))
+        if self.lesson.key == "angle":
+            spacing = 26.0
+            slope = min(0.75, level / max(abs(self.lesson.maximum), 1e-9))
+            x = rect.left() - rect.height()
+            while x < rect.right() + rect.height():
+                painter.drawLine(QPointF(x, rect.bottom()), QPointF(x + rect.height() * (0.25 + slope), rect.top()))
+                x += spacing
+        elif self.lesson.key in {"curvature", "defocus"}:
+            center = QPointF(rect.center().x(), rect.bottom() + rect.height() * 0.42)
+            base = max(30.0, min(rect.width(), rect.height()) * 0.22)
+            for i in range(4):
+                radius = base * (1.0 + i * 0.42)
+                painter.drawArc(QRectF(center.x()-radius, center.y()-radius, radius*2, radius*2), 18*16, 144*16)
+        else:
+            spacing = 30.0
+            y = rect.top() + 12
+            while y < rect.bottom():
+                painter.drawLine(QPointF(rect.left()+12, y), QPointF(rect.right()-12, y))
+                y += spacing
+        painter.setPen(QColor("#6D28D9"))
+        painter.drawText(QRectF(rect.left()+10, rect.top()+6, rect.width()-20, 22), Qt.AlignmentFlag.AlignRight, "相位示意")
+        painter.restore()
 
     def _draw_legend(self, painter: QPainter, rect) -> None:
         painter.setFont(QFont(painter.font().family(), max(9, painter.font().pointSize() - 1)))

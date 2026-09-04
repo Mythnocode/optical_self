@@ -29,6 +29,7 @@ TRACE_AFFECTING_OPTION_KEYS = frozenset({
     "include_source_to_pupil_opl", "record_surfaces",
     "propagate_to_image", "evaluate_apertures",
     "max_intersection_iterations", "sampling_role", "trace_output_level",
+    "polarization_sensitive", "vector_coupling_enabled",
 })
 
 
@@ -135,6 +136,7 @@ class SimulationContext:
     _trace_cache: dict[TraceKey, TraceBundle] = field(default_factory=dict)
     shared_trace_cache: Any | None = None
     trace_build_count: int = 0
+    trace_progress_callback: Any | None = None
 
     def __post_init__(self) -> None:
         self.metadata.update(
@@ -266,7 +268,9 @@ class SimulationContext:
                 evaluate_apertures=bool(opts.get("evaluate_apertures", True)),
                 max_intersection_iterations=int(opts["max_intersection_iterations"]),
                 output_level=str(opts.get("trace_output_level", "planes")),
+                polarization_sensitive=bool(opts.get("polarization_sensitive", False) or opts.get("vector_coupling_enabled", False)),
             ),
+            progress_callback=self.trace_progress_callback,
         )
         self._trace_cache[key] = trace
         if self.shared_trace_cache is not None:

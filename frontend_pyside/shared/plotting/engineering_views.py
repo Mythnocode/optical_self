@@ -8,6 +8,7 @@ import math
 import numpy as np
 
 from frontend_pyside.shared.feature_labels import display_feature_name
+from frontend_pyside.shared.display_names import parameter_label
 
 
 def _finite_number(value: Any) -> float | None:
@@ -161,6 +162,85 @@ def build_energy_flow(metrics: Mapping[str, Any], *, source: str) -> dict[str, A
     }
 
 
+def _scaled_intensity_frame(base: np.ndarray, scale_x: float, scale_y: float) -> np.ndarray:
+    rows, cols = base.shape
+    yy, xx = np.indices(base.shape, dtype=float)
+    cx, cy = (cols - 1) / 2.0, (rows - 1) / 2.0
+    sx = max(float(scale_x), 1.0e-4)
+    sy = max(float(scale_y), 1.0e-4)
+    src_x = np.clip(np.round(cx + (xx - cx) / sx).astype(int), 0, cols - 1)
+    src_y = np.clip(np.round(cy + (yy - cy) / sy).astype(int), 0, rows - 1)
+    return base[src_y, src_x] / max(sx * sy, 1.0e-12)
+
+
+def _derived_multi_plane_frames(model: Mapping[str, Any], start_mm: float, stop_mm: float, count: int) -> list[dict[str, Any]]:
+    base = _as_2d(model.get("base_intensity"))
+    if not base.size:
+        return []
+    count = max(3, min(15, int(count)))
+    start_mm, stop_mm = sorted((float(start_mm), float(stop_mm)))
+    if math.isclose(start_mm, stop_mm, rel_tol=0.0, abs_tol=1.0e-12):
+        stop_mm = start_mm + 1.0e-6
+    wx0 = max(float(model.get("waist_x_um", 1.0)), 1.0e-9)
+    wy0 = max(float(model.get("waist_y_um", 1.0)), 1.0e-9)
+    zx0 = float(model.get("waist_x_z_mm", 0.0))
+    zy0 = float(model.get("waist_y_z_mm", 0.0))
+    zrx = max(float(model.get("rayleigh_x_mm", 1.0)), 1.0e-9)
+    zry = max(float(model.get("rayleigh_y_mm", 1.0)), 1.0e-9)
+
+    def radius(w0: float, z: float, z0: float, zr: float) -> float:
+        return w0 * math.sqrt(1.0 + ((z - z0) / zr) ** 2)
+
+    ref_x = max(radius(wx0, 0.0, zx0, zrx), 1.0e-9)
+    ref_y = max(radius(wy0, 0.0, zy0, zry), 1.0e-9)
+    planes: list[dict[str, Any]] = []
+    for z_value in np.linspace(start_mm, stop_mm, count):
+        sx = radius(wx0, float(z_value), zx0, zrx) / ref_x
+        sy = radius(wy0, float(z_value), zy0, zry) / ref_y
+        frame = np.nan_to_num(_scaled_intensity_frame(base, sx, sy), nan=0.0)
+        maximum = float(np.max(frame)) if frame.size else 0.0
+        if maximum > 0:
+            frame = frame / maximum
+        planes.append({"z": float(z_value), "intensity": frame.tolist()})
+    return planes
+
+
+def rebuild_multi_plane_evolution_range(
+    data: Mapping[str, Any], start_mm: float, stop_mm: float, plane_count: int = 7,
+) -> dict[str, Any]:
+    """Return a display copy over a requested axial range.
+
+    Derived Gaussian propagation can be regenerated continuously.  For formal
+    multi-plane stacks we select the nearest available physical planes instead of
+    inventing uncomputed fields.
+    """
+    payload = dict(data or {})
+    start_mm, stop_mm = sorted((float(start_mm), float(stop_mm)))
+    plane_count = max(3, min(15, int(plane_count)))
+    model = payload.get("_derived_model")
+    if isinstance(model, Mapping):
+        payload["planes"] = _derived_multi_plane_frames(model, start_mm, stop_mm, plane_count)
+        payload["range_mm"] = [start_mm, stop_mm]
+        return payload
+
+    planes = [dict(item) for item in list(payload.get("planes", []) or []) if isinstance(item, Mapping)]
+    if not planes:
+        return payload
+    positions = np.asarray([float(item.get("z", 0.0)) for item in planes], dtype=float)
+    targets = np.linspace(start_mm, stop_mm, min(plane_count, max(1, len(planes))))
+    chosen: list[int] = []
+    for target in targets:
+        index = int(np.argmin(np.abs(positions - float(target))))
+        if index not in chosen:
+            chosen.append(index)
+    if not chosen:
+        chosen = [int(np.argmin(np.abs(positions - 0.5 * (start_mm + stop_mm))))]
+    payload["planes"] = [planes[index] for index in chosen]
+    payload["range_mm"] = [start_mm, stop_mm]
+    payload["range_note"] = "正式传播结果仅显示请求范围内最接近的已计算平面。"
+    return payload
+
+
 def build_multi_plane_evolution(
     arrays: Mapping[str, Any],
     beam_match: Mapping[str, Any] | None,
@@ -188,31 +268,43 @@ def build_multi_plane_evolution(
             if z_positions:
                 break
 
-    derived = False
+    derived_model: dict[str, Any] | None = None
+    description = "正式多平面传播结果"
     if not stack.size and isinstance(beam_match, Mapping):
         base = _as_2d(beam_match.get("z"))
         if base.size:
-            
-            
-            derived = True
-            positions = np.linspace(-1.0, 1.0, 7)
-            frames: list[np.ndarray] = []
-            rows, cols = base.shape
-            yy, xx = np.indices(base.shape, dtype=float)
-            cx, cy = (cols - 1) / 2.0, (rows - 1) / 2.0
-            for value in positions:
-                scale = 0.72 + 0.55 * abs(value)
-                src_x = np.clip(np.round(cx + (xx - cx) / scale).astype(int), 0, cols - 1)
-                src_y = np.clip(np.round(cy + (yy - cy) / scale).astype(int), 0, rows - 1)
-                frame = base[src_y, src_x] / max(scale * scale, 1e-12)
-                frames.append(frame)
-            stack = np.asarray(frames)
-            span = 1.0
-            if isinstance(waist, Mapping):
-                x_values = list(waist.get("x", []) or [])
-                if x_values:
-                    span = max(abs(float(min(x_values))), abs(float(max(x_values))), 1.0)
-            z_positions = np.linspace(-span, span, len(frames)).tolist()
+            metrics = dict(waist.get("metrics", {}) or {}) if isinstance(waist, Mapping) else {}
+            zrx = max(float(metrics.get("rayleigh_x_mm", 0.25) or 0.25), 1.0e-6)
+            zry = max(float(metrics.get("rayleigh_y_mm", 0.25) or 0.25), 1.0e-6)
+            zx0 = float(metrics.get("waist_x_z_mm", 0.0) or 0.0)
+            zy0 = float(metrics.get("waist_y_z_mm", 0.0) or 0.0)
+            # Focused-coupling view: do not let an ill-conditioned Gaussian fit
+            # explode into tens of metres.  The user can widen this explicitly.
+            raw_half_span = max(0.5, 2.0 * max(zrx, zry), 1.5 * max(abs(zx0), abs(zy0)))
+            auto_half_span = min(raw_half_span, 12.0)
+            derived_model = {
+                "base_intensity": np.nan_to_num(base, nan=0.0).tolist(),
+                "waist_x_um": float(metrics.get("waist_x_um", 1.0) or 1.0),
+                "waist_y_um": float(metrics.get("waist_y_um", 1.0) or 1.0),
+                "waist_x_z_mm": zx0,
+                "waist_y_z_mm": zy0,
+                "rayleigh_x_mm": zrx,
+                "rayleigh_y_mm": zry,
+            }
+            planes = _derived_multi_plane_frames(derived_model, -auto_half_span, auto_half_span, 7)
+            return {
+                "kind": "multi_plane_evolution",
+                "title": "多平面光斑演化",
+                "planes": planes,
+                "derived": True,
+                "source": source,
+                "range_mm": [-auto_half_span, auto_half_span],
+                "auto_range_capped": bool(raw_half_span > auto_half_span + 1.0e-9),
+                "_derived_model": derived_model,
+                "description": (
+                    "由端面复场与高斯传播拟合外推；自动范围聚焦于耦合焦区，异常大的拟合瑞利长度不会直接扩展到几十米。"
+                ),
+            }
     if not stack.size:
         return {"kind": "empty", "message": "当前结果没有多平面光斑数据。"}
 
@@ -225,21 +317,43 @@ def build_multi_plane_evolution(
             frame = frame / maximum
         z_value = z_positions[int(index)] if int(index) < len(z_positions) else float(index)
         planes.append({"z": float(z_value), "intensity": frame.tolist()})
+    range_mm = [min((p["z"] for p in planes), default=0.0), max((p["z"] for p in planes), default=0.0)]
     return {
         "kind": "multi_plane_evolution",
         "title": "多平面光斑演化",
         "planes": planes,
-        "derived": derived,
+        "derived": False,
         "source": source,
-        "description": "由端面复场与高斯传播拟合外推" if derived else "正式多平面传播结果",
+        "range_mm": range_mm,
+        "description": description,
     }
+
+def _baseline_metrics(result: Mapping[str, Any], project_metrics: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the metrics frozen when the task was submitted.
+
+    Optimisation results must not re-read the *current* project after a candidate
+    has been applied; otherwise an old task can silently turn into a meaningless
+    ``92.7 -> 92.7`` comparison.  The formal optimiser always records its first
+    evaluation as the current-system baseline, so prefer that immutable record.
+    """
+    metadata = dict(result.get("metadata", {}) or {})
+    explicit = metadata.get("baseline_metrics")
+    if isinstance(explicit, Mapping) and explicit:
+        return dict(explicit)
+    history = [item for item in list(result.get("history", []) or []) if isinstance(item, Mapping)]
+    if history:
+        metrics = history[0].get("metrics")
+        if isinstance(metrics, Mapping) and metrics:
+            return dict(metrics)
+    return dict(project_metrics or {})
 
 
 def build_before_after_comparison(result: Mapping[str, Any], project_metrics: Mapping[str, Any]) -> dict[str, Any]:
     best_metrics = dict(result.get("best_metrics", {}) or {})
-    before_eff = _finite_number(project_metrics.get("coupling_efficiency"))
+    baseline_metrics = _baseline_metrics(result, project_metrics)
+    before_eff = _finite_number(baseline_metrics.get("coupling_efficiency"))
     after_eff = _finite_number(best_metrics.get("coupling_efficiency"))
-    before_system = _finite_number(project_metrics.get("system_efficiency"))
+    before_system = _finite_number(baseline_metrics.get("system_efficiency"))
     after_system = _finite_number(best_metrics.get("system_efficiency"))
     if before_eff is None and after_eff is None:
         return {"kind": "empty", "message": "当前优化结果没有优化前后效率数据。"}
@@ -252,17 +366,17 @@ def build_before_after_comparison(result: Mapping[str, Any], project_metrics: Ma
     variables = dict(result.get("best_variables", {}) or {})
     rows = []
     for name, value in list(variables.items())[:8]:
-        rows.append({"name": str(name), "before": None, "after": value})
+        rows.append({"name": parameter_label(name), "before": None, "after": value})
     return {
         "kind": "before_after",
         "title": "优化前后对比",
         "before": {
-            "label": "优化前",
+            "label": "当前系统",
             "coupling_efficiency": percent(before_eff),
             "system_efficiency": percent(before_system),
         },
         "after": {
-            "label": "优化后",
+            "label": "最佳候选",
             "coupling_efficiency": percent(after_eff),
             "system_efficiency": percent(after_system),
         },
@@ -301,6 +415,7 @@ def build_convergence_view(result: Mapping[str, Any], *, metric_label: str, effi
         "best": best,
         "x_label": "正式仿真次数",
         "y_label": metric_label + (" / %" if efficiency else ""),
+        "plot_bottom_margin": 0.27,
         "source": "正式优化",
     }
 
@@ -316,13 +431,13 @@ def build_candidate_comparison(result: Mapping[str, Any], *, efficiency: bool) -
             metrics = dict(item.get("metrics", {}) or {})
             formal = metrics.get("coupling_efficiency") if efficiency else item.get("merit")
             rows.append({
-                "label": f"方案{index + 1}",
+                "label": f"候选{index + 1}",
                 "formal_efficiency": formal,
                 "predicted_efficiency": item.get("predicted_value"),
                 "feasible": metrics.get("collimation_feasible", 1.0) >= 0.5,
             })
     if not rows:
-        return {"kind": "empty", "message": "没有候选方案数据。"}
+        return {"kind": "empty", "message": "没有候选结果数据。"}
     normalized = []
     for index, item in enumerate(rows):
         formal = _finite_number(item.get("formal_efficiency", item.get("coupling_efficiency", item.get("formal_value"))))
@@ -334,23 +449,56 @@ def build_candidate_comparison(result: Mapping[str, Any], *, efficiency: bool) -
                 formal *= 100.0
             if predicted is not None and abs(predicted) <= 1.000001:
                 predicted *= 100.0
+        raw_label = str(item.get("label", item.get("name", "")) or "").strip()
+        # Legacy/demo result payloads sometimes called candidates "方案A/B/C".
+        # The platform has only one current system; optimisation produces candidates.
+        if not raw_label or raw_label.startswith("方案"):
+            raw_label = f"候选{index + 1}"
         normalized.append({
-            "label": str(item.get("label", item.get("name", f"方案{index + 1}"))),
+            "label": raw_label,
             "formal": formal,
             "predicted": predicted,
             "feasible": bool(item.get("feasible", item.get("constraint_passed", True))),
             "verified": formal is not None,
         })
     if not normalized:
-        return {"kind": "empty", "message": "候选方案没有有效指标。"}
+        return {"kind": "empty", "message": "候选结果没有有效指标。"}
     normalized.sort(key=lambda item: item["formal"] if item["formal"] is not None else (item["predicted"] or -float("inf")), reverse=True)
     return {
         "kind": "candidate_compare",
-        "title": "多候选方案对比",
+        "title": "多候选结果对比",
         "candidates": normalized[:10],
         "y_label": "耦合效率 / %" if efficiency else "目标值",
         "source": "正式优化",
     }
+
+
+def _compact_correlation_label(raw_key: str, display: str) -> str:
+    key = str(raw_key or "")
+    if key in {"receiver.axial_offset_z_mm", "receiver_axial_offset_z_mm", "axial_offset_z_mm"}:
+        return "Z位置"
+    if key in {"receiver.offset_x_mm", "receiver_offset_x_mm", "offset_x_mm"}:
+        return "X偏移"
+    if key in {"receiver.offset_y_mm", "receiver_offset_y_mm", "offset_y_mm"}:
+        return "Y偏移"
+    if key in {"receiver.tilt_x_deg", "tilt_x_deg"}:
+        return "X倾角"
+    if key in {"receiver.tilt_y_deg", "tilt_y_deg"}:
+        return "Y倾角"
+    if key == "目标值":
+        return "目标值"
+    import re
+    match = re.match(r"surfaces\[(\d+)\]\.(distance_to_next_mm|radius_mm|semi_aperture_mm)", key)
+    if match:
+        surface = int(match.group(1)) + 1
+        suffix = {
+            "distance_to_next_mm": "间距",
+            "radius_mm": "曲率",
+            "semi_aperture_mm": "口径",
+        }[match.group(2)]
+        return f"S{surface}{suffix}"
+    text = str(display or key).replace("（mm）", "").replace(" (mm)", "").strip()
+    return text if len(text) <= 8 else text[:7] + "…"
 
 
 def build_correlation_view(result: Mapping[str, Any]) -> dict[str, Any]:
@@ -392,10 +540,12 @@ def build_correlation_view(result: Mapping[str, Any]) -> dict[str, Any]:
         mean = float(np.mean(array[row_index, finite])) if np.any(finite) else 0.0
         array[row_index, ~finite] = mean
     correlation = np.corrcoef(array)
+    labels = [display_feature_name(key, fallback_index=index + 1) for index, key in enumerate(valid_keys)]
     return {
         "kind": "correlation_heatmap",
         "title": "参数相关性",
-        "labels": [display_feature_name(key, fallback_index=index + 1) for index, key in enumerate(valid_keys)],
+        "labels": labels,
+        "x_labels": [_compact_correlation_label(key, label) for key, label in zip(valid_keys, labels)],
         "raw_labels": valid_keys,
         "matrix": np.nan_to_num(correlation, nan=0.0).tolist(),
         "source": "优化历史",

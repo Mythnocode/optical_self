@@ -10,6 +10,7 @@ _EXPORTS = {
     "Card": (".cards", "Card"), "FeatureCard": (".cards", "FeatureCard"), "CollapsiblePanel": (".cards", "CollapsiblePanel"),
     "MetricCard": (".metrics", "MetricCard"), "InlineMetric": (".metrics", "InlineMetric"), "SummaryStrip": (".metrics", "SummaryStrip"),
     "InfoRow": (".information", "InfoRow"), "PageScrollArea": (".information", "PageScrollArea"), "KeyValueGrid": (".information", "KeyValueGrid"),
+    "FormGrid": (".forms", "FormGrid"),
 }
 
 

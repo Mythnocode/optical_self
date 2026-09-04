@@ -57,7 +57,12 @@ def _axis_overlap(
     return _clamp01(size * lateral * angular * axial)
 
 
-def estimate_efficiency(project, form_state) -> InstantEfficiency:
+def estimate_efficiency(
+    project,
+    form_state,
+    *,
+    beam_radius_at_receiver_um: tuple[float, float] | None = None,
+) -> InstantEfficiency:
 
     system = 1.0
     for surface in getattr(project, "surfaces", ()):
@@ -77,10 +82,15 @@ def estimate_efficiency(project, form_state) -> InstantEfficiency:
     receiver_eff = _clamp01(receiver_eff)
 
     source = form_state.source
+    if beam_radius_at_receiver_um is not None:
+        beam_x_um, beam_y_um = beam_radius_at_receiver_um
+    else:
+        beam_x_um = float(source.waist_x_um)
+        beam_y_um = float(source.waist_y_um)
     target_x = max(float(receiver.mode_field_diameter_x_um) / 2.0, 1e-9)
     target_y = max(float(receiver.mode_field_diameter_y_um) / 2.0, 1e-9)
     overlap_x = _axis_overlap(
-        source.waist_x_um,
+        beam_x_um,
         target_x,
         receiver.offset_x_um,
         receiver.tilt_x_urad,
@@ -88,7 +98,7 @@ def estimate_efficiency(project, form_state) -> InstantEfficiency:
         receiver.axial_offset_z_um,
     )
     overlap_y = _axis_overlap(
-        source.waist_y_um,
+        beam_y_um,
         target_y,
         receiver.offset_y_um,
         receiver.tilt_y_urad,

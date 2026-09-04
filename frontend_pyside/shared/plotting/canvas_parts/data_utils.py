@@ -90,6 +90,7 @@ def _field_crop_slices(
     contour: np.ndarray,
     *,
     fraction: float,
+    fill_fraction: float = 0.67,
 ) -> tuple[slice, slice]:
     fraction = min(max(float(fraction), 1.0e-6), 0.95)
     mask = np.zeros(field.shape, dtype=bool)
@@ -107,7 +108,9 @@ def _field_crop_slices(
         return slice(0, field.shape[0]), slice(0, field.shape[1])
     low = np.min(indices, axis=0)
     high = np.max(indices, axis=0)
-    padding = np.maximum(((high - low + 1) * 0.18).astype(int), 2)
+    fill_fraction = min(max(float(fill_fraction), 0.35), 0.9)
+    padding_ratio = max(0.02, (1.0 / fill_fraction - 1.0) / 2.0)
+    padding = np.maximum(((high - low + 1) * padding_ratio).astype(int), 2)
     row0 = max(0, int(low[0] - padding[0]))
     row1 = min(field.shape[0], int(high[0] + padding[0] + 1))
     col0 = max(0, int(low[1] - padding[1]))

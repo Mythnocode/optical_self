@@ -78,9 +78,13 @@ class MachineLearningApiMixin:
             self.training_client.list_models(f"ml.models.list.{token}")
 
     def _submit_dataset(self) -> None:
-        precision = {"预览": "preview", "标准": "standard", "高精度": "high"}.get(
-            self.dataset_precision.currentText(), "standard"
-        )
+        precision = {
+            "129×129": "preview",
+            "257×257": "standard",
+            "513×513": "high",
+            # 兼容旧界面保存值。
+            "预览": "preview", "标准": "standard", "高精度": "high",
+        }.get(self.dataset_precision.currentText(), "standard")
         target = canonical_metric_name(
             {
                 "耦合损耗(dB)": "coupling_loss_db",
@@ -114,6 +118,10 @@ class MachineLearningApiMixin:
             "random_seed": self.dataset_seed.value(),
             "precision": precision,
         }
+        if hasattr(self, "dataset_progress"):
+            # 提交请求期间尚未收到可量化的后台工作量，不伪造百分比。
+            self.dataset_progress.setRange(0, 0)
+            self.dataset_progress.setFormat("正在提交后台…")
         self.dataset_client.submit("ml.dataset.submit", payload)
         self._set_info(self.dataset_status, "任务状态", "正在提交数据集任务")
 
@@ -121,17 +129,29 @@ class MachineLearningApiMixin:
         dataset_id = self.training_dataset.currentData() or self.training_dataset.currentText()
         if not dataset_id:
             self._set_info(self.training_status, "任务状态", "请先刷新并选择数据集")
+            if hasattr(self, "training_submit_button"):
+                self.training_submit_button.set_task_state("error", "请先选择数据集")
+                from PySide6.QtCore import QTimer
+                QTimer.singleShot(1400, lambda: self.training_submit_button.reset_task_state("开始训练"))
             return
         model_type = str(self.model_type.currentData() or "random_forest")
+        hyperparameters = {"n_estimators": self.training_epochs.value()}
+        if model_type == "xgboost_physics_residual" and bool(self.training_early_stop.isChecked()):
+            hyperparameters["early_stopping_rounds"] = int(self.training_patience.value())
         payload = {
             "dataset_id": str(dataset_id),
             "model_type": model_type,
             "target_names": [],
-            "hyperparameters": {"n_estimators": self.training_epochs.value()},
+            "hyperparameters": hyperparameters,
             "random_seed": self.training_seed.value(),
         }
         token = self.lifecycle.generations.next("ml-training-preflight")
         self._pending_training[f"{token}:{dataset_id}"] = payload
+        if hasattr(self, "training_progress"):
+            self.training_progress.setRange(0, 0)
+            self.training_progress.setFormat("正在检查数据…")
+        if hasattr(self, "training_submit_button"):
+            self.training_submit_button.set_task_state("submitted", "正在检查数据")
         self.headless_client.download_manifest(
             f"ml.training.preflight.{token}.{dataset_id}", str(dataset_id)
         )
@@ -167,6 +187,24 @@ class MachineLearningApiMixin:
                 "task_id": str(task["id"]),
                 "result_requested": False,
             }
+            if kind == "dataset":
+                tracker = getattr(self, "_dataset_progress_tracker", None)
+                if tracker is not None:
+                    tracker.reset(job_id)
+                self._active_dataset_job_id = job_id
+                if hasattr(self, "dataset_progress"):
+                    self.dataset_progress.setRange(0, 100)
+                    self.dataset_progress.setValue(0)
+                    self.dataset_progress.setFormat("等待后台进度 · 0%")
+            elif kind == "training":
+                tracker = getattr(self, "_training_progress_tracker", None)
+                if tracker is not None:
+                    tracker.reset(job_id)
+                self._active_training_job_id = job_id
+                if hasattr(self, "training_progress"):
+                    self.training_progress.setRange(0, 100)
+                    self.training_progress.setValue(0)
+                    self.training_progress.setFormat("等待后台进度 · 0%")
             self.job_watcher.subscribe(job_id)
             if not self._centralized_polling:
                 self._poll_timer.start()
@@ -199,8 +237,20 @@ class MachineLearningApiMixin:
             if predictions:
                 summary = "，".join(f"{metric_label(name)}={value:.4g}" for name, value in predictions.items())
                 self._set_info(self.pred_result_label, "预测结果", summary)
+                if hasattr(self, "prediction_button"):
+                    self.prediction_button.set_task_state("success", "预测完成")
+                if hasattr(self, "prediction_progress_panel"):
+                    self.prediction_progress.setRange(0, 100)
+                    self.prediction_progress.setValue(100)
+                    self.prediction_progress_label.setText("预测完成 · 可解释预测或进行正式仿真验证")
             else:
                 self._set_info(self.pred_result_label, "预测结果", f"后端返回空结果: {model_id[:12]}")
+                if hasattr(self, "prediction_button"):
+                    self.prediction_button.set_task_state("error", "预测无结果")
+                if hasattr(self, "prediction_progress_panel"):
+                    self.prediction_progress.setRange(0, 100)
+                    self.prediction_progress.setValue(0)
+                    self.prediction_progress_label.setText("代理模型未返回预测值")
 
     def _api_failed(self, key: str, message: str) -> None:
         if not key.startswith("ml."):
@@ -215,7 +265,15 @@ class MachineLearningApiMixin:
             except ValueError:
                 token = -1
             if self.lifecycle.generations.is_current(token, "ml-training-preflight"):
+                if hasattr(self, "training_progress"):
+                    self.training_progress.setRange(0, 100)
+                    self.training_progress.setValue(0)
+                    self.training_progress.setFormat("检查失败")
                 self._set_info(self.training_status, "任务状态", f"无法检查数据集：{message}")
+                if hasattr(self, "training_submit_button"):
+                    self.training_submit_button.set_task_state("error", "检查失败")
+                    from PySide6.QtCore import QTimer
+                    QTimer.singleShot(1400, lambda: self.training_submit_button.reset_task_state("开始训练"))
         elif key.startswith("ml.status."):
             self._finish_job(key.rsplit(".", 1)[-1], "失败", message)
         elif key.startswith("ml.result."):
@@ -232,6 +290,13 @@ class MachineLearningApiMixin:
             parsed = self._parse_generation_key(key, "ml.predict")
             if parsed and self.lifecycle.generations.is_current(parsed[0], "ml-predict"):
                 self._set_info(self.pred_result_label, "预测结果", f"请求失败：{message}")
+                if hasattr(self, "prediction_button"):
+                    self.prediction_button.set_task_state("error", "预测失败")
+                if hasattr(self, "prediction_progress_panel"):
+                    self.prediction_progress.setRange(0, 100)
+                    self.prediction_progress.setValue(0)
+                    self.prediction_progress_label.setText(f"预测失败：{message}")
+                    self.prediction_progress_panel.show()
         elif key == "ml.coupling.submit":
             self._set_info(self.coupling_status, "耦合任务", f"提交失败：{message}")
         else:
@@ -276,7 +341,6 @@ class MachineLearningApiMixin:
             values = [
                 name,
                 samples,
-                feature_display,
                 target_display,
                 self._dataset_status_text(item.get("status", "未知")),
                 self._short_datetime(item.get("created_at", "")),
@@ -286,9 +350,8 @@ class MachineLearningApiMixin:
             tooltips.append([
                 f"{name}\nID: {dataset_id}",
                 f"{samples} 条样本",
-                f"输入维度：{feature_display}",
-                f"目标：{target_display}",
-                str(values[4]),
+                f"目标：{target_display}；特征数：{feature_display}",
+                str(values[3]),
                 str(item.get("created_at", "—")),
                 dataset_id,
             ])
@@ -299,7 +362,7 @@ class MachineLearningApiMixin:
             datasets_table.set_rows(
                 rows,
                 tooltips=tooltips,
-                align_columns=(1, 2, 4, 5),
+                align_columns=(1, 3, 4),
             )
         if training_dataset is not None:
             training_dataset.blockSignals(False)
@@ -308,12 +371,7 @@ class MachineLearningApiMixin:
                 if index >= 0:
                     training_dataset.setCurrentIndex(index)
         if hasattr(self, "dataset_summary_label"):
-            feature_text = str(max(known_feature_counts)) if known_feature_counts else "—"
-            target_text = str(max(known_target_counts)) if known_target_counts else "—"
-            self.dataset_summary_label.setText(
-                f"{len(dataset_records)}个数据集 · {total}条样本 · "
-                f"{feature_text}项输入 · {target_text}项目标"
-            )
+            self.dataset_summary_label.setText(f"{len(dataset_records)}个数据集 · {total}条样本")
         if datasets_table is not None:
             if selected_row >= 0:
                 datasets_table.selectRow(selected_row)
@@ -334,8 +392,17 @@ class MachineLearningApiMixin:
         selected_row = -1
         current_id = self.context.registry.current_model_id
         for row, item in enumerate(model_records):
-            metrics = item.get("validation_metrics", {})
+            # Model selection and SHAP reliability are based on the independent
+            # test set.  Show the same metrics here so the list never appears to
+            # contradict the current-model summary.  Fall back to validation only
+            # for older model records that do not yet contain test metrics.
+            metrics = item.get("test_metrics", {})
             metrics = metrics if isinstance(metrics, dict) else {}
+            metric_source = "独立测试"
+            if not metrics:
+                metrics = item.get("validation_metrics", {})
+                metrics = metrics if isinstance(metrics, dict) else {}
+                metric_source = "验证集"
             model_id = self._record_id(item, "model")
             values = [
                 readable_model_name(item, row, aliases=getattr(self, "registry_aliases", None)),
@@ -355,9 +422,9 @@ class MachineLearningApiMixin:
                 f"{values[0]}\nID: {model_id}",
                 str(values[1]),
                 f"训练数据集：{values[2]}",
-                f"R²={values[3]}",
-                f"MAE={values[4]}",
-                f"RMSE={values[5]}",
+                f"{metric_source} R²={values[3]}",
+                f"{metric_source} MAE={values[4]}",
+                f"{metric_source} RMSE={values[5]}",
                 str(item.get("created_at", "—")),
                 model_id,
             ])
@@ -511,13 +578,26 @@ class MachineLearningApiMixin:
             manifest.get("test_ids", []),
         )
         if not manifest.get("valid_sample_count", 0) or not all(splits):
+            if hasattr(self, "training_progress"):
+                self.training_progress.setRange(0, 100)
+                self.training_progress.setValue(0)
+                self.training_progress.setFormat("数据不可用")
             self._set_info(
                 self.training_status,
                 "任务状态",
                 "数据集没有可用于训练的有效样本；请检查数据集任务详情中的失败原因。",
             )
+            if hasattr(self, "training_submit_button"):
+                self.training_submit_button.set_task_state("error", "数据不可用")
+                from PySide6.QtCore import QTimer
+                QTimer.singleShot(1400, lambda: self.training_submit_button.reset_task_state("开始训练"))
             return
         self.context.registry.merge_dataset(manifest)
+        if hasattr(self, "training_progress"):
+            self.training_progress.setRange(0, 0)
+            self.training_progress.setFormat("正在提交后台…")
         self.training_client.submit("ml.training.submit", payload)
+        if hasattr(self, "training_submit_button"):
+            self.training_submit_button.set_task_state("running", "训练中")
         self._set_info(self.training_status, "任务状态", "正在提交训练任务")
 

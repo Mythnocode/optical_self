@@ -82,6 +82,35 @@ class SurfaceCommandMixin:
         ]
         self._insert_after_current(surfaces)
 
+    def _add_surface_to_current_group(self):
+        """Insert one Surface into the selected optical element.
+
+        This is the sequential-editor path for cemented doublets/triplets and
+        other elements with three or more physical interfaces.  The new Surface
+        inherits the selected element/group identity but remains fully editable.
+        """
+        row = self.table.currentRow()
+        if not 0 <= row < len(self.context.project.surfaces):
+            self._add_surface_type("球面")
+            return
+        selected = self.context.project.surfaces[row]
+        ensure_surface_defaults(selected)
+        group = str(getattr(selected, "group_id", "") or f"G{row + 1}")
+        element_id = str(getattr(selected, "element_id", "") or "")
+        same_group = [s for s in self.context.project.surfaces if str(getattr(s, "group_id", "")) == group]
+        internal_index = max(1, len(same_group))
+        surface = LensSurface(
+            f"{group} 内部面 {internal_index}",
+            30.0,
+            1.0,
+            "N-BK7",
+            max(float(getattr(selected, "semi_aperture_mm", 3.0) or 3.0), 0.001),
+            surface_type="球面",
+            group_id=group,
+            element_id=element_id,
+        )
+        self._insert_after_current([surface])
+
     def _add_surface_type(self, type_name: str):
         spec = get_surface_type(type_name)
         group = next_group_id(self._existing_groups(), spec.group_prefix)

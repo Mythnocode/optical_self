@@ -12,6 +12,8 @@ from PySide6.QtCore import QObject, Signal
 
 from frontend_pyside.shared.task_display import (
     extract_error_message,
+    friendly_job_error,
+    friendly_job_stage,
     progress_percent,
     terminal_progress,
     terminal_stage,
@@ -51,6 +53,7 @@ class TaskContext(QObject):
         self._started: dict[str, float] = {}
         self._results: dict[str, object] = {}
         self._logs: dict[str, list[dict]] = defaultdict(list)
+        self._last_log_fingerprint: dict[str, tuple[str, str, float]] = {}
         self._current_task_id = ""
         self.usage_store = usage_store
         self._backend_refreshed_at = 0.0
@@ -110,9 +113,7 @@ class TaskContext(QObject):
     ) -> dict:
         task_id = str(task_id or uuid4().hex)
         normalized_status = self._normalize_status(status)
-        normalized_progress = self._normalize_progress(progress)
-        if normalized_status in _TERMINAL_STATUSES:
-            normalized_progress = terminal_progress(normalized_status, normalized_progress)
+        normalized_progress = terminal_progress(normalized_status, self._normalize_progress(progress))
         error_message = str(note or "") if normalized_status in {"失败", "未收敛"} else ""
         task = {
             "id": task_id,
@@ -128,6 +129,14 @@ class TaskContext(QObject):
             "error_category": str(error_category or ""),
             "stage": terminal_stage(normalized_status, "") if normalized_status in _TERMINAL_STATUSES else "",
             "error_message": error_message,
+            "error_code": "",
+            "error_stage": "",
+            "error_retryable": False,
+            "error_context": {},
+            "result_available": False,
+            "retry_available": False,
+            "retry_of": None,
+            "last_activity_at": None,
         }
         if task["status"] not in _TERMINAL_STATUSES:
             self._started[task_id] = monotonic()
@@ -150,23 +159,37 @@ class TaskContext(QObject):
         status = self._normalize_status(raw_status)
         raw_stage = str(job.get("stage", "") or "")
         progress = terminal_progress(raw_status or status, job.get("progress", 0))
+        error_payload = job.get("error") if isinstance(job.get("error"), dict) else {}
         error_message = extract_error_message(job, "")
+        friendly_error = friendly_job_error(job, error_message or "任务失败")
         normalized_stage = terminal_stage(raw_status or status, raw_stage)
         if status in {"失败", "未收敛"}:
-            note = error_message or "任务失败"
+            note = friendly_error or "任务失败"
         elif status == "已取消":
             note = error_message or str(job.get("note") or "任务已取消")
         elif status == "已完成":
             note = str(job.get("note") or "任务已完成")
         else:
-            note = str(job.get("note") or raw_stage or "")
+            # Backend stages are machine-readable lifecycle identifiers.  The
+            # task center should show the same human-facing stage wording as the
+            # simulation page instead of leaking strings such as
+            # ``optical_engine.trace.running`` into the progress detail.
+            note = str(job.get("note") or friendly_job_stage(raw_stage) or raw_stage or "")
         changes = {
             "job_id": job_id,
             "status": status,
             "progress": progress,
             "note": note,
             "stage": normalized_stage,
-            "error_message": error_message,
+            "error_message": friendly_error if status in {"失败", "未收敛"} else error_message,
+            "error_code": str(error_payload.get("code", "") or ""),
+            "error_stage": str(error_payload.get("stage", "") or ""),
+            "error_retryable": bool(error_payload.get("retryable", False)),
+            "error_context": dict(error_payload.get("context") or {}),
+            "result_available": bool(job.get("result_available", False)),
+            "retry_available": bool(job.get("retry_available", False)),
+            "retry_of": job.get("retry_of"),
+            "last_activity_at": job.get("last_activity_at"),
         }
         if task is None:
             created = self.add(
@@ -216,6 +239,7 @@ class TaskContext(QObject):
         self._tasks = [item for item in self._tasks if str(item.get("id", "")) != task_id]
         self._results.pop(task_id, None)
         self._logs.pop(task_id, None)
+        self._last_log_fingerprint.pop(task_id, None)
         self._started.pop(task_id, None)
         if self._current_task_id == task_id:
             self._current_task_id = ""
@@ -267,10 +291,17 @@ class TaskContext(QObject):
         task_id = self._resolve_task_id(task_or_job_id) or str(task_or_job_id or "")
         if not task_id:
             return
+        normalized_level = str(level or "INFO").upper()
+        normalized_message = str(message or "")
+        stamp = monotonic()
+        previous = self._last_log_fingerprint.get(task_id)
+        if previous is not None and previous[0] == normalized_level and previous[1] == normalized_message and stamp - previous[2] <= 2.0:
+            return
+        self._last_log_fingerprint[task_id] = (normalized_level, normalized_message, stamp)
         entry = {
             "time": timestamp or datetime.now().strftime("%H:%M:%S"),
-            "level": str(level or "INFO").upper(),
-            "message": str(message or ""),
+            "level": normalized_level,
+            "message": normalized_message,
         }
         rows = self._logs[task_id]
         rows.append(entry)
@@ -334,9 +365,26 @@ class TaskContext(QObject):
         
         if not allow_reset:
             if current_status in _TERMINAL_STATUSES and incoming_status not in _TERMINAL_STATUSES:
-                normalized.pop("status", None)
-                normalized.pop("progress", None)
-                normalized.pop("stage", None)
+                # 终态之后到达的旧 queued/running 响应属于乱序网络事件。
+                # 不仅状态/进度不能回退，所有与任务生命周期绑定的字段也不能
+                # 覆盖已经确认的终态真值，否则会出现“仍显示已完成，但结果按钮
+                # 悄悄失效”之类的静默状态漂移。
+                for key in (
+                    "status",
+                    "progress",
+                    "stage",
+                    "note",
+                    "error_message",
+                    "error_code",
+                    "error_stage",
+                    "error_retryable",
+                    "error_context",
+                    "result_available",
+                    "retry_available",
+                    "retry_of",
+                    "last_activity_at",
+                ):
+                    normalized.pop(key, None)
                 incoming_status = current_status
             elif current_status in {"运行中", "取消请求中"} and incoming_status in {"等待后端", "排队中", "等待中"}:
                 normalized.pop("status", None)
@@ -346,10 +394,19 @@ class TaskContext(QObject):
             if "progress" in normalized and incoming_status not in _TERMINAL_STATUSES:
                 normalized["progress"] = max(current_progress, int(normalized["progress"]))
 
+            # 正式结果一旦被后端确认可用，同一 job 的较旧/重复状态不能把它
+            # 从 True 降回 False。结果可用性与进度一样是单调事实。
+            if bool(task.get("result_available", False)) and normalized.get("result_available") is False:
+                normalized.pop("result_available", None)
+
         candidate_status = normalized.get("status", task.get("status", ""))
         candidate_progress = normalized.get("progress", task.get("progress", 0))
-        if str(candidate_status) in _TERMINAL_STATUSES:
+        # Every task display uses the same lifecycle reduction.  In particular,
+        # running/persisting tasks are never allowed to render as 100%; 100 is
+        # reserved for a confirmed completed state.
+        if "progress" in normalized or "status" in normalized:
             normalized["progress"] = terminal_progress(candidate_status, candidate_progress)
+        if str(candidate_status) in _TERMINAL_STATUSES:
             normalized["stage"] = terminal_stage(
                 candidate_status,
                 normalized.get("stage", task.get("stage", "")),

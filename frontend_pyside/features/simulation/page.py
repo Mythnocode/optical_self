@@ -8,7 +8,6 @@ import logging
 from PySide6.QtCore import QSettings, QTimer, Signal
 from PySide6.QtWidgets import QWidget
 
-from frontend_pyside.core.types import LensSurface
 from frontend_pyside.features.simulation.alignment import AlignmentSolution
 from frontend_pyside.features.simulation.controller import SimulationController
 from frontend_pyside.features.simulation.formal_result_store import FormalResultStore
@@ -21,6 +20,7 @@ from frontend_pyside.api.payloads import serialize_project
 from frontend_pyside.shared.background import BackgroundPreparer
 from frontend_pyside.shared.lifecycle import ManagedPageResources
 from frontend_pyside.shared.settings import WorkspaceStateStore
+from frontend_pyside.shared import layout_tokens as ui_layout
 from .presentation.mode_behavior import SimulationModeMixin
 from .presentation.preview_behavior import SimulationPreviewMixin
 from .presentation.formal_behavior import SimulationFormalMixin
@@ -58,8 +58,15 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         self._pending_formal_result: tuple[dict, dict] | None = None
         self._last_form_signature = ""
         self._last_geometry_signature = ""
+        self._last_published_simulation_payload: dict = {}
+        self._applying_shared_payload = False
         self._formal_result_received_perf = 0.0
         self._formal_workers: set[object] = set()
+        self._candidate_preview_changes: dict[str, float] = {}
+        self._candidate_preview_label = ""
+        self._candidate_preview_metrics: dict[str, float] = {}
+        self._parameter_auto_collapsed = False
+        self._parameter_user_override = False
         self.session = SimulationSession()
         self._child_windows: list[QWidget] = []
 
@@ -75,10 +82,22 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         self.editor = ui.editor
         self.params = ui.params
         self.results = ui.results
+        self.metric_frame = ui.metric_frame
         self.cards = ui.cards
+        self.preview_banner = ui.preview_banner
+        self.preview_banner_title = ui.preview_banner_title
+        self.preview_banner_text = ui.preview_banner_text
+        self.preview_apply_button = ui.preview_apply_button
+        self.preview_clear_button = ui.preview_clear_button
+        self.formal_progress_panel = ui.formal_progress_panel
+        self.formal_progress_label = ui.formal_progress_label
+        self.formal_progress_bar = ui.formal_progress_bar
         self.apply_alignment_button = ui.apply_alignment_button
         self.diagnostic_text = ui.diagnostic_text
         self.formal_button = ui.formal_button
+        self.parameter_research_button = ui.parameter_research_button
+        self.tolerance_analysis_button = ui.tolerance_analysis_button
+        self.parameter_toggle_button = ui.parameter_toggle_button
         self.lens_editor_button = ui.lens_editor_button
         self.save_parameters_button = ui.save_parameters_button
         self.import_teaching_button = ui.import_teaching_button
@@ -116,6 +135,11 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         if hasattr(self.editor, "fullEditorRequested"):
             self.editor.fullEditorRequested.connect(self._open_lens_editor)
         ui.formal_button.clicked.connect(self.submit_formal)
+        ui.parameter_research_button.clicked.connect(lambda: self._open_current_system_research("optimization.scan"))
+        ui.tolerance_analysis_button.clicked.connect(lambda: self._open_current_system_research("optimization.tolerance"))
+        ui.parameter_toggle_button.clicked.connect(self._toggle_parameter_panel)
+        ui.preview_clear_button.clicked.connect(self.clear_candidate_preview)
+        ui.preview_apply_button.clicked.connect(self.apply_candidate_preview)
         ui.apply_alignment_button.clicked.connect(self._apply_alignment_solution)
         self.editor.changed.connect(self._geometry_changed)
         self.editor.surfaceSelected.connect(self._surface_selected_from_editor)
@@ -128,12 +152,17 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         self.results.surfaceActivated.connect(self._surface_activated_from_plot)
         self.results.recomputeRequested.connect(self.submit_formal)
         self.results.diagnosticsRequested.connect(self._open_detail_drawer)
+        self.results.focusRequested.connect(self._focus_result_canvas)
+        self.results.set_research_context(context.project.research_context)
+        self.lifecycle.connect(context.project.research_context_changed, self.results.set_research_context)
         self.detail_drawer.visibilityChanged.connect(self._detail_drawer_visibility_changed)
         self.multipath_button.clicked.connect(self._enable_multipath_mode)
         self.multipath_toggle.toggled.connect(self._set_multipath_enabled)
         self.auto_preview.toggled.connect(self._auto_preview_toggled)
         self.main_splitter.splitterMoved.connect(self._remember_splitter)
         self.lifecycle.connect(context.services.ui_preferences.render_quality_changed, self.set_render_quality)
+        self.lifecycle.connect(context.project.research_profile_changed, self._on_research_profile_changed)
+        self.lifecycle.connect(context.project.simulation_project_payload_changed, self._shared_simulation_payload_changed)
 
         self.auto_preview.setToolTip(
             "启用后合并连续输入：50 ms 更新二维截面，110 ms 更新简化三维，500 ms 后更新高质量预览；正式后端不会自动提交"
@@ -158,14 +187,156 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         self.lifecycle.single_shot(0, self._publish_active_simulation_project)
         self.lifecycle.single_shot(0, self._load_initial_result)
 
+    def show_candidate_preview(self, changes: dict, label: str = "候选") -> None:
+        """Preview task candidate parameters without writing them into the current system."""
+        clean = {str(k): float(v) for k, v in dict(changes or {}).items() if isinstance(v, (int, float))}
+        if not clean:
+            return
+        self._candidate_preview_changes = clean
+        self._candidate_preview_label = str(label or "候选")
+        self._candidate_preview_metrics = {}
+        self.preview_banner_title.setText(f"预览 · {self._candidate_preview_label}")
+        self.preview_banner_text.setText("临时候选，仅用于快速观察；尚未写入当前系统，也不是正式仿真结果。")
+        self.preview_banner.show()
+        self.preview_state.setText("正在生成候选快速预览")
+        self.preview_state.set_tone("warning")
+        self.results.set_external_preview_state(True, self._candidate_preview_label)
+        self.results.set_status("正在生成候选快速预览；正式结果不会被覆盖。", tone="warning")
+        self.preview_scheduler.request_now(high_quality=True)
+
+    def clear_candidate_preview(self) -> None:
+        if not self._candidate_preview_changes:
+            self.preview_banner.hide()
+            return
+        self._candidate_preview_changes = {}
+        self._candidate_preview_label = ""
+        self._candidate_preview_metrics = {}
+        self.preview_banner.hide()
+        self.results.set_external_preview_state(False)
+        self._update_instant_efficiency_cards()
+        self.results.set_status("已退出候选预览；恢复当前系统。", tone="info")
+        self.preview_scheduler.request_now(high_quality=True)
+
+    def apply_candidate_preview(self) -> None:
+        changes = dict(self._candidate_preview_changes or {})
+        if not changes:
+            return
+        apply_changes = getattr(self.context.project, "apply_parameter_changes", None)
+        changed = bool(apply_changes(changes, reason=f"采用{self._candidate_preview_label or '候选'}参数")) if callable(apply_changes) else False
+        self._candidate_preview_changes = {}
+        self._candidate_preview_label = ""
+        self._candidate_preview_metrics = {}
+        self.preview_banner.hide()
+        self.results.set_external_preview_state(False)
+        self._update_instant_efficiency_cards()
+        self.results.set_status("候选已应用到当前系统；请运行正式仿真验证。" if changed else "当前系统已处于该候选参数。", tone="success")
+        self.preview_scheduler.request_now(high_quality=True)
+
+    def _set_candidate_preview_metrics(self, metrics: dict) -> None:
+        self._candidate_preview_metrics = dict(metrics or {})
+        coupling = self._candidate_preview_metrics.get("coupling_efficiency")
+        if isinstance(coupling, (int, float)):
+            self.cards["coupling_eff"].set_value(f"{100.0 * float(coupling):.2f}", "%", note="候选预览")
+        self.formal_state.setText("候选预览 · 待正式验证")
+        self.formal_state.set_tone("warning")
+
+    def handle_assistant_action(self, action: dict) -> None:
+        payload = dict(action or {})
+        target = str(payload.get("target", "") or "")
+        extra = dict(payload.get("payload") or {})
+        if target == "simulation.formal":
+            self.formal_button.setFocus()
+            self.formal_button.setToolTip("检查当前参数后，由你确认是否开始正式计算。")
+        elif target == "simulation.parameters":
+            if not self.params.isVisible():
+                self._toggle_parameter_panel()
+            self.params.setFocus()
+        elif target == "simulation.lens_editor":
+            self._open_lens_editor()
+        elif target == "simulation.view":
+            view = str(extra.get("view") or "光路")
+            self.results.set_current_result(view)
+            self.results.setFocus()
+        elif target == "simulation.result_catalogue":
+            self.results.setFocus()
+            QTimer.singleShot(0, self.results.analysis_selector.showPopup)
+        elif target in {"simulation.parameter_research", "optimization.scan"}:
+            self._open_current_system_research("optimization.scan", extra)
+        elif target in {"simulation.tolerance", "optimization.tolerance"}:
+            self._open_current_system_research("optimization.tolerance", extra)
+        elif target in {"simulation.current", "simulation.result"}:
+            self.results.setFocus()
+        elif target == "simulation.focus":
+            self._focus_result_canvas()
+
+
+    def _open_current_system_research(self, target: str, payload: dict | None = None) -> None:
+        """Open scan/tolerance as research attached to the current simulation system.
+
+        The implementation is intentionally reused from the existing research task
+        container, but the ownership/navigation is Simulation.  This keeps the
+        persistent formal-result workbench visible and prevents parameter research
+        or tolerance from re-expanding the primary Optimization workspace.
+        """
+        self._publish_active_simulation_project()
+        # Parameter research and tolerance are owned by Simulation even though
+        # they reuse the mature research task container.  Pass that ownership
+        # explicitly so tolerance defaults to the current formal system rather
+        # than silently inheriting a stale optimisation candidate.
+        task_payload = dict(payload or {})
+        task_payload.setdefault("research_owner", "simulation")
+        shell = self.window()
+        opener = getattr(shell, "_open_optimization_task", None)
+        if callable(opener):
+            opener(str(target), task_payload)
+            return
+        # Standalone/page tests do not have MainWindow.  Lazily create the same
+        # modeless task window so the entry remains functional in isolation.
+        try:
+            from frontend_pyside.features.optimization.task_window import OptimizationTaskWindow
+            window = OptimizationTaskWindow(self.context, self.window())
+            window.set_target(str(target), task_payload)
+            window.previewRequested.connect(self.show_candidate_preview)
+            window.previewCleared.connect(self.clear_candidate_preview)
+            self._child_windows.append(window)
+            window.bring_to_front()
+        except Exception:
+            _logger.exception("无法打开当前系统研究任务")
+
+    def assistant_action_target_widget(self, action: dict):
+        target = str(dict(action or {}).get("target", "") or "")
+        if target == "simulation.formal":
+            return self.formal_button
+        if target in {"simulation.current", "simulation.result", "simulation.focus"}:
+            return self.results
+        return self
+
+    def _focus_result_canvas(self) -> None:
+        shell = self.window()
+        focus = getattr(shell, "set_workspace_focus", None)
+        if callable(focus):
+            focus(True)
+
     def _publish_active_simulation_project(self, state=None) -> None:
         try:
             if state is None:
                 state = self.params.collect_state()
             payload = serialize_project(self.context.project.project, state)
+            self._last_published_simulation_payload = dict(payload)
             self.context.project.set_simulation_project_payload(payload)
         except Exception:
             _logger.warning("无法同步当前仿真参数到其他工作区。", exc_info=True)
+
+    def _shared_simulation_payload_changed(self, payload: dict) -> None:
+        incoming = dict(payload or {})
+        if not incoming or incoming == self._last_published_simulation_payload or self._applying_shared_payload:
+            return
+        self._applying_shared_payload = True
+        try:
+            self.params.apply_project_payload(incoming)
+            # 镜片结构由 ProjectContext.project_changed 更新；这里仅同步光源/光纤/系统表单。
+        finally:
+            self._applying_shared_payload = False
 
     def _prepare_section_preview(self, generation: int) -> None:
         self._prepare_preview_stage(generation, "section")
@@ -225,7 +396,7 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
             "source": "formal_workbench",
             "snapshot_version": 2,
             "saved_at": datetime.now().isoformat(timespec="seconds"),
-            "project_name": str(getattr(project, "name", "光纤耦合方案")),
+            "project_name": str(getattr(project, "name", "光纤耦合系统")),
             "project_version": str(getattr(project, "version", "v1")),
             "wavelength_nm": float(getattr(project, "wavelength_nm", 808.0)),
             "receiver_mfd_um": float(getattr(project, "receiver_mfd_um", 5.6)),
@@ -262,64 +433,77 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         self.preview_state.setText("参数已保存，可在教学中心查看")
         return snapshot
 
+    def _on_research_profile_changed(self, profile: dict) -> None:
+        self.params.apply_numerics_profile()
+        if self._page_active:
+            self._maybe_auto_import_teaching_snapshot(profile)
+
+    def _maybe_auto_import_teaching_snapshot(self, profile: dict | None = None) -> None:
+        snapshot_profile = dict(profile or self.context.project.research_profile or {})
+        if not snapshot_profile.get("pending_teaching_import"):
+            return
+        if self._apply_teaching_snapshot_if_available(silent=True):
+            self.context.project.update_research_profile(pending_teaching_import=False)
+
     def _open_teaching_with_current_parameters(self) -> None:
         if self._save_workbench_parameters() is not None:
             self.navigateRequested.emit("teaching")
 
-    @staticmethod
-    def _teaching_lenses_from_snapshot(snapshot: dict) -> list[dict]:
-        nodes = list(snapshot.get("nodes", []) or [])
-        lenses = [dict(node) for node in nodes if str(node.get("kind")) == "lens"]
-        lenses.sort(key=lambda item: float(item.get("x", 0.0)))
-        return lenses
+    def _apply_teaching_snapshot_if_available(self, *, silent: bool = False) -> bool:
+        from frontend_pyside.features.simulation.teaching_import import (
+            receiver_payload_from_teaching_snapshot,
+            resolve_teaching_snapshot,
+            source_payload_from_teaching_snapshot,
+            surfaces_from_teaching_lenses,
+            teaching_lenses_from_snapshot,
+        )
 
-    def _apply_teaching_snapshot_if_available(self) -> None:
         try:
             profile = self.context.project.research_profile
         except Exception:
             profile = {}
-        if not isinstance(profile, dict):
-            profile = {}
-        snapshot = profile.get("teaching_snapshot") if str(profile.get("active_snapshot_source", "")) == "teaching" else None
-        if not isinstance(snapshot, dict):
-            raw = self.settings.value("teaching/shared_snapshot_json", "", type=str)
-            if raw:
-                try:
-                    snapshot = json.loads(raw)
-                except Exception:
-                    _logger.warning("教学中心共享参数不是有效 JSON，已忽略。", exc_info=True)
-                    snapshot = None
-        if not isinstance(snapshot, dict):
-            self.preview_state.setVisible(True)
-            self.preview_state.setText("教学中心尚未保存可导入的参数")
-            return
-        lenses = self._teaching_lenses_from_snapshot(snapshot)
+        raw = self.settings.value("teaching/shared_snapshot_json", "", type=str)
+        snapshot = resolve_teaching_snapshot(profile if isinstance(profile, dict) else {}, raw)
+        if snapshot is None:
+            if not silent:
+                self.preview_state.setVisible(True)
+                self.preview_state.set_tone("warning")
+                self.preview_state.setText("教学中心尚未保存可导入的参数")
+            return False
+        lenses = teaching_lenses_from_snapshot(snapshot)
         if not lenses:
-            return
+            if not silent:
+                self.preview_state.setVisible(True)
+                self.preview_state.set_tone("warning")
+                self.preview_state.setText("教学快照中没有可导入的透镜")
+            return False
 
-        surfaces: list[LensSurface] = []
-        for index, lens in enumerate(lenses):
-            params = dict(lens.get("params", {}) or {})
-            focal = max(1.0, float(params.get("focal_mm", 25.0)))
-            
-            
-            radius = max(2.0, 1.04 * focal)
-            next_x = float(lenses[index + 1].get("x", lens.get("x", 0.0) + 20.0)) if index + 1 < len(lenses) else float(lens.get("x", 0.0)) + 100.0
-            gap_mm = max(0.5, min(40.0, (next_x - float(lens.get("x", 0.0))) / 20.0))
-            group_id = str(lens.get("id") or f"L{index + 1}")
-            surfaces.extend(
-                [
-                    LensSurface(f"L{index + 1} 前表面", radius, 2.0, "N-BK7", 3.0, group_id=group_id),
-                    LensSurface(f"L{index + 1} 后表面", -radius, gap_mm, "AIR", 3.0, group_id=group_id),
-                ]
-            )
         project = self.context.project.project
         project.wavelength_nm = float(snapshot.get("wavelength_nm", project.wavelength_nm))
-        project.receiver_mfd_um = 2.0 * float(snapshot.get("receiver_mode_radius_um", project.receiver_mfd_um / 2.0))
-        self.context.project.replace_surfaces(surfaces, mark_dirty=True)
+        project.receiver_mfd_um = 2.0 * float(
+            snapshot.get("receiver_mode_radius_um", project.receiver_mfd_um / 2.0)
+        )
+        self.context.project.replace_surfaces(surfaces_from_teaching_lenses(lenses), mark_dirty=True)
+        self.params.apply_project_payload(
+            {
+                "source": source_payload_from_teaching_snapshot(snapshot),
+                "receiver": receiver_payload_from_teaching_snapshot(snapshot),
+            }
+        )
+        self._publish_active_simulation_project()
         self._teaching_snapshot_applied = True
         self.preview_state.setVisible(True)
-        self.preview_state.setText("已导入教学中心参数，等待快速预览")
+        self.preview_state.set_tone("success")
+        self.preview_state.setText(
+            "已导入教学参数（含光纤装调）"
+            if silent
+            else "已导入教学参数（含光纤装调）；可点击预览或开始计算"
+        )
+        self._update_instant_efficiency_cards()
+        self._geometry_changed()
+        if self.auto_preview.isChecked():
+            self.preview_scheduler.schedule(high_quality=False)
+        return True
 
     def _load_initial_result(self) -> None:
 
@@ -358,9 +542,16 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
 
         try:
             from frontend_pyside.features.simulation.instant_metrics import estimate_efficiency
+            from frontend_pyside.features.teaching.preview_metrics import beam_radius_from_project_metrics
 
             state = self.params.collect_state()
-            result = estimate_efficiency(self.context.project.project, state)
+            project = self.context.project.project
+            beam_radius = beam_radius_from_project_metrics(project)
+            result = estimate_efficiency(
+                project,
+                state,
+                beam_radius_at_receiver_um=beam_radius,
+            )
         except Exception:
             for key in ("system_eff", "receiver_eff", "coupling_eff"):
                 card = self.cards.get(key)
@@ -371,16 +562,23 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
             getattr(self.params, "calc_high_precision_coupling", None)
             and self.params.calc_high_precision_coupling.isChecked()
         )
-        note = "等待正式复场" if high_precision else "快速 Gaussian"
-        self.cards["system_eff"].set_value(f"{100.0 * result.system:.2f}", "%", note="界面估计")
-        self.cards["receiver_eff"].set_value(f"{100.0 * result.receiver:.2f}", "%", note="端面/传输")
-        self.cards["coupling_eff"].set_value(f"{100.0 * result.total:.2f}", "%", note=note)
+        # 三个效率只显示数值；结果来源/新旧状态统一由 formal_state 表达，避免卡片尾注挤压。
+        self.cards["system_eff"].set_value(f"{100.0 * result.system:.2f}", "%", note="")
+        self.cards["receiver_eff"].set_value(f"{100.0 * result.receiver:.2f}", "%", note="")
+        self.cards["coupling_eff"].set_value(f"{100.0 * result.total:.2f}", "%", note="")
+        if self.session.dirty.is_dirty:
+            self.formal_state.setText("⚠ 需更新")
+            self.formal_state.set_tone("warning")
+        else:
+            self.formal_state.setText("● 快速预览")
+            self.formal_state.set_tone("info")
 
     def on_activated(self) -> None:
         self._page_active = True
         self.lifecycle.activated()
         self.controller.set_polling_allowed(True)
         self._apply_responsive_layout()
+        self._maybe_auto_import_teaching_snapshot()
         
         
         if hasattr(self.results, "restore_cached_view"):
@@ -398,15 +596,34 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         self.lifecycle.deactivate()
 
     def _normalize_main_splitter_state(self) -> None:
-
         if not hasattr(self, "main_splitter"):
             return
         sizes = [int(value) for value in self.main_splitter.sizes()]
-        total = max(sum(sizes), int(self.main_splitter.width()), int(self.width()), 1200)
+        total = max(sum(sizes), int(self.main_splitter.width()), int(self.width()), 900)
+        if not self.params.isVisible():
+            self.main_splitter.setSizes([0, total])
+            self._main_splitter_initialized = True
+            return
         left = sizes[0] if len(sizes) == 2 else 0
-        if left < 520:
-            target = max(560, min(660, round(total * 0.40)))
+        # 参数栏只容纳常用输入。完整 Surface/高级数值设置不靠加宽侧栏解决。
+        target = max(ui_layout.SIM_PARAMETER_MIN_WIDTH, min(ui_layout.SIM_PARAMETER_MAX_WIDTH, round(total * 0.23)))
+        if left < ui_layout.SIM_PARAMETER_MIN_WIDTH or left > ui_layout.SIM_PARAMETER_MAX_WIDTH + 12:
             self.main_splitter.setSizes([target, max(520, total - target)])
+        self._main_splitter_initialized = True
+
+    def _toggle_parameter_panel(self) -> None:
+        show = not self.params.isVisible()
+        self._parameter_user_override = True
+        self._parameter_auto_collapsed = False
+        if show:
+            self.params.show()
+            total = max(sum(self.main_splitter.sizes()), self.main_splitter.width(), self.width(), 900)
+            target = max(ui_layout.SIM_PARAMETER_MIN_WIDTH, min(ui_layout.SIM_PARAMETER_MAX_WIDTH, round(total * 0.23)))
+            self.main_splitter.setSizes([target, max(520, total - target)])
+            self.parameter_toggle_button.setText("收起参数")
+        else:
+            self.params.hide()
+            self.parameter_toggle_button.setText("显示参数")
         self._main_splitter_initialized = True
 
     def _apply_responsive_layout(self) -> None:
@@ -418,8 +635,34 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
         if not self._main_splitter_initialized:
             self._normalize_main_splitter_state()
         width = max(1, self.width())
+        # Very narrow windows keep the engineering canvas usable by collapsing the
+        # parameter navigator. The user can still explicitly reopen it.
+        if width < 980 and self.params.isVisible() and not self._parameter_user_override:
+            self.params.hide()
+            self.parameter_toggle_button.setText("显示参数")
+            self._parameter_auto_collapsed = True
+        elif width >= 1040 and self._parameter_auto_collapsed and not self._parameter_user_override:
+            self.params.show()
+            self.parameter_toggle_button.setText("收起参数")
+            self._parameter_auto_collapsed = False
+
+        # QSettings can contain an old zero-width left pane. If parameters are visible,
+        # recover a compact usable width instead of preserving the old wide pane.
+        sizes = [int(value) for value in self.main_splitter.sizes()]
+        if self.params.isVisible():
+            total = max(sum(sizes), self.main_splitter.width(), self.width(), 900)
+            target = max(ui_layout.SIM_PARAMETER_MIN_WIDTH, min(ui_layout.SIM_PARAMETER_MAX_WIDTH, round(total * 0.23)))
+            if len(sizes) != 2 or abs(sizes[0] - target) > 22:
+                self.main_splitter.setSizes([target, max(520, total - target)])
+        compact = width < 1320
         if hasattr(self.results, "set_compact_navigation"):
-            self.results.set_compact_navigation(width < 1320)
+            self.results.set_compact_navigation(compact)
+        # 结果状态三项始终归在同一条结果带；窄屏只收紧最小宽度，不再通过隐藏/弹窗表达。
+        for key in ("coupling_eff", "system_eff", "receiver_eff"):
+            card = self.cards.get(key)
+            if card is not None:
+                card.setVisible(True)
+                card.setMinimumWidth(104 if compact else 126)
 
     def resizeEvent(self, event) -> None:  
         super().resizeEvent(event)
@@ -432,6 +675,22 @@ class SimulationPage(SimulationModeMixin, SimulationPreviewMixin, SimulationForm
     def hideEvent(self, event) -> None:
         self.on_deactivated()
         super().hideEvent(event)
+
+    def assistant_context(self) -> dict:
+        data = self.results.current_data() if hasattr(self, "results") else {}
+        return {
+            "page": "仿真系统",
+            "current_view": self.results.current_key() if hasattr(self, "results") else "",
+            "view_source": str(data.get("source", "")) if isinstance(data, dict) else "",
+            "view_kind": str(data.get("kind", "")) if isinstance(data, dict) else "",
+            "formal_state": self.formal_state.text() if hasattr(self, "formal_state") else "",
+            "metrics": {
+                key: card.value_label.text() if hasattr(card, "value_label") else ""
+                for key, card in getattr(self, "cards", {}).items()
+            },
+            "current_view_data": data if isinstance(data, dict) else {},
+            "project_metrics": dict(getattr(self.context.project.project, "metrics", {}) or {}),
+        }
 
     def dispose_page(self) -> None:
         self.workspace_state.save_splitter("main", self.main_splitter)

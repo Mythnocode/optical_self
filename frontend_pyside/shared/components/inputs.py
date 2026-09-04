@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
-    QDoubleSpinBox,
     QGridLayout,
     QLabel,
     QSizePolicy,
     QWidget,
 )
+
+from frontend_pyside.shared.components.unit_spinbox import UnitAwareDoubleSpinBox
 
 
 class ParameterControl(QWidget):
@@ -22,11 +23,12 @@ class ParameterControl(QWidget):
 
         self.label = QLabel(label)
         self.label.setMinimumWidth(112)
-        self.spin = QDoubleSpinBox()
+        self.spin = UnitAwareDoubleSpinBox()
         self.spin.setRange(minimum, maximum)
         self.spin.setSingleStep(step)
         self.spin.setDecimals(4 if step < 0.01 else 2)
         self.spin.setValue(value)
+        self.spin.setTargetUnit(unit)
         self.spin.setMinimumWidth(118)
         self.spin.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.unit = QLabel(unit)

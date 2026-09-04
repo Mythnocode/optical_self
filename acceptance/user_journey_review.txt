@@ -1,0 +1,42 @@
+﻿[
+  {
+    "persona": "AI 引导型新手",
+    "status": "PASS",
+    "detail": "Task-first 建议可见；结构化 Action 不直接执行正式计算"
+  },
+  {
+    "persona": "自主探索型新手",
+    "status": "FAIL",
+    "detail": "AttributeError: 'FlexibleSpatialTeachingWorkbench' object has no attribute 'teaching_nav_buttons'"
+  },
+  {
+    "persona": "光学科研用户",
+    "status": "PASS",
+    "detail": "参数区高频操作稳定；AI 能精确定位正式计算控件"
+  },
+  {
+    "persona": "实验验证用户",
+    "status": "PASS",
+    "detail": "实验验证入口可达；浏览冻结验证模块不会改变正式设计"
+  },
+  {
+    "persona": "机器学习研究用户",
+    "status": "PASS",
+    "detail": "最近模型与当前正式模型保持分离"
+  },
+  {
+    "persona": "教师/学生用户",
+    "status": "FAIL",
+    "detail": "AttributeError: 'FlexibleSpatialTeachingWorkbench' object has no attribute 'teaching_nav_buttons'"
+  },
+  {
+    "persona": "故障恢复用户",
+    "status": "PASS",
+    "detail": "任务刷新为真实图标操作；无结果/无可重试任务时动作保持禁用"
+  },
+  {
+    "persona": "熟练高频用户",
+    "status": "FAIL",
+    "detail": "AttributeError: 'FlexibleSpatialTeachingWorkbench' object has no attribute 'teaching_nav_buttons'"
+  }
+]

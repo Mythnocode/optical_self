@@ -16,6 +16,7 @@ class LazyResultWorkspace(QWidget):
     surfaceSelected = Signal(int)
     surfaceActivated = Signal(int)
     itemSelected = Signal(str)
+    pointSelected = Signal(float, float)
     renderCompleted = Signal(int, str)
 
     def __init__(self, parent=None) -> None:
@@ -27,6 +28,8 @@ class LazyResultWorkspace(QWidget):
         self._toolbar_visible = True
         self._maximize_visible = True
         self._pane_header_visible = True
+        self._pane_title_visible = True
+        self._pane_source_visible = True
         self._plot_tools_visible = True
         self._footer_visible = True
         self._layout_mode = "单图"
@@ -44,10 +47,9 @@ class LazyResultWorkspace(QWidget):
         self._message.setWordWrap(True)
         placeholder_layout.addStretch(1)
         placeholder_layout.addWidget(self._message)
-        self._load_button = QPushButton("加载图形工作区")
-        self._load_button.setMaximumWidth(180)
+        self._load_button = QPushButton("")
         self._load_button.clicked.connect(self.ensure_loaded)
-        placeholder_layout.addWidget(self._load_button, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self._load_button.hide()
         placeholder_layout.addStretch(1)
         self._layout.addWidget(self._placeholder, 1)
 
@@ -67,6 +69,7 @@ class LazyResultWorkspace(QWidget):
         real.surfaceSelected.connect(self.surfaceSelected.emit)
         real.surfaceActivated.connect(self.surfaceActivated.emit)
         real.itemSelected.connect(self.itemSelected.emit)
+        real.pointSelected.connect(self.pointSelected.emit)
         real.renderCompleted.connect(self.renderCompleted.emit)
         self._layout.replaceWidget(self._placeholder, real)
         self._placeholder.hide()
@@ -76,6 +79,8 @@ class LazyResultWorkspace(QWidget):
         real.set_toolbar_visible(self._toolbar_visible)
         real.set_maximize_controls_visible(self._maximize_visible)
         real.set_pane_header_visible(self._pane_header_visible)
+        real.set_pane_title_visible(self._pane_title_visible)
+        real.set_pane_source_visible(self._pane_source_visible)
         real.set_plot_tools_visible(self._plot_tools_visible)
         real.set_footer_visible(self._footer_visible)
         real.set_layout_mode(self._layout_mode)
@@ -110,6 +115,16 @@ class LazyResultWorkspace(QWidget):
         if self._real is not None:
             self._real.set_pane_header_visible(visible)
 
+    def set_pane_title_visible(self, visible: bool) -> None:
+        self._pane_title_visible = bool(visible)
+        if self._real is not None:
+            self._real.set_pane_title_visible(visible)
+
+    def set_pane_source_visible(self, visible: bool) -> None:
+        self._pane_source_visible = bool(visible)
+        if self._real is not None:
+            self._real.set_pane_source_visible(visible)
+
     def set_plot_tools_visible(self, visible: bool) -> None:
 
         self._plot_tools_visible = bool(visible)
@@ -128,13 +143,19 @@ class LazyResultWorkspace(QWidget):
             self._real.set_single_view_only(enabled)
 
     def set_result(self, index: int, title: str, data) -> None:
+        index = int(index)
         normalized = dict(data or {}) if isinstance(data, Mapping) else {}
-        self._pending_results[int(index)] = (str(title), normalized)
+        self._pending_results[index] = (str(title), normalized)
         if self._real is not None:
             self._real.set_result(index, title, normalized)
             return
         if self._is_empty(normalized):
-            self._message.setText(str(normalized.get("message") or "结果尚未生成。需要显示图形时才会加载绘图引擎。"))
+            # 一个懒加载工作区可能预先登记多个视图。隐藏视图的空结果不能
+            # 覆盖当前视图的提示，否则用户会看到与当前页面无关的通用占位。
+            if index == int(self._selected_result):
+                self._message.setText(
+                    str(normalized.get("message") or "当前还没有可显示的结果。")
+                )
             return
         self.ensure_loaded()
 
@@ -142,6 +163,29 @@ class LazyResultWorkspace(QWidget):
         self._selected_result = int(index)
         if self._real is not None:
             self._real.select_result(index)
+            return
+        current = self._pending_results.get(self._selected_result)
+        if current is not None:
+            _title, data = current
+            if self._is_empty(data):
+                self._message.setText(str(data.get("message") or "当前还没有可显示的结果。"))
+
+    def set_optical_3d_view(self, preset: str) -> bool:
+        real = self.ensure_loaded()
+        real.select_result(self._selected_result)
+        return bool(real.set_optical_3d_view(preset, index=self._selected_result))
+
+    def current_result(self) -> tuple[str, dict] | None:
+        current = self._pending_results.get(int(self._selected_result))
+        if current is None:
+            return None
+        title, data = current
+        return str(title), dict(data or {})
+
+    def current_data(self) -> dict:
+        """Return selected structured plot data without forcing the heavy canvas to load."""
+        current = self.current_result()
+        return dict(current[1]) if current is not None else {}
 
     def set_layout_mode(self, text: str) -> None:
         self._layout_mode = str(text)

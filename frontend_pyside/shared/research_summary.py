@@ -8,20 +8,25 @@ from frontend_pyside.shared.display_names import parameter_label
 
 
 def latest_optimization_task(task_context) -> dict | None:
+    """Return the most recent completed *automatic optimisation* task only.
 
+    Parameter scans and tolerance jobs share the same page but are not valid
+    sources for a "current best plan".
+    """
     tasks = list(getattr(task_context, "tasks", []) or [])
-    candidates = [
-        dict(task)
-        for task in tasks
-        if str(task.get("page", "")) == "optimization"
-        or str(task.get("kind", "")) in {"参数研究", "后端参数扫描", "后端自动优化"}
-    ]
-    if not candidates:
-        return None
-    for task in candidates:
-        if str(task.get("status", "")) == "已完成" and task_context.result(task.get("id")):
-            return task
-    return candidates[0]
+    for task in tasks:
+        if str(task.get("status", "")) != "已完成":
+            continue
+        kind = str(task.get("kind", ""))
+        name = str(task.get("name", ""))
+        if "容差" in name or "扫描" in kind or "参数扫描" in name:
+            continue
+        if "优化" not in kind and "优化" not in name:
+            continue
+        result = task_context.result(str(task.get("id", "")), {})
+        if isinstance(result, dict) and isinstance(result.get("best_variables"), dict) and result.get("best_variables"):
+            return dict(task)
+    return None
 
 
 def latest_optimization_result(task_context) -> dict:
@@ -30,6 +35,35 @@ def latest_optimization_result(task_context) -> dict:
         return {}
     result = task_context.result(str(task.get("id", "")), {})
     return dict(result) if isinstance(result, dict) else {}
+
+
+def latest_optimization_reference(task_context, project_context=None) -> dict:
+    task = latest_optimization_task(task_context)
+    result = latest_optimization_result(task_context)
+    if not task or not result:
+        return {}
+    metadata = dict(result.get("metadata", {}) or {})
+    # Bind the reference to the revision at optimisation submission/completion.
+    # Never overwrite it with the project's *current* revision, otherwise an old
+    # optimum would masquerade as belonging to the new design.
+    revision = str(task.get("project_revision", "") or metadata.get("project_revision", "") or "")
+    return {
+        "task_id": str(task.get("id", "") or ""),
+        "job_id": str(task.get("job_id", result.get("job_id", "")) or ""),
+        "result_id": str(result.get("request_id", result.get("result_id", "")) or ""),
+        "project_revision": revision,
+        "best_variables": dict(result.get("best_variables", {}) or {}),
+        "source": "后端自动优化",
+    }
+
+def latest_tolerance_result(task_context) -> dict:
+    for task in list(getattr(task_context, "tasks", []) or []):
+        if "容差" not in str(task.get("name", "")):
+            continue
+        result = task_context.result(str(task.get("id", "")), {})
+        if isinstance(result, dict) and result:
+            return dict(result)
+    return {}
 
 
 def latest_explainability_result(task_context) -> dict:
@@ -90,9 +124,6 @@ def top_influences(task_context, registry_context, *, limit: int = 5) -> tuple[l
 
     model_id = str(getattr(registry_context, "current_model_id", "") or "")
     model = registry_context.model(model_id) if model_id else None
-    if not model:
-        models = list(getattr(registry_context, "models", []) or [])
-        model = dict(models[0]) if models else None
     if isinstance(model, dict):
         records = _importance_records(model)
         if records:
@@ -129,16 +160,18 @@ def explain_factor(name: str) -> str:
         return "镜片结构会改变光束状态的演化路径，候选结构必须经过独立正式仿真复核。"
     if "孔径" in text:
         return "有效孔径过小会引入截断和边缘能量损失，并可能改变最终光斑。"
-    return "该参数与当前候选结果相关，建议结合参数关系图和正式复核结果判断其物理作用。"
+    return "该参数与当前候选结果相关，建议结合参数关系图和完整仿真结果判断其物理作用。"
 
 
 def current_model_quality(registry_context) -> dict[str, Any]:
+    # “当前模型”只能是用户明确采用的模型。训练完成或刷新模型列表时，
+    # 不能偷偷把列表第一项当成当前模型，否则模型分析、SHAP 和 AI 会
+    # 把“最新模型”误认为“已经采用的模型”。
     model_id = str(getattr(registry_context, "current_model_id", "") or "")
-    model = registry_context.model(model_id) if model_id else None
-    if not model:
-        models = list(getattr(registry_context, "models", []) or [])
-        model = dict(models[0]) if models else {}
-    if not isinstance(model, dict):
+    if not model_id:
+        return {}
+    model = registry_context.model(model_id)
+    if not isinstance(model, dict) or not model:
         return {}
     metrics = dict(model.get("metrics", {}) or {})
     for key in ("r2", "mae", "rmse", "high_efficiency_mae", "created_at", "model_type", "name"):
@@ -175,7 +208,9 @@ __all__ = [
     "humanize_parameter_name",
     "latest_explainability_result",
     "latest_optimization_result",
+    "latest_optimization_reference",
     "latest_optimization_task",
+    "latest_tolerance_result",
     "research_profile_text",
     "top_influences",
 ]

@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 from backend.optical_ml_app.api.responses import success
 from shared_contracts.parameters import ParameterChange
 from shared_contracts.project import ProjectSnapshot
-from shared_contracts.scan import ScanRequest
+from shared_contracts.scan import ScanMode, ScanParameter, ScanRequest
 
 router = APIRouter()
 
@@ -29,8 +29,8 @@ class ScanJobRequest(BaseModel):
     options: Dict[str, Any] = Field(default_factory=dict)
 
     
-    scan_mode: str = "line_1d"
-    scan_parameters: list = Field(default_factory=list)
+    scan_mode: ScanMode = "line_1d"
+    scan_parameters: List[ScanParameter] = Field(default_factory=list, min_length=1, max_length=8)
     scan_response_metrics: List[str] = Field(
         default_factory=lambda: ["coupling_efficiency"]
     )
@@ -45,17 +45,7 @@ def submit_scan(payload: ScanJobRequest, request: Request):
     from shared_contracts.scan import ScanParameter, ScanRequest as ScanReq
     from shared_contracts.simulation import SimulationRequest
 
-    scan_params = [
-        ScanParameter(
-            path=p.get("path", ""),
-            label=p.get("label", ""),
-            unit=p.get("unit", ""),
-            start=p.get("start", 0.0),
-            stop=p.get("stop", 1.0),
-            points=p.get("points", 41),
-        )
-        for p in payload.scan_parameters
-    ]
+    scan_params = list(payload.scan_parameters)
 
     base_request = SimulationRequest(
         request_id=payload.request_id,

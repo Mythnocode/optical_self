@@ -7,9 +7,9 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QProgressBar,
-    QScrollArea,
     QSplitter,
     QTabWidget,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -23,6 +23,9 @@ from frontend_pyside.shared.components.basic import (
     PrimaryButton,
     SecondaryButton,
 )
+from frontend_pyside.shared.components.workbench import MetricSummaryBar
+from frontend_pyside.shared.components.foundation.headers import PageHeader
+from frontend_pyside.shared import layout_tokens as ui_layout
 from frontend_pyside.shared.components.fast_table import FastTableView
 from frontend_pyside.shared.components.task_status_chart import (
     TaskProgressChart,
@@ -31,6 +34,7 @@ from frontend_pyside.shared.components.task_status_chart import (
 from frontend_pyside.shared.components.workbench import ExpandableSection
 from frontend_pyside.shared.lifecycle import Debouncer, ManagedPageResources
 from frontend_pyside.shared.settings import WorkspaceStateStore
+from frontend_pyside.shared.icons import icon
 from .presentation.detail_behavior import TaskDetailMixin
 from .presentation.remote_behavior import TaskRemoteMixin
 
@@ -53,27 +57,34 @@ class TasksPage(TaskDetailMixin, TaskRemoteMixin, QWidget):
         self._completed_tasks: list[dict] = []
 
         root = QVBoxLayout(self)
-        root.setContentsMargins(14, 9, 14, 12)
-        root.setSpacing(7)
+        root.setContentsMargins(ui_layout.PAGE_MARGIN, ui_layout.CONTROL_GAP, ui_layout.PAGE_MARGIN, ui_layout.PAGE_MARGIN)
+        root.setSpacing(ui_layout.CARD_GAP)
+
+        header = PageHeader(
+            "任务中心",
+            "查看后台任务的真实运行状态、进度、失败原因和结果。任务进度来自后台，不使用前端假进度。",
+        )
+        root.addWidget(header)
 
         summary = QHBoxLayout()
-        summary.setSpacing(7)
-        self.unfinished_metric = InlineMetric("未完成", "0", "个")
-        self.running_metric = InlineMetric("运行中", "0", "个")
-        self.waiting_metric = InlineMetric("等待中", "0", "个")
-        self.failed_metric = InlineMetric("失败", "0", "个")
-        for metric in (
-            self.unfinished_metric,
-            self.running_metric,
-            self.waiting_metric,
-            self.failed_metric,
-        ):
-            summary.addWidget(metric, 1)
-        self.refresh_button = SecondaryButton("刷新")
+        summary.setSpacing(ui_layout.CONTROL_GAP)
+        self.task_summary_bar = MetricSummaryBar((("运行", "0"), ("等待", "0"), ("失败", "0"), ("完成", "0")))
+        summary.addWidget(self.task_summary_bar, 1)
+        # Compatibility objects kept hidden for older refresh helpers.
+        self.unfinished_metric = InlineMetric("未完成", "0", "个"); self.unfinished_metric.hide()
+        self.running_metric = InlineMetric("运行中", "0", "个"); self.running_metric.hide()
+        self.waiting_metric = InlineMetric("等待中", "0", "个"); self.waiting_metric.hide()
+        self.failed_metric = InlineMetric("失败", "0", "个"); self.failed_metric.hide()
+        self.refresh_button = QToolButton()
+        self.refresh_button.setObjectName("compactIconTool")
+        self.refresh_button.setIcon(icon("refresh", "#344054", 18))
+        self.refresh_button.setToolTip("刷新任务状态")
         self.refresh_button.clicked.connect(lambda: self._request_remote_jobs(force=True))
         self.retry_button = SecondaryButton("重试")
+        self.retry_button.setIcon(icon("refresh", "#344054", 16))
         self.retry_button.clicked.connect(self._retry_selected)
         self.cancel_button = PrimaryButton("取消")
+        self.cancel_button.setIcon(icon("close", "#FFFFFF", 16))
         self.cancel_button.clicked.connect(self._cancel_selected)
         self.retry_button.setEnabled(False)
         self.cancel_button.setEnabled(False)
@@ -84,7 +95,7 @@ class TasksPage(TaskDetailMixin, TaskRemoteMixin, QWidget):
 
         self.remote_state = Badge("等待同步", "info")
         self.remote_state.setVisible(False)
-        self.queue_label = QLabel("当前没有未完成任务")
+        self.queue_label = QLabel("")
         self.queue_label.setObjectName("mutedText")
 
         workspace = QSplitter(Qt.Orientation.Horizontal)
@@ -92,105 +103,53 @@ class TasksPage(TaskDetailMixin, TaskRemoteMixin, QWidget):
         workspace.setChildrenCollapsible(False)
         workspace.setHandleWidth(8)
 
-        current_card = Card("当前任务", compact=True)
+        task_card = Card("任务", compact=True)
         filters = QHBoxLayout()
         filters.setSpacing(6)
         self.status_filter = QComboBox()
-        self.status_filter.addItems(["全部未完成", "运行中", "等待中", "已暂停"])
+        self.status_filter.addItems(["全部任务", "运行中", "等待中", "已完成", "失败", "已暂停", "已取消"])
         self.type_filter = QComboBox()
-        self.type_filter.addItems(
-            ["全部类型", "仿真", "参数扫描", "自动优化", "机器学习", "模型解释", "教学", "报告"]
-        )
+        self.type_filter.addItems(["全部类型", "仿真", "参数扫描", "自动优化", "机器学习", "模型解释", "教学", "报告"])
         self.search = QLineEdit()
-        self.search.setPlaceholderText("搜索未完成任务")
+        self.search.setPlaceholderText("搜索任务")
         filters.addWidget(self.status_filter)
         filters.addWidget(self.type_filter)
         filters.addWidget(self.search, 1)
-        filters.addWidget(self.queue_label)
-        current_card.body.addLayout(filters)
+        task_card.body.addLayout(filters)
 
         self.table = TaskProgressChart()
         self.table.currentCellChanged.connect(self._show_selected)
-        current_scroll = QScrollArea()
-        current_scroll.setWidgetResizable(True)
-        current_scroll.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
-        )
-        current_scroll.setWidget(self.table)
-        current_card.body.addWidget(current_scroll, 1)
-        workspace.addWidget(current_card)
+        task_card.body.addWidget(self.table, 1)
+        workspace.addWidget(task_card)
 
-        side = QWidget()
-        side_layout = QVBoxLayout(side)
-        side_layout.setContentsMargins(0, 0, 0, 0)
-        side_layout.setSpacing(7)
-        self.chart_card = Card("未完成任务分布", compact=True)
-        self.status_donut = TaskStatusDonut()
-        self.empty_chart_text = QLabel("暂无活动任务")
-        self.empty_chart_text.setObjectName("compactEmptyState")
-        self.empty_chart_text.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.empty_chart_text.setMinimumHeight(86)
-        self.empty_chart_text.setVisible(False)
-        self.chart_card.body.addWidget(self.status_donut, 1)
-        self.chart_card.body.addWidget(self.empty_chart_text)
-        side_layout.addWidget(self.chart_card, 1)
-
-        attention = Card("需要处理", compact=True)
-        self.attention_text = QLabel("当前没有需要处理的任务。")
-        self.attention_text.setWordWrap(True)
-        self.attention_text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        attention.body.addWidget(self.attention_text)
-        side_layout.addWidget(attention)
-        workspace.addWidget(side)
-        workspace.setSizes([1120, 400])
-        workspace.setStretchFactor(0, 1)
-        workspace.setStretchFactor(1, 0)
-        root.addWidget(workspace, 1)
-
-        history_widget = QWidget()
-        history_layout = QVBoxLayout(history_widget)
-        history_layout.setContentsMargins(7, 7, 7, 7)
-        self.completed_table = FastTableView(
-            ["完成时间", "任务", "类型", "耗时", "结果"],
-            page_size=50,
-        )
-        self.completed_table.stretch_columns(1)
-        self.completed_table.content_columns(0, 2, 3, 4)
-        self.completed_table.currentCellChanged.connect(self._show_completed_selected)
-        history_layout.addWidget(self.completed_table)
-        self.history_section = ExpandableSection(
-            "任务历史",
-            history_widget,
-            subtitle="完成、失败和取消任务统一归档",
-            expanded=False,
-        )
-        root.addWidget(self.history_section)
-
-        detail_widget = QWidget()
-        detail_layout = QVBoxLayout(detail_widget)
-        detail_layout.setContentsMargins(7, 7, 7, 7)
-        detail_layout.setSpacing(7)
+        detail_card = Card("任务详情", compact=True)
         self.detail_badge = Badge("未选择", "info")
-        detail_layout.addWidget(self.detail_badge)
+        detail_card.body.addWidget(self.detail_badge)
+        self.detail_empty = QLabel("选择一个任务查看运行状态、失败原因、日志和结果。")
+        self.detail_empty.setObjectName("emptyHint")
+        self.detail_empty.setWordWrap(True)
+        self.detail_empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.detail_empty.setMinimumHeight(160)
+        detail_card.body.addWidget(self.detail_empty, 1)
         self.detail_tabs = QTabWidget()
         self.detail_tabs.setDocumentMode(True)
 
         overview = QWidget()
         overview_layout = QVBoxLayout(overview)
+        self.failure_banner = QLabel("")
+        self.failure_banner.setObjectName("warningBanner")
+        self.failure_banner.setWordWrap(True)
+        self.failure_banner.hide()
+        overview_layout.addWidget(self.failure_banner)
         self.detail_name = InfoRow("任务名称", "—")
         self.detail_kind = InfoRow("任务类型", "—")
         self.detail_time = InfoRow("创建时间", "—")
         self.detail_source = InfoRow("执行来源", "—")
         self.detail_duration = InfoRow("运行耗时", "—")
         self.detail_note = InfoRow("当前信息", "—")
-        for row in (
-            self.detail_name,
-            self.detail_kind,
-            self.detail_time,
-            self.detail_source,
-            self.detail_duration,
-            self.detail_note,
-        ):
+        self.detail_job_id = InfoRow("任务 ID", "—")
+        self.detail_error_code = InfoRow("错误代码", "—")
+        for row in (self.detail_name, self.detail_kind, self.detail_time, self.detail_source, self.detail_duration, self.detail_note, self.detail_job_id, self.detail_error_code):
             overview_layout.addWidget(row)
         self.progress = QProgressBar()
         self.progress.setRange(0, 100)
@@ -198,8 +157,14 @@ class TasksPage(TaskDetailMixin, TaskRemoteMixin, QWidget):
         overview_layout.addWidget(self.progress)
         action_row = QHBoxLayout()
         self.detail_view_result = SecondaryButton("查看结果")
-        self.detail_open_log = SecondaryButton("查看日志")
-        self.detail_export = SecondaryButton("导出")
+        self.detail_open_log = QToolButton()
+        self.detail_open_log.setObjectName("compactIconTool")
+        self.detail_open_log.setIcon(icon("log", "#344054", 18))
+        self.detail_open_log.setToolTip("查看任务日志")
+        self.detail_export = QToolButton()
+        self.detail_export.setObjectName("compactIconTool")
+        self.detail_export.setIcon(icon("download", "#344054", 18))
+        self.detail_export.setToolTip("导出任务记录")
         self.detail_view_result.clicked.connect(self._view_selected_result)
         self.detail_open_log.clicked.connect(self._open_selected_log)
         self.detail_export.clicked.connect(self._export_selected_record)
@@ -213,7 +178,7 @@ class TasksPage(TaskDetailMixin, TaskRemoteMixin, QWidget):
 
         log_page = QWidget()
         log_layout = QVBoxLayout(log_page)
-        self.log_text = QLabel("选择任务后显示关键日志。")
+        self.log_text = QLabel("选择任务后显示日志。")
         self.log_text.setWordWrap(True)
         self.log_text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         log_layout.addWidget(self.log_text)
@@ -222,19 +187,18 @@ class TasksPage(TaskDetailMixin, TaskRemoteMixin, QWidget):
 
         result_page = QWidget()
         result_layout = QVBoxLayout(result_page)
-        self.artifact_text = QLabel("选择任务后查看结果或产物。")
+        self.artifact_text = QLabel("选择任务后查看结果。")
         self.artifact_text.setWordWrap(True)
         result_layout.addWidget(self.artifact_text)
         result_layout.addStretch(1)
         self.detail_tabs.addTab(result_page, "结果")
-        detail_layout.addWidget(self.detail_tabs)
-        self.detail_section = ExpandableSection(
-            "任务详情",
-            detail_widget,
-            subtitle="选择任务后按需展开",
-            expanded=False,
-        )
-        root.addWidget(self.detail_section)
+        detail_card.body.addWidget(self.detail_tabs, 1)
+        self.detail_tabs.hide()
+        workspace.addWidget(detail_card)
+        workspace.setSizes([1000, 500])
+        workspace.setStretchFactor(0, 1)
+        workspace.setStretchFactor(1, 0)
+        root.addWidget(workspace, 1)
 
         self._filter_debouncer = Debouncer(200, self._apply_filter, self)
         self.lifecycle.connect(context.tasks.tasks_changed, self.refresh)
@@ -246,16 +210,72 @@ class TasksPage(TaskDetailMixin, TaskRemoteMixin, QWidget):
         self.lifecycle.connect(self.status_filter.currentTextChanged, self._apply_filter)
         if self.api_client is not None:
             self.lifecycle.connect(self.api_client.completed, self._api_completed)
-            self.lifecycle.connect(self.api_client.failed, self._api_failed)
+            if hasattr(self.api_client, "failed_detail"):
+                self.lifecycle.connect(self.api_client.failed_detail, self._api_failed_detail)
+            else:
+                self.lifecycle.connect(self.api_client.failed, self._api_failed)
 
         self._refresh_timer = self.lifecycle.manage_timer(QTimer(self))
         self._refresh_timer.setProperty("stopWhenHidden", True)
         self._refresh_timer.setInterval(2500)
         self._refresh_timer.timeout.connect(self._request_remote_jobs)
 
-        self.workspace_state.restore_splitter("main", workspace, [1120, 400])
+        self.workspace_state.restore_splitter("main", workspace, [1000, 500])
         self.refresh()
         QTimer.singleShot(0, self._request_remote_jobs)
+
+    def handle_assistant_action(self, action: dict) -> None:
+        target = str(dict(action or {}).get("target", "") or "")
+        if target != "tasks.current":
+            return
+        # Select a concrete visible task so the action has an observable business
+        # result rather than merely navigating to the page. Prefer unfinished
+        # work, otherwise fall back to the newest visible record.
+        row = -1
+        for index, task in enumerate(list(getattr(self, "_visible_tasks", []) or [])):
+            if str(task.get("status", "")) not in {"已完成", "失败", "已取消", "未收敛"}:
+                row = index
+                break
+        if row < 0 and getattr(self, "_visible_tasks", None):
+            row = 0
+        if row >= 0:
+            self.table.setCurrentCell(row, 0)
+            self._show_selected(row, 0, -1, -1)
+        self.table.setFocus(Qt.FocusReason.OtherFocusReason)
+
+    def assistant_action_target_widget(self, action: dict):
+        target = str(dict(action or {}).get("target", "") or "")
+        if target == "tasks.current":
+            return self.table
+        return self
+
+    def assistant_context(self) -> dict:
+        rows = list(getattr(self.context.tasks, "tasks", []) or [])
+        counts: dict[str, int] = {}
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            status = str(row.get("status", "未知") or "未知")
+            counts[status] = counts.get(status, 0) + 1
+        selected = None
+        try:
+            selected = self._task_at(self.table.currentRow())
+        except Exception:
+            selected = None
+        selected_payload = dict(selected) if isinstance(selected, dict) else {}
+        if selected_payload:
+            task_id = str(selected_payload.get("id", "") or "")
+            result = self.context.tasks.result(task_id, None) if task_id else None
+            if result is not None:
+                selected_payload["result"] = result
+        return {
+            "page": "任务中心",
+            "current_view": "任务详情" if selected_payload else "任务列表",
+            "task_count": len(rows),
+            "status_counts": counts,
+            "selected_task": selected_payload,
+            "remote_state": self.remote_state.text() if hasattr(self, "remote_state") else "",
+        }
 
     def _show_completed_selected(self, row: int, *_args) -> None:
         if not 0 <= row < len(self._completed_tasks):

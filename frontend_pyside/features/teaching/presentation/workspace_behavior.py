@@ -165,7 +165,7 @@ class TeachingWorkspaceMixin:
         console.add_lazy_tab(self._trajectory_panel, "调节轨迹", "记录两个以上状态后显示调节过程。")
         console.add_lazy_tab(self._mismatch_panel, "模场失配分析", "打开后再创建光强、相位和复场诊断工作区。")
         self.mismatch_console = console
-        console.add_lazy_tab(self._compare_panel, "方案比较", "打开后再创建方案比较表。")
+        console.add_lazy_tab(self._compare_panel, "快照比较", "打开后再创建实验快照比较表。")
         console.add_lazy_tab(self._diagnostic_panel, "数值诊断", "打开后再创建诊断控件。")
         console.add_lazy_tab(self._report_panel, "练习与报告", "打开后再生成报告编辑区。")
         root.addWidget(console)

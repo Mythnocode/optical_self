@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 from matplotlib.collections import LineCollection
+from matplotlib.patches import Patch
 from frontend_pyside.resources import theme_tokens as theme
 from frontend_pyside.shared.plotting.canvas_view import fit_optical_section_2d
 from frontend_pyside.shared.plotting.ray_plot_style import (RAY_ALPHA_2D, RAY_LINEWIDTH_2D, SURFACE_ALPHA_2D, SURFACE_LINEWIDTH_2D)
@@ -37,6 +38,8 @@ class Canvas2DMixin:
             self._waist_position(ax, data)
         elif kind == "parameter_response":
             self._parameter_response(ax, data)
+        elif kind == "research_preview":
+            self._research_preview(ax, data)
         elif kind == "validation_scatter":
             self._validation_scatter(ax, data)
         elif kind == "residual":
@@ -51,6 +54,8 @@ class Canvas2DMixin:
             self._multi_plane_evolution(ax, data)
         elif kind == "energy_flow":
             self._energy_flow(ax, data)
+        elif kind == "profile_pair":
+            self._profile_pair(ax, data)
         elif kind == "before_after":
             self._before_after(ax, data)
         elif kind == "candidate_compare":
@@ -59,6 +64,10 @@ class Canvas2DMixin:
             self._convergence_curve(ax, data)
         elif kind == "correlation_heatmap":
             self._correlation_heatmap(ax, data)
+        elif kind == "target_achievement":
+            self._target_achievement(ax, data)
+        elif kind == "histogram":
+            self._histogram(ax, data)
         elif kind == "adjustment_trajectory":
             self._adjustment_trajectory(ax, data)
         elif kind == "teaching_scan":
@@ -84,13 +93,13 @@ class Canvas2DMixin:
         elif kind == "heatmap_contour":
             self._heatmap_contour(ax, data)
         elif kind == "bar":
-            labels = [str(value) for value in data.get("labels", [])]
+            labels = self._readable_category_labels([str(value) for value in data.get("labels", [])], max_chars=14)
             values = data.get("values", [])
             colors = data.get("colors") or None
             bars = ax.bar(labels, values, color=colors)
             self._register_bar_items(bars, labels, data)
             self._annotate_bars(ax, bars, values, horizontal=False, enabled=bool(data.get("show_values")))
-            ax.tick_params(axis="x", rotation=18)
+            ax.tick_params(axis="x", rotation=0)
         elif kind == "barh":
             labels = [str(value) for value in data.get("labels", [])]
             values = data.get("values", [])
@@ -104,21 +113,24 @@ class Canvas2DMixin:
         elif kind == "scatter_formula":
             self._scatter_formula(ax, data)
         elif kind == "bar_grouped":
-            labels = data.get("labels", [])
+            labels = self._readable_category_labels([str(value) for value in data.get("labels", [])], max_chars=14)
             series = data.get("series", [])
             positions = np.arange(len(labels), dtype=float)
             count = max(1, len(series))
             width = 0.78 / count
             for index, item in enumerate(series):
                 offset = (index - (count - 1) / 2) * width
+                errors = item.get("errors")
                 ax.bar(
                     positions + offset,
                     item.get("values", []),
                     width,
                     label=item.get("label", ""),
+                    yerr=errors if errors else None,
+                    capsize=3 if errors else 0,
                 )
             ax.set_xticks(positions)
-            ax.set_xticklabels(labels, rotation=18)
+            ax.set_xticklabels(labels, rotation=0, ha="center")
             if series:
                 ax.legend()
         elif kind == "donut":
@@ -137,6 +149,8 @@ class Canvas2DMixin:
                 self._empty(ax, data.get("message", "暂无真实统计"))
         elif kind == "scatter":
             ax.scatter(data.get("x", []), data.get("y", []), s=16, alpha=0.72)
+            if bool(data.get("equal_aspect", False)):
+                ax.set_aspect("equal", adjustable="box")
             airy = float(data.get("airy_radius_um", 0.0) or 0.0)
             if airy > 0.0:
                 from matplotlib.patches import Circle
@@ -158,18 +172,20 @@ class Canvas2DMixin:
                 transform=ax.transAxes,
                 linespacing=1.45,
             )
+        elif kind == "parameter_summary":
+            self._parameter_summary(ax, data)
         else:
             self._empty(ax, data.get("message", "暂无结果"))
 
         composite_kinds = {
-            "phase_comparison", "multi_plane_evolution", "before_after",
+            "phase_comparison", "multi_plane_evolution", "before_after", "profile_pair",
             "adjustment_trajectory", "teaching_scan",
         }
         if kind in composite_kinds:
             return
 
         diagnostic_titleless_kinds = {
-            "waterfall", "mismatch_budget", "beeswarm", "scatter_formula",
+            "waterfall", "mismatch_budget", "beeswarm", "scatter_formula", "research_preview",
             "beam_match", "phase_comparison", "multi_plane_evolution", "before_after",
             "adjustment_trajectory", "teaching_scan",
         }
@@ -179,12 +195,16 @@ class Canvas2DMixin:
             ax.set_title("")
         else:
             ax.set_title(data.get("title", ""), pad=8)
-        ax.set_xlabel(data.get("x_label", ""))
+        # Some specialized plots (notably the pre-run research preview) build their
+        # axis labels from the selected parameters themselves.  Do not erase those
+        # labels just because the generic payload has no x_label/y_label fields.
+        if kind != "research_preview":
+            ax.set_xlabel(data.get("x_label", ""))
         if kind in {"waterfall", "mismatch_budget", "beeswarm"}:
             
             
             ax.set_ylabel(data.get("y_label", ""), rotation=90, labelpad=28, va="center")
-        else:
+        elif kind != "research_preview":
             ax.set_ylabel(data.get("y_label", ""), rotation=90, labelpad=12, va="center")
         if kind in (
             "line", "line_multi", "scatter", "beeswarm", "scatter_formula",
@@ -194,6 +214,98 @@ class Canvas2DMixin:
             ax.grid(True, alpha=0.72, color=theme.CHART_GRID)
         else:
             ax.grid(False)
+
+    @staticmethod
+    def _parameter_value_text(row: dict) -> str:
+        value = row.get("value", "—")
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            value_text = f"{float(value):.6g}"
+        else:
+            value_text = str(value)
+        unit = str(row.get("unit", "") or "").strip()
+        return f"{value_text} {unit}" if unit and unit != "—" else value_text
+
+    def _parameter_summary(self, ax, data: dict) -> None:
+        """Render optimized and fixed parameters without dropping long snapshots."""
+        ax.axis("off")
+        optimized = [item for item in data.get("optimized", []) if isinstance(item, dict)]
+        fixed = [item for item in data.get("fixed", []) if isinstance(item, dict)]
+        figure_height_px = max(320.0, ax.figure.get_figheight() * ax.figure.dpi)
+        line_step = max(0.036, 19.0 / figure_height_px)
+
+        def draw_rows(rows: list[dict], *, top: float, bottom: float, accent: bool) -> None:
+            if not rows or top <= bottom:
+                return
+            rows_per_column = max(1, int((top - bottom) / line_step + 0.5))
+            columns = max(1, int(np.ceil(len(rows) / rows_per_column)))
+            if columns > 2:
+                columns = 2
+                rows_per_column = int(np.ceil(len(rows) / columns))
+            effective_step = min(
+                line_step,
+                (top - bottom) / max(1, rows_per_column),
+            )
+            column_width = 0.96 / columns
+            font_size = max(7.2, min(9.4, effective_step * figure_height_px * 0.48))
+            max_label_chars = max(9, int(30 / columns + 5))
+            for index, row in enumerate(rows):
+                column = index // rows_per_column
+                row_index = index % rows_per_column
+                x = 0.02 + column * column_width
+                y = top - row_index * effective_step
+                label = str(row.get("label", "") or "—")
+                if len(label) > max_label_chars:
+                    label = f"{label[:max_label_chars - 1]}…"
+                ax.text(
+                    x,
+                    y,
+                    label,
+                    va="top",
+                    ha="left",
+                    fontsize=font_size,
+                    color=theme.TEXT_PRIMARY,
+                    fontweight="semibold" if accent else "normal",
+                    transform=ax.transAxes,
+                )
+                ax.text(
+                    x + column_width * 0.94,
+                    y,
+                    self._parameter_value_text(row),
+                    va="top",
+                    ha="right",
+                    fontsize=font_size,
+                    color=theme.PRIMARY if accent else theme.TEXT_SECONDARY,
+                    transform=ax.transAxes,
+                )
+
+        ax.text(
+            0.02, 0.97, "已优化变量", va="top", ha="left", fontsize=10.5,
+            fontweight="bold", color=theme.PRIMARY, transform=ax.transAxes,
+        )
+        optimized_rows_per_column = 6
+        optimized_height = min(0.34, line_step * min(len(optimized), optimized_rows_per_column))
+        draw_rows(optimized, top=0.90, bottom=max(0.58, 0.90 - optimized_height), accent=True)
+
+        fixed_heading_y = max(0.54, 0.86 - optimized_height)
+        ax.plot(
+            [0.02, 0.98], [fixed_heading_y + 0.045, fixed_heading_y + 0.045],
+            color=theme.DIVIDER, linewidth=0.8, transform=ax.transAxes, clip_on=False,
+        )
+        ax.text(
+            0.02, fixed_heading_y,
+            str(data.get("fixed_title", "固定参数（未参与本次优化）")),
+            va="top", ha="left",
+            fontsize=10.5, fontweight="bold", color=theme.TEXT_SECONDARY,
+            transform=ax.transAxes,
+        )
+        if fixed:
+            draw_rows(fixed, top=fixed_heading_y - 0.075, bottom=0.02, accent=False)
+        else:
+            ax.text(
+                0.02, fixed_heading_y - 0.08, "没有固定参数快照",
+                va="top", ha="left", fontsize=9.0, color=theme.TEXT_MUTED,
+                transform=ax.transAxes,
+            )
 
     def _beam_match(self, ax, data: dict) -> None:
         from matplotlib.patches import Ellipse
@@ -209,13 +321,16 @@ class Canvas2DMixin:
             x = np.arange(field.shape[1], dtype=float)
         if len(y) != field.shape[0]:
             y = np.arange(field.shape[0], dtype=float)
-        rows, columns = _field_crop_slices(
-            field, mode if mode.shape == field.shape else np.empty((0, 0)),
-            fraction=float(data.get("auto_crop_fraction", np.exp(-2.0)) or np.exp(-2.0)),
-        )
-        
-        
-        
+        auto_frame = bool(data.get("auto_display_frame", True))
+        if auto_frame:
+            rows, columns = _field_crop_slices(
+                field, mode if mode.shape == field.shape else np.empty((0, 0)),
+                fraction=float(data.get("auto_crop_fraction", np.exp(-2.0)) or np.exp(-2.0)),
+                fill_fraction=float(data.get("display_fill_fraction", 0.67) or 0.67),
+            )
+        else:
+            rows, columns = slice(0, field.shape[0]), slice(0, field.shape[1])
+
         try:
             ic = data.get("incident_center", [0.0, 0.0])
             fc = data.get("fiber_center", [0.0, 0.0])
@@ -225,11 +340,15 @@ class Canvas2DMixin:
             y_radius = max(float(ir[1]), float(tr[1]), abs(float(ic[1]) - float(fc[1])) / 2.0, 1e-12)
             x_center = 0.5 * (float(ic[0]) + float(fc[0]))
             y_center = 0.5 * (float(ic[1]) + float(fc[1]))
-            x_mask = np.flatnonzero((x >= x_center - 3.2 * x_radius) & (x <= x_center + 3.2 * x_radius))
-            y_mask = np.flatnonzero((y >= y_center - 3.2 * y_radius) & (y <= y_center + 3.2 * y_radius))
-            if len(x_mask) >= 8 and len(y_mask) >= 8:
-                columns = slice(max(0, int(x_mask[0]) - 2), min(len(x), int(x_mask[-1]) + 3))
-                rows = slice(max(0, int(y_mask[0]) - 2), min(len(y), int(y_mask[-1]) + 3))
+            if auto_frame:
+                fill_fraction = min(max(float(data.get("display_fill_fraction", 0.67) or 0.67), 0.35), 0.9)
+                x_half = x_radius / fill_fraction
+                y_half = y_radius / fill_fraction
+                x_mask = np.flatnonzero((x >= x_center - x_half) & (x <= x_center + x_half))
+                y_mask = np.flatnonzero((y >= y_center - y_half) & (y <= y_center + y_half))
+                if len(x_mask) >= 8 and len(y_mask) >= 8:
+                    columns = slice(max(0, int(x_mask[0]) - 2), min(len(x), int(x_mask[-1]) + 3))
+                    rows = slice(max(0, int(y_mask[0]) - 2), min(len(y), int(y_mask[-1]) + 3))
         except (TypeError, ValueError, IndexError):
             pass
         view = field[rows, columns]
@@ -327,6 +446,60 @@ class Canvas2DMixin:
         if data.get("series"):
             ax.legend()
 
+    def _research_preview(self, ax, data: dict) -> None:
+        """Render a truthful pre-run preview in the same slot as the future result.
+
+        This is deliberately a design preview, not a fake response curve: it only
+        visualises selected variables and sampling density so the page geometry can
+        remain stable before and after a study runs.
+        """
+        labels = [str(value) for value in list(data.get("labels", []) or []) if str(value).strip()]
+        count = max(2, int(data.get("sample_count", 81) or 81))
+        mode = str(data.get("mode", "参数研究") or "参数研究")
+        structure = str(data.get("structure", "固定结构") or "固定结构")
+        target = str(data.get("target", "耦合效率最高") or "耦合效率最高")
+        ax.clear()
+        if mode == "参数研究" and len(labels) >= 2:
+            side = max(3, min(11, int(round(np.sqrt(count)))))
+            xv, yv = np.meshgrid(np.linspace(0.0, 1.0, side), np.linspace(0.0, 1.0, side))
+            ax.scatter(xv.ravel(), yv.ravel(), s=18, color=theme.CHART_BLUE, alpha=0.55)
+            ax.scatter([0.5], [0.5], s=70, marker="D", color=theme.CHART_CURRENT, edgecolors=theme.SURFACE, linewidths=0.8, zorder=5)
+            ax.set_xlim(-0.08, 1.08); ax.set_ylim(-0.08, 1.08)
+            ax.set_xlabel(labels[0], labelpad=8); ax.set_ylabel(labels[1], labelpad=10)
+            # Sampling count is already shown by the task controls and result
+            # summary. Keeping a duplicate label inside the axes crowds the
+            # lowest sample row on narrow layouts.
+        else:
+            shown = min(count, 41)
+            x = np.linspace(0.0, 1.0, shown)
+            ax.hlines(0.0, 0.0, 1.0, color=theme.CHART_AXIS, linewidth=1.3, alpha=0.75)
+            ax.scatter(x, np.zeros_like(x), s=22, color=theme.CHART_BLUE, alpha=0.62, edgecolors=theme.SURFACE, linewidths=0.45)
+            ax.scatter([0.5], [0.0], s=76, marker="D", color=theme.CHART_CURRENT, edgecolors=theme.SURFACE, linewidths=0.8, zorder=5)
+            ax.set_xlim(-0.06, 1.06); ax.set_ylim(-0.45, 0.45)
+            ax.set_yticks([])
+            ax.set_xticks([0.0, 0.5, 1.0], ["范围起点", "当前系统", "范围终点"])
+            # Edge tick labels should stay inside compact task windows instead of
+            # being centered across the axes boundary and clipped by the page scroll bar.
+            tick_labels = ax.get_xticklabels()
+            if tick_labels:
+                tick_labels[0].set_horizontalalignment("left")
+                tick_labels[-1].set_horizontalalignment("right")
+            default_axis = "待选择研究参数" if mode == "参数研究" else "允许调整的变量"
+            ax.set_xlabel(labels[0] if labels else default_axis, labelpad=8)
+            title = {
+                "参数研究": "研究设计预览",
+                "自动优化": "优化搜索预览",
+                "物理反向设计": "物理候选搜索预览",
+                "代理模型反向预测": "代理模型候选搜索预览",
+            }.get(mode, "任务预览")
+            unit = "点" if mode == "参数研究" else "次"
+            ax.text(0.5, 0.84, f"{title} · {count} {unit}", transform=ax.transAxes, ha="center", va="center", color=theme.TEXT_PRIMARY, fontsize=13, fontweight="semibold")
+        # The task page already reports structure and target immediately below
+        # the chart.  Repeating them inside the axes competes with the lowest
+        # sample row and x-axis labels in narrow layouts, so keep the plot
+        # focused on the sampling/search geometry.
+        ax.grid(True, alpha=0.42, color=theme.CHART_GRID)
+
     def _parameter_response(self, ax, data: dict) -> None:
         x = np.asarray(data.get("x", []), dtype=float)
         y = np.asarray(data.get("y", []), dtype=float)
@@ -347,7 +520,7 @@ class Canvas2DMixin:
         marker_specs = (
             ("current_point", "当前参数", "D"),
             ("best_point", "扫描最佳点", "*"),
-            ("verified_point", "正式复核", "s"),
+            ("verified_point", "完整仿真", "s"),
         )
         marker_colors = {
             "current_point": theme.CHART_CURRENT,
@@ -451,8 +624,6 @@ class Canvas2DMixin:
 
     def _validation_scatter(self, ax, data: dict) -> None:
 
-        from matplotlib.patches import Patch
-
         actual, predicted = self._finite_pairs(
             data.get("actual", data.get("x", [])),
             data.get("predicted", data.get("y", [])),
@@ -474,39 +645,43 @@ class Canvas2DMixin:
             limit_arrays.extend((np.asarray([current_actual]), np.asarray([current_predicted])))
         low, high = self._diagnostic_limits(*limit_arrays)
         reference_x = np.linspace(low, high, 160)
-        ax.fill_between(
-            reference_x,
-            reference_x - tolerance,
-            reference_x + tolerance,
-            color=theme.CHART_BLUE,
-            alpha=0.09,
-            linewidth=0,
-            zorder=0,
-        )
+        simple = bool(data.get("simple", False))
+        if not simple:
+            ax.fill_between(
+                reference_x, reference_x - tolerance, reference_x + tolerance,
+                color=theme.CHART_BLUE, alpha=0.09, linewidth=0, zorder=0,
+            )
         ax.plot([low, high], [low, high], color=theme.CHART_REFERENCE, linestyle="--", linewidth=1.55, label="理想线  y=x", zorder=2)
 
         if actual.size >= 140:
             ax.hexbin(actual, predicted, gridsize=28, mincnt=1, cmap="Blues", linewidths=0.0, alpha=0.9, label="测试样本密度", zorder=2)
         elif actual.size:
             ax.scatter(actual, predicted, s=31, color=theme.CHART_BLUE, alpha=0.78, edgecolors=theme.SURFACE, linewidths=0.5, label="测试样本", zorder=3)
-        if actual.size:
+        if actual.size and not simple:
             outliers = np.abs(residual) > tolerance
             if np.any(outliers):
                 ax.scatter(actual[outliers], predicted[outliers], s=38, color=theme.CHART_ORANGE, alpha=0.92, edgecolors=theme.SURFACE, linewidths=0.55, label="超出 ±2×MAE", zorder=4)
         if current_actual is not None:
-            ax.scatter([current_actual], [current_predicted], marker="*", s=155, color=theme.CHART_CURRENT, edgecolors=theme.SURFACE, linewidths=0.9, label="当前方案", zorder=6)
+            ax.scatter([current_actual], [current_predicted], marker="*", s=155, color=theme.CHART_CURRENT, edgecolors=theme.SURFACE, linewidths=0.9, label="当前系统", zorder=6)
 
         ax.set_xlim(low, high)
         ax.set_ylim(low, high)
-        ax.set_aspect("equal", adjustable="box")
+        # In the embedded beginner view, use the available workspace width rather
+        # than shrinking the chart to a small square in the centre of a wide pane.
+        # The detailed/pop-out view may keep a 1:1 physical aspect for diagnosis.
+        ax.set_aspect("auto", adjustable="box")
         handles, labels = ax.get_legend_handles_labels()
-        ax.legend(
-            [Patch(facecolor=theme.CHART_BLUE, alpha=0.13, edgecolor="none"), *handles],
-            ["诊断带  ±2×MAE", *labels],
-            loc="lower right",
-            fontsize=9.2,
-        )
-        self._draw_diagnostic_metrics(ax, self._diagnostic_metric_lines(data, actual, residual, tolerance))
+        if simple:
+            ax.legend(handles, labels, loc="lower right", fontsize=9.2)
+        else:
+            ax.legend(
+                [Patch(facecolor=theme.CHART_BLUE, alpha=0.13, edgecolor="none"), *handles],
+                ["诊断带  ±2×MAE", *labels], loc="lower right", fontsize=9.2,
+            )
+        # Diagnostic statistics are deliberately kept out of the plotting area.
+        # The surrounding result page already owns R²/MAE/RMSE cards; duplicating
+        # a large text box here used to cover samples, the legend and even axes on
+        # embedded canvases.
 
     def _residual_plot(self, ax, data: dict) -> None:
 
@@ -531,15 +706,19 @@ class Canvas2DMixin:
             np.asarray([-tolerance, tolerance]),
             np.asarray([current_residual]) if current_residual is not None else np.empty(0),
         )
-        ax.fill_between([x_low, x_high], -tolerance, tolerance, color=theme.CHART_BLUE, alpha=0.09, linewidth=0, zorder=0)
+        simple = bool(data.get("simple", False))
+        if not simple:
+            ax.fill_between([x_low, x_high], -tolerance, tolerance, color=theme.CHART_BLUE, alpha=0.09, linewidth=0, zorder=0)
         ax.axhline(0.0, color=theme.CHART_REFERENCE, linestyle="--", linewidth=1.55, label="零残差", zorder=2)
-        ax.axhline(tolerance, color=theme.CHART_BLUE, linestyle=":", linewidth=1.15, label="诊断带  ±2×MAE", zorder=2)
-        ax.axhline(-tolerance, color=theme.CHART_BLUE, linestyle=":", linewidth=1.15, zorder=2)
+        if not simple:
+            ax.axhline(tolerance, color=theme.CHART_BLUE, linestyle=":", linewidth=1.15, label="诊断带  ±2×MAE", zorder=2)
+            ax.axhline(-tolerance, color=theme.CHART_BLUE, linestyle=":", linewidth=1.15, zorder=2)
         if actual.size:
             ax.scatter(actual, residual, s=30, color=theme.CHART_BLUE, alpha=0.74, edgecolors=theme.SURFACE, linewidths=0.5, label="测试样本", zorder=3)
-            outliers = np.abs(residual) > tolerance
-            if np.any(outliers):
-                ax.scatter(actual[outliers], residual[outliers], s=38, color=theme.CHART_ORANGE, alpha=0.92, edgecolors=theme.SURFACE, linewidths=0.55, label="超出诊断带", zorder=4)
+            if not simple:
+                outliers = np.abs(residual) > tolerance
+                if np.any(outliers):
+                    ax.scatter(actual[outliers], residual[outliers], s=38, color=theme.CHART_ORANGE, alpha=0.92, edgecolors=theme.SURFACE, linewidths=0.55, label="超出诊断带", zorder=4)
             if actual.size >= 4:
                 order = np.argsort(actual)
                 chunks = np.array_split(order, min(10, max(4, int(np.sqrt(actual.size)))))
@@ -553,16 +732,24 @@ class Canvas2DMixin:
                     q10.append(float(np.percentile(values, 10)))
                     q90.append(float(np.percentile(values, 90)))
                 if centers:
-                    ax.fill_between(centers, q10, q90, color=theme.CHART_GREEN, alpha=0.12, linewidth=0, zorder=1)
-                    ax.plot(centers, medians, color=theme.CHART_GREEN, linewidth=1.8, marker="o", markersize=3.2, label="分箱中位趋势", zorder=5)
+                    if not simple:
+                        ax.fill_between(centers, q10, q90, color=theme.CHART_GREEN, alpha=0.12, linewidth=0, zorder=1)
+                    ax.plot(centers, medians, color=theme.CHART_GREEN, linewidth=1.8, marker="o" if not simple else None, markersize=3.2, label="误差趋势", zorder=5)
         if current_actual is not None:
-            ax.scatter([current_actual], [current_residual], marker="*", s=155, color=theme.CHART_CURRENT, edgecolors=theme.SURFACE, linewidths=0.9, label="当前方案", zorder=6)
+            ax.scatter([current_actual], [current_residual], marker="*", s=155, color=theme.CHART_CURRENT, edgecolors=theme.SURFACE, linewidths=0.9, label="当前系统", zorder=6)
 
         ax.set_xlim(x_low, x_high)
         ax.set_ylim(y_low, y_high)
         ax.legend(loc="lower left", fontsize=9.1)
-        self._draw_diagnostic_metrics(ax, self._diagnostic_metric_lines(data, actual, residual, tolerance))
-        self._residual_distribution_inset(ax, residual, tolerance)
+        if simple:
+            # 默认界面只展示“散点 + 零误差线 + 趋势”。Bias/P95/覆盖率和
+            # 分布小窗属于专业诊断，不再挤占普通用户首屏。
+            provided = dict(data.get("metrics", {}) or {})
+            compact = [f"RMSE  {provided['RMSE']}"] if "RMSE" in provided else []
+            self._draw_diagnostic_metrics(ax, compact)
+        else:
+            self._draw_diagnostic_metrics(ax, self._diagnostic_metric_lines(data, actual, residual, tolerance))
+            self._residual_distribution_inset(ax, residual, tolerance)
 
     @staticmethod
     def _residual_distribution_inset(ax, residual: np.ndarray, tolerance: float) -> None:
@@ -610,7 +797,7 @@ class Canvas2DMixin:
             starts.append(running)
             running += value
         positions = np.arange(count)
-        colors = [theme.CHART_RED if value >= 0 else theme.CHART_GREEN for value in values]
+        colors = [theme.CHART_ORANGE if value >= 0 else theme.CHART_CYAN for value in values]
         bars = ax.barh(positions, values, left=starts, color=colors, height=0.62, zorder=3)
         for index, (start, value) in enumerate(zip(starts, values)):
             endpoint = start + value
@@ -622,7 +809,7 @@ class Canvas2DMixin:
         ax.set_yticklabels(display_labels, rotation=0, ha="right", va="center")
         ax.tick_params(axis="y", labelsize=10, pad=6)
         ax.invert_yaxis()
-        ax.axvline(base, color=theme.CHART_REFERENCE, linestyle=":", linewidth=1.25, label="模型基准值")
+        ax.axvline(base, color=theme.CHART_REFERENCE, linestyle=":", linewidth=1.25, label="模型平均基准")
         ax.axvline(running, color=theme.CHART_BLUE, linestyle="--", linewidth=1.65, label="当前预测值")
         formal = data.get("formal_value")
         if formal is not None:
@@ -649,10 +836,15 @@ class Canvas2DMixin:
                 fontweight="semibold",
             )
         domain = data.get("within_training_domain")
-        domain_text = "训练域内" if domain is True else "训练域外" if domain is False else "训练域状态未知"
+        domain_text = "在训练范围内" if domain is True else "超出训练范围" if domain is False else "训练范围未知"
         summary = str(data.get("summary", ""))
-        ax.text(0.0, 1.01, f"{summary}   |   {domain_text}", transform=ax.transAxes, ha="left", va="bottom", fontsize=9.5, color=theme.CHART_GRAY)
-        ax.legend(loc="lower right", fontsize=9, frameon=True)
+        ax.text(0.0, 1.01, f"{summary}   |   {domain_text}", transform=ax.transAxes, ha="left", va="bottom", fontsize=11.0, color=theme.CHART_GRAY)
+        handles, legend_labels = ax.get_legend_handles_labels()
+        handles.extend([
+            Patch(facecolor=theme.CHART_ORANGE, edgecolor="none", label="正向贡献"),
+            Patch(facecolor=theme.CHART_CYAN, edgecolor="none", label="负向贡献"),
+        ])
+        ax.legend(handles=handles, loc="lower right", fontsize=10.5, frameon=True)
 
     def _mismatch_budget(self, ax, data: dict) -> None:
 
@@ -668,13 +860,13 @@ class Canvas2DMixin:
         local_share = 100.0 * local_raw / (float(np.sum(np.abs(local_raw))) or 1.0)
         positions = np.arange(count, dtype=float)
         global_bars = ax.barh(
-            positions + 0.18, global_share, height=0.30, color="#93c5fd", alpha=0.78,
+            positions + 0.18, global_share, height=0.30, color=theme.CHART_BLUE, alpha=0.58,
             label="全局平均重要性", zorder=2,
         )
-        local_colors = [theme.CHART_RED if value >= 0 else theme.CHART_GREEN for value in local_share]
+        local_colors = [theme.CHART_ORANGE if value >= 0 else theme.CHART_CYAN for value in local_share]
         local_bars = ax.barh(
             positions - 0.18, local_share, height=0.30, color=local_colors,
-            label="当前方案贡献（带符号）", zorder=3,
+            label="当前系统贡献（带符号）", zorder=3,
         )
         ax.axvline(0.0, color=theme.CHART_REFERENCE, linewidth=1.15, linestyle="--", zorder=1)
         display_labels = self._readable_category_labels(labels)
@@ -686,13 +878,43 @@ class Canvas2DMixin:
         extent = max(float(np.max(np.abs(global_share))), float(np.max(np.abs(local_share))), 1.0)
         ax.set_xlim(-extent * 1.28, extent * 1.28)
         for bar, value in zip(global_bars, global_share):
-            ax.text(bar.get_width() + extent * 0.025, bar.get_y() + bar.get_height() / 2, f"全局 {value:.0f}%", va="center", fontsize=9, color="#1d4ed8")
+            ax.text(bar.get_width() + extent * 0.025, bar.get_y() + bar.get_height() / 2, f"全局 {value:.0f}%", va="center", fontsize=10.5, color=theme.CHART_BLUE)
         for bar, value in zip(local_bars, local_share):
             x = bar.get_width() + (extent * 0.025 if value >= 0 else -extent * 0.025)
-            ax.text(x, bar.get_y() + bar.get_height() / 2, f"当前 {value:+.0f}%", ha="left" if value >= 0 else "right", va="center", fontsize=9, fontweight="semibold")
-        ax.text(0.0, 1.01, str(data.get("summary", "")), transform=ax.transAxes, ha="left", va="bottom", fontsize=9.3, color=theme.CHART_GRAY)
-        ax.legend(loc="lower right", fontsize=9, frameon=True)
+            ax.text(x, bar.get_y() + bar.get_height() / 2, f"当前 {value:+.0f}%", ha="left" if value >= 0 else "right", va="center", fontsize=10.5, fontweight="semibold")
+        ax.text(0.0, 1.01, str(data.get("summary", "")), transform=ax.transAxes, ha="left", va="bottom", fontsize=10.8, color=theme.CHART_GRAY)
+        ax.legend(
+            handles=[
+                Patch(facecolor=theme.CHART_BLUE, alpha=0.58, edgecolor="none", label="全局平均重要性"),
+                Patch(facecolor=theme.CHART_ORANGE, edgecolor="none", label="当前正向贡献"),
+                Patch(facecolor=theme.CHART_CYAN, edgecolor="none", label="当前负向贡献"),
+            ],
+            loc="lower right", fontsize=10.5, frameon=True,
+        )
 
+
+    def _profile_pair(self, ax, data: dict) -> None:
+        ax.remove()
+        axes = self.figure.subplots(1, 2)
+        x_axis = np.asarray(data.get("x_axis", []), dtype=float)
+        y_axis = np.asarray(data.get("y_axis", []), dtype=float)
+        for axis, coord, series, title, xlabel in (
+            (axes[0], x_axis, list(data.get("x_series", []) or []), "X 方向", str(data.get("x_label", "x"))),
+            (axes[1], y_axis, list(data.get("y_series", []) or []), "Y 方向", str(data.get("y_label", "y"))),
+        ):
+            for item in series:
+                values = np.asarray(item.get("y", []), dtype=float)
+                count = min(len(coord), len(values))
+                if count:
+                    axis.plot(coord[:count], values[:count], linewidth=1.8, label=str(item.get("label", "")))
+            axis.set_title(title)
+            axis.set_xlabel(xlabel)
+            axis.set_ylabel(str(data.get("value_label", "归一化强度")))
+            axis.grid(True, alpha=0.55)
+            if series:
+                axis.legend()
+        self.figure.suptitle(str(data.get("title", "X/Y 截面")), y=0.97, fontsize=15, fontweight="semibold")
+        self.figure.subplots_adjust(left=0.09, right=0.97, bottom=0.14, top=0.83, wspace=0.30)
 
     def _phase_comparison(self, ax, data: dict) -> None:
         ax.remove()
@@ -771,7 +993,8 @@ class Canvas2DMixin:
             if index > 0 and index < len(losses) and losses[index] > 0:
                 ax.text(index - 0.5, (cumulative[index-1] + value)/2, f"−{losses[index]:.2f}%", ha="center", va="center", fontsize=9.5)
         ax.set_xticks(x)
-        ax.set_xticklabels(labels, rotation=18)
+        labels = self._readable_category_labels(labels, max_chars=12)
+        ax.set_xticklabels(labels, rotation=0, ha="center")
         ax.set_ylim(0, max(105.0, float(cumulative.max()) * 1.12))
         ax.legend()
 
@@ -798,7 +1021,7 @@ class Canvas2DMixin:
             else:
                 axis.axis("off")
                 axis.text(0.5, 0.5, "暂无效率数据", ha="center", va="center", transform=axis.transAxes)
-            axis.set_title(str(payload.get("label", "方案")))
+            axis.set_title(str(payload.get("label", "候选")))
         params = list(data.get("parameters", []) or [])
         if params:
             lines = []
@@ -812,9 +1035,12 @@ class Canvas2DMixin:
     def _candidate_compare(self, ax, data: dict) -> None:
         candidates = list(data.get("candidates", []) or [])
         if not candidates:
-            self._empty(ax, data.get("message", "暂无候选方案数据"))
+            self._empty(ax, data.get("message", "暂无候选结果数据"))
             return
-        labels = [str(item.get("label", f"方案{i+1}")) for i, item in enumerate(candidates)]
+        labels = self._readable_category_labels(
+            [str(item.get("label", f"候选{i+1}")) for i, item in enumerate(candidates)],
+            max_chars=12,
+        )
         formal = np.asarray([item.get("formal", np.nan) for item in candidates], dtype=float)
         predicted = np.asarray([item.get("predicted", np.nan) for item in candidates], dtype=float)
         x = np.arange(len(labels), dtype=float)
@@ -824,12 +1050,12 @@ class Canvas2DMixin:
         if np.any(valid_pred):
             ax.bar(x[valid_pred]-width/2, predicted[valid_pred], width, label="模型预测")
         if np.any(valid_formal):
-            ax.bar(x[valid_formal]+width/2, formal[valid_formal], width, label="正式复核")
+            ax.bar(x[valid_formal]+width/2, formal[valid_formal], width, label="完整仿真")
         for index, item in enumerate(candidates):
             if not bool(item.get("feasible", True)):
                 ax.scatter([x[index]], [0], marker="x", s=70, linewidths=2, label="约束未通过" if index == 0 else None)
         ax.set_xticks(x)
-        ax.set_xticklabels(labels, rotation=18)
+        ax.set_xticklabels(labels, rotation=0, ha="center")
         ax.legend()
 
     def _convergence_curve(self, ax, data: dict) -> None:
@@ -846,21 +1072,79 @@ class Canvas2DMixin:
         ax.legend()
 
     def _correlation_heatmap(self, ax, data: dict) -> None:
-        labels = [str(value) for value in data.get("labels", [])]
+        labels = self._readable_category_labels([str(value) for value in data.get("labels", [])], max_chars=18)
+        x_labels = self._readable_category_labels(
+            [str(value) for value in data.get("x_labels", data.get("labels", []))], max_chars=9
+        )
         matrix = np.asarray(data.get("matrix", []), dtype=float)
         if matrix.ndim != 2 or not labels or matrix.shape != (len(labels), len(labels)):
             self._empty(ax, data.get("message", "暂无相关性数据"))
             return
-        image = ax.imshow(matrix, origin="upper", cmap="coolwarm", vmin=-1.0, vmax=1.0, aspect="equal")
+        # A correlation matrix does not need square screen pixels.  Filling the
+        # available result pane is substantially more readable than squeezing a
+        # square matrix into the centre just to preserve cell aspect.
+        image = ax.imshow(matrix, origin="upper", cmap="coolwarm", vmin=-1.0, vmax=1.0, aspect="auto")
         ax.set_xticks(range(len(labels)))
         ax.set_yticks(range(len(labels)))
-        ax.set_xticklabels(labels, rotation=45, ha="right")
-        ax.set_yticklabels(labels)
+        ax.set_xticklabels(x_labels, rotation=0, ha="center", fontsize=9.0)
+        ax.set_yticklabels(labels, fontsize=9.2)
         for row in range(len(labels)):
             for col in range(len(labels)):
                 ax.text(col, row, f"{matrix[row, col]:.2f}", ha="center", va="center", fontsize=8.5)
         self._heatmap_image = image
         self._heatmap_colorbar = self.figure.colorbar(image, ax=ax, shrink=0.78, label="相关系数")
+        # A square matrix with long engineering labels needs real label space;
+        # rotating them merely hides the clipping.  Keep them horizontal and
+        # multiline, and reserve the required margins inside the figure.
+        self.figure.subplots_adjust(left=0.27, right=0.90, bottom=0.19, top=0.86)
+
+    def _target_achievement(self, ax, data: dict) -> None:
+        """Physical inverse-design result: target vs current vs best candidate.
+
+        This is intentionally not the auto-optimisation "before/after" chart.
+        Inverse design asks whether a requested performance target can be met.
+        """
+        target = data.get("target")
+        current = data.get("current")
+        best = data.get("best")
+        rows = []
+        for label, value in (("当前系统", current), ("最佳正式候选", best)):
+            if isinstance(value, (int, float)) and np.isfinite(float(value)):
+                rows.append((label, float(value)))
+        if not rows:
+            self._empty(ax, data.get("message", "暂无目标达成数据"))
+            return
+        x = np.arange(len(rows), dtype=float)
+        values = [value for _label, value in rows]
+        bars = ax.bar(x, values, width=0.52)
+        ax.set_xticks(x)
+        ax.set_xticklabels([label for label, _value in rows], rotation=0, ha="center")
+        self._annotate_bars(ax, bars, values, horizontal=False, enabled=True)
+        if isinstance(target, (int, float)) and np.isfinite(float(target)):
+            target_value = float(target)
+            ax.axhline(target_value, linestyle="--", linewidth=1.8, label=f"设计目标 {target_value:.3g}%")
+            ax.legend(loc="best")
+            ax.set_ylim(0, max(100.0, target_value * 1.12, max(values) * 1.12))
+        else:
+            ax.set_ylim(0, max(100.0, max(values) * 1.12))
+
+    def _histogram(self, ax, data: dict) -> None:
+        values = np.asarray(data.get("values", []), dtype=float)
+        values = values[np.isfinite(values)]
+        if not values.size:
+            self._empty(ax, data.get("message", "暂无分布数据"))
+            return
+        bins = int(data.get("bins", min(24, max(8, int(np.sqrt(values.size)) + 2))) or 12)
+        ax.hist(values, bins=bins, alpha=0.78, edgecolor=theme.SURFACE, linewidth=0.55)
+        for key, label, style in (
+            ("mean", "平均值", "-"),
+            ("p05", "P05", ":"),
+            ("threshold", "达标阈值", "--"),
+        ):
+            value = data.get(key)
+            if isinstance(value, (int, float)) and np.isfinite(float(value)):
+                ax.axvline(float(value), linestyle=style, linewidth=1.6, label=f"{label} {float(value):.2f}%")
+        ax.legend(loc="best", fontsize=9.0)
 
 
     def _adjustment_trajectory(self, ax, data: dict) -> None:
@@ -922,7 +1206,10 @@ class Canvas2DMixin:
             y = np.arange(z.shape[0], dtype=float)
         fraction = data.get("auto_crop_fraction")
         if fraction is not None:
-            rows, columns = _field_crop_slices(z, np.empty((0, 0)), fraction=float(fraction))
+            rows, columns = _field_crop_slices(
+                z, np.empty((0, 0)), fraction=float(fraction),
+                fill_fraction=float(data.get("display_fill_fraction", 0.67) or 0.67),
+            )
             z = z[rows, columns]
             x = x[columns]
             y = y[rows]
@@ -1008,8 +1295,8 @@ class Canvas2DMixin:
             inset.set_xticks([0.0, 1.0])
             inset.set_xticklabels(["0", "1"])
             inset.set_yticks([])
-            inset.set_title("mean(|SHAP|)", fontsize=8, pad=2)
-        ax.text(0.0, 1.01, str(data.get("summary", "")), transform=ax.transAxes, ha="left", va="bottom", fontsize=9.3, color=theme.CHART_GRAY)
+            inset.set_title("平均 |SHAP|", fontsize=8, pad=2)
+        ax.text(0.0, 1.01, str(data.get("summary", "")), transform=ax.transAxes, ha="left", va="bottom", fontsize=10.8, color=theme.CHART_GRAY)
         ax.text(0.99, 0.015, "参数值：低  ◄───────►  高", transform=ax.transAxes, ha="right", va="bottom", fontsize=8.5, color=theme.CHART_GRAY)
 
     @staticmethod
@@ -1074,14 +1361,14 @@ class Canvas2DMixin:
         current_x = data.get("current_x")
         current_y = data.get("current_y")
         if isinstance(current_x, (int, float)) and isinstance(current_y, (int, float)):
-            ax.scatter([float(current_x)], [float(current_y)], s=145, marker="*", color=theme.CHART_RED, edgecolors="#111827", linewidths=0.65, zorder=8, label="当前方案")
+            ax.scatter([float(current_x)], [float(current_y)], s=145, marker="*", color=theme.CHART_RED, edgecolors="#111827", linewidths=0.65, zorder=8, label="当前系统")
             has_content = True
         ax.axhline(0.0, color=theme.CHART_REFERENCE, linestyle="--", linewidth=1.0, zorder=1)
 
         if has_content:
             correlation = self._rank_correlation(x, y)
             domain = data.get("within_training_domain")
-            domain_text = "训练域内" if domain is True else "训练域外" if domain is False else "训练域状态未知"
+            domain_text = "在训练范围内" if domain is True else "超出训练范围" if domain is False else "训练范围未知"
             rho = f"{correlation:+.2f}" if correlation is not None else "—"
             ax.text(0.985, 0.975, f"n = {count}\nSpearman ρ = {rho}\n{domain_text}", transform=ax.transAxes, ha="right", va="top", fontsize=9, color="#111827", bbox={"boxstyle": "round,pad=0.35", "facecolor": "white", "edgecolor": theme.CHART_REFERENCE, "alpha": 0.92})
             ax.legend(loc="lower left", fontsize=8.5, frameon=True, ncol=2)
@@ -1106,8 +1393,15 @@ class Canvas2DMixin:
             x = np.arange(z.shape[1], dtype=float)
         if len(y) != z.shape[0]:
             y = np.arange(z.shape[0], dtype=float)
-        fraction = float(data.get("auto_crop_fraction", np.exp(-2.0)) or np.exp(-2.0))
-        row_slice, column_slice = _field_crop_slices(z, contour, fraction=fraction)
+        crop_fraction = data.get("auto_crop_fraction")
+        contour_fraction = float(crop_fraction if crop_fraction is not None else np.exp(-2.0))
+        if crop_fraction is None:
+            row_slice, column_slice = slice(0, z.shape[0]), slice(0, z.shape[1])
+        else:
+            row_slice, column_slice = _field_crop_slices(
+                z, contour, fraction=float(crop_fraction),
+                fill_fraction=float(data.get("display_fill_fraction", 0.67) or 0.67),
+            )
         z_view = z[row_slice, column_slice]
         contour_view = contour[row_slice, column_slice] if contour.shape == z.shape else np.empty((0, 0))
         x_view = x[column_slice]
@@ -1124,7 +1418,7 @@ class Canvas2DMixin:
         image = ax.imshow(z_view, origin="lower", aspect="equal", extent=extent)
         self.figure.colorbar(image, ax=ax, shrink=0.78, label="强度")
         if contour_view.size and float(np.nanmax(contour_view)) > 0.0:
-            level = float(np.nanmax(contour_view)) * fraction
+            level = float(np.nanmax(contour_view)) * contour_fraction
             ax.contour(
                 x_view,
                 y_view,

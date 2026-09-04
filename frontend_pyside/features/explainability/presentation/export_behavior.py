@@ -38,7 +38,7 @@ class ExplainabilityExportMixin:
             return
         dialog = TablePreviewDialog(
             "高贡献样本列表",
-            ["样本 ID", "总绝对贡献", "主导特征", "主导贡献", "输出"],
+            ["样本 ID", "总绝对贡献", "候选主导特征", "候选贡献", "输出"],
             rows,
             self,
         )
@@ -150,6 +150,9 @@ class ExplainabilityExportMixin:
         ):
             outline.body.addWidget(self._report_outline_row(number, title))
         outline.body.addStretch(1)
+        back_button = SecondaryButton("返回分析")
+        back_button.clicked.connect(lambda: self._set_main_step(0))
+        outline.body.addWidget(back_button)
         self.report_select_button = SecondaryButton("选择报告内容")
         self.report_select_button.clicked.connect(self._select_report_contents)
         outline.body.addWidget(self.report_select_button)

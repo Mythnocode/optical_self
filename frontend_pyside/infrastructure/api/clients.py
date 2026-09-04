@@ -4,6 +4,7 @@ from frontend_pyside.api.headless_dataset_client import HeadlessDatasetClient
 from frontend_pyside.api.multipath_client import MultiPathClient
 from frontend_pyside.api.optimization_client import OptimizationClient
 from frontend_pyside.api.scan_client import ScanClient
+from frontend_pyside.api.tolerance_client import ToleranceClient
 
 
 class JobClient:
@@ -23,6 +24,9 @@ class JobClient:
 
     def get_result(self, key: str, job_id: str) -> None:
         self.api.get(key, f"/jobs/{job_id}/result")
+
+    def retry(self, key: str, job_id: str) -> None:
+        self.api.post(key, f"/jobs/{job_id}/retry", {})
 
     def get_live_result_local(self, key: str, job_id: str) -> None:
         self.api.get(key, f"/jobs/{job_id}/live-result-local")
@@ -96,4 +100,5 @@ __all__ = [
     "ScanClient",
     "SimulationClient",
     "TrainingClient",
+    "ToleranceClient",
 ]

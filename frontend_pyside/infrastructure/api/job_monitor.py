@@ -74,7 +74,18 @@ class CentralJobMonitor(QObject):
                 self.socket.open(QUrl(self.url))
             else:
                 self._send_subscribe()
-        self._sync_fallback_timer(immediate=True)
+
+        # Always perform one immediate HTTP status reconciliation, even when the
+        # WebSocket is already connected. Very fast jobs can finish between the
+        # POST response and the subscribe message; the server does not replay an
+        # already-emitted terminal event, so relying on WebSocket-only delivery
+        # can leave the UI permanently in "等待后端". The in-flight guard and
+        # unsubscribe-on-terminal logic make this one-shot request safe when a
+        # WebSocket event arrives first.
+        if job_id not in self._poll_inflight:
+            self._poll_inflight.add(job_id)
+            self.api.get(f"job_monitor.status.{job_id}", f"/jobs/{job_id}")
+        self._sync_fallback_timer(immediate=False)
 
     def unsubscribe(self, job_id: str) -> None:
         job_id = str(job_id or "")
@@ -105,7 +116,13 @@ class CentralJobMonitor(QObject):
             self.socket.close()
 
     def _sync_fallback_timer(self, *, immediate: bool = False) -> None:
-        should_poll = bool(self._subscribed_jobs) and not self._connected
+        # Keep a low-frequency HTTP reconciliation active even while the
+        # WebSocket is connected. WebSocket delivery is the low-latency path,
+        # but terminal events can be emitted before a newly-created job's
+        # subscription reaches the server. The HTTP poll closes that race and
+        # also repairs transient dropped events. Terminal handling unsubscribes
+        # the job immediately, so completed jobs do not keep polling.
+        should_poll = bool(self._subscribed_jobs)
         if should_poll:
             if immediate:
                 self._poll_subscriptions()
@@ -115,9 +132,6 @@ class CentralJobMonitor(QObject):
             self._poll_timer.stop()
 
     def _poll_subscriptions(self) -> None:
-        if self._connected:
-            self._poll_timer.stop()
-            return
         for job_id in tuple(self._subscribed_jobs):
             if job_id in self._poll_inflight:
                 continue
@@ -176,11 +190,11 @@ class CentralJobMonitor(QObject):
 
     def _on_connected(self) -> None:
         self._connected = True
-        self._poll_timer.stop()
         self._reconnect_timer.stop()
         self.connection_changed.emit(True)
         if self._subscribed_jobs:
             self._send_subscribe()
+        self._sync_fallback_timer()
 
     def _on_disconnected(self) -> None:
         self._connected = False

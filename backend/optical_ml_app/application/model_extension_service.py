@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import logging
 import threading
+import hashlib
+import json
 from collections import OrderedDict
 from collections.abc import Iterable, Sequence
+from pathlib import Path
 from typing import Any
 
 from backend.optical_ml_app.domain.errors import BackendApplicationError
@@ -21,6 +24,7 @@ from machine_learning.explainability.linkage_metadata import (
 from machine_learning.explainability.physics_features import PHYSICS_FEATURES
 
 _logger = logging.getLogger(__name__)
+_SHAP_CACHE_SCHEMA_VERSION = 3
 
 
 def _to_dict(payload: Any) -> dict[str, Any]:
@@ -123,13 +127,129 @@ class ModelExtensionService:
         self._shap_gate = threading.Semaphore(1)
         self._shap_cache_lock = threading.RLock()
         self._tree_explainer_cache: OrderedDict[tuple[str, str], Any] = OrderedDict()
+        self._dataset_rows_cache: OrderedDict[tuple[Any, ...], tuple[Any, dict[str, dict]]] = OrderedDict()
+        self._dataset_rows_cache_size = 4
+        # Content digests make packaged SHAP caches stable across ZIP extraction.
+        # Runtime mtime remains part of this *in-memory* digest cache key, so changed
+        # files are rehashed immediately; the persisted SHAP key itself is based on
+        # file contents and therefore survives copy/extract timestamp changes.
+        self._content_digest_cache: OrderedDict[tuple[str, int, int], str] = OrderedDict()
+        self._content_digest_cache_size = 32
+        self._shap_result_cache_dir = (
+            Path(self.model_registry.root).parent / "cache" / "shap"
+        )
+        self._shap_result_cache_dir.mkdir(parents=True, exist_ok=True)
+
+    @staticmethod
+    def _mtime_ns(path: Path) -> int:
+        try:
+            return int(path.stat().st_mtime_ns)
+        except OSError:
+            return -1
+
+    def _stable_file_digest(self, path: Path) -> str:
+        try:
+            stat = path.stat()
+        except OSError:
+            return "missing"
+        key = (str(path.resolve()), int(stat.st_size), int(stat.st_mtime_ns))
+        with self._shap_cache_lock:
+            cached = self._content_digest_cache.pop(key, None)
+            if cached is not None:
+                self._content_digest_cache[key] = cached
+                return cached
+        digest = hashlib.sha256()
+        try:
+            with path.open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+            value = digest.hexdigest()
+        except OSError:
+            value = "missing"
+        with self._shap_cache_lock:
+            # Remove stale entries for the same path before inserting the current
+            # content fingerprint.  This keeps update invalidation deterministic.
+            for old_key in tuple(self._content_digest_cache):
+                if old_key[0] == key[0] and old_key != key:
+                    self._content_digest_cache.pop(old_key, None)
+            self._content_digest_cache[key] = value
+            while len(self._content_digest_cache) > self._content_digest_cache_size:
+                self._content_digest_cache.popitem(last=False)
+        return value
+
+    def _dataset_signature(self, dataset_id: str | None) -> tuple[Any, ...]:
+        if not dataset_id or self.dataset_store is None:
+            return (str(dataset_id or ""), "missing", "missing")
+        root = Path(self.dataset_store.root) / str(dataset_id)
+        return (
+            str(dataset_id),
+            self._stable_file_digest(root / "manifest.json"),
+            self._stable_file_digest(root / "samples.jsonl"),
+        )
+
+    def _model_shap_signature(self, model_id: str) -> tuple[str, str, str, str]:
+        root = Path(self.model_registry.root) / str(model_id)
+        return (
+            str(model_id),
+            self._stable_file_digest(root / "model.joblib"),
+            self._stable_file_digest(root / "preprocessing.joblib"),
+            self._stable_file_digest(root / "manifest.json"),
+        )
+
+    def _shap_cache_key(self, model_id: str, dataset_id: str | None, body: dict[str, Any]) -> str:
+        signature = {
+            "schema": _SHAP_CACHE_SCHEMA_VERSION,
+            "model": list(self._model_shap_signature(model_id)),
+            "dataset": list(self._dataset_signature(dataset_id)),
+            "request": body,
+        }
+        encoded = json.dumps(
+            signature,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            default=str,
+        ).encode("utf-8")
+        return hashlib.sha256(encoded).hexdigest()
+
+    def _read_shap_cache(self, cache_key: str) -> dict[str, Any] | None:
+        path = self._shap_result_cache_dir / f"{cache_key}.json"
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, OSError, json.JSONDecodeError):
+            return None
+        if not isinstance(payload, dict):
+            return None
+        result = dict(payload)
+        result["cache_hit"] = True
+        result["elapsed_ms"] = 0.0
+        return result
+
+    def _write_shap_cache(self, cache_key: str, payload: dict[str, Any]) -> None:
+        path = self._shap_result_cache_dir / f"{cache_key}.json"
+        tmp = path.with_suffix(".tmp")
+        try:
+            tmp.write_text(
+                json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
+                encoding="utf-8",
+            )
+            tmp.replace(path)
+        except (OSError, TypeError, ValueError):
+            try:
+                tmp.unlink(missing_ok=True)
+            except OSError:
+                pass
+            _logger.debug("SHAP result cache write skipped", exc_info=True)
 
     # ------------------------------------------------------------------
     
     # ------------------------------------------------------------------
 
     def _tree_explainer(self, shap_module: Any, model_id: str, model: Any, manifest: dict[str, Any]):
-        key = (str(model_id), str(manifest.get("created_at", manifest.get("dataset_id", ""))))
+        key = (
+            str(model_id),
+            repr(self.model_registry.artifact_signature(model_id)),
+        )
         with self._shap_cache_lock:
             cached = self._tree_explainer_cache.pop(key, None)
             if cached is not None:
@@ -162,13 +282,30 @@ class ModelExtensionService:
                 message="Dataset-backed SHAP requires a configured dataset store",
                 context={"dataset_id": dataset_id},
             )
+        signature = self._dataset_signature(dataset_id) + (tuple(feature_paths),)
+        with self._shap_cache_lock:
+            cached = self._dataset_rows_cache.pop(signature, None)
+            if cached is not None:
+                self._dataset_rows_cache[signature] = cached
         try:
-            manifest = self.dataset_store.load_manifest(dataset_id)
-            records = [
-                record
-                for record in self.dataset_store.iter_samples(dataset_id)
-                if bool(record.get("valid", True))
-            ]
+            if cached is not None:
+                manifest, by_id = cached
+            else:
+                manifest = self.dataset_store.load_manifest(dataset_id)
+                records = [
+                    record
+                    for record in self.dataset_store.iter_samples(dataset_id)
+                    if bool(record.get("valid", True))
+                ]
+                by_id = {
+                    str(record.get("sample_id")): record
+                    for record in records
+                    if record.get("sample_id") is not None
+                }
+                with self._shap_cache_lock:
+                    self._dataset_rows_cache[signature] = (manifest, by_id)
+                    while len(self._dataset_rows_cache) > self._dataset_rows_cache_size:
+                        self._dataset_rows_cache.popitem(last=False)
         except (FileNotFoundError, OSError, ValueError) as exc:
             raise BackendApplicationError(
                 code="SHAP_DATASET_NOT_FOUND",
@@ -177,11 +314,6 @@ class ModelExtensionService:
                 context={"dataset_id": dataset_id, "error_type": type(exc).__name__},
             ) from exc
 
-        by_id = {
-            str(record.get("sample_id")): record
-            for record in records
-            if record.get("sample_id") is not None
-        }
         if not by_id:
             raise BackendApplicationError(
                 code="SHAP_DATASET_EMPTY",
@@ -297,6 +429,11 @@ class ModelExtensionService:
                     "requested_dataset_id": requested_dataset_id,
                 },
             )
+
+        cache_key = self._shap_cache_key(model_id, dataset_id, body)
+        cached_result = self._read_shap_cache(cache_key)
+        if cached_result is not None:
+            return cached_result
 
         synthetic_samples = False
         data_source = "registered_dataset"
@@ -585,7 +722,7 @@ class ModelExtensionService:
             )
 
         elapsed_ms = (time.perf_counter() - started) * 1000.0
-        return {
+        response = {
             "model_id": model_id,
             "dataset_id": dataset_id,
             "data_source": data_source,
@@ -609,4 +746,7 @@ class ModelExtensionService:
             "sample_count": len(X),
             "background_sample_count": len(background),
             "elapsed_ms": round(elapsed_ms, 1),
+            "cache_hit": False,
         }
+        self._write_shap_cache(cache_key, response)
+        return response

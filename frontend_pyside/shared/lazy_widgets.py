@@ -56,7 +56,40 @@ class _LazyContainerSupport:
         return released
 
 
+class CurrentPageStackedWidget(QStackedWidget):
+    """A stacked widget whose size hint follows only the visible page.
+
+    Qt's default QStackedWidget can reserve the largest hidden page, which created
+    a large fake blank area in the fixed-structure research workflow.
+    """
+
+    def sizeHint(self):
+        current = self.currentWidget()
+        return current.sizeHint() if current is not None else super().sizeHint()
+
+    def minimumSizeHint(self):
+        current = self.currentWidget()
+        return current.minimumSizeHint() if current is not None else super().minimumSizeHint()
+
+    def setCurrentIndex(self, index: int) -> None:
+        super().setCurrentIndex(index)
+        self.updateGeometry()
+        current = self.currentWidget()
+        if current is not None:
+            current.updateGeometry()
+
+
 class LazyStackedWidget(_LazyContainerSupport, QStackedWidget):
+    # Keep long model/parameter workflows on the outer page scroll. Hidden lazy
+    # pages must not reserve the height of the largest workflow page.
+    def sizeHint(self):
+        current = self.currentWidget()
+        return current.sizeHint() if current is not None else super().sizeHint()
+
+    def minimumSizeHint(self):
+        current = self.currentWidget()
+        return current.minimumSizeHint() if current is not None else super().minimumSizeHint()
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self._init_lazy_support()
@@ -72,7 +105,10 @@ class LazyStackedWidget(_LazyContainerSupport, QStackedWidget):
             return None
         self.touch(index)
         if index in self._loaded or index in self._loading:
-            return self.widget(index)
+            widget = self.widget(index)
+            if widget is not None and self.currentIndex() == index:
+                QTimer.singleShot(0, self._sync_current_geometry)
+            return widget
         factory = self._factories.get(index)
         if factory is None:
             return self.widget(index)
@@ -87,6 +123,7 @@ class LazyStackedWidget(_LazyContainerSupport, QStackedWidget):
             self._loaded.add(index)
             if current:
                 super().setCurrentIndex(index)
+            QTimer.singleShot(0, self._sync_current_geometry)
             return widget
         finally:
             self._loading.discard(index)
@@ -104,9 +141,33 @@ class LazyStackedWidget(_LazyContainerSupport, QStackedWidget):
         super().setCurrentIndex(current)
         return True
 
-    def setCurrentIndex(self, index: int) -> None:  
+    def setCurrentIndex(self, index: int) -> None:
         self.ensure_loaded(index)
         super().setCurrentIndex(index)
+        self._sync_current_geometry()
+        QTimer.singleShot(0, self._sync_current_geometry)
+
+    def _sync_current_geometry(self) -> None:
+        try:
+            current = self.currentWidget()
+            if current is None:
+                return
+            layout = current.layout()
+            if layout is not None:
+                layout.invalidate()
+                layout.activate()
+            current.updateGeometry()
+            required = max(current.minimumSizeHint().height(), current.sizeHint().height())
+            # The parent page owns scrolling; keep the lazy stack tall enough for
+            # the selected workflow instead of compressing nested forms.
+            self.setMinimumHeight(max(0, required))
+            self.updateGeometry()
+            parent = self.parentWidget()
+            while parent is not None:
+                parent.updateGeometry()
+                parent = parent.parentWidget()
+        except RuntimeError:
+            pass
 
     def ensure_current_deferred(self) -> None:
         QTimer.singleShot(0, lambda: self.ensure_loaded(self.currentIndex()))
@@ -195,4 +256,4 @@ class LazyTabWidget(_LazyContainerSupport, QTabWidget):
             self.unload(index)
 
 
-__all__ = ["LazyStackedWidget", "LazyTabWidget"]
+__all__ = ["CurrentPageStackedWidget", "LazyStackedWidget", "LazyTabWidget"]

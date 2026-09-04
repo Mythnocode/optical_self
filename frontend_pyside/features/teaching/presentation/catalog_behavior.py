@@ -67,7 +67,7 @@ class TeachingCatalogMixin:
         workflow.body.addWidget(InfoRow("1", "观察初始状态并阅读任务"))
         workflow.body.addWidget(InfoRow("2", "先预测参数变化方向"))
         workflow.body.addWidget(InfoRow("3", "调节核心参数并观察主图"))
-        workflow.body.addWidget(InfoRow("4", "完成记录、诊断和方案比较"))
+        workflow.body.addWidget(InfoRow("4", "完成记录、诊断和设计比较"))
         workflow.body.addWidget(InfoRow("5", "评分并导出实验报告"))
         detail_layout.addWidget(workflow)
 

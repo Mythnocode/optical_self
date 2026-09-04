@@ -17,6 +17,7 @@ class DeferredPageHost(QWidget):
 
 
     navigateRequested = Signal(str)
+    assistantActionRequested = Signal(object)
     pageReady = Signal(object)
 
     def __init__(self, spec, context, parent=None, *, auto_load: bool = False) -> None:
@@ -90,6 +91,8 @@ class DeferredPageHost(QWidget):
             record_perf("page_widget_build", build_timer.elapsed(), page=self.spec.key)
             if hasattr(page, "navigateRequested"):
                 page.navigateRequested.connect(self.navigateRequested.emit)
+            if hasattr(page, "assistantActionRequested"):
+                page.assistantActionRequested.connect(self.assistantActionRequested.emit)
             self._install(page)
             record_perf("page_build", timer.elapsed(), page=self.spec.key)
             self.pageReady.emit(page)

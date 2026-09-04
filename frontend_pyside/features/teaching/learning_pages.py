@@ -80,50 +80,40 @@ class TeachingHomePage(QWidget):
         root.setContentsMargins(0, 0, 0, 0)
         root.setSpacing(8)
 
-        intro = Card("学习路线", compact=True)
-        message = QLabel(
-            "教学中心不是简化版工作台。这里训练三种能力：根据复场重叠理解原因、根据仪器证据完成装调、根据目标和约束设计透镜系统。"
-        )
-        message.setWordWrap(True)
-        intro.body.addWidget(message)
-        route = LearningRouteWidget()
-        route.setMinimumHeight(105)
-        intro.body.addWidget(route)
-        root.addWidget(intro)
+        route_card = Card("学习路线", compact=True)
+        top_row = QHBoxLayout()
+        top_row.addWidget(QLabel("原理 → 实验诊断 → 系统设计"), 1)
+        self.overall_metric = InlineMetric("总体进度", "0", "%")
+        top_row.addWidget(self.overall_metric)
+        route_card.body.addLayout(top_row)
 
-        self.metrics_row = QHBoxLayout()
-        self.overall_metric = InlineMetric("总体学习进度", "0", "%")
-        self.principle_metric = InlineMetric("原理掌握", "0", "%")
+        route = LearningRouteWidget()
+        route.setMinimumHeight(100)
+        route_card.body.addWidget(route)
+
+        self.principle_metric = InlineMetric("原理", "0", "%")
         self.diagnostic_metric = InlineMetric("实验诊断", "0", "%")
         self.design_metric = InlineMetric("系统设计", "0", "%")
-        for metric in (self.overall_metric, self.principle_metric, self.diagnostic_metric, self.design_metric):
-            metric.value_label.setMinimumWidth(42)
-            self.metrics_row.addWidget(metric)
-        root.addLayout(self.metrics_row)
-
-        grid = QGridLayout()
-        grid.setHorizontalSpacing(8)
-        grid.setVerticalSpacing(8)
-        cards = (
-            ("模场失配原理", "左侧保留完整耦合链路，右侧放大横向、轴向、角度、尺寸和曲率失配。", "principle", "开始学习"),
-            ("实验诊断与装调", "在固定仪器平台上选择测量证据，并通过2D光路和3D空间装调恢复耦合。", "diagnostic", "进入实验"),
-            ("单至四透镜系统设计", "从目标、效率分解、镜片角色、焦距筛选到分轮优化，训练完整设计决策链。", "design", "开始设计"),
-            ("综合挑战与工作台验证", "完成自由诊断或自由设计后，将当前状态送入正式工作台进行复场验证。", "diagnostic", "进入挑战"),
+        modules = (
+            ("模场失配原理", self.principle_metric, "principle", "继续"),
+            ("实验诊断与装调", self.diagnostic_metric, "diagnostic", "进入"),
+            ("单至四透镜系统设计", self.design_metric, "design", "进入"),
         )
-        for index, (title, description, key, action) in enumerate(cards):
-            card = FeatureCard(title, description, action, details=("教学近似", "半自由 / 自由", "正式验证入口"))
-            card.setMaximumHeight(175)
-            card.activated.connect(lambda k=key: self.sectionRequested.emit(k))
-            grid.addWidget(card, index // 2, index % 2)
-        root.addLayout(grid)
-        root.addStretch(1)
+        for title, metric, key, action in modules:
+            row = QHBoxLayout()
+            row.addWidget(QLabel(title), 1)
+            metric.value_label.setMinimumWidth(42)
+            row.addWidget(metric)
+            button = SecondaryButton(action)
+            button.clicked.connect(lambda checked=False, k=key: self.sectionRequested.emit(k))
+            row.addWidget(button)
+            route_card.body.addLayout(row)
 
-        boundary = Card("教学边界", compact=True)
-        text = QLabel("教学中心使用本地近似即时反馈，用于理解趋势、训练诊断和形成设计思路；正式数值、像差和镜片处方结果必须在工作台中验证。")
-        text.setWordWrap(True)
-        text.setObjectName("helperText")
-        boundary.body.addWidget(text)
-        root.addWidget(boundary)
+        challenge = SecondaryButton("综合挑战")
+        challenge.clicked.connect(lambda: self.sectionRequested.emit("diagnostic"))
+        route_card.body.addWidget(challenge)
+        root.addWidget(route_card)
+        root.addStretch(1)
         self.refresh()
 
     def refresh(self) -> None:

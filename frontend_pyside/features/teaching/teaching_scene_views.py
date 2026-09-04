@@ -691,3 +691,7 @@ class TeachingOpticalScene3D(QWidget):
 
 
 __all__ = ["SceneInstrument", "TeachingOpticalScene3D", "TeachingOverview2D"]
+
+# Teaching 3D is now a real Qt Quick 3D View3D scene.  Keep this compatibility alias so
+# existing diagnostic/workbench code can use the same public API without a page rewrite.
+from .teaching_quick3d import TeachingQuick3DView as TeachingOpticalScene3D

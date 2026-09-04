@@ -28,10 +28,14 @@ class InfoRow(QWidget):
         key.setMinimumWidth(94)
         val = QLabel(value)
         val.setWordWrap(True)
+        self.key_label = key
+        self.value_label = val
+        self.status_badge = None
         layout.addWidget(key)
         layout.addWidget(val, 1)
         if status:
-            layout.addWidget(Badge(status, tone))
+            self.status_badge = Badge(status, tone)
+            layout.addWidget(self.status_badge)
 
 class PageScrollArea(QScrollArea):
 

@@ -248,10 +248,4 @@ class SurfacePropertyMixin:
 
     def _rebuild_summary(self):
         project = self.context.project
-        groups = {surface.group_id for surface in project.surfaces if surface.group_id}
-        lens_groups = {group for group in groups if group.upper().startswith("L")}
-        special_count = sum(1 for surface in project.surfaces if surface.surface_type not in {"球面", "非球面", "平面"})
-        length = sum(surface.thickness_mm for surface in project.surfaces)
-        self.stats_badge.setText(
-            f"{len(lens_groups)} 片透镜｜{len(project.surfaces)} 个表面｜{special_count} 个特殊面｜系统长 {length:.1f} mm"
-        )
+        self.stats_badge.setText(f"{len(project.surfaces)} 面")

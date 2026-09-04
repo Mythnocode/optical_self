@@ -240,8 +240,8 @@ class OpticalSimulationEngine(SimulationPort):
 
 
     name = "headless"
-    version = "native-optical-core-v3.1"
-    algorithm_version = "coupling-research-task-graph-v4-batch-workspace"
+    version = "native-optical-core-v3.2"
+    algorithm_version = "coupling-research-task-graph-v5-unpolarized-fresnel"
 
     def __init__(
         self,
@@ -258,9 +258,21 @@ class OpticalSimulationEngine(SimulationPort):
             else ByteBoundLRUCache(trace_cache_max_bytes)
         )
 
+    def clear_prepared_coupling_cache(self) -> None:
+        """Release dense prepared-coupling state without discarding the ray cache.
+
+        Long parameter scans can visit hundreds of unique receiver offsets.  A
+        PreparedCouplingProblem intentionally caches generated receiver modes and
+        evaluations for interactive reuse, but those dense 2-D fields are not
+        useful once a scan batch has reduced them to scalar response metrics.
+        Clearing only this runtime cache keeps scan memory bounded while preserving
+        the shared geometric trace cache and does not change any optical calculation.
+        """
+        self.hybrid_pipeline.clear_caches()
+
     def clear_caches(self) -> None:
         self._shared_trace_cache.clear()
-        self.hybrid_pipeline.clear_caches()
+        self.clear_prepared_coupling_cache()
         try:
             from optical_core.physics.wave.solvers.advanced_propagation import clear_all_propagation_caches
             clear_all_propagation_caches()
@@ -361,6 +373,8 @@ class OpticalSimulationEngine(SimulationPort):
             context.shared_trace_cache = self._shared_trace_cache
             analyses = normalize_analyses(request)
             add_timing("参数校验与编译", compile_started)
+            if progress is not None:
+                progress.update(0.07, "optical_engine.compiled")
             unsupported = [spec.name for spec in analyses if DEFAULT_ANALYSIS_REGISTRY.get(spec.name) is None]
             if unsupported:
                 raise AnalysisNotImplementedError(unsupported)
@@ -387,6 +401,8 @@ class OpticalSimulationEngine(SimulationPort):
             graph = build_task_graph(analyses, context)
             ordered = graph.topological_order()
             add_timing("任务图构建", graph_started)
+            if progress is not None:
+                progress.update(0.10, "optical_engine.graph_ready")
             final = EnginePartialResult.empty()
             analysis_nodes = [node for node in ordered if node.kind == "analysis"]
             completed_analyses = 0
@@ -400,15 +416,30 @@ class OpticalSimulationEngine(SimulationPort):
                 if node.kind == "scene":
                     continue
                 if node.kind == "trace":
+                    if progress is not None:
+                        progress.update(0.14, "optical_engine.trace.running")
                     trace_started = time.perf_counter()
-                    context.get_or_create_trace(dict(node.payload or {}))
+                    if progress is not None:
+                        context.trace_progress_callback = lambda fraction: progress.update(
+                            0.14 + 0.28 * max(0.0, min(1.0, float(fraction))),
+                            "optical_engine.trace.running",
+                        )
+                    try:
+                        context.get_or_create_trace(dict(node.payload or {}))
+                    finally:
+                        context.trace_progress_callback = None
                     add_timing("光线追迹", trace_started)
+                    if progress is not None:
+                        progress.update(0.42, "optical_engine.trace.completed")
                     continue
                 if node.kind != "analysis":
                     raise RuntimeError(f"unknown optical task kind: {node.kind!r}")
 
                 spec = node.payload
                 definition = DEFAULT_ANALYSIS_REGISTRY.resolve(spec.name)
+                if progress is not None:
+                    analysis_start_fraction = 0.42 + 0.48 * completed_analyses / max(1, len(analysis_nodes))
+                    progress.update(analysis_start_fraction, f"optical_engine.analysis.{spec.name}.running")
                 analysis_started = time.perf_counter()
                 if definition.category is AnalysisCategory.GEOMETRIC:
                     partial = self.geometric_pipeline.evaluate(
@@ -446,11 +477,11 @@ class OpticalSimulationEngine(SimulationPort):
                 add_timing(timing_name, analysis_started)
                 completed_analyses += 1
                 fraction = (
-                    0.08 + 0.88 * completed_analyses / len(analysis_nodes)
-                    if analysis_nodes else 0.96
+                    0.42 + 0.48 * completed_analyses / len(analysis_nodes)
+                    if analysis_nodes else 0.90
                 )
                 if progress is not None:
-                    progress.update(fraction, f"optical_engine.analysis.{spec.name}")
+                    progress.update(fraction, f"optical_engine.analysis.{spec.name}.completed")
                     preview_arrays = _preview_array_payload(partial.arrays)
                     preview_result = None
                     if preview_arrays:
@@ -512,7 +543,7 @@ class OpticalSimulationEngine(SimulationPort):
             )
             final.metadata["stage_timings_ms"] = dict(stage_timings_ms)
             if progress is not None:
-                progress.update(1.0, "optical_engine.completed")
+                progress.update(0.94, "optical_engine.finalizing")
 
             return build_completed_result(
                 request=request,
@@ -566,7 +597,7 @@ class OpticalSimulationEngine(SimulationPort):
         )
         partial = pipeline.evaluate(request)
         if progress is not None:
-            progress.update(1.0, "optical_engine.multipath.completed")
+            progress.update(0.94, "optical_engine.multipath.finalizing")
         return build_completed_result(
             request=request,
             engine_name=self.name,
@@ -596,18 +627,40 @@ class OpticalSimulationEngine(SimulationPort):
     ) -> list[SimulationResult]:
 
         if worker_pool is not None:
-            return list(worker_pool.map(requests))
+            return list(
+                worker_pool.map(
+                    requests,
+                    cancellation=cancellation,
+                    progress=progress,
+                    stage="batch.evaluate",
+                )
+            )
         if int(max_workers) <= 1:
-            return [
-                self.evaluate(request, cancellation=cancellation, progress=progress)
-                for request in requests
-            ]
+            items = tuple(requests)
+            results: list[SimulationResult] = []
+            for index, request in enumerate(items):
+                results.append(
+                    self.evaluate(request, cancellation=cancellation, progress=None)
+                )
+                if progress is not None and items:
+                    progress.update(
+                        (index + 1) / len(items),
+                        "batch.evaluate",
+                        completed_items=index + 1,
+                        total_items=len(items),
+                    )
+            return results
         from .worker_pool import OpticalWorkerPool
         with OpticalWorkerPool(
             max_workers=int(max_workers),
             trace_cache_max_bytes=self._shared_trace_cache.max_bytes,
         ) as pool:
-            return pool.map(requests)
+            return pool.map(
+                requests,
+                cancellation=cancellation,
+                progress=progress,
+                stage="batch.evaluate",
+            )
 
     @staticmethod
     def _is_cancelled(cancellation: CancellationTokenPort | Any | None) -> bool:

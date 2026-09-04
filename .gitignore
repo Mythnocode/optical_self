@@ -37,3 +37,12 @@ logs/
 *.swo
 .DS_Store
 Thumbs.db
+
+# ===== Unity =====
+unity_experiments/**/Library/
+unity_experiments/**/Temp/
+unity_experiments/**/Obj/
+unity_experiments/**/Logs/
+unity_experiments/**/UserSettings/
+unity_experiments/**/Build/
+unity_experiments/**/Builds/

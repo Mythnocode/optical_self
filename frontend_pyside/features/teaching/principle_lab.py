@@ -407,6 +407,7 @@ class PrincipleLearningPage(QWidget):
 
     def _show_formula(self) -> None:
         dialog = QDialog(self)
+        dialog.setSizeGripEnabled(True)
         dialog.setWindowTitle(f"{self.lesson.title}：原理与公式")
         dialog.resize(560, 260)
         layout = QVBoxLayout(dialog)

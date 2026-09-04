@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "optical-ml-platform"
-version = "1.5.0"
+version = "1.5.6"
 description = "基于激光耦合的仿真与参数优化研究平台"
 requires-python = ">=3.11,<3.14"
 dynamic = ["dependencies"]

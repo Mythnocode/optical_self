@@ -18,6 +18,7 @@ class TablePreviewDialog(QDialog):
     def __init__(self, title: str, headers: list[str], rows: list[list[object]], parent=None):
         super().__init__(parent)
         self.setWindowTitle(title)
+        self.setSizeGripEnabled(True)
         self.resize(860, 520)
         root = QVBoxLayout(self)
         table = DataTable(len(rows), len(headers))
@@ -47,7 +48,9 @@ class ReportContentDialog(QDialog):
     def __init__(self, options: ReportContentOptions | None = None, parent=None):
         super().__init__(parent)
         self.setWindowTitle("选择解释报告内容")
-        self.setMinimumWidth(440)
+        self.setSizeGripEnabled(True)
+        self.resize(520, 420)
+        self.setMinimumSize(420, 320)
         options = options or ReportContentOptions()
         root = QVBoxLayout(self)
         label = QLabel("所选内容将控制解释报告结构；至少保留一个部分。")

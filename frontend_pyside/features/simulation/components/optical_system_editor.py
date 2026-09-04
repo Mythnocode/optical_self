@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QMenu,
+    QSizePolicy,
     QTabWidget,
     QToolButton,
     QVBoxLayout,
@@ -30,7 +31,7 @@ from frontend_pyside.shared.icons import icon
 from frontend_pyside.resources import theme_tokens as theme
 from frontend_pyside.shared.lifecycle import Debouncer
 
-from .surface_delegate import SurfaceTypeDelegate
+from .surface_delegate import MaterialDelegate, SurfaceFloatDelegate, SurfaceTypeDelegate
 
 
 from .editor_parts import SurfaceCommandMixin, SurfacePropertyMixin, SurfaceTableMixin
@@ -69,19 +70,32 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
 
         toolbar = QHBoxLayout()
         toolbar.setSpacing(6)
+        # Surface count is already shown once in the window header.  Keep the
+        # compatibility badge object for mixins, but do not repeat the same count
+        # in the editing toolbar.
         self.stats_badge = Badge("", "info")
-        toolbar.addWidget(self.stats_badge)
+        self.stats_badge.hide()
+
+        self.search_toggle = QToolButton()
+        self.search_toggle.setObjectName("editorActionButton")
+        self.search_toggle.setText("搜索")
+        self.search_toggle.setCheckable(True)
+        self.search_toggle.setToolTip("按面号、元件组、名称、材料、类型或关键参数搜索；Ctrl+F 也可聚焦搜索")
+        toolbar.addWidget(self.search_toggle)
 
         self.search = QLineEdit()
-        self.search.setPlaceholderText("搜索面号、元件组、名称、材料、类型或关键参数")
+        self.search.setPlaceholderText("搜索 Surface…")
         self.search.setClearButtonEnabled(True)
-        self.search.setMinimumWidth(250)
+        self.search.setMinimumWidth(220)
+        self.search.setVisible(False)
         toolbar.addWidget(self.search, 1)
 
         self.lens_filter = QComboBox()
-        self.lens_filter.setMinimumWidth(128)
-        self.lens_filter.setToolTip("按元件组筛选")
+        self.lens_filter.setMinimumWidth(118)
+        self.lens_filter.setMaximumWidth(150)
+        self.lens_filter.setToolTip("可选：按元件组筛选；Surface 顺序本身不依赖固定双表面镜片结构")
         toolbar.addWidget(self.lens_filter)
+        toolbar.addStretch(1)
 
         add_button = QToolButton()
         add_button.setObjectName("editorActionButton")
@@ -90,8 +104,9 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
         add_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         add_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         add_menu = QMenu(add_button)
-        add_lens_action = add_menu.addAction(icon("add", theme.PRIMARY, 16), "新增透镜（双表面）")
-        add_surface_action = add_menu.addAction(icon("add", theme.PRIMARY, 16), "新增普通表面")
+        add_lens_action = add_menu.addAction(icon("add", theme.PRIMARY, 16), "新增双面透镜")
+        add_surface_to_group_action = add_menu.addAction(icon("add", theme.PRIMARY, 16), "插入面到当前元件组")
+        add_surface_action = add_menu.addAction(icon("add", theme.PRIMARY, 16), "新增独立表面")
         add_menu.addSeparator()
         special_menu = add_menu.addMenu("新增特殊表面")
         special_actions = {}
@@ -132,15 +147,22 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
             columns_menu.addAction(action)
         columns_button.setMenu(columns_menu)
         toolbar.addWidget(columns_button)
+
+        self.properties_button = QToolButton()
+        self.properties_button.setObjectName("editorActionButton")
+        self.properties_button.setText("表面属性…")
+        self.properties_button.setToolTip("打开选中 Surface 的高级参数窗口；常用公共参数可直接在表格中编辑")
+        toolbar.addWidget(self.properties_button)
         root.addLayout(toolbar)
 
-        self.table_card = Card("镜头数据编辑器", compact=True)
+        self.table_card = Card("顺序表面编辑器", compact=True)
         table_header = QHBoxLayout()
-        hint = QLabel("公共列始终稳定；光栅、反射镜等专用参数在“关键参数”摘要与下方表面属性中编辑。")
+        hint = QLabel("按 Surface 顺序编辑；公共列双击直接修改，高级参数使用“表面属性…”。元件组只是可选标记，不限制一个元件必须有两个表面。")
         hint.setObjectName("helperText")
         hint.setWordWrap(True)
         table_header.addWidget(hint, 1)
         self.visible_count = Badge("0 / 0 面", "info")
+        self.visible_count.setVisible(False)
         table_header.addWidget(self.visible_count)
         self.table_card.body.addLayout(table_header)
 
@@ -160,6 +182,10 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
             | QAbstractItemView.EditTrigger.EditKeyPressed
         )
         self.table.setItemDelegateForColumn(self.COL_TYPE, SurfaceTypeDelegate(self.table))
+        self.table.setItemDelegateForColumn(self.COL_RADIUS, SurfaceFloatDelegate(self.table))
+        self.table.setItemDelegateForColumn(self.COL_THICKNESS, SurfaceFloatDelegate(self.table, minimum=0.0))
+        self.table.setItemDelegateForColumn(self.COL_MATERIAL, MaterialDelegate(self.table))
+        self.table.setItemDelegateForColumn(self.COL_APERTURE, SurfaceFloatDelegate(self.table, minimum=1.0e-9))
         header = self.table.horizontalHeader()
         header.setStretchLastSection(False)
         header.setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
@@ -242,8 +268,9 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
         footer.addWidget(self.next_button)
         auto_apply_hint = QLabel("修改完成后自动写入当前项目，并由完整镜头编辑器记录撤销历史。")
         auto_apply_hint.setObjectName("helperText")
-        footer.addStretch()
-        footer.addWidget(auto_apply_hint)
+        auto_apply_hint.setWordWrap(True)
+        auto_apply_hint.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        footer.addWidget(auto_apply_hint, 1)
         footer.addWidget(self.reset_button)
         footer.addWidget(self.apply_button)
         detail_body.addLayout(footer)
@@ -252,6 +279,7 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
         root.addWidget(self.detail_card)
 
         add_lens_action.triggered.connect(self._add_lens)
+        add_surface_to_group_action.triggered.connect(self._add_surface_to_current_group)
         add_surface_action.triggered.connect(lambda: self._add_surface_type("球面"))
         for type_name, action in special_actions.items():
             action.triggered.connect(lambda checked=False, name=type_name: self._add_surface_type(name))
@@ -259,13 +287,16 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
         duplicate_group_action.triggered.connect(self._duplicate_group)
         remove_button.clicked.connect(self._remove)
         self.detail_toggle.toggled.connect(self._toggle_detail)
+        self.properties_button.clicked.connect(lambda: self._activate_surface(self.table.currentRow(), self.COL_NAME))
         self.table.currentCellChanged.connect(self._select)
-        self.table.cellDoubleClicked.connect(self._activate_surface)
+        self.table.cellDoubleClicked.connect(self._table_double_clicked)
         self.table.itemChanged.connect(self._table_item_changed)
         self.apply_button.clicked.connect(self._apply)
         self.reset_button.clicked.connect(self._reset_current)
         self.previous_button.clicked.connect(lambda: self._step_selection(-1))
         self.next_button.clicked.connect(lambda: self._step_selection(1))
+        self.search_toggle.toggled.connect(self.search.setVisible)
+        self.search_toggle.toggled.connect(lambda checked: self.search.setFocus() if checked else None)
         self.search.textChanged.connect(self._search_debouncer.trigger)
         self.lens_filter.currentIndexChanged.connect(self._filter_rows)
         self.surface_type.currentTextChanged.connect(self._surface_type_changed)

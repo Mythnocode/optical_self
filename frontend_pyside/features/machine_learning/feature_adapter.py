@@ -57,8 +57,37 @@ def resolve_feature_path(payload: Any, path: str) -> float:
 
 
 def features_from_project(payload: Any, feature_paths: Sequence[str]) -> dict[str, float]:
+    """Build exactly the feature vector declared by a trained-model manifest.
 
-
+    Plain project paths are resolved directly.  Physics-residual features are not
+    ordinary JSON fields, so they must be derived from the *current* optical
+    project using the same physics feature builder used during dataset creation.
+    Missing fields are never replaced with zero or another cosmetic default.
+    """
     if not feature_paths:
         raise FeaturePathError("the selected model manifest does not declare feature_paths")
-    return {path: resolve_feature_path(payload, path) for path in feature_paths}
+
+    from machine_learning.features.coupling_physics import (
+        PHYSICS_RESIDUAL_FEATURE_PATHS,
+        derive_coupling_physics_features,
+    )
+    from machine_learning.explainability.physics_features import PhysicsFeatureError
+    from shared_contracts.project import ProjectSnapshot
+
+    physics_paths = set(PHYSICS_RESIDUAL_FEATURE_PATHS)
+    requested_physics = [path for path in feature_paths if path in physics_paths]
+    physics: dict[str, float] = {}
+    if requested_physics:
+        try:
+            project = payload if isinstance(payload, ProjectSnapshot) else ProjectSnapshot.model_validate(payload)
+            physics = derive_coupling_physics_features(project)
+        except (PhysicsFeatureError, TypeError, ValueError) as exc:
+            raise FeaturePathError(f"cannot derive coupling physics features: {exc}") from exc
+
+    values: dict[str, float] = {}
+    for path in feature_paths:
+        if path in physics:
+            values[path] = float(physics[path])
+        else:
+            values[path] = resolve_feature_path(payload, path)
+    return values

@@ -17,7 +17,7 @@ class MetricDefinition:
 
 _DEFINITIONS: tuple[MetricDefinition, ...] = (
     MetricDefinition(
-        "coupling_efficiency", "耦合效率", "", ("coupling",),
+        "coupling_efficiency", "模式耦合效率", "", ("coupling",),
         aliases=("fiber_coupling_efficiency", "fibre_coupling_efficiency"),
     ),
     MetricDefinition(

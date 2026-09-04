@@ -84,16 +84,16 @@ def friendly_warning_message(message: object) -> str:
         "no compatible surrogate model; coarse search used formal simulation":
             "未找到与当前参数兼容的代理模型；粗搜索已自动改用正式仿真。",
         "optimisation failed to find a valid solution":
-            "优化未找到满足当前约束的有效方案。",
+            "优化未找到满足当前约束的有效候选。",
         "optimization failed to find a valid solution":
-            "优化未找到满足当前约束的有效方案。",
+            "优化未找到满足当前约束的有效候选。",
     }
     if low in translations:
         return translations[low]
     if "surrogate model" in low and "formal simulation" in low:
         return "未找到兼容的代理模型；当前搜索已使用正式仿真完成。"
     if "simulation" in low and "failed" in low:
-        return "部分候选方案的正式仿真失败，请检查任务日志和参数范围。"
+        return "部分候选结果的正式仿真失败，请检查任务日志和参数范围。"
     return text or "当前结果包含需要注意的信息。"
 
 

@@ -88,6 +88,7 @@ class XGBoostPhysicsResidualRegressor:
             "max_leaves",
             "n_jobs",
             "tree_method",
+            "early_stopping_rounds",
         }
         params: dict[str, Any] = {
             "n_estimators": 500,
@@ -108,7 +109,7 @@ class XGBoostPhysicsResidualRegressor:
         )
         return XGBRegressor(**params)
 
-    def fit(self, X: Any, y: Any):
+    def fit(self, X: Any, y: Any, *, X_validation: Any | None = None, y_validation: Any | None = None):
         frame = self._frame(X)
         target = np.asarray(y, dtype=float).reshape(-1)
         if len(target) != len(frame):
@@ -120,11 +121,21 @@ class XGBoostPhysicsResidualRegressor:
         residual_target = target - baseline
         residual_x = augment_residual_features(frame)
         self.residual_model = self._create_xgb()
-        self.residual_model.fit(
-            residual_x,
-            residual_target,
-            sample_weight=emphasis_weights(target),
-        )
+        fit_kwargs: dict[str, Any] = {"sample_weight": emphasis_weights(target)}
+        if X_validation is not None and y_validation is not None:
+            validation_frame = self._frame(X_validation)
+            validation_target = np.asarray(y_validation, dtype=float).reshape(-1)
+            validation_baseline = formula_baseline_db(validation_frame)
+            validation_residual = validation_target - validation_baseline
+            fit_kwargs["eval_set"] = [(augment_residual_features(validation_frame), validation_residual)]
+            fit_kwargs["verbose"] = False
+        self.residual_model.fit(residual_x, residual_target, **fit_kwargs)
+        try:
+            self.evals_result_ = dict(self.residual_model.evals_result())
+        except Exception:
+            self.evals_result_ = {}
+        best = getattr(self.residual_model, "best_iteration", None)
+        self.best_iteration_ = (int(best) + 1) if best is not None else None
         return self
 
     def predict(self, X: Any) -> np.ndarray:

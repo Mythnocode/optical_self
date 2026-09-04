@@ -84,6 +84,57 @@ def _polarized_branch(
     return out, power, coherent
 
 
+
+def _scalar_unpolarized_branch(
+    ray: Ray,
+    *,
+    outgoing_direction: np.ndarray,
+    coefficient_s: complex,
+    coefficient_p: complex,
+    power_s: float,
+    power_p: float,
+    extra_survival: float,
+    phase_label: str,
+) -> tuple[Ray, float, complex]:
+    """Build the scalar equivalent of an unpolarized interface branch.
+
+    Power is the equal incoherent s/p average.  A scalar coherent phase is
+    represented by the phase of the mean complex amplitude; this is exact for
+    ordinary uncoated dielectric transmission where s/p phases are equal and is
+    an explicit scalar approximation for polarization-insensitive coated paths.
+    """
+    power_fraction = max(0.5 * (float(power_s) + float(power_p)), 0.0) * max(float(extra_survival), 0.0)
+    if power_fraction <= 0.0:
+        raise ValueError(f"{phase_label} branch has zero field")
+    coherent = 0.5 * (complex(coefficient_s) + complex(coefficient_p))
+    phase = float(cmath.phase(coherent)) if abs(coherent) > 0.0 else 0.0
+    outgoing = np.asarray(_normalised(outgoing_direction, name="outgoing direction"), dtype=float)
+    polarization = np.asarray(ray.polarization_xyz, dtype=np.complex128)
+    polarization = polarization - np.vdot(outgoing, polarization) * outgoing
+    norm_pol = float(np.linalg.norm(polarization))
+    if norm_pol <= 1.0e-15:
+        reference = np.asarray([1.0, 0.0, 0.0], dtype=float)
+        if abs(float(np.dot(reference, outgoing))) > 0.95:
+            reference = np.asarray([0.0, 1.0, 0.0], dtype=float)
+        polarization = reference - np.dot(reference, outgoing) * outgoing
+        polarization = polarization.astype(np.complex128)
+        norm_pol = float(np.linalg.norm(polarization))
+    polarization /= max(norm_pol, 1.0e-30)
+    power = float(ray.power_weight) * power_fraction
+    out = Ray(
+        position_mm=ray.position_mm,
+        direction=tuple(float(v) for v in outgoing),
+        wavelength_nm=ray.wavelength_nm,
+        field_amplitude=float(ray.field_amplitude) * math.sqrt(power_fraction),
+        power_weight=power,
+        quadrature_weight=ray.quadrature_weight,
+        optical_path_mm=ray.optical_path_mm,
+        valid=True,
+        polarization_xyz=tuple(complex(v) for v in polarization),
+        phase_offset_rad=float(ray.phase_offset_rad) + phase,
+    )
+    return out, power, coherent
+
 def _roughness_specular_survival(
     roughness_rms_nm: float,
     wavelength_nm: float,
@@ -144,6 +195,7 @@ def interact_ray_with_surface(
     n_after: float,
     temperature_c: float = 20.0,
     include_group_delay: bool = False,
+    polarization_sensitive: bool = True,
 ) -> SurfaceInteractionResult:
 
     direction = np.asarray(ray.direction, dtype=float)
@@ -154,8 +206,6 @@ def interact_ray_with_surface(
         conic=surface.conic,
         asphere_a2=surface.asphere_a2,
         asphere_coefficients=surface.asphere_coefficients,
-        surface_type=surface.surface_type,
-        metadata=surface.metadata,
     )
     if float(np.dot(direction, normal)) > 0.0:
         normal = -normal
@@ -197,18 +247,20 @@ def interact_ray_with_surface(
             rs = rp = amplitude
             Rs = Rp = branch_survival
         try:
-            reflected_ray, reflected_power, coherent = _polarized_branch(
-                ray,
-                outgoing_direction=np.asarray(reflection_direction, dtype=float),
-                s_basis=s_basis,
-                p_incident=p_incident,
-                coefficient_s=rs,
-                coefficient_p=rp,
-                power_s=Rs,
-                power_p=Rp,
-                extra_survival=branch_survival if surface.coating_layers else 1.0,
-                phase_label="reflection",
-            )
+            branch = _polarized_branch if polarization_sensitive else _scalar_unpolarized_branch
+            branch_kwargs = {
+                "ray": ray,
+                "outgoing_direction": np.asarray(reflection_direction, dtype=float),
+                "coefficient_s": rs,
+                "coefficient_p": rp,
+                "power_s": Rs,
+                "power_p": Rp,
+                "extra_survival": branch_survival if surface.coating_layers else 1.0,
+                "phase_label": "reflection",
+            }
+            if polarization_sensitive:
+                branch_kwargs.update({"s_basis": s_basis, "p_incident": p_incident})
+            reflected_ray, reflected_power, coherent = branch(**branch_kwargs)
         except ValueError:
             reflected_ray = None
         if reflected_ray is not None:
@@ -216,34 +268,38 @@ def interact_ray_with_surface(
     else:
         if refraction_ok and not coating.total_internal_reflection:
             try:
-                transmitted_ray, transmitted_power, coherent = _polarized_branch(
-                    ray,
-                    outgoing_direction=np.asarray(transmission_direction, dtype=float),
-                    s_basis=s_basis,
-                    p_incident=p_incident,
-                    coefficient_s=coating.ts,
-                    coefficient_p=coating.tp,
-                    power_s=coating.Ts,
-                    power_p=coating.Tp,
-                    extra_survival=branch_survival,
-                    phase_label="transmission",
-                )
+                branch = _polarized_branch if polarization_sensitive else _scalar_unpolarized_branch
+                branch_kwargs = {
+                    "ray": ray,
+                    "outgoing_direction": np.asarray(transmission_direction, dtype=float),
+                    "coefficient_s": coating.ts,
+                    "coefficient_p": coating.tp,
+                    "power_s": coating.Ts,
+                    "power_p": coating.Tp,
+                    "extra_survival": branch_survival,
+                    "phase_label": "transmission",
+                }
+                if polarization_sensitive:
+                    branch_kwargs.update({"s_basis": s_basis, "p_incident": p_incident})
+                transmitted_ray, transmitted_power, coherent = branch(**branch_kwargs)
                 phase_delay = float(transmitted_ray.phase_offset_rad - ray.phase_offset_rad)
             except ValueError:
                 transmitted_ray = None
         try:
-            reflected_ray, reflected_power, _ = _polarized_branch(
-                ray,
-                outgoing_direction=np.asarray(reflection_direction, dtype=float),
-                s_basis=s_basis,
-                p_incident=p_incident,
-                coefficient_s=coating.rs,
-                coefficient_p=coating.rp,
-                power_s=coating.Rs,
-                power_p=coating.Rp,
-                extra_survival=branch_survival,
-                phase_label="reflection",
-            )
+            branch = _polarized_branch if polarization_sensitive else _scalar_unpolarized_branch
+            branch_kwargs = {
+                "ray": ray,
+                "outgoing_direction": np.asarray(reflection_direction, dtype=float),
+                "coefficient_s": coating.rs,
+                "coefficient_p": coating.rp,
+                "power_s": coating.Rs,
+                "power_p": coating.Rp,
+                "extra_survival": branch_survival,
+                "phase_label": "reflection",
+            }
+            if polarization_sensitive:
+                branch_kwargs.update({"s_basis": s_basis, "p_incident": p_incident})
+            reflected_ray, reflected_power, _ = branch(**branch_kwargs)
         except ValueError:
             reflected_ray = None
 
@@ -298,6 +354,8 @@ def interact_ray_with_surface(
             "surface_absorption_fraction": float(surface.surface_absorption_fraction),
             "explicit_absorbed_power_estimate": explicit_absorbed_estimate,
             "coating_absorbed_power_estimate": coating_absorption_estimate,
+            "polarization_sensitive": bool(polarization_sensitive),
+            "polarization_model": "jones" if polarization_sensitive else "scalar_unpolarized",
             "coating_Rs": coating.Rs,
             "coating_Rp": coating.Rp,
             "coating_Ts": coating.Ts,

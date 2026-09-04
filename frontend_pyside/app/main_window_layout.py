@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,33 +5,29 @@ from dataclasses import dataclass
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import (
     QComboBox,
+    QFrame,
     QHBoxLayout,
     QLabel,
     QMainWindow,
-    QSizePolicy,
     QStackedWidget,
-    QStatusBar,
     QToolButton,
     QVBoxLayout,
     QWidget,
 )
 
-from frontend_pyside.app.page_registry import PageSpec
+from frontend_pyside.app.compact_shell import CompactNavigationRail, CompactToolDrawer, DocumentTabBar
 from frontend_pyside.core.constants import APP_VERSION
-from frontend_pyside.shared.icons import icon
 from frontend_pyside.resources import theme_tokens as theme
+from frontend_pyside.shared.icons import icon
 
 
 @dataclass(slots=True)
 class MainWindowWidgets:
     central: QWidget
-    sidebar: QWidget
-    brand_layout: QHBoxLayout
-    brand_icon: QLabel
-    brand_text: QWidget
-    sidebar_toggle: QToolButton
-    nav_buttons: dict[str, QToolButton]
-    group_labels: list[QLabel]
+    rail: CompactNavigationRail
+    drawer: CompactToolDrawer
+    document_tabs: DocumentTabBar
+    stack: QStackedWidget
     connection_status: QLabel
     top_project: QLabel
     top_version: QLabel
@@ -43,155 +38,154 @@ class MainWindowWidgets:
     top_frontend: QLabel
     display_mode: QComboBox
     render_quality: QComboBox
-    stack: QStackedWidget
-    status_bar: QStatusBar
     status_page: QLabel
     status_source: QLabel
+    footer_efficiency: QLabel
+    footer_notice: QLabel
+    footer_result_button: QToolButton
+    footer_tasks_button: QToolButton
+    command_buttons: dict[str, QToolButton]
 
 
-def build_main_window_layout(window: QMainWindow, specs: tuple[PageSpec, ...]) -> MainWindowWidgets:
-    central = QWidget()
+def _small_tool(icon_name: str, tooltip: str) -> QToolButton:
+    button = QToolButton()
+    button.setObjectName("shellIconButton")
+    button.setIcon(icon(icon_name, theme.TEXT_SECONDARY, 18))
+    button.setIconSize(QSize(18, 18))
+    button.setToolTip(tooltip)
+    button.setAccessibleName(tooltip)
+    return button
+
+
+def _command(text: str, *, icon_name: str = "") -> QToolButton:
+    button = QToolButton()
+    button.setObjectName("shellCommandButton")
+    button.setText(text)
+    button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+    if icon_name:
+        button.setIcon(icon(icon_name, theme.TEXT_SECONDARY, 17))
+        button.setIconSize(QSize(17, 17))
+    button.setMinimumHeight(34)
+    button.setAccessibleName(text)
+    return button
+
+
+def build_main_window_layout(window: QMainWindow, _specs) -> MainWindowWidgets:
+    central = QWidget(window)
     central.setObjectName("centralRoot")
-    shell = QHBoxLayout(central)
-    shell.setContentsMargins(0, 0, 0, 0)
-    shell.setSpacing(0)
+    root = QVBoxLayout(central)
+    root.setContentsMargins(0, 0, 0, 0)
+    root.setSpacing(0)
 
-    sidebar = QWidget()
-    sidebar.setObjectName("navPanel")
-    sidebar.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
-    nav_layout = QVBoxLayout(sidebar)
-    nav_layout.setContentsMargins(0, 0, 0, 0)
-    nav_layout.setSpacing(0)
+    # One stable command strip.  It chooses tasks; it does not pretend each
+    # analysis sub-view is a separate document/workspace.
+    top = QFrame(central)
+    top.setObjectName("compactTopBar")
+    top_layout = QHBoxLayout(top)
+    top_layout.setContentsMargins(8, 4, 10, 4)
+    top_layout.setSpacing(5)
 
-    brand_row = QWidget()
-    brand_row.setObjectName("brandRow")
-    brand_layout = QHBoxLayout(brand_row)
-    brand_layout.setContentsMargins(14, 10, 10, 10)
-    brand_layout.setSpacing(10)
+    home_button = _small_tool("logo", "项目总览")
+    home_button.setObjectName("shellHomeButton")
+    save_button = _small_tool("save", "保存当前系统")
+    save_button.setProperty("shellAction", "save")
+    undo_button = _small_tool("undo", "撤销")
+    undo_button.setProperty("shellAction", "undo")
+    redo_button = _small_tool("redo", "重做")
+    redo_button.setProperty("shellAction", "redo")
+    for button in (home_button, save_button, undo_button, redo_button):
+        top_layout.addWidget(button)
 
-    
-    
-    brand_icon = QLabel()
-    brand_icon.setVisible(False)
+    divider = QFrame(top)
+    divider.setObjectName("shellCommandDivider")
+    divider.setFrameShape(QFrame.Shape.VLine)
+    top_layout.addWidget(divider)
 
-    brand_text = QWidget()
-    brand_text_layout = QVBoxLayout(brand_text)
-    brand_text_layout.setContentsMargins(0, 0, 0, 0)
-    brand_text_layout.setSpacing(0)
-    title = QLabel("激光耦合研究系统")
-    title.setObjectName("brand")
-    subtitle = QLabel("仿真与参数优化")
-    subtitle.setObjectName("brandSubtitle")
-    subtitle.setVisible(True)
-    brand_text_layout.addWidget(title)
-    brand_text_layout.addWidget(subtitle)
-    brand_layout.addWidget(brand_text, 1)
-
-    sidebar_toggle = QToolButton()
-    sidebar_toggle.setObjectName("sidebarToggle")
-    sidebar_toggle.setIconSize(QSize(18, 18))
-    brand_layout.addWidget(sidebar_toggle)
-    nav_layout.addWidget(brand_row)
-
-    nav_buttons: dict[str, QToolButton] = {}
-    group_labels: list[QLabel] = []
-    for spec in specs:
-        button = QToolButton()
-        button.setObjectName("navButton")
+    command_buttons = {
+        "simulation": _command("仿真", icon_name="simulation"),
+        "optimization": _command("优化", icon_name="optimization"),
+        "surrogate": _command("代理模型", icon_name="machine_learning"),
+        "explainability": _command("模型解释", icon_name="explainability"),
+        "teaching": _command("教学", icon_name="teaching"),
+    }
+    for button in command_buttons.values():
         button.setCheckable(True)
         button.setAutoExclusive(True)
-        button.setIcon(icon(spec.icon_name, theme.NAV_ICON, 23))
-        button.setIconSize(QSize(23, 23))
-        button.setText(spec.title)
-        button.setToolTip(spec.title)
-        button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        nav_layout.addWidget(button)
-        nav_buttons[spec.key] = button
-
-    nav_layout.addStretch(1)
-    connection_status = QLabel("● 服务状态检查中")
-    connection_status.setObjectName("connectionStatus")
-    connection_status.setWordWrap(True)
-    nav_layout.addWidget(connection_status)
-    shell.addWidget(sidebar)
-
-    content = QWidget()
-    content_layout = QVBoxLayout(content)
-    content_layout.setContentsMargins(0, 0, 0, 0)
-    content_layout.setSpacing(0)
-
-    
-    
-    
-    
-    topbar = QWidget(content)
-    topbar.setObjectName("topBar")
-    top_layout = QHBoxLayout(topbar)
-    top_layout.setContentsMargins(18, 9, 18, 9)
-    top_layout.setSpacing(8)
-
-    top_project = QLabel()
-    top_project.setObjectName("topProject")
-    top_layout.addWidget(top_project)
+        top_layout.addWidget(button)
     top_layout.addStretch(1)
 
-    top_version = QLabel()
-    top_wave = QLabel()
-    top_surfaces = QLabel()
-    top_efficiency = QLabel()
-    top_mode = QLabel("教学：近似模式")
-    top_frontend = QLabel(f"前端 {APP_VERSION}")
-    for widget in (top_version, top_wave, top_surfaces, top_mode, top_frontend):
-        widget.setObjectName("topMeta")
-    top_efficiency.setObjectName("topMetric")
-    for widget in (top_version, top_wave, top_surfaces, top_efficiency):
-        top_layout.addWidget(widget)
+    connection_status = QLabel("服务检查中")
+    connection_status.setObjectName("compactConnectionStatus")
+    connection_status.setToolTip("后端服务状态")
+    top_layout.addWidget(connection_status)
+    root.addWidget(top)
 
-    display_mode = QComboBox()
-    display_mode.setObjectName("topDisplayMode")
-    display_mode.addItems(["标准", "紧凑", "大字体"])
-    display_mode.setToolTip("界面显示密度")
-    display_mode.setMaximumWidth(96)
-    top_layout.addWidget(display_mode)
+    body = QWidget(central)
+    body_layout = QHBoxLayout(body)
+    body_layout.setContentsMargins(0, 0, 0, 0)
+    body_layout.setSpacing(0)
 
-    render_quality = QComboBox()
-    render_quality.setObjectName("topRenderQuality")
-    render_quality.addItems(["性能优先", "平衡", "质量优先"])
-    render_quality.setToolTip("绘图质量与交互性能")
-    render_quality.setMaximumWidth(108)
-    top_layout.addWidget(render_quality)
+    # Compatibility objects stay alive for old controller calls, but navigation
+    # is no longer a permanent left feature rail/drawer.
+    rail = CompactNavigationRail(body)
+    rail.hide()
+    drawer = CompactToolDrawer(body)
+    drawer.hide()
+    document_tabs = DocumentTabBar(body)
+    document_tabs.hide()
 
-    top_mode.setVisible(False)
-    top_frontend.setVisible(False)
-    
-    
-    
-    topbar.setVisible(False)
-
-    stack = QStackedWidget()
+    stack = QStackedWidget(body)
     stack.setObjectName("featureStack")
-    content_layout.addWidget(stack, 1)
-    shell.addWidget(content, 1)
+    body_layout.addWidget(stack, 1)
+    root.addWidget(body, 1)
 
-    status_bar = QStatusBar()
-    status_page = QLabel("当前页面：首页")
-    status_source = QLabel("结果来源会在各页面明确标注")
-    status_bar.addWidget(status_page)
-    status_bar.addPermanentWidget(status_source)
+    footer = QFrame(central)
+    footer.setObjectName("compactFooter")
+    footer_layout = QHBoxLayout(footer)
+    footer_layout.setContentsMargins(10, 2, 10, 2)
+    footer_layout.setSpacing(8)
+
+    footer_efficiency = QLabel("耦合效率 待计算")
+    footer_efficiency.setObjectName("footerMetric")
+    footer_layout.addWidget(footer_efficiency)
+    footer_notice = QLabel("就绪")
+    footer_notice.setObjectName("footerNotice")
+    footer_layout.addWidget(footer_notice, 1)
+
+    footer_result_button = _small_tool("result", "当前仿真结果")
+    footer_result_button.setObjectName("footerActionButton")
+    footer_layout.addWidget(footer_result_button)
+    footer_tasks_button = _small_tool("tasks", "任务状态")
+    footer_tasks_button.setObjectName("footerActionButton")
+    footer_layout.addWidget(footer_tasks_button)
+    root.addWidget(footer)
+
+    # Hidden compatibility state for pre-refactor logic.
+    compat = QWidget(central)
+    compat.hide()
+    top_project = QLabel(compat)
+    top_version = QLabel(compat)
+    top_wave = QLabel(compat)
+    top_surfaces = QLabel(compat)
+    top_efficiency = QLabel(compat)
+    top_mode = QLabel("教学：近似模式", compat)
+    top_frontend = QLabel(f"前端 {APP_VERSION}", compat)
+    display_mode = QComboBox(compat)
+    display_mode.addItems(["标准", "紧凑", "大字体"])
+    render_quality = QComboBox(compat)
+    render_quality.addItems(["性能优先", "平衡", "质量优先"])
+    status_page = QLabel("当前页面：首页", compat)
+    status_source = QLabel("结果来源会在各页面明确标注", compat)
 
     window.setCentralWidget(central)
-    status_bar.setVisible(False)
-    window.setStatusBar(status_bar)
+    window.statusBar().hide()
 
     return MainWindowWidgets(
         central=central,
-        sidebar=sidebar,
-        brand_layout=brand_layout,
-        brand_icon=brand_icon,
-        brand_text=brand_text,
-        sidebar_toggle=sidebar_toggle,
-        nav_buttons=nav_buttons,
-        group_labels=group_labels,
+        rail=rail,
+        drawer=drawer,
+        document_tabs=document_tabs,
+        stack=stack,
         connection_status=connection_status,
         top_project=top_project,
         top_version=top_version,
@@ -202,10 +196,13 @@ def build_main_window_layout(window: QMainWindow, specs: tuple[PageSpec, ...]) -
         top_frontend=top_frontend,
         display_mode=display_mode,
         render_quality=render_quality,
-        stack=stack,
-        status_bar=status_bar,
         status_page=status_page,
         status_source=status_source,
+        footer_efficiency=footer_efficiency,
+        footer_notice=footer_notice,
+        footer_result_button=footer_result_button,
+        footer_tasks_button=footer_tasks_button,
+        command_buttons=command_buttons,
     )
 
 

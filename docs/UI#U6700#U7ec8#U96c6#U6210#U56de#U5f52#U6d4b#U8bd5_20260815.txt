@@ -1,0 +1,13 @@
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+Unexpected condition met: "QSGRendererInterface::isApiRhiBased(rif->graphicsApi())" in file /home/qt/work/qt/qtquick3d/src/quick3d/qquick3dviewport.cpp, line 561
+The Qt Quick scene is using a rendering method that is not based on QRhi and a 3D graphics API. Qt Quick 3D is not functional in such an environment. The View3D item is not going to display anything.
+FINAL_INTEGRATED_REGRESSION_OK
+COMPILEALL_OK

@@ -72,6 +72,12 @@ class SimulationFormalMixin:
             self._set_coupling_note("正在准备正式计算")
             self.model_badge.setText("按需正式计算")
             self.model_badge.set_tone("warning")
+            if hasattr(self.formal_button, "set_task_state"):
+                self.formal_button.set_task_state("submitted", "正在提交正式仿真")
+            if hasattr(self, "formal_progress_panel"):
+                self.formal_progress_label.setText("正在提交正式仿真")
+                self.formal_progress_bar.setRange(0, 0)
+                self.formal_progress_panel.show()
 
     def _display_partial_result(self, payload: dict) -> None:
 
@@ -174,7 +180,54 @@ class SimulationFormalMixin:
 
     def _formal_state_changed(self, status: str, progress: float, note: str) -> None:
         display = stable_progress_text(status, progress)
-        self._set_coupling_note(display)
+        state_key = str(status or "").strip().lower()
+        if hasattr(self, "formal_progress_panel"):
+            if state_key in {"submitting", "queued"}:
+                self.formal_progress_panel.show()
+                self.formal_progress_label.setText(str(note or display or "正在提交正式仿真"))
+                self.formal_progress_bar.setRange(0, 0)
+            elif state_key == "running":
+                self.formal_progress_panel.show()
+                self.formal_progress_label.setText(str(note or "正在计算正式结果"))
+                try:
+                    pct = max(0, min(99, round(float(progress or 0.0) * 100)))
+                except (TypeError, ValueError):
+                    pct = 0
+                self.formal_progress_bar.setRange(0, 100)
+                self.formal_progress_bar.setValue(pct)
+                self.formal_progress_bar.setFormat(f"{pct}%")
+            elif state_key == "completed":
+                self.formal_progress_label.setText("正式仿真完成")
+                self.formal_progress_bar.setRange(0, 100)
+                self.formal_progress_bar.setValue(100)
+                self.formal_progress_bar.setFormat("已完成 · 100%")
+                QTimer.singleShot(900, self.formal_progress_panel.hide)
+            elif state_key in {"failed", "cancelled", "not_converged"}:
+                self.formal_progress_panel.show()
+                self.formal_progress_label.setText(str(note or display))
+                self.formal_progress_bar.setRange(0, 100)
+                self.formal_progress_bar.setValue(100 if state_key == "not_converged" else 0)
+                self.formal_progress_bar.setFormat("失败" if state_key == "failed" else ("已取消" if state_key == "cancelled" else "未收敛"))
+        if hasattr(self.formal_button, "set_task_state"):
+            if state_key in {"submitting", "queued", "running"}:
+                self.formal_button.set_task_state("running", "正式仿真运行中")
+            elif state_key == "completed":
+                self.formal_button.set_task_state("success", "正式仿真完成")
+            elif state_key in {"failed", "cancelled", "not_converged"}:
+                self.formal_button.set_task_state("error" if state_key == "failed" else "pending", display)
+        if str(status or "").strip().lower() == "running" and str(note or "") in {"正在保存结果", "正在整理结果", "正式结果已生成，正在完成存档"}:
+            display = f"{note} · {min(99, round(max(0.0, min(1.0, float(progress or 0.0))) * 100))}%"
+        # 运行状态与效率结果放在同一结果带；不再把状态塞进耦合效率卡片尾注。
+        if state_key in {"submitting", "queued", "running"}:
+            self.formal_state.setText("● " + display)
+            self.formal_state.set_tone("info")
+        elif state_key == "completed":
+            self.formal_state.setText("✓ 正式结果 · 当前")
+            self.formal_state.set_tone("success")
+        elif state_key in {"failed", "cancelled", "not_converged"}:
+            self.formal_state.setText(("× " if state_key == "failed" else "⚠ ") + display)
+            self.formal_state.set_tone("danger" if state_key == "failed" else "warning")
+        self.formal_state.setToolTip(str(note or ""))
         self.model_badge.setText(display)
         self.model_badge.set_tone(
             "warning" if status in {"submitting", "queued", "running", "cancelled"}
@@ -207,10 +260,18 @@ class SimulationFormalMixin:
             self._formal_failed(status, message)
             return
         converged = bool(body.get("converged", False))
+        metadata = dict(body.get("metadata", {}) or {})
         metrics = dict(body.get("metrics", {})) if isinstance(body.get("metrics"), dict) else {}
         if metrics:
             self.context.project.update_metrics(metrics)
             self._update_formal_metric_cards(metrics)
+        # 正式结果必须同步到共享 ProjectContext，AI/模型分析/其他页面只读取这一
+        # 个事实源。此前仿真页已经显示“✓ 正式结果·当前”，但 AI 仍可能因为
+        # ProjectContext.formal_result 为空而建议重复仿真。
+        shared_formal = dict(body)
+        shared_formal["design_revision"] = int(getattr(self.context.project, "design_revision", 0) or 0)
+        shared_formal["submitted_project"] = dict(submitted_project or {})
+        self.context.project.set_formal_result(shared_formal, metrics=metrics)
 
         visible = tuple(self.results.visible_result_keys())
         if prebuilt is None and _estimated_dense_elements(body) >= 100_000:
@@ -251,6 +312,11 @@ class SimulationFormalMixin:
                 section_options=self.results.section_options(),
             )
             plots = self._formal_store.ensure(visible)
+        available_analyses = set(metadata.get("frontend_cached_analyses", []) or [])
+        available_analyses.update(metadata.get("frontend_submitted_analyses", []) or [])
+        available_analyses.update(metadata.get("frontend_requested_analyses", []) or [])
+        if hasattr(self.results, "set_available_analyses"):
+            self.results.set_available_analyses(available_analyses)
         self.results.set_results(plots)
         missing_visible = [key for key in visible if key not in plots]
         auto_retry_missing = False
@@ -283,7 +349,6 @@ class SimulationFormalMixin:
             self._missing_plot_retry_keys.clear()
 
         diagnostics = formal_result_diagnostics(body)
-        metadata = dict(body.get("metadata", {}) or {})
         cache_status = str(metadata.get("frontend_cache_status", ""))
         if cache_status:
             diagnostics += f"\n前端缓存：{cache_status}；已具备分析：" + "、".join(
@@ -402,6 +467,15 @@ class SimulationFormalMixin:
 
     def _formal_failed(self, category: str, message: str) -> None:
         self.results.set_busy(False)
+        if hasattr(self, "formal_progress_panel"):
+            self.formal_progress_panel.show()
+            self.formal_progress_label.setText("正式仿真已取消" if category == "cancelled" else "正式仿真失败")
+            self.formal_progress_bar.setRange(0, 100)
+            self.formal_progress_bar.setValue(0)
+            self.formal_progress_bar.setFormat("已取消" if category == "cancelled" else "失败")
+        if hasattr(self.formal_button, "set_task_state"):
+            self.formal_button.set_task_state("pending" if category == "cancelled" else "error", "已取消" if category == "cancelled" else "计算失败")
+            QTimer.singleShot(1500, lambda: self.formal_button.reset_task_state("开始计算"))
         self._alignment_solution = None
         self.apply_alignment_button.setVisible(False)
         cancelled = category == "cancelled"

@@ -16,10 +16,11 @@ from PySide6.QtWidgets import (
 )
 
 from frontend_pyside.shared.components.basic import SummaryStrip
+from frontend_pyside.shared.components.unit_spinbox import UnitAwareDoubleSpinBox
 
 
 
-class ScrollSafeDoubleSpinBox(QDoubleSpinBox):
+class ScrollSafeDoubleSpinBox(UnitAwareDoubleSpinBox):
 
 
     def wheelEvent(self, event: QWheelEvent) -> None:  
@@ -63,7 +64,7 @@ class ParameterControlMixin:
     @staticmethod
     def _compact_form() -> QFormLayout:
         form = QFormLayout()
-        form.setVerticalSpacing(7)
+        form.setVerticalSpacing(5)
         form.setHorizontalSpacing(10)
         form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapLongRows)
@@ -74,8 +75,9 @@ class ParameterControlMixin:
         page = QWidget()
         layout = QVBoxLayout(page)
         layout.setContentsMargins(8, 8, 8, 8)
-        layout.setSpacing(7)
-        layout.addWidget(SummaryStrip(summary_items))
+        layout.setSpacing(6)
+        if summary_items:
+            layout.addWidget(SummaryStrip(summary_items))
         grid = QGridLayout()
         grid.setHorizontalSpacing(8)
         grid.setVerticalSpacing(8)

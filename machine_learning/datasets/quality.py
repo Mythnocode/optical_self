@@ -59,13 +59,22 @@ def evaluate_simulation_quality(
     }
     checks.update({f"quality_{key}": value for key, value in quality_metrics.items()})
     for key, value in quality_metrics.items():
-        if value is not None and not bool(value):
-            return SimulationQualityDecision(
-                False,
-                f"OPTICAL_{key.upper()}_CHECK_FAILED",
-                f"optical quality check failed: {key}",
-                checks,
-            )
+        if value is None or bool(value):
+            continue
+        # scaled-Fresnel pre-flight Nyquist checks are deliberately conservative.
+        # For ML data we do not silently ignore them: the sample is accepted only
+        # when the engine has actually repeated the calculation at a finer grid and
+        # the explicit sampling-convergence test passed.  Energy/edge failures are
+        # never waived.
+        if key == "nyquist" and quality_metrics.get("sampling_convergence") is not None and bool(quality_metrics.get("sampling_convergence")):
+            checks["quality_nyquist_accepted_by_convergence"] = True
+            continue
+        return SimulationQualityDecision(
+            False,
+            f"OPTICAL_{key.upper()}_CHECK_FAILED",
+            f"optical quality check failed: {key}",
+            checks,
+        )
 
     valid_ray_ratio = _metric(metrics, "valid_ray_ratio")
     if valid_ray_ratio is not None and valid_ray_ratio <= 0.0:

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from frontend_pyside.shared.task_display import progress_fraction, progress_percent, stable_progress_text
+from PySide6.QtCore import QTimer
+
+from frontend_pyside.shared.task_display import friendly_job_stage, progress_fraction, progress_percent, stable_progress_text
 
 from frontend_pyside.shared.components.basic import InfoRow
 
@@ -67,6 +69,13 @@ class MachineLearningJobMixin:
             info["task_id"] = str(task.get("id", info.get("task_id", "")))
             status = str(task.get("status", ""))
             progress = progress_percent(task.get("progress", 0))
+            tracker = getattr(
+                self,
+                "_dataset_progress_tracker" if info["kind"] == "dataset" else "_training_progress_tracker",
+                None,
+            )
+            if tracker is not None:
+                progress = tracker.value(job_id, status, progress)
             self.context.registry.merge_training_task(
                 {
                     "job_id": job_id,
@@ -78,8 +87,10 @@ class MachineLearningJobMixin:
                 }
             )
             self._set_job_status(info["kind"], f"{status} {progress}%")
-            if info["kind"] == "training" and hasattr(self, "training_progress"):
-                self.training_progress.setValue(progress)
+            if info["kind"] == "training":
+                self._update_training_progress(job_id, status, progress)
+            elif info["kind"] == "dataset":
+                self._update_dataset_progress(job_id, status, progress)
             if status == "已完成" and not info.get("result_requested", False):
                 self._request_ml_result(job_id, info)
             elif status in {"失败", "已取消"}:
@@ -156,11 +167,21 @@ class MachineLearningJobMixin:
         status = str(body.get("status", "queued"))
         progress = progress_fraction(body.get("progress", 0.0))
         stage = str(body.get("stage", ""))
+        progress_value = round(progress * 100)
+        tracker = getattr(
+            self,
+            "_dataset_progress_tracker" if info["kind"] == "dataset" else "_training_progress_tracker",
+            None,
+        )
+        if tracker is not None:
+            progress_value = tracker.value(job_id, status, progress)
+            progress = progress_value / 100.0
+        stage_display = friendly_job_stage(stage)
         self.context.tasks.update_job(
             job_id,
             status=self._status_text(status),
-            progress=round(progress * 100),
-            note=stage or f"job_id: {job_id}",
+            progress=progress_value,
+            note=stage_display or f"job_id: {job_id}",
         )
         self.context.registry.merge_training_task(
             {
@@ -168,14 +189,17 @@ class MachineLearningJobMixin:
                 "training_task_id": str(info.get("task_id", "")),
                 "kind": info["kind"],
                 "status": self._status_text(status),
-                "progress": round(progress * 100),
-                "note": stage,
+                "progress": progress_value,
+                "note": stage_display,
             }
         )
-        self.context.tasks.append_log(job_id, stage or self._status_text(status))
-        self._set_job_status(info["kind"], stable_progress_text(status, progress))
-        if info["kind"] == "training" and hasattr(self, "training_progress"):
-            self.training_progress.setValue(round(progress * 100))
+        self.context.tasks.append_log(job_id, stage_display or self._status_text(status))
+        loading_result = status == "completed" and not bool(info.get("result_requested", False))
+        self._set_job_status(info["kind"], stable_progress_text(status, progress, loading_result=loading_result))
+        if info["kind"] == "training":
+            self._update_training_progress(job_id, status, progress)
+        elif info["kind"] == "dataset":
+            self._update_dataset_progress(job_id, status, progress)
         if status == "completed" and not info.get("result_requested", False):
             self._request_ml_result(job_id, info)
         elif status in {"failed", "cancelled"}:
@@ -198,6 +222,7 @@ class MachineLearningJobMixin:
             status="已完成",
             progress=100,
             note="后端任务已完成",
+            result_available=True,
         )
         self.context.tasks.set_result(job_id, data)
         self.context.tasks.append_log(job_id, "机器学习任务结果已加载")
@@ -212,6 +237,7 @@ class MachineLearningJobMixin:
             }
         )
         if info["kind"] == "dataset":
+            self._update_dataset_progress(job_id, "completed", 1.0)
             if isinstance(data, dict) and (data.get("dataset_id") or data.get("id")):
                 self.context.registry.merge_dataset(data)
                 self.context.registry.set_current_dataset(
@@ -220,55 +246,129 @@ class MachineLearningJobMixin:
             self._set_job_status("dataset", "数据集任务完成")
             self.context.registry.invalidate("datasets")
             self.refresh_remote(force=True)
-            if getattr(self, "advanced_section", None) is not None and self.advanced_section.is_expanded():
-                self._set_workflow_step(0)
+            # Background completion must not steal the user's current ML stage.
+            # The visible workflow bar is the navigation authority; data refreshes
+            # in place and the user decides when to inspect it.
         else:
             metrics = data.get("validation_metrics", {})
             metrics = dict(metrics) if isinstance(metrics, dict) else {}
+            self._update_training_progress(job_id, "completed", 1.0)
             if hasattr(self, "training_progress"):
-                self.training_progress.setValue(100)
-                self.training_r2.set_value(metrics.get("r2", metrics.get("R2", "—")))
-                self.training_mae.set_value(metrics.get("mae", "—"))
-                self.training_rmse.set_value(metrics.get("rmse", "—"))
-                self.training_time.set_value(data.get("training_elapsed_ms", "—"))
+                def _fmt_metric(value):
+                    try:
+                        return f"{float(value):.3f}"
+                    except (TypeError, ValueError):
+                        return "—"
+                self.training_r2.set_value(_fmt_metric(metrics.get("r2", metrics.get("R2"))))
+                self.training_mae.set_value(_fmt_metric(metrics.get("mae")))
+                self.training_rmse.set_value(_fmt_metric(metrics.get("rmse")))
+                try:
+                    elapsed_ms = float(data.get("training_elapsed_ms"))
+                    self.training_time.set_value(f"{elapsed_ms:.0f}")
+                except (TypeError, ValueError):
+                    self.training_time.set_value("—")
                 model_type = str(data.get("model_type", ""))
-                history = data.get("training_history")
+                metadata = dict(data.get("metadata") or {})
+                history = data.get("training_history") or metadata.get("training_history")
                 if isinstance(history, dict) and history:
                     
                     
                     
                     train_values = list(history.get("train", history.get("training", [])) or [])
                     validation_values = list(history.get("validation", history.get("valid", [])) or [])
+                    # XGBoost exposes nested evals_result_ such as
+                    # {"validation_0": {"rmse": [...]}}. Use the real validation curve
+                    # instead of treating the nested structure as “no history”.
+                    if not train_values and not validation_values:
+                        for dataset_name, metrics_map in history.items():
+                            if not isinstance(metrics_map, dict):
+                                continue
+                            for metric_name, values in metrics_map.items():
+                                if isinstance(values, (list, tuple)) and values:
+                                    validation_values = list(values)
+                                    break
+                            if validation_values:
+                                break
                     count = max(len(train_values), len(validation_values))
                     series = []
                     if train_values:
                         series.append({"label": "训练集", "y": train_values})
                     if validation_values:
                         series.append({"label": "验证集", "y": validation_values})
-                    self.training_result.set_result(0, "模型训练", {
-                        "kind": "line_multi", "x": list(range(1, count + 1)), "series": series,
-                        "title": "真实训练历史", "x_label": "迭代轮次", "y_label": "评估误差",
-                        "source": "后端训练历史",
-                    })
+                    if series:
+                        self.training_result.set_result(0, "训练诊断", {
+                            "kind": "line_multi", "x": list(range(1, count + 1)), "series": series,
+                            "title": "真实训练历史", "x_label": "训练轮次", "y_label": "验证误差",
+                            "source": "后端训练历史",
+                        })
+                    else:
+                        history = {}
                 else:
-                    self.training_result.set_result(0, "模型训练", {
-                        "kind": "text",
-                        "text": f"模型：{model_type or '—'}\n后端未返回逐轮评估历史。\n随机森林等非迭代模型不绘制伪训练曲线；质量请查看上方 R²、MAE 和 RMSE。",
-                        "title": "模型训练信息", "source": "后端训练",
-                    })
+                    evaluation = dict(metadata.get("evaluation") or {})
+                    actual = evaluation.get("actual") or []
+                    predicted = evaluation.get("predicted") or []
+                    # Single-target regression is the normal coupling use case. Flatten one-element rows.
+                    def _flat(values):
+                        out = []
+                        for value in values:
+                            if isinstance(value, (list, tuple)) and value:
+                                value = value[0]
+                            try:
+                                out.append(float(value))
+                            except (TypeError, ValueError):
+                                pass
+                        return out
+                    actual_flat, predicted_flat = _flat(actual), _flat(predicted)
+                    if actual_flat and len(actual_flat) == len(predicted_flat):
+                        self.training_result.set_result(0, "训练诊断", {
+                            "kind": "validation_scatter",
+                            "actual": actual_flat,
+                            "predicted": predicted_flat,
+                            "title": "预测值与真实值",
+                            "x_label": "真实值",
+                            "y_label": "预测值",
+                            "source": "独立测试集",
+                        })
+                    else:
+                        self.training_result.set_result(0, "训练诊断", {
+                            "kind": "empty",
+                            "message": "当前模型没有逐轮历史；后端也未返回可绘制的独立测试样本。",
+                        })
+                summary = dict(metadata.get("training_summary") or {})
+                if hasattr(self, "training_run_summary"):
+                    if model_type == "random_forest":
+                        trees = int(summary.get("actual_units", summary.get("requested_units", 0)) or 0)
+                        self.training_run_summary.setText(f"随机森林为非迭代模型 · 实际构建 {trees or '—'} 棵树 · 早停/收敛轮次不适用")
+                    else:
+                        requested = int(summary.get("requested_units", 0) or 0)
+                        actual_units = int(summary.get("actual_units", 0) or 0)
+                        best = summary.get("best_iteration")
+                        early = bool(summary.get("early_stopped"))
+                        convergence = "早停收敛" if early else "达到最大训练预算，需结合验证曲线判断收敛"
+                        self.training_run_summary.setText(
+                            f"计划最大轮数 {requested or '—'} · 实际训练 {actual_units or '—'} · "
+                            f"最佳轮次 {best or '—'} · 早停 {'是' if early else '否'} · {convergence}"
+                        )
             model_record = data.get("model") if isinstance(data.get("model"), dict) else data
             if isinstance(model_record, dict) and (
                 model_record.get("model_id") or model_record.get("id")
             ):
                 self.context.registry.merge_model(model_record)
-                self.context.registry.set_current_model(
+                self.context.registry.set_recent_model(
                     str(model_record.get("model_id", model_record.get("id", "")))
                 )
+                if hasattr(self, "training_adopt_button"):
+                    self.training_adopt_button.setEnabled(True)
+                if hasattr(self, "training_adopt_note"):
+                    self.training_adopt_note.setText("新模型已训练完成，但尚未设为当前模型。请检查指标后再决定是否采用。")
             self._set_job_status("training", "模型训练完成")
+            if hasattr(self, "training_submit_button"):
+                self.training_submit_button.set_task_state("success", "训练完成")
+                QTimer.singleShot(1400, lambda: self.training_submit_button.reset_task_state("开始训练"))
             self.context.registry.invalidate("models")
             self.refresh_remote(force=True)
-            if getattr(self, "advanced_section", None) is not None and self.advanced_section.is_expanded():
-                self._set_workflow_step(2)
+            # Do not asynchronously jump from prediction/data to model comparison.
+            # This used to race with real clicks during GUI acceptance.
         self._loaded_ml_results.add(job_id)
         self._jobs.pop(job_id, None)
         if not self._jobs:
@@ -294,9 +394,80 @@ class MachineLearningJobMixin:
                 info["kind"],
                 f"{status}：{display_message}" if status == "失败" else display_message,
             )
+            if info["kind"] == "dataset":
+                self._update_dataset_progress(job_id, status, 0.0)
+            elif info["kind"] == "training":
+                self._update_training_progress(job_id, status, 0.0)
+                if hasattr(self, "training_submit_button"):
+                    if status == "失败":
+                        self.training_submit_button.set_task_state("error", "训练失败")
+                    else:
+                        self.training_submit_button.set_task_state("pending", "训练已取消")
+                    QTimer.singleShot(1500, lambda: self.training_submit_button.reset_task_state("开始训练"))
             self._jobs.pop(job_id, None)
         if not self._jobs:
             self._poll_timer.stop()
+
+    def _update_dataset_progress(self, job_id: str, status: object, progress: object) -> None:
+        """Only render progress reported by the backend for the active dataset job."""
+        state = str(status or "").strip().lower()
+        active = str(getattr(self, "_active_dataset_job_id", "") or "")
+        if not active and state in {"running", "运行中", "queued", "等待后端", "等待中"}:
+            self._active_dataset_job_id = str(job_id)
+            active = str(job_id)
+            tracker = getattr(self, "_dataset_progress_tracker", None)
+            if tracker is not None:
+                tracker.reset(job_id)
+        if str(job_id) != active:
+            return
+        tracker = getattr(self, "_dataset_progress_tracker", None)
+        percent = tracker.value(job_id, status, progress) if tracker is not None else progress_percent(progress)
+        bar = getattr(self, "dataset_progress", None)
+        if bar is not None:
+            bar.setRange(0, 100)
+            bar.setValue(percent)
+            if state in {"completed", "已完成"}:
+                bar.setFormat("已完成 · 100%")
+            elif state in {"failed", "失败"}:
+                bar.setFormat("任务失败")
+            elif state in {"cancelled", "已取消"}:
+                bar.setFormat("已取消")
+            else:
+                bar.setFormat("%p%")
+        if state in {"completed", "已完成", "failed", "失败", "cancelled", "已取消"}:
+            self._active_dataset_job_id = ""
+            if tracker is not None:
+                tracker.forget(job_id)
+
+    def _update_training_progress(self, job_id: str, status: object, progress: object) -> None:
+        state = str(status or "").strip().lower()
+        active = str(getattr(self, "_active_training_job_id", "") or "")
+        if not active and state in {"running", "运行中", "queued", "等待后端", "等待中"}:
+            self._active_training_job_id = str(job_id); active = str(job_id)
+            tracker = getattr(self, "_training_progress_tracker", None)
+            if tracker is not None: tracker.reset(job_id)
+        if str(job_id) != active:
+            return
+        tracker = getattr(self, "_training_progress_tracker", None)
+        percent = tracker.value(job_id, status, progress) if tracker is not None else progress_percent(progress)
+        bar = getattr(self, "training_progress", None)
+        if hasattr(self, "training_submit_button") and state not in {"completed", "已完成", "failed", "失败", "cancelled", "已取消"}:
+            if self.training_submit_button.property("taskState") not in {"running", "submitted"}:
+                self.training_submit_button.set_task_state("running", "训练中")
+        if bar is not None:
+            bar.setRange(0, 100)
+            bar.setValue(percent)
+            if state in {"completed", "已完成"}:
+                bar.setFormat("已完成 · 100%")
+            elif state in {"failed", "失败"}:
+                bar.setFormat("任务失败")
+            elif state in {"cancelled", "已取消"}:
+                bar.setFormat("已取消")
+            else:
+                bar.setFormat("%p%")
+        if state in {"completed", "已完成", "failed", "失败", "cancelled", "已取消"}:
+            self._active_training_job_id = ""
+            if tracker is not None: tracker.forget(job_id)
 
     def _on_ws_progress(self, job_id: str, progress: float, stage: str) -> None:
         info = self._ensure_ml_job(job_id)
@@ -304,20 +475,39 @@ class MachineLearningJobMixin:
             return
         if progress > 1.0:
             progress /= 100.0
+        percent = round(progress * 100)
+        tracker = getattr(
+            self,
+            "_dataset_progress_tracker" if info["kind"] == "dataset" else "_training_progress_tracker",
+            None,
+        )
+        if tracker is not None:
+            percent = tracker.value(job_id, "running", progress)
+            progress = percent / 100.0
+        stage_display = friendly_job_stage(stage)
         self.context.tasks.update_job(
             job_id,
             status="运行中",
-            progress=round(progress * 100),
-            note=stage,
+            progress=percent,
+            note=stage_display,
         )
-        self._set_job_status(info["kind"], stable_progress_text("running", progress))
+        message = stage_display if stage_display in {"正在保存结果", "正在整理结果"} else stable_progress_text("running", progress)
+        if stage_display in {"正在保存结果", "正在整理结果"}:
+            message = f"{stage_display} · {percent}%"
+        self._set_job_status(info["kind"], message)
+        if info["kind"] == "training":
+            self._update_training_progress(job_id, "running", progress)
+        elif info["kind"] == "dataset":
+            self._update_dataset_progress(job_id, "running", progress)
 
     def _on_ws_completed(self, job_id: str, status: str, _metrics: dict) -> None:
         info = self._ensure_ml_job(job_id)
         if not info:
             return
         if status == "completed" and not info.get("result_requested", False):
-            self.context.tasks.update_job(job_id, status="已完成", progress=100)
+            self.context.tasks.update_job(
+                job_id, status="已完成", progress=100, note="任务已完成，结果可读取", result_available=True
+            )
             self._request_ml_result(job_id, info)
         elif status == "cancelled":
             self._finish_job(job_id, "已取消", "任务已取消")

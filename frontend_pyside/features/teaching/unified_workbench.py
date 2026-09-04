@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 import copy
 from datetime import datetime
 import json
@@ -43,6 +43,7 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QMessageBox,
+    QMenu,
     QPushButton,
     QScrollArea,
     QSizePolicy,
@@ -59,9 +60,12 @@ from PySide6.QtWidgets import (
 from frontend_pyside.resources import theme_tokens as theme
 from frontend_pyside.shared.lifecycle import safe_single_shot
 from frontend_pyside.shared.components.basic import Badge, PrimaryButton, SecondaryButton
+from frontend_pyside.shared.icons import icon
 
 from . import component_catalog as catalog
 from .experiment_presets import EXPERIMENT_GROUPS, EXPERIMENT_PRESETS, presets_for_group
+from .optical_components import DeviceFactory, TeachingOpticalSystem
+from .unified_quick3d import UnifiedTeachingQuick3DView
 
 
 _logger = logging.getLogger(__name__)
@@ -147,6 +151,22 @@ class TeachingSceneSnapshot:
     metrics: WorkbenchMetrics
     current_radii: dict[str, float]
     ideal_radii: dict[str, float]
+    # Optical rays displayed by both engineering projection and 3D must come
+    # from the same formal raytrace result.  An empty tuple means “do not draw
+    # a physical beam yet”, never “invent a snapped path between scene objects”.
+    formal_rays_mm: tuple[tuple[tuple[float, float, float], ...], ...] = ()
+    # Free-placement scene solver provides scene-frame and world-frame polylines
+    # directly so Quick3D does not re-map through the sequential z compiler.
+    formal_rays_scene: tuple[tuple[tuple[float, float, float], ...], ...] = ()
+    formal_rays_world: tuple[tuple[tuple[float, float, float], ...], ...] = ()
+    physics_source: str = "等待正式计算"
+    physics_status: str = "pending"
+    # Efficiency can have a different provenance from the displayed rays. The
+    # interactive teaching controller intentionally runs a fast formal
+    # raytrace, while coupling may still be a labelled teaching estimate.
+    efficiency_source: str = "教学快速估算"
+    efficiency_status: str = "preview"
+    validation_messages: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -163,6 +183,7 @@ class ExperimentModel:
         self.mode = "standard"
         self.nodes: dict[str, ExperimentNode] = {}
         self.edges: dict[str, ExperimentEdge] = {}
+        self.optical_system = TeachingOpticalSystem()
         self.selected_node_id: str | None = None
         self.selected_edge_id: str | None = None
         self.connect_source_id: str | None = None
@@ -183,11 +204,17 @@ class ExperimentModel:
         self._revision = 0
         self._metrics_cache_revision = -1
         self._metrics_cache: WorkbenchMetrics | None = None
+        self._project_context: Any | None = None
+        self._preview_metrics_source: str = ""
         self._scene_snapshot_cache: TeachingSceneSnapshot | None = None
         self.load_standard(record=False)
         self._reset_history()
 
-    
+    def sync_optical_system(self) -> TeachingOpticalSystem:
+        """Keep OpticalSystem.components in lockstep with dragged scene nodes."""
+        self.optical_system.sync_from_nodes(self.nodes)
+        return self.optical_system
+
     @property
     def revision(self) -> int:
         return self._revision
@@ -197,6 +224,7 @@ class ExperimentModel:
         self._metrics_cache_revision = -1
         self._metrics_cache = None
         self._scene_snapshot_cache = None
+        self.sync_optical_system()
 
     def snapshot(self) -> dict[str, Any]:
         return {
@@ -299,7 +327,28 @@ class ExperimentModel:
 
     def _default_params(self, kind: str) -> dict[str, float | str | bool]:
         if kind == "lens":
-            return {"focal_mm": 50.0, "reversed": False, "enabled": True}
+            return {
+                "focal_mm": 50.0,
+                "thickness_mm": 3.0,
+                "material": "N-BK7",
+                "semi_aperture_mm": 12.5,
+                "mechanical_diameter_mm": 25.4,
+                "coating": "未指定",
+                "coating_min_nm": 330.0,
+                "coating_max_nm": 2500.0,
+                "prescription_source": "焦距近似",
+                "reversed": False,
+                "enabled": True,
+            }
+        if kind == "laser":
+            return {
+                "wavelength_nm": self.wavelength_nm,
+                "source_type": "gaussian",
+                "waist_x_um": 720.0,
+                "waist_y_um": 720.0,
+                "beam_quality_m2_x": 1.0,
+                "beam_quality_m2_y": 1.0,
+            }
         if kind == "fiber":
             return {
                 "offset_x_um": 0.0,
@@ -333,10 +382,38 @@ class ExperimentModel:
                 "pair_spacing_mm": 60.0,
                 "module_offset_mm": 0.0,
             }
-        if kind in {"beam_analyzer", "imaging_camera", "focus_scan_module", "wavefront_sensor"}:
-            return {"plane_offset_mm": 0.0}
         if kind == "focus_scan_module":
-            return {"plane_offset_mm": 0.0, "scan_span_mm": 20.0}
+            return {
+                "plane_offset_mm": 0.0,
+                "scan_span_mm": 20.0,
+                "scan_positions_mm": "10,15,17.5,27.5,37.5",
+                "spot_definition": "ISO 11146 二阶矩",
+            }
+        if kind == "imaging_camera":
+            return {
+                "plane_offset_mm": 0.0,
+                "camera_model": "通用面阵相机",
+                "pixel_pitch_um": 4.65,
+                "magnification": 1.0,
+                "pixel_integration": True,
+                "background_subtraction": True,
+                "saturation_check": True,
+                "spot_definition": "ISO 11146 二阶矩",
+            }
+        if kind == "ccd":
+            return {
+                "plane_offset_mm": 0.0,
+                "camera_model": "LM135C",
+                "pixel_pitch_um": 4.65,
+                "magnification": 1.0,
+                "pixel_integration": True,
+                "background_subtraction": True,
+                "saturation_check": True,
+                "scan_positions_mm": "10,15,17.5,27.5,37.5",
+                "spot_definition": "ISO 11146 二阶矩",
+            }
+        if kind in {"beam_analyzer", "wavefront_sensor"}:
+            return {"plane_offset_mm": 0.0}
         if kind == "power_meter":
             return {"range_mw": 500.0}
         return {}
@@ -353,6 +430,10 @@ class ExperimentModel:
         record: bool = True,
     ) -> str:
         kind = str(kind)
+        # CCD tray drops create a CCDComponent via DeviceFactory and land in
+        # OpticalSystem.components; the scene node kind remains "ccd".
+        if kind == "ccd":
+            kind = "ccd"
         node_id = node_id or self._next_id(kind)
         merged = self._default_params(kind)
         merged.update(params or {})
@@ -360,7 +441,23 @@ class ExperimentModel:
             base = NODE_LABELS.get(kind, kind)
             same_kind = sum(1 for node in self.nodes.values() if node.kind == kind)
             label = base if same_kind == 0 else f"{base}{same_kind + 1}"
-        self.nodes[node_id] = ExperimentNode(node_id, kind, label, float(x), float(y), params=merged)
+        component = DeviceFactory.create(
+            kind,
+            component_id=node_id,
+            scene_x=float(x),
+            scene_y=float(y),
+            label=label,
+            params=merged,
+        )
+        self.nodes[node_id] = ExperimentNode(
+            component.component_id,
+            component.kind,
+            component.label,
+            float(component.visual.scene_x),
+            float(component.visual.scene_y),
+            rotation_deg=float(component.visual.rotation_deg),
+            params=dict(component.optical.params),
+        )
         self.mark_changed()
         self.selected_node_id = node_id
         self.selected_edge_id = None
@@ -448,7 +545,7 @@ class ExperimentModel:
         laser = self.add_node("laser", 120, MAIN_RAIL_Y, node_id="laser", label="激光器", record=False)
         isolator = self.add_node("isolator", 300, MAIN_RAIL_Y, node_id="isolator", label="光隔离器", record=False)
         splitter = self.add_node("splitter", 495, MAIN_RAIL_Y, node_id="splitter", label="分束器", record=False)
-        l1 = self.add_node("lens", 710, MAIN_RAIL_Y, node_id="lens_1", label="L1", params={"focal_mm": 12.0}, record=False)
+        l1 = self.add_node("lens", 710, MAIN_RAIL_Y, node_id="lens_1", label="L1", params={"focal_mm": 50.0}, record=False)
         l2 = self.add_node("lens", 910, MAIN_RAIL_Y, node_id="lens_2", label="L2", params={"focal_mm": 12.0}, record=False)
         fiber = self.add_node("fiber", 1160, MAIN_RAIL_Y, node_id="fiber", label="五轴光纤架", record=False)
         input_meter = self.add_node("power_meter", 500, BRANCH_RAIL_Y, node_id="input_meter", label="输入功率计", params={"range_mw": 500.0}, record=False)
@@ -559,13 +656,11 @@ class ExperimentModel:
                 waist_shift_y_um += (0.08 * module_offset + 3.0 * detune) * 1000.0
             elif node.kind == "cylindrical_lens":
                 focal = float(node.params.get("focal_mm", 50.0))
-                # axis_angle_deg 表示传统柱面轴（零光焦度方向），光焦度方向与其正交。
-                cylinder_axis = math.radians(float(node.params.get("axis_angle_deg", node.params.get("cylinder_axis_deg", 0.0)) or 0.0))
-                power_axis = cylinder_axis + math.pi * 0.5
+                axis = math.radians(float(node.params.get("axis_angle_deg", 0.0)))
                 power = 50.0 / max(abs(focal), 1.0)
                 signed = 1.0 if focal >= 0.0 else -1.0
-                effect_x = math.cos(power_axis) ** 2
-                effect_y = math.sin(power_axis) ** 2
+                effect_x = math.cos(axis) ** 2
+                effect_y = math.sin(axis) ** 2
                 radius_x_mm *= max(0.45, 1.0 - 0.16 * signed * power * effect_x)
                 radius_y_mm *= max(0.45, 1.0 - 0.16 * signed * power * effect_y)
                 separation = float(node.params.get("pair_spacing_mm", 60.0))
@@ -608,75 +703,6 @@ class ExperimentModel:
             "rayleigh_x_um": zrx, "rayleigh_y_um": zry,
             "curvature_waves": curvature_waves + natural_curvature,
             "ellipticity": max(radius_plane_x, radius_plane_y) / max(min(radius_plane_x, radius_plane_y), 1e-9),
-        }
-
-    def field_verification(self, *, sample_side: int = 257) -> dict[str, Any]:
-        """复场验证：在光纤接收平面用解析高斯复场与光纤模场做模式重叠积分。
-
-        属于教学预览阶段的“复场”验证：用低复杂度解析传播模型构造端面复场
-        （振幅 + 二次相位 + 倾斜线性相位），与光纤模场做重叠积分得到耦合效率。
-        """
-        import numpy as np
-
-        path = self.shortest_path("fiber")
-        if not path:
-            return {
-                "ok": False,
-                "reason": "光路未连通，无法进行复场验证。",
-                "coupling_efficiency": 0.0,
-                "sample_side": 0,
-            }
-        state = self.beam_state()
-        fiber = next((node for node in self.nodes.values() if node.kind == "fiber"), None)
-        fp = fiber.params if fiber is not None else {}
-        wavelength_um = max(self.wavelength_nm / 1000.0, 1e-9)
-        k = 2.0 * math.pi / wavelength_um
-
-        waist_x = max(float(state["waist_x_um"]), 1e-6)
-        waist_y = max(float(state["waist_y_um"]), 1e-6)
-        zx = float(state["waist_x_z_um"]) + float(fp.get("offset_z_um", 0.0))
-        zy = float(state["waist_y_z_um"]) + float(fp.get("offset_z_um", 0.0))
-        zrx = max(float(state["rayleigh_x_um"]), 1e-6)
-        zry = max(float(state["rayleigh_y_um"]), 1e-6)
-        wfx = max(float(state["plane_radius_x_um"]), 1e-6)
-        wfy = max(float(state["plane_radius_y_um"]), 1e-6)
-        inv_rx = zx / max(zx * zx + zrx * zrx, 1e-9)
-        inv_ry = zy / max(zy * zy + zry * zry, 1e-9)
-        wf = max(0.2, float(self.receiver_mode_radius_um))
-        dx = float(fp.get("offset_x_um", 0.0))
-        dy = float(fp.get("offset_y_um", 0.0))
-        theta_x = float(fp.get("yaw_mrad", 0.0)) * 1e-3
-        theta_y = float(fp.get("pitch_mrad", 0.0)) * 1e-3
-
-        span_x = 5.0 * max(wfx, wf)
-        span_y = 5.0 * max(wfy, wf)
-        xs = np.linspace(-span_x, span_x, int(sample_side))
-        ys = np.linspace(-span_y, span_y, int(sample_side))
-        xg, yg = np.meshgrid(xs, ys, indexing="ij")
-        xm = xg - dx
-        ym = yg - dy
-
-        beam_amp = np.exp(-(xm * xm) / (wfx * wfx) - (ym * ym) / (wfy * wfy))
-        beam_phase = -0.5 * k * (inv_rx * xm * xm + inv_ry * ym * ym) - k * (theta_x * xm + theta_y * ym)
-        beam = beam_amp * np.exp(1j * beam_phase)
-        fiber_mode = np.exp(-(xg * xg + yg * yg) / (wf * wf))
-
-        numerator = np.abs(np.sum(np.conj(beam) * fiber_mode)) ** 2
-        denominator = np.sum(np.abs(beam) ** 2) * np.sum(fiber_mode * fiber_mode)
-        efficiency = float(min(1.0, max(0.0, numerator / max(denominator, 1e-30))))
-
-        return {
-            "ok": True,
-            "coupling_efficiency": efficiency,
-            "sample_side": int(sample_side),
-            "waist_x_um": float(state["waist_x_um"]),
-            "waist_y_um": float(state["waist_y_um"]),
-            "plane_radius_x_um": wfx,
-            "plane_radius_y_um": wfy,
-            "fiber_mode_radius_um": wf,
-            "position_offset_um": (dx, dy),
-            "axial_offset_um": float(fp.get("offset_z_um", 0.0)),
-            "tilt_mrad": (theta_x * 1e3, theta_y * 1e3),
         }
 
     def _evaluate_uncached(self) -> WorkbenchMetrics:
@@ -830,10 +856,37 @@ class ExperimentModel:
             latest_cause=self.latest_cause,
         )
 
+    def set_project_context(self, project_context: Any | None) -> None:
+        self._project_context = project_context
+
+    def _apply_preview_efficiency(self, metrics: WorkbenchMetrics) -> WorkbenchMetrics:
+        self._preview_metrics_source = ""
+        if not metrics.connected or self._project_context is None:
+            return metrics
+        if not any(
+            self.nodes.get(node_id) and self.nodes[node_id].kind == "fiber"
+            for node_id in metrics.path_node_ids
+        ):
+            return metrics
+        from frontend_pyside.features.teaching.preview_metrics import estimate_teaching_preview_efficiency
+
+        preview = estimate_teaching_preview_efficiency(self, self._project_context)
+        if preview is None:
+            return metrics
+        self._preview_metrics_source = preview.source
+        total = max(0.0, min(1.0, float(preview.total)))
+        return replace(
+            metrics,
+            system_efficiency=max(0.0, min(1.0, float(preview.system))),
+            receiver_efficiency=max(0.0, min(1.0, float(preview.receiver))),
+            total_efficiency=total,
+            output_power_mw=self.input_power_mw * total,
+        )
+
     def evaluate(self) -> WorkbenchMetrics:
         if self._metrics_cache_revision == self._revision and self._metrics_cache is not None:
             return self._metrics_cache
-        metrics = self._evaluate_uncached()
+        metrics = self._apply_preview_efficiency(self._evaluate_uncached())
         self._metrics_cache = metrics
         self._metrics_cache_revision = self._revision
         return metrics
@@ -879,7 +932,25 @@ class ExperimentModel:
             return cached
         metrics = self.evaluate()
         current, ideal = self._compute_beam_radii(metrics)
-        snapshot = TeachingSceneSnapshot(self._revision, metrics, current, ideal)
+        has_fiber = any(node.kind == "fiber" for node in self.nodes.values())
+        preview_source = str(getattr(self, "_preview_metrics_source", "") or "")
+        if preview_source:
+            efficiency_source = preview_source
+            efficiency_status = "preview"
+        elif has_fiber:
+            efficiency_source = "教学快速估算"
+            efficiency_status = "preview"
+        else:
+            efficiency_source = "相机测量模式：耦合效率不适用"
+            efficiency_status = "not_applicable"
+        snapshot = TeachingSceneSnapshot(
+            self._revision,
+            metrics,
+            current,
+            ideal,
+            efficiency_source=efficiency_source,
+            efficiency_status=efficiency_status,
+        )
         self._scene_snapshot_cache = snapshot
         return snapshot
 
@@ -908,7 +979,7 @@ class ExperimentModel:
                 power = self.input_power_mw * fraction
                 role = "监测功率"
             return {"valid": True, "kind": node.kind, "role": role, "power_mw": power, "efficiency": metrics.total_efficiency}
-        if node.kind in {"beam_analyzer", "imaging_camera", "focus_scan_module"}:
+        if node.kind in {"beam_analyzer", "imaging_camera", "focus_scan_module", "ccd"}:
             state = self.beam_state()
             offset_mm = float(node.params.get("plane_offset_mm", 0.0))
             offset_um = offset_mm * 1000.0
@@ -925,6 +996,18 @@ class ExperimentModel:
                 "waist_x_z_mm": float(state["waist_x_z_um"]) / 1000.0,
                 "waist_y_z_mm": float(state["waist_y_z_um"]) / 1000.0,
                 "ellipticity": max(wx, wy) / max(min(wx, wy), 1e-9),
+                # ``w`` is the Gaussian 1/e² intensity radius.  ISO-style
+                # second-moment values are separate fields; never relabel one as
+                # the other merely because both are commonly called "radius".
+                "radius_x_1e2_um": wx,
+                "radius_y_1e2_um": wy,
+                "rms_x_um": wx / 2.0,
+                "rms_y_um": wy / 2.0,
+                "radial_rms_um": math.sqrt(((wx / 2.0) ** 2 + (wy / 2.0) ** 2) / 2.0),
+                "centroid_x_um": dx,
+                "centroid_y_um": dy,
+                "fit_residual": None,
+                "metric_source": "教学高斯解析预览",
             }
             if node.kind == "focus_scan_module":
                 span = max(0.5, float(node.params.get("scan_span_mm", 20.0)))
@@ -1013,15 +1096,29 @@ class OpticalNodeItem(QGraphicsObject):
         display_layer: str,
         show_ports: bool,
     ) -> None:
-        self.prepareGeometryChange()
+        target_layer = display_layer if display_layer in DISPLAY_LAYER_LABELS else "overlay"
+        target_movable = bool(movable)
+        current_movable = bool(self.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
+        target = QPointF(float(node.x), float(node.y))
+        changed = any((
+            self.kind != node.kind,
+            self.label != node.label,
+            self.params != node.params,
+            abs(self.rotation_deg - float(node.rotation_deg)) > 1e-9,
+            self.display_layer != target_layer,
+            self.show_ports != bool(show_ports),
+            current_movable != target_movable,
+            (self.pos() - target).manhattanLength() > 0.01,
+        ))
+        if not changed:
+            return
         self.kind = node.kind
         self.label = node.label
         self.params = copy.deepcopy(node.params)
         self.rotation_deg = float(node.rotation_deg)
-        self.display_layer = display_layer if display_layer in DISPLAY_LAYER_LABELS else "overlay"
+        self.display_layer = target_layer
         self.show_ports = bool(show_ports)
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, movable)
-        target = QPointF(float(node.x), float(node.y))
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, target_movable)
         if (self.pos() - target).manhattanLength() > 0.01:
             self._syncing = True
             self.setPos(target)
@@ -1864,6 +1961,7 @@ class OverlayDrawer(QFrame):
     def __init__(self, title: str, parent=None) -> None:
         super().__init__(parent)
         self.setObjectName("teachingOverlayDrawer")
+        self.setWindowFlags(Qt.WindowType.Widget)
         self.setFrameShape(QFrame.Shape.StyledPanel)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         layout = QVBoxLayout(self)
@@ -1874,7 +1972,7 @@ class OverlayDrawer(QFrame):
         self.title_label.setObjectName("drawerTitle")
         head.addWidget(self.title_label, 1)
         close = QToolButton()
-        close.setText("×")
+        close.setIcon(icon("close", "#667085", 16))
         close.setToolTip("收起")
         close.clicked.connect(self.hide)
         close.clicked.connect(self.closed)
@@ -1913,6 +2011,8 @@ class FloatingPanel(QFrame):
         self._drag_global: QPoint | None = None
         self._collapsed = False
         self.setObjectName("teachingFloatingPanel")
+        # Stay embedded in the teaching canvas; never become a native OS window.
+        self.setWindowFlags(Qt.WindowType.Widget)
         self.setFrameShape(QFrame.Shape.StyledPanel)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setMinimumSize(360, 230)
@@ -1928,12 +2028,12 @@ class FloatingPanel(QFrame):
         self.title_label.setObjectName("floatingTitle")
         title_layout.addWidget(self.title_label, 1)
         self.collapse_button = QToolButton()
-        self.collapse_button.setText("—")
+        self.collapse_button.setIcon(icon("minus", "#667085", 16))
         self.collapse_button.setToolTip("最小化/恢复")
         self.collapse_button.clicked.connect(self.toggle_collapsed)
         title_layout.addWidget(self.collapse_button)
         close = QToolButton()
-        close.setText("×")
+        close.setIcon(icon("close", "#667085", 16))
         close.setToolTip("关闭")
         close.clicked.connect(self._close)
         title_layout.addWidget(close)
@@ -2231,12 +2331,19 @@ class MismatchTripleView(QWidget):
 class UnifiedTeachingWorkbench(QWidget):
     navigateRequested = Signal(str)
     profileReady = Signal(dict)
+    model_class = ExperimentModel
+    graphics_view_class = ExperimentGraphicsView
+    quick3d_view_class = UnifiedTeachingQuick3DView
 
     def __init__(self, context, parent=None) -> None:
         super().__init__(parent)
         self.context = context
         self.settings = QSettings("Optical ML Platform", "OpticalFrontend")
-        self.model = ExperimentModel()
+        self.model = self.model_class()
+        if hasattr(self.model, "set_project_context"):
+            self.model.set_project_context(context.project)
+        if hasattr(context.project, "simulation_project_payload_changed"):
+            context.project.simulation_project_payload_changed.connect(self._on_shared_simulation_payload_changed)
         self._mode_snapshots: dict[str, dict[str, Any]] = {}
         self._view_kind = "2d"
         self._display_layer = "overlay"
@@ -2255,22 +2362,33 @@ class UnifiedTeachingWorkbench(QWidget):
         header = QHBoxLayout()
         title_block = QVBoxLayout()
         title_block.setSpacing(0)
-        title = QLabel("光纤耦合教学中心")
+        title = QLabel("虚拟光学实验")
         title.setObjectName("pageTitle")
         title_block.addWidget(title)
         header.addLayout(title_block, 1)
-        header.addWidget(Badge("教学近似模式", "warning"))
-        self.save_parameters_button = SecondaryButton("保存参数")
-        self.save_parameters_button.setToolTip("保存当前教学方案，供教学中心和正式工作台继续使用")
+        teaching_badge = Badge("真实参数 · 教学解释", "warning")
+        self.teaching_badge = teaching_badge
+        teaching_badge.setToolTip("教学环境中的操作不影响当前系统；带入正式仿真时会明确确认。")
+        header.addWidget(teaching_badge)
+        # Low-frequency workbench transfer actions share one compact menu so the teaching canvas stays dominant.
+        self.save_parameters_button = SecondaryButton("保存参数"); self.save_parameters_button.hide()
         self.save_parameters_button.clicked.connect(self._save_shared_parameters)
-        header.addWidget(self.save_parameters_button)
-        self.import_workbench_button = SecondaryButton("读取工作台")
-        self.import_workbench_button.setToolTip("读取正式工作台最近保存的结构和参数")
+        self.import_workbench_button = SecondaryButton("读取工作台"); self.import_workbench_button.hide()
         self.import_workbench_button.clicked.connect(self._import_workbench_parameters)
-        header.addWidget(self.import_workbench_button)
-        self.enter_workbench_button = PrimaryButton("进入工作台")
+        self.enter_workbench_button = PrimaryButton("进入工作台"); self.enter_workbench_button.hide()
         self.enter_workbench_button.clicked.connect(self._enter_formal_workbench)
-        header.addWidget(self.enter_workbench_button)
+        self.scheme_menu_button = QToolButton()
+        self.scheme_menu_button.setText("实验库")
+        self.scheme_menu_button.setIcon(icon("list", "#344054", 17))
+        self.scheme_menu_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.scheme_menu_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        scheme_menu = QMenu(self.scheme_menu_button)
+        scheme_menu.addAction("保存教学参数", self._save_shared_parameters)
+        scheme_menu.addAction("读取当前系统参数", self._import_workbench_parameters)
+        scheme_menu.addSeparator()
+        scheme_menu.addAction("带入正式仿真", self._enter_formal_workbench)
+        self.scheme_menu_button.setMenu(scheme_menu)
+        header.addWidget(self.scheme_menu_button)
         root.addLayout(header)
 
         toolbar = QHBoxLayout()
@@ -2279,14 +2397,14 @@ class UnifiedTeachingWorkbench(QWidget):
         self.mode_group.setExclusive(True)
         self.mode_buttons: dict[str, QPushButton] = {}
         self.model.mode = "free"
-        self.view_2d_button = SecondaryButton("2D平台")
-        self.view_2d_button.setCheckable(True)
-        self.view_2d_button.clicked.connect(lambda: self.set_view_kind("2d"))
-        toolbar.addWidget(self.view_2d_button)
         self.view_3d_button = SecondaryButton("3D空间")
         self.view_3d_button.setCheckable(True)
+        self.view_3d_button.setChecked(True)
         self.view_3d_button.clicked.connect(lambda: self.set_view_kind("3d"))
         toolbar.addWidget(self.view_3d_button)
+        self.view_2d_button = SecondaryButton("工程视图")
+        self.view_2d_button.hide()
+        self.view_2d_button.setCheckable(True)
         toolbar.addSpacing(10)
         
         
@@ -2304,10 +2422,12 @@ class UnifiedTeachingWorkbench(QWidget):
         host_layout = QVBoxLayout(self.overlay_host)
         host_layout.setContentsMargins(0, 0, 0, 0)
         self.view_stack = QStackedWidget()
-        self.graphics_view = ExperimentGraphicsView()
-        self.view_3d = Experiment3DView()
+        self.graphics_view = self.graphics_view_class()
+        self.graphics_view.hide()
+        self.view_3d = self.quick3d_view_class()
         self.view_stack.addWidget(self.graphics_view)
         self.view_stack.addWidget(self.view_3d)
+        self.view_stack.setCurrentWidget(self.view_3d)
         host_layout.addWidget(self.view_stack)
         root.addWidget(self.overlay_host, 1)
 
@@ -2316,41 +2436,80 @@ class UnifiedTeachingWorkbench(QWidget):
         self.graphics_view.nodeMoved.connect(self._on_node_moved)
         self.graphics_view.blankActivated.connect(self._on_blank_activated)
         self.view_3d.objectActivated.connect(self._on_node_activated)
+        self.view_3d.objectDoubleActivated.connect(self._on_node_double_activated)
+        self.view_3d.nodeMoved.connect(self._on_node_moved)
+        self.view_3d.componentDropped.connect(self._add_component_at)
+        self.view_3d.toolCategoryRequested.connect(self._on_tool_category_requested)
+        self.view_3d.nodeControlChanged.connect(lambda _node_id: self._refresh_all(preserve_view=True))
 
-        self.left_drawer = OverlayDrawer("工具与设置", self.overlay_host)
+        self.left_drawer = OverlayDrawer("实验库", self.overlay_host)
         self.right_drawer = OverlayDrawer("当前对象", self.overlay_host)
 
         self._create_overlay_buttons()
 
         
-        status = QHBoxLayout()
-        status.setSpacing(12)
+        # Experiment-first workflow: the scene, analysis and record phases are explicit,
+        # but only one is foregrounded at a time. This replaces the former permanent
+        # teaching wall without deleting measurement/principle/record capabilities.
+        stage_bar = QHBoxLayout()
+        stage_bar.setSpacing(6)
+        self.experiment_scene_stage = PrimaryButton("实验场景")
+        self.experiment_scene_stage.clicked.connect(self._show_experiment_scene_stage)
+        self.experiment_analysis_stage = SecondaryButton("测量与分析")
+        self.experiment_analysis_stage.clicked.connect(self._open_measurement_panel)
+        self.experiment_record_stage = SecondaryButton("实验记录")
+        self.experiment_record_stage.clicked.connect(lambda: self._open_left_drawer("schemes"))
+        stage_bar.addStretch(1)
+        stage_bar.addWidget(self.experiment_scene_stage)
+        stage_bar.addWidget(self.experiment_analysis_stage)
+        stage_bar.addWidget(self.experiment_record_stage)
+        stage_bar.addStretch(1)
+        root.addLayout(stage_bar)
+
+        # Canvas-first teaching layout: keep the persistent status/action strip to
+        # a single compact row.  Measurement and explanation panels are overlays,
+        # so the optical bench remains the dominant visual layer even at 1366x768.
+        status_box = QHBoxLayout()
+        status_box.setSpacing(9)
         self.total_metric = QLabel()
         self.total_metric.setObjectName("teachingPrimaryMetric")
-        status.addWidget(self.total_metric)
+        status_box.addWidget(self.total_metric)
         self.system_metric = QLabel()
-        status.addWidget(self.system_metric)
+        status_box.addWidget(self.system_metric)
         self.receiver_metric = QLabel()
-        status.addWidget(self.receiver_metric)
+        status_box.addWidget(self.receiver_metric)
         self.feasible_metric = QLabel()
-        status.addWidget(self.feasible_metric)
-        status.addStretch(1)
-        self.undo_button = SecondaryButton("撤销")
+        status_box.addWidget(self.feasible_metric)
+        status_box.addStretch(1)
+        self.undo_button = QToolButton()
+        self.undo_button.setObjectName("teachingStatusToolButton")
+        self.undo_button.setIcon(icon("undo", "#344054", 18))
+        self.undo_button.setToolTip("撤销上一步")
         self.undo_button.clicked.connect(self._undo)
-        status.addWidget(self.undo_button)
-        self.redo_button = SecondaryButton("重做")
+        status_box.addWidget(self.undo_button)
+        self.redo_button = QToolButton()
+        self.redo_button.setObjectName("teachingStatusToolButton")
+        self.redo_button.setIcon(icon("redo", "#344054", 18))
+        self.redo_button.setToolTip("重做下一步")
         self.redo_button.clicked.connect(self._redo)
-        status.addWidget(self.redo_button)
+        status_box.addWidget(self.redo_button)
         self.baseline_button = SecondaryButton("设为基线")
+        self.baseline_button.setIcon(icon("baseline", "#344054", 17))
         self.baseline_button.clicked.connect(self._set_baseline)
-        status.addWidget(self.baseline_button)
+        status_box.addWidget(self.baseline_button)
         self.restore_baseline_button = SecondaryButton("恢复基线")
+        self.restore_baseline_button.setIcon(icon("reset", "#344054", 17))
         self.restore_baseline_button.clicked.connect(self._restore_baseline)
-        status.addWidget(self.restore_baseline_button)
-        self.save_scheme_button = PrimaryButton("保存方案")
+        status_box.addWidget(self.restore_baseline_button)
+        self.save_scheme_button = PrimaryButton("保存快照")
+        self.save_scheme_button.setIcon(icon("save", "#FFFFFF", 17))
         self.save_scheme_button.clicked.connect(self._save_scheme)
-        status.addWidget(self.save_scheme_button)
-        root.addLayout(status)
+        # Baseline/save operations already live in the compact experiment menu. Keep
+        # compatibility widgets but do not let low-frequency actions consume the
+        # teaching canvas footer.
+        for low_frequency in (self.baseline_button, self.restore_baseline_button, self.save_scheme_button):
+            low_frequency.hide()
+        root.addLayout(status_box)
 
         
         
@@ -2359,73 +2518,124 @@ class UnifiedTeachingWorkbench(QWidget):
 
         self._apply_local_style()
         self.set_mode("standard", force=True)
-        self.set_view_kind("2d")
+        self.set_view_kind("3d")
         self.set_display_layer("overlay", force=True)
+        # Restore the persisted teaching layout before the first formal request;
+        # otherwise its revision can invalidate the startup result on arrival.
         safe_single_shot(self, 0, self._restore_persisted_snapshot)
 
     
+    def _show_experiment_scene_stage(self) -> None:
+        """Return focus to the experiment scene without changing physical state."""
+        self.left_drawer.hide()
+        self.right_drawer.hide()
+        for panel in self._floating_panels.values():
+            panel.hide()
+        if hasattr(self, "experiment_scene_stage"):
+            self.experiment_scene_stage.setEnabled(False)
+            self.experiment_analysis_stage.setEnabled(True)
+            self.experiment_record_stage.setEnabled(True)
+        self.overlay_host.setFocus()
+
+    def dismiss_transient_overlays(self) -> None:
+        """Hide drawers/floating panels and suspend Quick3D when leaving the teaching page."""
+        self.left_drawer.hide()
+        self.right_drawer.hide()
+        for panel in self._floating_panels.values():
+            if getattr(panel, "_collapsed", False):
+                panel.toggle_collapsed()
+            panel.hide()
+        view_3d = getattr(self, "view_3d", None)
+        suspend = getattr(view_3d, "suspend_scene_graph", None)
+        if callable(suspend):
+            suspend()
+
+    def resume_scene_surfaces(self) -> None:
+        view_3d = getattr(self, "view_3d", None)
+        resume = getattr(view_3d, "resume_scene_graph", None)
+        if callable(resume):
+            resume()
+
+    def hideEvent(self, event) -> None:
+        self.dismiss_transient_overlays()
+        super().hideEvent(event)
+
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        if self.isVisible():
+            self.resume_scene_surfaces()
+
     def _create_overlay_buttons(self) -> None:
         self.left_buttons: list[QToolButton] = []
         self.right_buttons: list[QToolButton] = []
+        self.rotate_buttons: list[QToolButton] = []
+        for icon_name, tooltip, degrees in [("rotate_left", "逆时针旋转选中元件", -15.0), ("rotate_right", "顺时针旋转选中元件", 15.0)]:
+            button = QToolButton(self.overlay_host)
+            button.setObjectName("teachingComponentControlButton")
+            button.setIcon(icon(icon_name, "#344054", 20))
+            button.setToolTip(tooltip)
+            button.clicked.connect(lambda _checked=False, value=degrees: self.view_3d.rotateSelected(value))
+            button.raise_()
+            self.rotate_buttons.append(button)
+        self.nudge_buttons: list[QToolButton] = []
+        for icon_name, tooltip, dx, dy in [
+            ("arrow_up", "向上移动选中元件", 0.0, -28.0),
+            ("arrow_down", "向下移动选中元件", 0.0, 28.0),
+            ("arrow_left", "向左移动选中元件", -28.0, 0.0),
+            ("arrow_right", "向右移动选中元件", 28.0, 0.0),
+        ]:
+            button = QToolButton(self.overlay_host)
+            button.setObjectName("teachingComponentControlButton")
+            button.setIcon(icon(icon_name, "#344054", 20))
+            button.setToolTip(tooltip)
+            button.clicked.connect(lambda _checked=False, x=dx, y=dy: self.view_3d.nudgeSelected(x, y))
+            button.raise_()
+            self.nudge_buttons.append(button)
+
         left_specs = [
-            ("器材", lambda: self._open_left_drawer("library")),
-            ("设置", lambda: self._open_left_drawer("settings")),
-            ("方案", lambda: self._open_left_drawer("schemes")),
+            ("toolbox", "实验库", lambda: self._open_left_drawer("library")),
+            ("settings", "实验设置", lambda: self._open_left_drawer("settings")),
         ]
         right_specs = [
-            ("当前对象", lambda: self._open_right_drawer("object")),
-            ("测量结果", self._open_measurement_panel),
-            ("原理分析", self._open_principle_panel),
-            ("智能建议", self._open_smart_panel),
+            ("inspect", "当前对象与诊断 Inspector", lambda: self._open_right_drawer("object")),
+            ("measure", "测量结果", self._open_measurement_panel),
+            ("function", "原理解释", self._open_principle_panel),
         ]
-        for text, callback in left_specs:
+        for icon_name, tooltip, callback in left_specs:
             button = QToolButton(self.overlay_host)
             button.setObjectName("teachingOverlayButton")
-            button.setText(text)
-            button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextOnly)
+            button.setIcon(icon(icon_name, "#0A327A", 20))
+            button.setToolTip(tooltip)
             button.clicked.connect(callback)
             button.raise_()
             self.left_buttons.append(button)
-        for text, callback in right_specs:
+        for icon_name, tooltip, callback in right_specs:
             button = QToolButton(self.overlay_host)
             button.setObjectName("teachingOverlayButton")
-            button.setText(text)
-            button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextOnly)
+            button.setIcon(icon(icon_name, "#0A327A", 20))
+            button.setToolTip(tooltip)
             button.clicked.connect(callback)
             button.raise_()
             self.right_buttons.append(button)
 
         self.bottom_buttons: list[QToolButton] = []
-        for text, callback in [
-            ("参数优化", self._open_optimization_panel),
-            ("智能分析", self._open_smart_panel),
-            ("方案比较", self._open_compare_panel),
-            ("设计记录", self._open_log_panel),
-        ]:
-            button = QToolButton(self.overlay_host)
-            button.setObjectName("teachingBottomOverlayButton")
-            button.setText(text)
-            button.clicked.connect(callback)
-            button.raise_()
-            self.bottom_buttons.append(button)
-
         self.view_control_buttons: list[QToolButton] = []
-        for text, tooltip, callback in [
-            ("全图", "适合全图", self.graphics_view.fit_full),
-            ("聚焦", "聚焦当前选中元件", self._focus_selected_node),
-            ("＋", "放大主实验平台", self.graphics_view.zoom_in),
-            ("－", "缩小主实验平台", self.graphics_view.zoom_out),
+        for icon_name, tooltip, callback in [
+            ("fit", "适合全图", self._fit_current_view),
+            ("focus", "聚焦当前选中元件", self._focus_selected_node),
+            ("zoom_in", "放大主实验平台", lambda: self._zoom_current_view(True)),
+            ("zoom_out", "缩小主实验平台", lambda: self._zoom_current_view(False)),
         ]:
             button = QToolButton(self.overlay_host)
             button.setObjectName("teachingViewControlButton")
-            button.setText(text)
+            button.setIcon(icon(icon_name, "#344054", 18))
             button.setToolTip(tooltip)
             button.clicked.connect(callback)
             button.raise_()
             self.view_control_buttons.append(button)
         self.rays_only_button = QToolButton(self.overlay_host)
         self.rays_only_button.setObjectName("teachingViewControlButton")
-        self.rays_only_button.setText("光线")
+        self.rays_only_button.setIcon(icon("rays", "#344054", 18))
         self.rays_only_button.setToolTip("隐藏器件只查看光线；再次点击恢复叠加显示")
         self.rays_only_button.setCheckable(True)
         self.rays_only_button.toggled.connect(self._toggle_rays_only)
@@ -2450,19 +2660,27 @@ class UnifiedTeachingWorkbench(QWidget):
         h = self.overlay_host.height()
         y0 = 18
         for index, button in enumerate(self.left_buttons):
-            button.setGeometry(12, y0 + index * 46, 92, 38)
+            button.setGeometry(12, y0 + index * 58, 38, 38)
+            button.raise_()
+        for index, button in enumerate(self.rotate_buttons):
+            button.setGeometry(12, y0 + 130 + index * 48, 38, 38)
+            button.raise_()
+        for index, button in enumerate(self.nudge_buttons):
+            positions = [(1, 0), (0, 1), (2, 1), (1, 1)]
+            col, row = positions[index]
+            button.setGeometry(max(0, w - 154 + col * 42), max(0, h - 142 + row * 42), 36, 36)
             button.raise_()
         for index, button in enumerate(self.right_buttons):
-            button.setGeometry(max(0, w - 116), y0 + index * 46, 104, 38)
+            button.setGeometry(max(0, w - 50), y0 + index * 58, 38, 38)
             button.raise_()
         total_width = len(self.bottom_buttons) * 104 + (len(self.bottom_buttons) - 1) * 6
         start_x = max(110, (w - total_width) // 2)
         for index, button in enumerate(self.bottom_buttons):
             button.setGeometry(start_x + index * 110, max(0, h - 52), 104, 38)
             button.raise_()
-        widths = [58 if button.text() in {"全图", "聚焦", "光线"} else 46 for button in self.view_control_buttons]
+        widths = [38 for _button in self.view_control_buttons]
         view_total_width = sum(widths) + max(0, len(widths) - 1) * 4
-        view_start_x = max(120, w - view_total_width - 136)
+        view_start_x = max(72, w - view_total_width - 60)
         cursor_x = view_start_x
         for button, button_width in zip(self.view_control_buttons, widths):
             button.setGeometry(cursor_x, max(8, h - 98), button_width, 34)
@@ -2472,11 +2690,14 @@ class UnifiedTeachingWorkbench(QWidget):
         
         
         
-        left_width = min(620, max(500, int(w * 0.44)))
-        left_width = min(left_width, max(360, w - 150))
-        right_width = min(430, max(350, w // 3))
-        self.left_drawer.setGeometry(112, 18, left_width, drawer_h)
-        self.right_drawer.setGeometry(max(0, w - right_width - 122), 18, right_width, drawer_h)
+        # Drawers temporarily overlay the scene instead of permanently stealing
+        # columns from it.  Keep them narrow enough that the optical path remains
+        # visible while editing/inspecting, especially at 1366 px width.
+        left_width = min(440, max(340, int(w * 0.31)))
+        left_width = min(left_width, max(320, w - 180))
+        right_width = min(390, max(340, int(w * 0.27)))
+        self.left_drawer.setGeometry(58, 18, left_width, drawer_h)
+        self.right_drawer.setGeometry(max(0, w - right_width - 58), 18, right_width, drawer_h)
         if self.left_drawer.isVisible():
             self.left_drawer.raise_()
         if self.right_drawer.isVisible():
@@ -2493,10 +2714,9 @@ class UnifiedTeachingWorkbench(QWidget):
         self._refresh_all(preserve_view=True)
 
     def set_view_kind(self, kind: str) -> None:
-        self._view_kind = "3d" if str(kind).lower() == "3d" else "2d"
-        self.view_stack.setCurrentIndex(1 if self._view_kind == "3d" else 0)
-        self.view_2d_button.setChecked(self._view_kind == "2d")
-        self.view_3d_button.setChecked(self._view_kind == "3d")
+        self._view_kind = "3d" if str(kind).lower() == "3d" else "3d"
+        self.view_stack.setCurrentIndex(1)
+        self.view_3d_button.setChecked(True)
         self._refresh_views(preserve_view=True)
 
     def set_display_layer(self, layer: str, *, force: bool = False) -> None:
@@ -2507,16 +2727,34 @@ class UnifiedTeachingWorkbench(QWidget):
         button = self.display_layer_buttons.get(layer)
         if button is not None:
             button.setChecked(True)
-        self.graphics_view.set_display_layer(layer)
-        if hasattr(self.view_3d, "set_display_layer"):
-            self.view_3d.set_display_layer(layer)
-        self.model.latest_cause = f"切换到{DISPLAY_LAYER_LABELS[layer]}，实验结构和方案参数保持不变。"
+        self.view_3d.set_display_layer(layer)
+        self.model.latest_cause = f"切换到{DISPLAY_LAYER_LABELS[layer]}，实验结构和系统参数保持不变。"
         self._refresh_all(preserve_view=True)
+
+    def _fit_current_view(self) -> None:
+        if self._view_kind == "3d" and hasattr(self.view_3d, "reset_camera"):
+            self.view_3d.reset_camera()
+        else:
+            self.view_3d.reset_camera()
+
+    def _zoom_current_view(self, zoom_in: bool) -> None:
+        if self._view_kind == "3d":
+            method = getattr(self.view_3d, "zoom_in" if zoom_in else "zoom_out", None)
+            if callable(method):
+                method()
+        else:
+            method = getattr(self.view_3d, "zoom_in" if zoom_in else "zoom_out", None)
+            if callable(method):
+                method()
 
     def _focus_selected_node(self) -> None:
         node_id = self.model.selected_node_id
-        if node_id:
-            self.graphics_view.focus_node(node_id)
+        if not node_id:
+            return
+        if self._view_kind == "3d" and hasattr(self.view_3d, "focus_selected"):
+            self.view_3d.focus_selected()
+        else:
+            self.view_3d.focus_selected()
 
     
     def _refresh_views(
@@ -2526,8 +2764,12 @@ class UnifiedTeachingWorkbench(QWidget):
         snapshot: TeachingSceneSnapshot | None = None,
     ) -> None:
         snapshot = snapshot or self.model.scene_snapshot()
-        self.graphics_view.set_model(self.model, preserve_view=preserve_view, snapshot=snapshot)
         self.view_3d.set_model(self.model, snapshot=snapshot)
+
+    def _on_shared_simulation_payload_changed(self, _payload: dict) -> None:
+        self.model._metrics_cache_revision = -1
+        self.model._scene_snapshot_cache = None
+        self._refresh_all(preserve_view=True)
 
     def _refresh_all(self, *, preserve_view: bool = True) -> None:
         snapshot = self.model.scene_snapshot()
@@ -2537,6 +2779,10 @@ class UnifiedTeachingWorkbench(QWidget):
         self.system_metric.setText(f"系统效率 {metrics.system_efficiency * 100:.1f}%")
         self.receiver_metric.setText(f"接收效率 {metrics.receiver_efficiency * 100:.1f}%")
         self.feasible_metric.setText("工程可实现：通过" if metrics.feasible else "工程可实现：需检查")
+        for button in self.nudge_buttons:
+            button.setEnabled(bool(self.model.selected_node_id))
+        for button in self.rotate_buttons:
+            button.setEnabled(bool(self.model.selected_node_id))
         self.undo_button.setEnabled(self.model.can_undo())
         self.redo_button.setEnabled(self.model.can_redo())
         if self.right_drawer.isVisible():
@@ -2563,6 +2809,49 @@ class UnifiedTeachingWorkbench(QWidget):
                 self._build_log_panel(panel)
 
     
+    def _on_tool_category_requested(self, category: str) -> None:
+        category = str(category or "")
+        self.left_drawer.hide()
+        if category in {"工具", "搭建"}:
+            # The workbench is already a free experiment. Open the actual
+            # component tray directly so adding an element is never buried
+            # behind a second "自由实验" page.
+            if self.model.mode == "free" and hasattr(self, "_populate_free_experiment_tools"):
+                self._populate_free_experiment_tools()
+            else:
+                self._populate_library_drawer()
+            self._left_drawer_key = "library"
+            self._show_right_side_drawer(self.left_drawer)
+        elif category in {"相机", "观察"}:
+            self._populate_settings_drawer()
+            self._left_drawer_key = "settings"
+            self._show_right_side_drawer(self.left_drawer)
+        elif category == "显示":
+            self._populate_settings_drawer()
+            self._left_drawer_key = "settings"
+            self._show_right_side_drawer(self.left_drawer)
+        elif category == "测量":
+            self._open_measurement_panel()
+        elif category in {"分析", "原理"}:
+            self._open_principle_panel()
+
+    def _show_right_side_drawer(self, drawer) -> None:
+        drawer.show()
+        drawer.raise_()
+        w = self.overlay_host.width()
+        h = self.overlay_host.height()
+        width = min(390, max(340, int(w * 0.27)))
+        drawer.setGeometry(max(0, w - width - 58), 18, width, max(280, h - 36))
+        drawer.raise_()
+
+    def _on_node_double_activated(self, node_id: str) -> None:
+        if node_id not in self.model.nodes:
+            return
+        self.model.selected_node_id = node_id
+        self.model.selected_edge_id = None
+        self._refresh_views(preserve_view=True)
+        self._open_right_drawer("object")
+
     def _on_node_activated(self, node_id: str) -> None:
         if node_id not in self.model.nodes:
             return
@@ -2585,7 +2874,6 @@ class UnifiedTeachingWorkbench(QWidget):
         self.model.selected_node_id = node_id
         self.model.selected_edge_id = None
         self._refresh_views(preserve_view=True)
-        self._open_right_drawer("object")
 
     def _on_edge_activated(self, edge_id: str) -> None:
         if edge_id not in self.model.edges:
@@ -2599,6 +2887,11 @@ class UnifiedTeachingWorkbench(QWidget):
         if self.model.mode == "standard":
             self._refresh_views(preserve_view=True)
             return
+        # A completed 3D drag is also a selection action.  Selection is applied
+        # here (after the mouse grab has ended) so opening the object drawer cannot
+        # interrupt the drag that produced this move.
+        self.model.selected_node_id = node_id
+        self.model.selected_edge_id = None
         self.model.move_node(node_id, x, y, record=True)
         self._refresh_all(preserve_view=True)
 
@@ -2630,7 +2923,13 @@ class UnifiedTeachingWorkbench(QWidget):
         self._populate_object_drawer()
         self.right_drawer.show()
         self.right_drawer.raise_()
+        self._collapse_object_drawer_sections()
         self._position_overlays()
+
+    def _collapse_object_drawer_sections(self) -> None:
+        for group in self.right_drawer.findChildren(QGroupBox):
+            if group.isCheckable():
+                group.setChecked(False)
 
     def _group_box(self, title: str) -> tuple[QGroupBox, QVBoxLayout]:
         group = QGroupBox(title)
@@ -2785,7 +3084,7 @@ class UnifiedTeachingWorkbench(QWidget):
                 layout.addWidget(button)
             self.left_drawer.body_layout.addWidget(group)
         if self.model.saved_schemes:
-            saved_group, saved_layout = self._group_box("已保存方案")
+            saved_group, saved_layout = self._group_box("已保存快照")
             for index, scheme in enumerate(self.model.saved_schemes):
                 row = QHBoxLayout()
                 row.addWidget(QLabel(scheme.name), 1)
@@ -2794,6 +3093,18 @@ class UnifiedTeachingWorkbench(QWidget):
                 row.addWidget(restore)
                 saved_layout.addLayout(row)
             self.left_drawer.body_layout.addWidget(saved_group)
+
+        analysis_group, analysis_layout = self._group_box("分析与记录")
+        for text, callback in [
+            ("参数优化", self._open_optimization_panel),
+            ("教学智能分析", self._open_smart_panel),
+            ("快照比较", self._open_compare_panel),
+            ("设计记录", self._open_log_panel),
+        ]:
+            button = QPushButton(text)
+            button.clicked.connect(callback)
+            analysis_layout.addWidget(button)
+        self.left_drawer.body_layout.addWidget(analysis_group)
         self.left_drawer.body_layout.addStretch(1)
 
     def _load_experiment_preset(self, key: str) -> None:
@@ -2816,6 +3127,9 @@ class UnifiedTeachingWorkbench(QWidget):
             )
             self.model.nodes[node_id].rotation_deg = float(rotation)
             created.append(node_id)
+        laser = next((node for node in self.model.nodes.values() if node.kind == "laser"), None)
+        if laser is not None and isinstance(laser.params.get("wavelength_nm"), (int, float)):
+            self.model.wavelength_nm = float(laser.params["wavelength_nm"])
         main_nodes = [node_id for node_id in created if abs(self.model.nodes[node_id].y - 310.0) <= 85.0]
         main_nodes.sort(key=lambda node_id: self.model.nodes[node_id].x)
         for source, target in zip(main_nodes, main_nodes[1:]):
@@ -2864,9 +3178,32 @@ class UnifiedTeachingWorkbench(QWidget):
             return
         node = self.model.nodes.get(node_id or "")
         if node is None:
-            label = QLabel("在主实验平台中选择一个元件、仪器或连接。")
-            label.setWordWrap(True)
-            self.right_drawer.body_layout.addWidget(label)
+            metrics = self.model.evaluate()
+            title = QLabel("当前实验观察")
+            title.setObjectName("drawerObjectTitle")
+            self.right_drawer.body_layout.addWidget(title)
+            summary = QLabel(
+                f"总效率 {metrics.total_efficiency * 100:.1f}%  ·  "
+                f"系统 {metrics.system_efficiency * 100:.1f}%  ·  "
+                f"接收 {metrics.receiver_efficiency * 100:.1f}%"
+            )
+            summary.setWordWrap(True)
+            self.right_drawer.body_layout.addWidget(summary)
+            issue = QLabel(f"值得优先观察：{metrics.dominant_issue}。{metrics.explanation}")
+            issue.setWordWrap(True)
+            issue.setObjectName("teachingConclusion")
+            self.right_drawer.body_layout.addWidget(issue)
+            verify = QLabel(
+                "怎样验证：选择光纤可查看五轴/波前状态；选择透镜可查看它对束腰和曲率的影响；"
+                "需要区分多个假设时，打开“诊断推理”比较扫描指纹。"
+            )
+            verify.setWordWrap(True)
+            verify.setObjectName("helperText")
+            self.right_drawer.body_layout.addWidget(verify)
+            note = QLabel("这里给的是优先观察方向，不把单一现象当成唯一因果结论。")
+            note.setWordWrap(True)
+            note.setObjectName("helperText")
+            self.right_drawer.body_layout.addWidget(note)
             self.right_drawer.body_layout.addStretch(1)
             return
         title = QLabel(node.label)
@@ -2916,6 +3253,10 @@ class UnifiedTeachingWorkbench(QWidget):
             hint.setWordWrap(True)
             hint.setObjectName("helperText")
             layout.addWidget(hint)
+            impact = QLabel("它会影响：输出束径、波前曲率、束腰位置；在高 NA、明显像差或截光条件下应回到正式复场验证。")
+            impact.setWordWrap(True)
+            impact.setObjectName("teachingConclusion")
+            layout.addWidget(impact)
             self.right_drawer.body_layout.addWidget(group)
         elif node.kind == "fiber":
             group, layout = self._group_box("五轴与波前")
@@ -2938,6 +3279,22 @@ class UnifiedTeachingWorkbench(QWidget):
                 spin.valueChanged.connect(lambda value, nid=node.id, name=key: self._update_node_parameter(nid, name, float(value), live=True))
                 form.addRow(label, spin)
             layout.addLayout(form)
+            fp = node.params
+            candidates = {
+                "横向": math.hypot(float(fp.get("offset_x_um", 0.0)), float(fp.get("offset_y_um", 0.0))) / 3.0,
+                "轴向": abs(float(fp.get("offset_z_um", 0.0))) / 50.0,
+                "角度": math.hypot(float(fp.get("pitch_mrad", 0.0)), float(fp.get("yaw_mrad", 0.0))) / 20.0,
+                "曲率": abs(float(fp.get("curvature_waves", 0.0))) / 0.2,
+            }
+            ranked = sorted(candidates.items(), key=lambda item: item[1], reverse=True)
+            primary = ranked[0][0] if ranked and ranked[0][1] > 0.05 else "暂无明显单因素"
+            diagnosis = QLabel(
+                f"当前优先观察：{primary}。这只是教学尺度下的线索，不是唯一诊断。"
+                "可用横向 / 轴向 / 角度扫描以及强度-相位对比进一步区分。"
+            )
+            diagnosis.setWordWrap(True)
+            diagnosis.setObjectName("teachingConclusion")
+            layout.addWidget(diagnosis)
             self.right_drawer.body_layout.addWidget(group)
         elif node.kind == "splitter":
             group, layout = self._group_box("分光设置")
@@ -3028,7 +3385,6 @@ class UnifiedTeachingWorkbench(QWidget):
         params = {"beam_offset_deg": 90.0} if kind == "mirror" else None
         self.model.add_node(kind, x, y, params=params)
         self._refresh_all(preserve_view=True)
-        self._populate_library_drawer()
 
     def _add_mirror_bundle(self, count: int) -> None:
         if self.model.mode != "free":
@@ -3044,7 +3400,6 @@ class UnifiedTeachingWorkbench(QWidget):
             self.model.add_node("mirror", min(1480.0, base_x + 110.0), min(780.0, base_y + 110.0), params={"beam_offset_deg": -90.0})
             self.model.latest_cause = "已添加双反射镜组合，可用于L形或Z形折叠光路设计。"
         self._refresh_all(preserve_view=True)
-        self._populate_library_drawer()
 
     def _toggle_connect_mode(self, checked: bool) -> None:
         self._connect_mode = bool(checked)
@@ -3084,6 +3439,9 @@ class UnifiedTeachingWorkbench(QWidget):
         value = float(sender.value())
         if name == "wavelengthSpin":
             self.model.wavelength_nm = value
+            for node in self.model.nodes.values():
+                if node.kind == "laser":
+                    node.params["wavelength_nm"] = value
         elif name == "inputPowerSpin":
             self.model.input_power_mw = value
         elif name == "receiverNaSpin":
@@ -3097,6 +3455,7 @@ class UnifiedTeachingWorkbench(QWidget):
         elif name == "targetEfficiencySpin":
             self.model.target_total_efficiency = value / 100.0
         self.model.latest_cause = "更新教学系统设置。"
+        self.model.mark_changed()
         self._refresh_all(preserve_view=True)
 
     def _set_node_position_component(self, node_id: str, *, x: float | None = None, y: float | None = None) -> None:
@@ -3115,14 +3474,30 @@ class UnifiedTeachingWorkbench(QWidget):
         node.params[key] = value
         if key == "rotation_deg":
             node.rotation_deg = float(value)
+        if not changed and not live:
+            return
         if live:
-            if changed:
-                self.model.mark_changed()
-                rebuild = getattr(self.model, "rebuild_auto_paths", None)
-                if callable(rebuild):
-                    rebuild()
+            rebuild = getattr(self.model, "rebuild_auto_paths", None)
+            if callable(rebuild):
+                rebuild()
             self.model.latest_cause = f"调整{node.label}的{key}：{old} → {value}。"
+            preview = getattr(self, "_refresh_live_preview", None)
+            if callable(preview):
+                preview()
+                schedule = getattr(self, "_schedule_live_commit", None)
+                if callable(schedule):
+                    schedule()
+                return
+            self.model.mark_changed()
         else:
+            timer = getattr(self, "_live_commit_timer", None)
+            if timer is not None and timer.isActive():
+                timer.stop()
+            if getattr(self, "_pending_live_commit", False):
+                commit = getattr(self, "_commit_pending_live_edit", None)
+                if callable(commit):
+                    commit()
+                    return
             self.model.record(f"调整{node.label}的{key}：{old} → {value}。")
         self._refresh_all(preserve_view=True)
 
@@ -3209,12 +3584,14 @@ class UnifiedTeachingWorkbench(QWidget):
             elif node.kind in {"beam_analyzer", "imaging_camera", "focus_scan_module"}:
                 grid = QGridLayout()
                 values = (
-                    ("X半径", f"{reading['radius_x_um']:.2f} μm"),
-                    ("Y半径", f"{reading['radius_y_um']:.2f} μm"),
-                    ("中心X", f"{reading['center_x_um']:.2f} μm"),
-                    ("中心Y", f"{reading['center_y_um']:.2f} μm"),
+                    ("RMSx", f"{reading.get('rms_x_um', 0.0):.2f} μm"),
+                    ("RMSy", f"{reading.get('rms_y_um', 0.0):.2f} μm"),
+                    ("径向RMS", f"{reading.get('radial_rms_um', 0.0):.2f} μm"),
+                    ("1/e² X/Y", f"{reading.get('radius_x_1e2_um', 0.0):.2f}/{reading.get('radius_y_1e2_um', 0.0):.2f} μm"),
+                    ("质心X/Y", f"{reading.get('centroid_x_um', 0.0):.2f}/{reading.get('centroid_y_um', 0.0):.2f} μm"),
                     ("椭圆率", f"{reading.get('ellipticity', 1.0):.3f}"),
-                    ("状态", "正常接收"),
+                    ("拟合残差", "待实验/像素拟合" if reading.get("fit_residual") is None else f"{reading['fit_residual']:.4g}"),
+                    ("来源", str(reading.get("metric_source", "未知"))),
                 )
                 for index, (label, value) in enumerate(values):
                     grid.addWidget(QLabel(label), index // 2, (index % 2) * 2)
@@ -3396,8 +3773,8 @@ class UnifiedTeachingWorkbench(QWidget):
         panel.clear_content()
         metrics = self.model.evaluate()
         summary = QLabel(
-            f"教学代理判断：当前方案主要受“{metrics.dominant_issue}”限制。\n"
-            "智能分析只给出候选排序和影响依据，最终方案仍需学生选择并进入正式工作台验证。"
+            f"教学辅助判断：当前系统主要受“{metrics.dominant_issue}”限制。\n"
+            "智能分析只给出候选排序和影响依据，最终调整仍需学生选择并进入正式工作台验证。"
         )
         summary.setWordWrap(True)
         summary.setObjectName("teachingConclusion")
@@ -3459,18 +3836,18 @@ class UnifiedTeachingWorkbench(QWidget):
         self._refresh_all(preserve_view=True)
 
     def _open_compare_panel(self) -> None:
-        panel = self._get_panel("compare", "方案比较", (760, 430))
+        panel = self._get_panel("compare", "快照比较", (760, 430))
         self._build_compare_panel(panel)
 
     def _build_compare_panel(self, panel: FloatingPanel) -> None:
         panel.clear_content()
         if not self.model.saved_schemes:
-            label = QLabel("尚未保存方案。使用底部“保存方案”后，可比较效率、束腰、结构长度和镜片数量。")
+            label = QLabel("尚未保存快照。使用底部“保存快照”后，可比较效率、束腰、结构长度和镜片数量。")
             label.setWordWrap(True)
             panel.content_layout.addWidget(label)
             return
         table = QTableWidget(len(self.model.saved_schemes), 7)
-        table.setHorizontalHeaderLabels(["方案", "系统效率", "接收效率", "总效率", "束腰/目标", "镜片数", "可实现"])
+        table.setHorizontalHeaderLabels(["快照", "系统效率", "接收效率", "总效率", "束腰/目标", "镜片数", "可实现"])
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         for row, scheme in enumerate(self.model.saved_schemes):
@@ -3487,7 +3864,7 @@ class UnifiedTeachingWorkbench(QWidget):
             for col, value in enumerate(values):
                 table.setItem(row, col, QTableWidgetItem(value))
         panel.content_layout.addWidget(table, 1)
-        note = QLabel("方案比较聚焦效率、束腰、结构可实现性和复杂度。")
+        note = QLabel("快照比较聚焦效率、束腰、结构可实现性和复杂度。")
         note.setObjectName("helperText")
         note.setWordWrap(True)
         panel.content_layout.addWidget(note)
@@ -3534,7 +3911,7 @@ class UnifiedTeachingWorkbench(QWidget):
 
     def _save_scheme(self) -> None:
         metrics = self.model.evaluate()
-        name = f"方案{chr(ord('A') + len(self.model.saved_schemes))}"
+        name = f"快照{chr(ord('A') + len(self.model.saved_schemes))}"
         scheme = SavedScheme(name, copy.deepcopy(self.model.snapshot()), metrics)
         self.model.saved_schemes.append(scheme)
         self.model.latest_cause = f"保存{name}，总效率 {metrics.total_efficiency * 100:.1f}%。"
@@ -3642,7 +4019,7 @@ class UnifiedTeachingWorkbench(QWidget):
                     "receiver_na": float(profile.get("receiver_na", snapshot["receiver_na"])),
                     "receiver_mode_radius_um": float(profile.get("receiver_mode_radius_um", snapshot["receiver_mode_radius_um"])),
                     "target_total_efficiency": float(profile.get("target_total_efficiency", snapshot["target_total_efficiency"])),
-                    "latest_cause": "已读取共享方案参数。",
+                    "latest_cause": "已读取共享教学参数。",
                 }
             )
             self.model.restore(snapshot, reset_history=True)
@@ -3671,6 +4048,7 @@ class UnifiedTeachingWorkbench(QWidget):
                     "active_snapshot_source": "teaching",
                     "teaching_snapshot": profile,
                     "shared_snapshot": profile,
+                    "pending_teaching_import": True,
                 }
             )
         except Exception as exc:
@@ -3691,11 +4069,11 @@ class UnifiedTeachingWorkbench(QWidget):
             try:
                 profile = json.loads(raw)
                 if self._apply_shared_profile(profile, announce=False):
-                    self.model.latest_cause = "已恢复上次保存的教学方案。"
+                    self.model.latest_cause = "已恢复上次保存的教学参数。"
                     self._refresh_all(preserve_view=False)
                     return
             except Exception:
-                _logger.warning("恢复教学平台持久化参数失败，已使用当前方案。", exc_info=True)
+                _logger.warning("恢复教学平台持久化参数失败，已使用当前系统。", exc_info=True)
         self._refresh_all(preserve_view=False)
 
     def _import_workbench_parameters(self) -> None:
@@ -3720,7 +4098,7 @@ class UnifiedTeachingWorkbench(QWidget):
                     _logger.warning("正式工作台共享参数不是有效 JSON，已忽略。", exc_info=True)
                     candidate = {}
         if not candidate:
-            QMessageBox.information(self, "读取工作台参数", "正式工作台尚未保存可读取的方案参数。")
+            QMessageBox.information(self, "读取工作台参数", "当前系统尚未保存可读取的共享参数。")
             return
         if not self._apply_shared_profile(candidate):
             QMessageBox.warning(self, "读取工作台参数", "已找到工作台记录，但其中没有可映射的光学结构参数。")
@@ -3772,6 +4150,10 @@ class UnifiedTeachingWorkbench(QWidget):
             QToolButton#teachingViewControlButton:checked {
                 background: #155EEF; color: #FFFFFF; border-color: #155EEF;
             }
+            QToolButton#teachingStatusToolButton {
+                min-width:32px; min-height:30px; background:#FFFFFF; border:1px solid #98A2B3; border-radius:6px;
+            }
+            QToolButton#teachingStatusToolButton:hover { background:#D6E4FF; border-color:#155EEF; }
             QFrame#teachingOverlayDrawer {
                 background: rgba(250,253,255,248); border: 1px solid #667085; border-radius: 9px;
             }

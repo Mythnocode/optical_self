@@ -116,6 +116,9 @@ class OptimizationResult(BaseModel):
     best_variables: Dict[str, float] = Field(default_factory=dict)
     best_metrics: Dict[str, Any] = Field(default_factory=dict)
     best_merit: float
+    # Formally simulated alternatives retained for inverse-design comparison.
+    # Additive to the existing contract so older clients can ignore it safely.
+    candidates: List[Dict[str, Any]] = Field(default_factory=list)
     history: List[OptimizationIteration] = Field(default_factory=list)
     total_evaluations: int = 0
     total_iterations: int = 0

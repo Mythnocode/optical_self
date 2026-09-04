@@ -30,7 +30,7 @@ class SimulationModeMixin:
 
     def _remember_splitter(self, *_args) -> None:
         sizes = [int(value) for value in self.main_splitter.sizes()]
-        if len(sizes) == 2 and sizes[0] >= 500 and sizes[1] >= 420:
+        if len(sizes) == 2 and sizes[0] >= 300 and sizes[1] >= 420:
             
             
             self.settings.setValue("simulation/unified_splitter_sizes", sizes)

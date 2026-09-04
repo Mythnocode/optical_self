@@ -28,29 +28,41 @@ class DatasetGenerator:
         self.store = store
         self.resolver = FeatureResolver()
 
-    def generate(self, request, cancellation=None, progress=None):
+    def generate(self, request, cancellation=None, progress=None, *, max_workers: int = 1):
         dataset_id = "dataset-" + uuid.uuid4().hex[:12]
-        plan = create_sampling_plan(request.parameters, request.sample_count, request.sampling_method, request.random_seed)
+        plan = create_sampling_plan(
+            request.parameters,
+            request.sample_count,
+            request.sampling_method,
+            request.random_seed,
+        )
         canonical_targets = [canonical_metric_name(target) for target in request.targets]
         include_coupling_physics = (
-            request.base_project.receiver is not None
+            bool(getattr(request, "include_derived_physics_features", True))
+            and request.base_project.receiver is not None
             and bool({"coupling_efficiency", "coupling_loss_db"} & set(canonical_targets))
         )
-        valid_ids = []
+        valid_ids: list[str] = []
         failed = 0
         engine_name = "unknown"
         engine_version = "unknown"
+
+        prepared: list[tuple[str, dict[str, float], ProjectSnapshot, SimulationRequest]] = []
         for index, sample_id in enumerate(plan.sample_ids):
             if cancellation is not None and cancellation.is_cancelled:
                 break
-            feature_values = {}
+            feature_values: dict[str, float] = {}
             changes = []
-            for p, value in zip(request.parameters, plan.values[index]):
-                feature_values[p.path] = float(value)
-                changes.append(self.resolver.create_change(p.path, float(value), p.unit))
+            for parameter, value in zip(request.parameters, plan.values[index]):
+                feature_values[parameter.path] = float(value)
+                changes.append(
+                    self.resolver.create_change(
+                        parameter.path, float(value), parameter.unit
+                    )
+                )
             changed_project = apply_parameter_changes(request.base_project, changes)
             sim_request = SimulationRequest(
-                request_id="%s-%s" % (dataset_id, sample_id),
+                request_id=f"{dataset_id}-{sample_id}",
                 project=changed_project,
                 analyses=target_to_analyses(canonical_targets),
                 parameter_changes=[],
@@ -59,17 +71,79 @@ class DatasetGenerator:
                 engine=request.engine,
                 options=dataset_simulation_options(changed_project),
             )
-            sample_started = time.perf_counter()
-            try:
-                result = self.simulation_port.evaluate(
-                    sim_request, cancellation, progress
-                )
-            except Exception as exc:
-                
-                
-                
+            prepared.append((sample_id, feature_values, changed_project, sim_request))
+
+        if progress is not None:
+            progress.update(0.02, "dataset.preparing", 0, max(1, len(prepared)))
+
+        simulation_requests = [item[3] for item in prepared]
+        results = []
+        if simulation_requests:
+            batch = getattr(self.simulation_port, "batch_evaluate", None)
+            batch_error: Exception | None = None
+            if callable(batch):
+                try:
+                    from backend.optical_ml_app.jobs.progress import ScaledProgressReporter
+
+                    try:
+                        results = list(
+                            batch(
+                                simulation_requests,
+                                cancellation=cancellation,
+                                progress=ScaledProgressReporter(
+                                    progress, 0.02, 0.90, stage_prefix="dataset"
+                                )
+                                if progress is not None
+                                else None,
+                                max_workers=max(1, int(max_workers)),
+                            )
+                        )
+                    except TypeError:
+                        # Compatibility with SimulationPort implementations that do
+                        # not yet expose max_workers.
+                        results = list(
+                            batch(
+                                simulation_requests,
+                                cancellation=cancellation,
+                                progress=ScaledProgressReporter(
+                                    progress, 0.02, 0.90, stage_prefix="dataset"
+                                )
+                                if progress is not None
+                                else None,
+                            )
+                        )
+                except Exception as exc:
+                    # Preserve the old dataset contract: one bad simulation must
+                    # not destroy the whole dataset.  If a custom/fallback batch
+                    # port raises, retry sample-by-sample and record exceptions as
+                    # invalid samples exactly as the previous serial path did.
+                    batch_error = exc
+                    results = []
+            if not callable(batch) or batch_error is not None:
+                for index, sim_request in enumerate(simulation_requests):
+                    try:
+                        result = self.simulation_port.evaluate(sim_request, cancellation, None)
+                    except Exception as exc:
+                        result = exc
+                    results.append(result)
+                    if progress is not None:
+                        progress.update(
+                            0.02 + 0.88 * (index + 1) / max(len(simulation_requests), 1),
+                            "dataset.simulation",
+                            index + 1,
+                            len(simulation_requests),
+                        )
+
+        # Persist records only after the expensive optical batch.  This keeps
+        # disk I/O single-threaded and deterministic while the actual simulations
+        # run in parallel.
+        processed = min(len(prepared), len(results))
+        for index, ((sample_id, feature_values, changed_project, sim_request), result) in enumerate(
+            zip(prepared, results)
+        ):
+            if isinstance(result, Exception):
                 failed += 1
-                message = str(exc) or type(exc).__name__
+                message = str(result) or type(result).__name__
                 record = SampleRecord(
                     sample_id=sample_id,
                     request_id=sim_request.request_id,
@@ -81,7 +155,7 @@ class DatasetGenerator:
                     failure_message=message,
                     engine_name=str(request.engine or "unknown"),
                     engine_version="unknown",
-                    elapsed_ms=(time.perf_counter() - sample_started) * 1000.0,
+                    elapsed_ms=0.0,
                     converged=False,
                     metadata={
                         "source": "dataset_generation",
@@ -89,22 +163,22 @@ class DatasetGenerator:
                         "project_fingerprint": changed_project.fingerprint,
                         "random_seed": sim_request.random_seed,
                         "precision": sim_request.precision,
-                        "simulation_exception": type(exc).__name__,
+                        "simulation_exception": type(result).__name__,
                     },
                 )
                 self.store.append_sample(dataset_id, record.model_dump())
                 if progress is not None:
                     progress.update(
-                        (index + 1) / len(plan.sample_ids),
-                        "dataset.simulation",
+                        0.90 + 0.09 * (index + 1) / max(processed, 1),
+                        "dataset.writing",
                         index + 1,
-                        len(plan.sample_ids),
+                        processed,
                     )
                 continue
             engine_name = result.engine_name
             engine_version = result.engine_version
             targets = extract_target_values(result.metrics, canonical_targets)
-            physics_features = {}
+            physics_features: dict[str, float] = {}
             physics_feature_error = ""
             if include_coupling_physics:
                 try:
@@ -113,10 +187,6 @@ class DatasetGenerator:
                     )
                     feature_values.update(physics_features)
                 except Exception as exc:
-                    
-                    
-                    
-                    
                     physics_feature_error = str(exc) or type(exc).__name__
             quality = evaluate_simulation_quality(
                 result, targets, canonical_targets, require_converged=True
@@ -153,7 +223,9 @@ class DatasetGenerator:
                     "source": result.metadata.get("source", "unknown"),
                     "simulation_quality_checks": quality.checks,
                     "algorithm_version": getattr(result, "algorithm_version", "unknown"),
-                    "project_fingerprint": getattr(result, "project_fingerprint", changed_project.fingerprint),
+                    "project_fingerprint": getattr(
+                        result, "project_fingerprint", changed_project.fingerprint
+                    ),
                     "random_seed": sim_request.random_seed,
                     "precision": sim_request.precision,
                     "coupling_physics_features": physics_features,
@@ -161,8 +233,25 @@ class DatasetGenerator:
             )
             self.store.append_sample(dataset_id, record.model_dump())
             if progress is not None:
-                progress.update((index + 1) / len(plan.sample_ids), "dataset.simulation", index + 1, len(plan.sample_ids))
-        train_ids, validation_ids, test_ids = split_ids(valid_ids, request.train_ratio, request.validation_ratio, request.random_seed)
+                progress.update(
+                    0.90 + 0.09 * (index + 1) / max(processed, 1),
+                    "dataset.writing",
+                    index + 1,
+                    processed,
+                )
+
+        # A cancellation can intentionally stop the batch before every request
+        # returns.  Count unprocessed samples as failed only for a non-cancelled
+        # run so the manifest remains honest.
+        if cancellation is None or not cancellation.is_cancelled:
+            failed += max(0, len(prepared) - processed)
+
+        train_ids, validation_ids, test_ids = split_ids(
+            valid_ids,
+            request.train_ratio,
+            request.validation_ratio,
+            request.random_seed,
+        )
         if cancellation is not None and cancellation.is_cancelled:
             status = "cancelled"
         elif failed:
@@ -207,9 +296,12 @@ class DatasetGenerator:
                 else [],
                 "analytic_coupling_baseline": bool(include_coupling_physics),
                 "source_project": request.base_project.model_dump(),
+                "batch_workers": max(1, int(max_workers)),
             },
         )
         self.store.save_manifest(manifest)
+        if progress is not None:
+            progress.update(1.0, "dataset.completed", processed, max(1, len(prepared)))
         return manifest
 
 
@@ -250,6 +342,25 @@ def dataset_simulation_options(project: ProjectSnapshot) -> dict:
         options["hybrid"] = {
             "wavelength_nm": project.source.wavelength_nm,
             "pupil_radius_mm": project.pupil_radius_mm,
+            # Training data must be generated with the same physical numerics that
+            # the formal GUI uses for this 780 nm coupling workflow.  Previously
+            # the dataset path fell back to the hybrid defaults, so a packaged ML
+            # model could explain a different numerical problem from the one shown
+            # on the formal-result page.
+            "pupil_sample_count": 49,
+            "grid_size": 257,
+            "output_grid_size": 257,
+            "output_extent_x_mm": 0.024,
+            "output_extent_y_mm": 0.024,
+            "propagation_model": "scaled_fresnel",
+            "zero_padding_factor": 2.0,
+            "precision_mode": "balanced",
+            "convergence_enabled": True,
+            "sampling_convergence_enabled": True,
+            "auto_expand_output": True,
+            "include_diagnostic_arrays": True,
+            "result_array_policy": "field_only",
+            "high_precision_coupling_enabled": True,
             "mode_field_diameter_x_um": project.receiver.mode_field_diameter_x_um,
             "mode_field_diameter_y_um": project.receiver.mode_field_diameter_y_um,
             "offset_x_mm": project.receiver.offset_x_mm,

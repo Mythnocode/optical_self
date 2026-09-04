@@ -48,7 +48,7 @@ class SourceSnapshot(BaseModel):
 
 
     model_config = ConfigDict(frozen=True, extra="forbid")
-    wavelength_nm: float = 1064.0
+    wavelength_nm: float = Field(default=1064.0, gt=0.0, allow_inf_nan=False)
     source_type: str = "gaussian"
     object_na_x: float = 0.1
     object_na_y: float = 0.1

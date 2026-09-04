@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
     QListView,
     QListWidget,
     QListWidgetItem,
+    QMenu,
     QPushButton,
     QSizePolicy,
     QToolButton,
@@ -36,7 +37,10 @@ from . import unified_workbench as base
 from . import component_catalog as catalog
 
 
-_COMPONENT_MIME = "application/x-optical-teaching-component"
+COMPONENT_MIME = "application/x-optical-teaching-component"
+# Compatibility name retained for older callers. New views should import the
+# public constant so the 2-D and Quick3D drop targets share one MIME contract.
+_COMPONENT_MIME = COMPONENT_MIME
 
 
 def _enabled(node: base.ExperimentNode) -> bool:
@@ -102,6 +106,7 @@ class SpatialExperimentModel(base.ExperimentModel):
             node.rotation_deg = float(rotation_deg)
         node.params.update(self._default_params(kind))
         node.params.update(params or {})
+        self.sync_optical_system()
         self._suspend_auto = previous
         if record:
             self.record(f"将{node.label}放到实验平台。")
@@ -133,8 +138,8 @@ class SpatialExperimentModel(base.ExperimentModel):
         self._counter = 0
         self.add_node("laser", 120, base.MAIN_RAIL_Y, node_id="laser", label="激光器", record=False, rotation_deg=0.0)
         self.add_node("isolator", 300, base.MAIN_RAIL_Y, node_id="isolator", label="光隔离器", record=False, rotation_deg=0.0)
-        self.add_node("splitter", 495, base.MAIN_RAIL_Y, node_id="splitter", label="分束器", record=False, rotation_deg=90.0)
-        self.add_node("lens", 710, base.MAIN_RAIL_Y, node_id="lens_1", label="L1", params={"focal_mm": 12.0}, record=False, rotation_deg=0.0)
+        self.add_node("splitter", 495, base.MAIN_RAIL_Y, node_id="splitter", label="分束器", record=False, rotation_deg=0.0)
+        self.add_node("lens", 710, base.MAIN_RAIL_Y, node_id="lens_1", label="L1", params={"focal_mm": 50.0}, record=False, rotation_deg=0.0)
         self.add_node("lens", 910, base.MAIN_RAIL_Y, node_id="lens_2", label="L2", params={"focal_mm": 12.0}, record=False, rotation_deg=0.0)
         self.add_node("fiber", 1160, base.MAIN_RAIL_Y, node_id="fiber", label="五轴光纤架", record=False, rotation_deg=180.0)
         self.add_node(
@@ -959,13 +964,17 @@ class SpatialExperiment3DView(QWidget):
         self._pan = QPointF(0.0, 0.0)
         self._focus = (800.0, 390.0, 0.0)
         self._hit_boxes: dict[str, QRectF] = {}
+        self._label_boxes: list[QRectF] = []
         self._last_mouse = QPointF()
         self._interaction: str | None = None
         self._active_node_id: str | None = None
         self._node_origin: tuple[float, float, float, float, float] | None = None
         self._layer_flags = {
             "structure": True,
-            "beam": True,
+            "beam": True,  # 兼容旧配置
+            "chief_ray": True,
+            "beam_envelope": True,
+            "sample_rays": False,
             "ideal": False,
             "axis": True,
             "coordinates": False,
@@ -1104,11 +1113,15 @@ class SpatialExperiment3DView(QWidget):
             QPointF(end.x() - nx * r1, end.y() - ny * r1),
             QPointF(start.x() - nx * r0, start.y() - ny * r0),
         ])
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(255, 48, 48, 82))
-        painter.drawPolygon(envelope)
-        painter.setPen(QPen(QColor("#ff5b5b"), 1.8, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
-        painter.drawLine(start, end)
+        if self._layer_flags.get("beam_envelope", True):
+            fill = QColor(theme.BEAM_ENVELOPE_FILL)
+            fill.setAlpha(78)
+            painter.setPen(QPen(QColor(theme.BEAM_ENVELOPE_EDGE), 1.15))
+            painter.setBrush(fill)
+            painter.drawPolygon(envelope)
+        if self._layer_flags.get("chief_ray", True):
+            painter.setPen(QPen(QColor(theme.CHART_ORANGE), 2.35, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+            painter.drawLine(start, end)
 
     def _draw_axis_and_beams(self, painter: QPainter) -> None:
         if self._model is None:
@@ -1119,7 +1132,9 @@ class SpatialExperiment3DView(QWidget):
             p2 = self._project(1540, base.MAIN_RAIL_Y, 82)[0]
             painter.setPen(QPen(QColor(185, 199, 211, 72), 1.0, Qt.PenStyle.DashLine))
             painter.drawLine(p1, p2)
-        if not self._layer_flags["beam"]:
+        if not self._layer_flags.get("beam", True):
+            return
+        if not (self._layer_flags.get("chief_ray", True) or self._layer_flags.get("beam_envelope", True)):
             return
         current_radii = self._snapshot.current_radii if self._snapshot is not None else self._model.scene_snapshot().current_radii
         for edge in self._model.edges.values():
@@ -1134,8 +1149,10 @@ class SpatialExperiment3DView(QWidget):
             a = self._project(source.x, source.y, sz)[0]
             b = self._project(target.x, target.y, tz)[0]
             if self._fast_interaction:
-                painter.setPen(QPen(QColor(theme.ERROR), 2.0, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
-                painter.drawLine(a, b)
+                # 拖动期间只画主光线，松手后再恢复 Gaussian 包络，保证跟手。
+                if self._layer_flags.get("chief_ray", True):
+                    painter.setPen(QPen(QColor(theme.CHART_ORANGE), 2.0, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+                    painter.drawLine(a, b)
             else:
                 self._draw_beam_segment(
                     painter, a, b,
@@ -1363,13 +1380,51 @@ class SpatialExperiment3DView(QWidget):
                     painter.drawRoundedRect(QRectF(point.x() - 38 * scale, point.y() - 18 * scale, 47 * scale, 36 * scale), 3, 3)
         painter.restore()
 
+        # Device labels are deliberately treated as annotations, not as part of the
+        # instrument geometry.  In compressed perspective views a dozen permanent
+        # 144-px labels used to pile up on the rail and made the 3D stage unreadable.
+        # Try several nearby positions and suppress a low-priority label when none is
+        # collision-free.  The selected element and the optical-chain endpoints are
+        # never suppressed.
         label_offset = 55 if node.kind in {"lens", "beam_expander", "cylindrical_lens", "fiber", "mirror", "splitter", "pbs", "half_wave_plate", "beam_sampler"} else 39
-        label_rect = QRectF(point.x() - 72, point.y() + label_offset * scale, 144, 25)
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(4, 7, 10, 185))
-        painter.drawRoundedRect(label_rect, 5, 5)
-        painter.setPen(QColor("#f2f5f7" if enabled else "#89939b"))
-        painter.drawText(label_rect, Qt.AlignmentFlag.AlignCenter, node.label)
+        font_metrics = painter.fontMetrics()
+        label_width = float(max(72, min(132, font_metrics.horizontalAdvance(node.label) + 22)))
+        label_height = 24.0
+        base_y = point.y() + label_offset * scale
+        candidates = [
+            QRectF(point.x() - label_width / 2, base_y, label_width, label_height),
+            QRectF(point.x() - label_width / 2, point.y() - (label_offset + 24) * scale, label_width, label_height),
+            QRectF(point.x() + 18 * scale, base_y - 14, label_width, label_height),
+            QRectF(point.x() - label_width - 18 * scale, base_y - 14, label_width, label_height),
+            QRectF(point.x() - label_width / 2, base_y + 26, label_width, label_height),
+        ]
+        viewport = QRectF(8, 48, max(1, self.width() - 16), max(1, self.height() - 58))
+        title_rect = self._title_rect_for_width(self.width()).adjusted(-8, -4, 8, 4)
+
+        def label_is_free(rect: QRectF) -> bool:
+            if not viewport.contains(rect) or rect.intersects(title_rect):
+                return False
+            padded = rect.adjusted(-5, -4, 5, 4)
+            return all(not padded.intersects(other) for other in self._label_boxes)
+
+        label_rect = next((rect for rect in candidates if label_is_free(rect)), None)
+        important_label = selected or node.kind in {"laser", "fiber"}
+        if label_rect is None and important_label:
+            # The endpoint/selection label wins over a nearby low-priority label.  A
+            # compact fallback keeps it on-screen; its stronger outline makes the
+            # exceptional overlap obvious rather than silently hiding the selection.
+            raw = candidates[0]
+            x = min(max(raw.x(), viewport.left()), max(viewport.left(), viewport.right() - raw.width()))
+            y = min(max(raw.y(), viewport.top()), max(viewport.top(), viewport.bottom() - raw.height()))
+            label_rect = QRectF(x, y, raw.width(), raw.height())
+
+        if label_rect is not None:
+            self._label_boxes.append(label_rect)
+            painter.setPen(QPen(QColor("#5bb8e5") if selected else QColor(30, 40, 48, 220), 1.0))
+            painter.setBrush(QColor(4, 7, 10, 205 if selected else 184))
+            painter.drawRoundedRect(label_rect, 5, 5)
+            painter.setPen(QColor("#ffffff" if selected else ("#f2f5f7" if enabled else "#89939b")))
+            painter.drawText(label_rect, Qt.AlignmentFlag.AlignCenter, node.label)
         self._hit_boxes[node.id] = QRectF(point.x() - 65 * scale, point.y() - 62 * scale, 130 * scale, 124 * scale)
 
         if selected and self._layer_flags["coordinates"]:
@@ -1392,6 +1447,7 @@ class SpatialExperiment3DView(QWidget):
             return
         self._draw_axis_and_beams(painter)
         self._hit_boxes = {}
+        self._label_boxes = []
         ordered = sorted(
             self._model.nodes.values(),
             key=lambda n: self._project(n.x, n.y, float(n.params.get("z_mm", 82.0)))[1],
@@ -1500,14 +1556,11 @@ class SpatialExperiment3DView(QWidget):
 
 class SpatialTeachingWorkbench(base.UnifiedTeachingWorkbench):
 
+    model_class = SpatialExperimentModel
+    graphics_view_class = SpatialExperimentGraphicsView
+
 
     def __init__(self, context, parent=None) -> None:
-        
-        
-        
-        base.ExperimentModel = SpatialExperimentModel
-        base.ExperimentGraphicsView = SpatialExperimentGraphicsView
-        base.Experiment3DView = SpatialExperiment3DView
         super().__init__(context, parent)
         self._connect_mode = False
         self.graphics_view.componentDropped.connect(self._add_component_at)
@@ -1539,15 +1592,40 @@ class SpatialTeachingWorkbench(base.UnifiedTeachingWorkbench):
         self.camera_bar.setObjectName("teachingCameraBar")
         self.camera_bar.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         layout = QHBoxLayout(self.camera_bar)
-        layout.setContentsMargins(8, 4, 8, 4)
-        layout.setSpacing(4)
-        
-        
-        reset = QToolButton()
-        reset.setText("恢复相机")
-        reset.clicked.connect(self.view_3d.reset_camera)
-        layout.addWidget(reset)
-        layout.addSpacing(8)
+        layout.setContentsMargins(10, 5, 10, 5)
+        layout.setSpacing(8)
+
+        def preset_button(text: str, preset: str) -> QToolButton:
+            button = QToolButton(self.camera_bar)
+            button.setObjectName("teachingCameraPresetButton")
+            button.setText(text)
+            button.clicked.connect(lambda checked=False, value=preset: self.view_3d.set_view_preset(value))
+            button.setFixedHeight(34)
+            layout.addWidget(button)
+            return button
+
+        self.camera_global_button = preset_button("全局", "paper")
+        self.camera_coupling_button = QToolButton(self.camera_bar)
+        self.camera_coupling_button.setObjectName("teachingCameraPresetButton")
+        self.camera_coupling_button.setText("耦合端")
+        self.camera_coupling_button.clicked.connect(self._focus_fiber_3d)
+        self.camera_coupling_button.setFixedHeight(34)
+        layout.addWidget(self.camera_coupling_button)
+        self.camera_top_button = preset_button("俯视", "top")
+        self.camera_side_button = preset_button("侧视", "side")
+        self.camera_reset_button = QToolButton(self.camera_bar)
+        self.camera_reset_button.setObjectName("teachingCameraPresetButton")
+        self.camera_reset_button.setText("↻")
+        self.camera_reset_button.setToolTip("恢复默认相机")
+        self.camera_reset_button.clicked.connect(self.view_3d.reset_camera)
+        self.camera_reset_button.setFixedHeight(34)
+        layout.addWidget(self.camera_reset_button)
+
+        self.camera_display_button = QToolButton(self.camera_bar)
+        self.camera_display_button.setObjectName("teachingCameraDisplayButton")
+        self.camera_display_button.setText("显示 ▾")
+        self.camera_display_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        display_menu = QMenu(self.camera_display_button)
         for text, key, checked in [
             ("光束包络", "beam", True),
             ("理想参考", "ideal", True),
@@ -1555,13 +1633,35 @@ class SpatialTeachingWorkbench(base.UnifiedTeachingWorkbench):
             ("元件坐标", "coordinates", False),
             ("测量区域", "measurement", False),
         ]:
-            box = QCheckBox(text)
-            box.setChecked(checked)
-            box.toggled.connect(lambda value, layer=key: self.view_3d.set_layer_visible(layer, value))
-            layout.addWidget(box)
-        self.camera_status = QLabel("方位角 35°｜俯仰角 28°｜缩放 1.00×")
+            action = display_menu.addAction(text)
+            action.setCheckable(True)
+            action.setChecked(checked)
+            action.toggled.connect(lambda value, layer=key: self.view_3d.set_layer_visible(layer, value))
+        self.camera_display_button.setMenu(display_menu)
+        self.camera_display_button.setFixedHeight(34)
+        layout.addWidget(self.camera_display_button)
+        self.camera_analysis_button = QToolButton(self.camera_bar)
+        self.camera_analysis_button.setObjectName("teachingCameraPresetButton")
+        self.camera_analysis_button.setText("截面")
+        self.camera_analysis_button.setCheckable(True)
+        self.camera_analysis_button.setToolTip("按需显示移动截面与光纤模场放大镜")
+        if hasattr(self.view_3d, "set_analysis_panels_visible"):
+            self.camera_analysis_button.toggled.connect(self.view_3d.set_analysis_panels_visible)
+        self.camera_analysis_button.setFixedHeight(34)
+        layout.addWidget(self.camera_analysis_button)
+        layout.addStretch(1)
+        self.camera_status = QLabel("")
+        self.camera_status.hide()
         layout.addWidget(self.camera_status)
         self.camera_bar.hide()
+
+    def _focus_fiber_3d(self) -> None:
+        fiber = next((node for node in self.model.nodes.values() if node.kind == "fiber"), None)
+        if fiber is None:
+            self.view_3d.set_view_preset("paper")
+            return
+        self.view_3d.set_view_preset("paper")
+        self.view_3d.focus_node(fiber.id)
 
     def resizeEvent(self, event) -> None:  
         super().resizeEvent(event)
@@ -1574,7 +1674,14 @@ class SpatialTeachingWorkbench(base.UnifiedTeachingWorkbench):
             self.lens_strip.setGeometry((self.overlay_host.width() - width) // 2, max(10, self.overlay_host.height() - 128), width, 70)
             self.lens_strip.raise_()
         if hasattr(self, "camera_bar"):
-            width = max(620, min(self.overlay_host.width() - 180, 980))
+            # Fit the rounded bar to the controls plus small side breathing room;
+            # the row itself remains centered by _position_overlays().
+            button_count = 7
+            button_width = 62
+            gap = 8
+            horizontal_padding = 20
+            width = button_count * button_width + (button_count - 1) * gap + horizontal_padding
+            width = min(width, max(360, self.overlay_host.width() - 80))
             self.camera_bar.setGeometry((self.overlay_host.width() - width) // 2, 10, width, 44)
             self.camera_bar.raise_()
 
@@ -1706,6 +1813,22 @@ class SpatialTeachingWorkbench(base.UnifiedTeachingWorkbench):
         reset = QPushButton("恢复默认相机")
         reset.clicked.connect(self.view_3d.reset_camera)
         camera_layout.addWidget(reset)
+        layer_row = QHBoxLayout()
+        chief = QCheckBox("主光线")
+        chief.setChecked(True)
+        chief.setToolTip("显示真实传播路径的中心线；橙色用于表示传播路径，而不是肉眼可见激光颜色。")
+        chief.toggled.connect(lambda value: self.view_3d.set_layer_visible("chief_ray", value))
+        envelope = QCheckBox("Gaussian 包络")
+        envelope.setChecked(True)
+        envelope.setToolTip("按当前光束半径绘制半透明包络；拖动期间暂时只保留主光线。")
+        envelope.toggled.connect(lambda value: self.view_3d.set_layer_visible("beam_envelope", value))
+        layer_row.addWidget(chief)
+        layer_row.addWidget(envelope)
+        layer_row.addStretch(1)
+        camera_layout.addLayout(layer_row)
+        note = QLabel("橙色：主光路　青色：Gaussian 光束包络")
+        note.setObjectName("helperText")
+        camera_layout.addWidget(note)
         self.left_drawer.body_layout.addWidget(camera_group)
 
     def _populate_object_drawer(self) -> None:
@@ -1787,8 +1910,6 @@ class SpatialTeachingWorkbench(base.UnifiedTeachingWorkbench):
             rotation = 180.0
         self.model.add_node(kind, x, y, rotation_deg=rotation)
         self._refresh_all(preserve_view=True)
-        if self.left_drawer.isVisible() and self._left_drawer_key == "library":
-            self._populate_library_drawer()
 
     def _remove_node_to_tray(self, node_id: str) -> None:
         if self.model.mode != "free":

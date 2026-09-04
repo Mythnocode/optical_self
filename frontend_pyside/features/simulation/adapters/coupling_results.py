@@ -4,10 +4,19 @@ from collections.abc import Mapping
 from typing import Any
 import math
 import numpy as np
+from frontend_pyside.shared.settings import SimulationNumericsProfileStore
 
 from .array_utils import _as_1d, _as_2d, _preview_grid
 
 FORMAL_SOURCE = "正式仿真"
+
+
+def _display_profile() -> tuple[bool, float]:
+    try:
+        profile = SimulationNumericsProfileStore().load()
+        return bool(profile.get("auto_display_frame", True)), float(profile.get("display_fill_fraction", 0.67))
+    except Exception:
+        return True, 0.67
 
 
 def _normalize(values: np.ndarray) -> np.ndarray:
@@ -81,6 +90,7 @@ def _beam_match_view(
     else:
         mode_preview = np.zeros_like(field_preview)
 
+    auto_frame, fill_fraction = _display_profile()
     description = (
         f"中心偏移 {center_distance:.3g} μm；X尺寸比 {ratio_x:.3f}；"
         f"Y尺寸比 {ratio_y:.3f}；椭圆率 {ellipticity:.3f}。"
@@ -114,7 +124,9 @@ def _beam_match_view(
         "x_label": x_label,
         "y_label": y_label,
         "source": source,
-        "auto_crop_fraction": float(np.exp(-2.0)),
+        "auto_display_frame": bool(auto_frame),
+        "auto_crop_fraction": float(np.exp(-2.0)) if auto_frame else None,
+        "display_fill_fraction": fill_fraction,
         "preview_shape": [int(field_preview.shape[0]), int(field_preview.shape[1])],
         "original_shape": [int(full_shape[0]), int(full_shape[1])],
         "description": description,
@@ -185,6 +197,12 @@ def _waist_position_view(
             "facet_spot_x_um": wx_plane,
             "facet_spot_y_um": wy_plane,
             "target_radius_um": target,
+            "waist_x_um": waist_x,
+            "waist_y_um": waist_y,
+            "waist_x_z_mm": waist_x_z,
+            "waist_y_z_mm": waist_y_z,
+            "rayleigh_x_mm": zr_x,
+            "rayleigh_y_mm": zr_y,
         },
         "x_label": "z / mm（光纤端面为0）",
         "y_label": "w / μm",
@@ -210,6 +228,7 @@ def _coupling_plots(
     field = _as_2d(arrays.get("coupling_field_intensity"))
     phase = _as_2d(arrays.get("coupling_field_phase_rad"))
     mode = _as_2d(arrays.get("coupling_mode_intensity"))
+    mode_phase = _as_2d(arrays.get("coupling_mode_phase_rad"))
 
     if not field.size and real.size and imag.shape == real.shape:
         field = real * real + imag * imag
@@ -288,6 +307,48 @@ def _coupling_plots(
             "z": np.nan_to_num(phase_preview, nan=0.0).astype(np.float32, copy=False),
             "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
             "description": "相位单位：rad。",
+        }
+    plots["光纤基模"] = {
+        "kind": "heatmap", "title": "光纤基模强度",
+        "x": display_x_preview.astype(float, copy=False), "y": display_y_preview.astype(float, copy=False),
+        "z": _normalize(mode_preview).astype(np.float32, copy=False),
+        "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
+        "equal_aspect": True,
+        "description": "接收光纤目标模式的归一化强度分布。",
+    }
+    # X/Y 两个方向分别比较入射场与目标模式，避免只看二维热图时遗漏椭圆率和偏心。
+    row_incident = int(np.argmin(np.abs(display_y - beam_match.get("incident_center", [0.0, 0.0])[1]))) if len(display_y) else field.shape[0] // 2
+    col_incident = int(np.argmin(np.abs(display_x - beam_match.get("incident_center", [0.0, 0.0])[0]))) if len(display_x) else field.shape[1] // 2
+    row_target = int(np.argmin(np.abs(display_y - beam_match.get("fiber_center", [0.0, 0.0])[1]))) if len(display_y) else mode.shape[0] // 2
+    col_target = int(np.argmin(np.abs(display_x - beam_match.get("fiber_center", [0.0, 0.0])[0]))) if len(display_x) else mode.shape[1] // 2
+    plots["XY模场比较"] = {
+        "kind": "profile_pair", "title": "X/Y 模场比较",
+        "x_axis": display_x.astype(float).tolist(),
+        "y_axis": display_y.astype(float).tolist(),
+        "x_series": [
+            {"label": "入射场", "y": _normalize(field[row_incident]).astype(float).tolist()},
+            {"label": "光纤模式", "y": _normalize(mode[row_target]).astype(float).tolist()},
+        ],
+        "y_series": [
+            {"label": "入射场", "y": _normalize(field[:, col_incident]).astype(float).tolist()},
+            {"label": "光纤模式", "y": _normalize(mode[:, col_target]).astype(float).tolist()},
+        ],
+        "x_label": x_label, "y_label": y_label, "value_label": "归一化强度", "source": FORMAL_SOURCE,
+        "description": "分别比较 X、Y 方向的入射场与光纤基模截面。",
+    }
+    if phase.size and phase.shape == field.shape and mode_phase.size and mode_phase.shape == field.shape:
+        overlap = np.sqrt(np.maximum(field, 0.0) * np.maximum(mode, 0.0)) * np.cos(phase - mode_phase)
+        scale = float(np.nanmax(np.abs(overlap))) if overlap.size else 0.0
+        if scale > 0.0:
+            overlap = overlap / scale
+        overlap_preview = overlap[np.ix_(row_index, col_index)]
+        plots["重叠贡献"] = {
+            "kind": "heatmap", "title": "复场重叠实部贡献",
+            "x": display_x_preview.astype(float, copy=False), "y": display_y_preview.astype(float, copy=False),
+            "z": np.nan_to_num(overlap_preview, nan=0.0).astype(np.float32, copy=False),
+            "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
+            "equal_aspect": True,
+            "description": "由归一化复场重叠积分的点乘实部构造；正值表示同相贡献，负值表示相消贡献，不等同于局部效率。",
         }
     for key, value in _derived_coupling_views(diagnostic_pair, source=FORMAL_SOURCE).items():
         plots.setdefault(key, value)

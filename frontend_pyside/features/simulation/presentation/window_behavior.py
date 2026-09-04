@@ -15,7 +15,15 @@ class SimulationWindowMixin:
         window.activateWindow()
 
     def _cleanup_child_windows(self) -> None:
-        self._child_windows = [
-            window for window in self._child_windows
-            if window is not None and not window.isHidden()
-        ]
+        alive = []
+        for window in list(self._child_windows):
+            if window is None:
+                continue
+            try:
+                if not window.isHidden():
+                    alive.append(window)
+            except RuntimeError:
+                # WA_DeleteOnClose destroys the C++ window before Qt emits all
+                # queued cleanup callbacks; stale Python wrappers are discarded.
+                continue
+        self._child_windows = alive

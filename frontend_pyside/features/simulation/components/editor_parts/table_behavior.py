@@ -69,7 +69,7 @@ class SurfaceTableMixin:
         selected = self.lens_filter.currentData()
         self.lens_filter.blockSignals(True)
         self.lens_filter.clear()
-        self.lens_filter.addItem("全部元件", None)
+        self.lens_filter.addItem("全部表面", None)
         groups = []
         for surface in self.context.project.surfaces:
             ensure_surface_defaults(surface)
@@ -123,6 +123,28 @@ class SurfaceTableMixin:
                 surface_id=str(getattr(surface, "surface_id", "")),
             )
         self.surfaceSelected.emit(int(row))
+
+    def _inline_edit_columns(self) -> tuple[int, ...]:
+        return (
+            self.COL_GROUP, self.COL_NAME, self.COL_TYPE, self.COL_RADIUS,
+            self.COL_THICKNESS, self.COL_MATERIAL, self.COL_APERTURE, self.COL_ENABLED,
+        )
+
+    def _table_double_clicked(self, row: int, column: int) -> None:
+        """Double-click edits common fields; advanced properties remain explicit.
+
+        The previous signal opened the Surface property window for *every*
+        double-click, immediately stealing focus from the table editor.  That made
+        cells advertise ItemIsEditable while no inline editor could stay open.
+        """
+        if not 0 <= row < len(self.context.project.surfaces):
+            return
+        if column in self._inline_edit_columns():
+            item = self.table.item(row, column)
+            if item is not None:
+                self.table.editItem(item)
+            return
+        self._activate_surface(row, column)
 
     def _activate_surface(self, row: int, _column: int = 0) -> None:
         if not 0 <= row < len(self.context.project.surfaces):

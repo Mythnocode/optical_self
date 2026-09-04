@@ -9,7 +9,10 @@ VIEW_ANALYSES: dict[str, frozenset[str]] = {
     "3D光路": frozenset({"raytrace"}),
     "点列图": frozenset({"spot"}),
     "PSF": frozenset({"psf"}),
-    "MTF": frozenset({"mtf"}),
+    "焦面截面": frozenset({"psf"}),
+    "光斑尺寸": frozenset({"psf"}),
+    "MTF": frozenset({"psf"}),
+    "波前": frozenset({"wavefront_quality"}),
     "端面匹配": frozenset({"coupling"}),
     "光束包络": frozenset({"coupling"}),
     "束腰位置": frozenset({"coupling"}),
@@ -21,6 +24,9 @@ VIEW_ANALYSES: dict[str, frozenset[str]] = {
     "中心截面": frozenset({"coupling"}),
     "振幅": frozenset({"coupling"}),
     "相位": frozenset({"coupling"}),
+    "光纤基模": frozenset({"coupling"}),
+    "XY模场比较": frozenset({"coupling"}),
+    "重叠贡献": frozenset({"coupling"}),
 }
 
 SPECIAL_ANALYSES = frozenset({

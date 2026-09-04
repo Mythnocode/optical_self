@@ -152,9 +152,10 @@ class ImportedFieldSelector(QWidget):
         row.addWidget(self.path_edit, 1)
         row.addWidget(self.select_button, 0)
         root.addLayout(row)
-        self.status_label = QLabel("支持 NPY、NPZ、CSV；数据将归一化后用于正式耦合。")
+        self.status_label = QLabel("")
         self.status_label.setObjectName("helperText")
         self.status_label.setWordWrap(True)
+        self.status_label.setVisible(False)
         root.addWidget(self.status_label)
 
     @property
@@ -164,7 +165,8 @@ class ImportedFieldSelector(QWidget):
     def clear(self) -> None:
         self._data = None
         self.path_edit.clear()
-        self.status_label.setText("支持 NPY、NPZ、CSV；数据将归一化后用于正式耦合。")
+        self.status_label.clear()
+        self.status_label.setVisible(False)
         self.fieldChanged.emit()
 
     def choose_file(self) -> None:
@@ -185,6 +187,7 @@ class ImportedFieldSelector(QWidget):
             self._data = None
             self.path_edit.setText(str(path))
             self.status_label.setText(f"导入失败：{exc}")
+            self.status_label.setVisible(True)
             if show_error:
                 QMessageBox.warning(self, "复场导入失败", str(exc))
             self.fieldChanged.emit()
@@ -193,8 +196,9 @@ class ImportedFieldSelector(QWidget):
         self.path_edit.setText(data.path)
         wavelength = f"，文件波长 {data.wavelength_nm:g} nm" if data.wavelength_nm is not None else ""
         self.status_label.setText(
-            f"已读取 {data.rows}×{data.columns}，{data.interpretation}，已完成归一化{wavelength}。"
+            f"已读取 {data.rows}×{data.columns}{wavelength}"
         )
+        self.status_label.setVisible(True)
         self.fieldChanged.emit()
         return True
 

@@ -31,7 +31,7 @@ _TRACE_KEYS = {
     "apodization_type", "apodization_factor", "apodization_factor_x",
     "apodization_factor_y", "include_source_to_pupil_opl",
     "propagate_to_image", "evaluate_apertures", "max_intersection_iterations", "start_z_mm",
-    "sampling_role", "trace_output_level",
+    "sampling_role", "trace_output_level", "polarization_sensitive", "vector_coupling_enabled",
 }
 _WAVE_KEYS = {
     "wavelength_nm", "grid_size", "extent_mm", "propagation_distance_mm", "distance_mm", "method",

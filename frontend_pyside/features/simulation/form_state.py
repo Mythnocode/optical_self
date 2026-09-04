@@ -7,6 +7,8 @@ from typing import Any
 from frontend_pyside.presets.demo_780nm_four_lens import (
     DEFAULT_ANALYSES,
     DEFAULT_BEAM_QUALITY_M2,
+    DEFAULT_BEAM_QUALITY_M2_X,
+    DEFAULT_BEAM_QUALITY_M2_Y,
     DEFAULT_CALCULATION_PRECISION,
     DEFAULT_HIGH_PRECISION_COUPLING,
     DEFAULT_IMAGE_DISTANCE_MM,
@@ -28,6 +30,8 @@ from frontend_pyside.presets.demo_780nm_four_lens import (
     DEFAULT_SOURCE_NA,
     DEFAULT_WAIST_POSITION_MM,
     DEFAULT_WAIST_RADIUS_UM,
+    DEFAULT_WAIST_RADIUS_X_UM,
+    DEFAULT_WAIST_RADIUS_Y_UM,
     DEFAULT_WAVELENGTH_NM,
     DEFAULT_ZERO_PADDING_FACTOR,
 )
@@ -37,11 +41,11 @@ from frontend_pyside.presets.demo_780nm_four_lens import (
 class SourceFormState:
     source_type: str = "gaussian"
     wavelength_nm: float = DEFAULT_WAVELENGTH_NM
-    waist_x_um: float = DEFAULT_WAIST_RADIUS_UM
-    waist_y_um: float = DEFAULT_WAIST_RADIUS_UM
+    waist_x_um: float = DEFAULT_WAIST_RADIUS_X_UM
+    waist_y_um: float = DEFAULT_WAIST_RADIUS_Y_UM
     waist_position_mm: float = DEFAULT_WAIST_POSITION_MM
-    beam_quality_m2_x: float = DEFAULT_BEAM_QUALITY_M2
-    beam_quality_m2_y: float = DEFAULT_BEAM_QUALITY_M2
+    beam_quality_m2_x: float = DEFAULT_BEAM_QUALITY_M2_X
+    beam_quality_m2_y: float = DEFAULT_BEAM_QUALITY_M2_Y
     object_na_x: float = DEFAULT_SOURCE_NA
     object_na_y: float = DEFAULT_SOURCE_NA
     field_x_deg: float = 0.0
@@ -113,6 +117,7 @@ class CalculationFormState:
     propagation_model: str = DEFAULT_PROPAGATION_MODEL
     zero_padding_factor: float = DEFAULT_ZERO_PADDING_FACTOR
     output_extent_mm: float = DEFAULT_OUTPUT_EXTENT_MM
+    auto_expand_output: bool = True
     analyses: tuple[str, ...] = DEFAULT_ANALYSES
     only_visible_results: bool = DEFAULT_ONLY_VISIBLE_RESULTS
     include_energy_audit: bool = False
@@ -172,11 +177,17 @@ class SimulationFormState:
                 "precision_mode": precision_mode,
                 "convergence_enabled": calculation.sampling_convergence_enabled,
                 "sampling_convergence_enabled": calculation.sampling_convergence_enabled,
-                "auto_expand_output": False,
+                "auto_expand_output": bool(calculation.auto_expand_output),
                 "wavefront_fit_order": 4,
                 "include_diagnostic_arrays": calculation.save_large_arrays or "coupling" in analyses,
                 "result_array_policy": "full" if calculation.save_large_arrays else "field_only",
                 "mode_model": receiver.mode_model,
+                # Keep the GUI's native angular unit all the way into the formal
+                # coupling options.  The project snapshot remains degree-based for
+                # schema compatibility, but the solver no longer has to infer a
+                # GUI tilt from that serialized representation.
+                "tilt_x_urad": receiver.tilt_x_urad,
+                "tilt_y_urad": receiver.tilt_y_urad,
                 "high_precision_coupling_enabled": calculation.high_precision_coupling_enabled,
                 "fiber_core_radius_um": receiver.core_diameter_um / 2.0,
                 "fiber_n_core": receiver.core_refractive_index,
@@ -232,7 +243,7 @@ RECEIVER_TYPE_MAP = {
     "二维探测器": "detector",
     "用户模式": "user_mode",
 }
-PRECISION_MAP = {"预览": "preview", "标准": "standard", "高精度": "high", "研究级": "high"}
+PRECISION_MAP = {"129×129": "preview", "257×257": "standard", "513×513": "high", "1025×1025": "high", "预览": "preview", "标准": "standard", "高精度": "high", "研究级": "high"}
 PROPAGATION_MAP = {
     "普通角谱": "angular_spectrum",
     "带限角谱": "band_limited_angular_spectrum",

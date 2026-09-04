@@ -20,6 +20,8 @@ class Settings:
     log_level: str
     simulation_worker_count: int
     training_worker_count: int
+    analysis_worker_count: int
+    batch_thread_count: int
     native_thread_limit: int
 
 
@@ -36,6 +38,22 @@ def load_settings() -> Settings:
         ),
         training_worker_count=max(
             0, int(os.getenv("TRAINING_WORKER_COUNT", "1"))
+        ),
+        analysis_worker_count=max(
+            0, int(os.getenv("ANALYSIS_WORKER_COUNT", "1"))
+        ),
+        batch_thread_count=max(
+            1,
+            int(
+                os.getenv(
+                    "OPTICAL_BATCH_THREAD_COUNT",
+                    # Current-container benchmark shows the optical wave pipeline
+                    # can become slower when several Python threads compete for
+                    # FFT/memory bandwidth.  Keep the verified-safe default at 1;
+                    # target machines can opt in after running the performance probe.
+                    "1",
+                )
+            ),
         ),
         native_thread_limit=max(
             1, int(os.getenv("NATIVE_THREAD_LIMIT", "1"))

@@ -87,6 +87,7 @@ class _AspectRatioImage(QWidget):
 
 class HomePage(QWidget):
     navigateRequested = Signal(str)
+    assistantActionRequested = Signal(object)
 
     def __init__(self, context, parent=None):
         super().__init__(parent)
@@ -98,12 +99,15 @@ class HomePage(QWidget):
         self._remote_models: list[dict] = context.registry.models
 
         root = QVBoxLayout(self)
-        root.setContentsMargins(14, 9, 14, 12)
-        root.setSpacing(7)
+        root.setContentsMargins(18, 12, 18, 12)
+        root.setSpacing(10)
 
-        # 首页直接进入平台介绍与当前工作区，避免重复的大标题和项目摘要条。
-        workspace = QSplitter(Qt.Orientation.Horizontal)
-        workspace.setChildrenCollapsible(False)
+        # 首页只承担“平台总览”这一件事。完整能力目录由左下悬浮工具箱负责，
+        # 任务/历史/数据由底部全局入口负责，避免首页重复制造中转入口。
+        title = QLabel(APP_NAME)
+        title.setObjectName("homePlatformTitle")
+        title.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        root.addWidget(title)
 
         intro_scroll = QScrollArea()
         intro_scroll.setObjectName("homeIntroScroll")
@@ -111,71 +115,7 @@ class HomePage(QWidget):
         intro_scroll.setFrameShape(QFrame.Shape.NoFrame)
         intro_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         intro_scroll.setWidget(self._build_intro())
-        workspace.addWidget(intro_scroll)
-
-        work_panel = QWidget()
-        work_panel.setMinimumWidth(300)
-        work_panel.setMaximumWidth(360)
-        work_layout = QVBoxLayout(work_panel)
-        work_layout.setContentsMargins(0, 0, 0, 0)
-        work_layout.setSpacing(7)
-
-        current = Card("当前项目", compact=True)
-        self.project = InlineMetric("项目", "—")
-        self.eff = InlineMetric("最新结果", "—")
-        self.state = InlineMetric("质量状态", "—")
-        self.wave = InlineMetric("波长", "—")
-        self.surface = InlineMetric("表面", "—")
-        self.task_count = InlineMetric("活动任务", "—")
-        current.body.addWidget(self.project)
-        self.project_summary = QLabel()
-        self.project_summary.setWordWrap(True)
-        current.body.addWidget(self.project_summary)
-        current.body.addWidget(self.eff)
-        current.body.addWidget(self.state)
-        project_actions = QHBoxLayout()
-        new_project = SecondaryButton("新建项目")
-        new_project.clicked.connect(self._new_project)
-        project_actions.addWidget(new_project)
-        teaching = SecondaryButton("教学中心")
-        teaching.clicked.connect(lambda: self.navigateRequested.emit("teaching"))
-        project_actions.addWidget(teaching)
-        project_actions.addStretch(1)
-        continue_project = PrimaryButton("继续当前项目")
-        continue_project.clicked.connect(lambda: self.navigateRequested.emit("simulation"))
-        project_actions.addWidget(continue_project)
-        current.body.addLayout(project_actions)
-        work_layout.addWidget(current)
-
-        recent = Card("最近任务", compact=True)
-        self.task_text = QLabel("暂无任务")
-        self.task_text.setWordWrap(True)
-        self.task_text.setObjectName("compactTaskText")
-        recent.body.addWidget(self.task_text)
-        open_tasks = SecondaryButton("打开任务中心")
-        open_tasks.clicked.connect(lambda: self.navigateRequested.emit("tasks"))
-        recent.body.addWidget(open_tasks)
-        work_layout.addWidget(recent)
-
-        pending = Card("待处理事项", compact=True)
-        self.quality_rows = QVBoxLayout()
-        self.quality_rows.setSpacing(4)
-        pending.body.addLayout(self.quality_rows)
-        work_layout.addWidget(pending)
-
-        assets = Card("最近资产", compact=True)
-        self.asset_text = QLabel("当前项目｜尚无远程数据集或模型")
-        self.asset_text.setObjectName("compactAssetText")
-        self.asset_text.setWordWrap(True)
-        assets.body.addWidget(self.asset_text)
-        work_layout.addWidget(assets)
-        work_layout.addStretch(1)
-
-        workspace.addWidget(work_panel)
-        workspace.setStretchFactor(0, 3)
-        workspace.setStretchFactor(1, 1)
-        workspace.setSizes([1100, 360])
-        root.addWidget(workspace, 1)
+        root.addWidget(intro_scroll, 1)
 
         context.project.project_changed.connect(self._refresh)
         context.tasks.tasks_changed.connect(self._refresh_tasks)
@@ -190,85 +130,68 @@ class HomePage(QWidget):
     def _build_intro(self) -> QWidget:
         container = QWidget()
         layout = QVBoxLayout(container)
-        layout.setContentsMargins(0, 0, 8, 0)
-        layout.setSpacing(8)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(10)
         layout.addWidget(self._overview_content())
-        layout.addWidget(self._functions_content())
-        layout.addWidget(
-            ExpandableSection(
-                "技术能力与应用场景",
-                self._details_content,
-                expanded=False,
-            )
-        )
         layout.addStretch(1)
         return container
 
+
+    def _goal_content(self) -> QWidget:
+        card = Card("你现在想做什么？", compact=True)
+        intro = QLabel("按研究目的进入，平台会把你带到对应工作区；熟悉平台后仍可直接使用左侧导航。")
+        intro.setObjectName("helperText")
+        intro.setWordWrap(True)
+        card.body.addWidget(intro)
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(8)
+        grid.setVerticalSpacing(8)
+        goals = [
+            ("查看光路与耦合", "simulation", {"target": "simulation.view", "level": "prepare", "payload": {"view": "端面匹配"}}),
+            ("诊断耦合问题", "simulation", {"target": "simulation.view", "level": "prepare", "payload": {"view": "XY模场比较"}}),
+            ("研究参数规律", "optimization", {"target": "optimization.scan", "level": "prepare"}),
+            ("检查装调容差", "optimization", {"target": "optimization.tolerance", "level": "prepare"}),
+            ("自动寻找更优参数", "optimization", {"target": "optimization.variables", "level": "prepare"}),
+            ("正向预测当前系统", "machine_learning", {"target": "machine_learning.prediction", "level": "prepare"}),
+            ("按目标反推参数", "optimization", {"target": "optimization.inverse_design", "level": "prepare"}),
+            ("进入教学实验", "teaching", {"target": "teaching.mismatch", "level": "prepare", "payload": {"mismatch": "lateral"}}),
+        ]
+        for index, (text, page, action) in enumerate(goals):
+            button = SecondaryButton(text)
+            button.setMinimumHeight(44)
+            button.clicked.connect(lambda checked=False, p=page, a=action: self._open_goal(p, a))
+            grid.addWidget(button, index // 4, index % 4)
+        card.body.addLayout(grid)
+        return card
+
+    def _open_goal(self, page: str, action: dict) -> None:
+        payload = dict(action or {})
+        if "payload" not in payload:
+            payload["payload"] = {}
+        payload.setdefault("label", "继续")
+        self.assistantActionRequested.emit(payload)
+        if not payload.get("target"):
+            self.navigateRequested.emit(page)
+
     def _overview_content(self) -> QWidget:
-        card = Card("系统概述", compact=True)
-        title = QLabel(APP_NAME)
-        title.setObjectName("homeSystemTitle")
-        title.setWordWrap(True)
-        card.body.addWidget(title)
-
-        text = QLabel(
-            "本平台面向单模光纤耦合系统，提供建模、仿真、研究、优化、智能分析与教学实验的一体化研究环境。"
-            "平台将光学系统建模、正式数值仿真、参数研究与优化、智能分析、正式复核和教学实验统一在同一项目上下文中管理，"
-            "确保数据可追溯、流程可复现。"
-        )
-        text.setWordWrap(True)
-        text.setObjectName("homeOverviewText")
-        card.body.addWidget(text)
-
+        # 首页主视觉已经包含项目简介、能力和研究闭环，不再在外层重复标题/说明。
+        card = Card("", compact=True)
         workflow_image = _AspectRatioImage(
-            Path(__file__).resolve().parents[2]
-            / "resources"
-            / "images"
-            / "home_platform_research_workflow.png"
+            Path(__file__).resolve().parents[2] / "resources" / "images" / "Frame1.png"
         )
+        workflow_image.setToolTip("激光耦合仿真系统及智能优化平台 · 研究流程总览")
         card.body.addWidget(workflow_image)
 
-        actions = QHBoxLayout()
-        formal = PrimaryButton("建立正式仿真")
-        formal.clicked.connect(lambda: self.navigateRequested.emit("simulation"))
-        teaching = SecondaryButton("进入教学中心")
-        teaching.clicked.connect(lambda: self.navigateRequested.emit("teaching"))
-        actions.addWidget(formal)
-        actions.addWidget(teaching)
-        actions.addStretch(1)
-        card.body.addLayout(actions)
-
-        card.body.addWidget(
-            InfoRow(
-                "结果来源",
-                "正式数值结果由后端生成并通过数值质量检查；教学中心使用独立本地近似模型，两者数据严格隔离。",
-            )
-        )
-        card.body.addWidget(
-            SummaryStrip(
-                [
-                    ("01 建立系统", "光源 / 镜组 / 光纤"),
-                    ("02 正式计算", "光路 / 复场 / 效率"),
-                    ("03 参数研究", "扫描 / 候选 / 复核"),
-                    ("04 智能研究", "模型 / SHAP / 公式"),
-                ]
-            )
-        )
-
-        boundary = Card("结果来源与质量闸门", compact=True)
-        boundary.body.addWidget(InfoRow("前端快速预览", "检查结构合理性与变化趋势，不作为正式结论"))
-        boundary.body.addWidget(InfoRow("教学近似", "用于课堂演示和物理规律理解，不作为正式结论"))
-        boundary.body.addWidget(InfoRow("后端正式计算", "通过边缘功率、能量闭合、网格收敛和光瞳采样检查后可作为正式结果"))
-        card.body.addWidget(boundary)
+        # 首页主视觉只负责展示研究流程；具体能力统一由工具箱进入。
         return card
 
     def _functions_content(self) -> QWidget:
         card = Card("核心功能", compact=True)
         for title, detail, page in (
             ("光学仿真", "光路、复场、耦合效率与数值诊断", "simulation"),
-            ("研究与优化", "参数扫描、候选方案与正式复核", "optimization"),
-            ("智能分析", "代理模型、关键因素与预测可信度", "machine_learning"),
-            ("模型解释", "SHAP 蜂群图、瀑布图与物理公式联动", "explainability"),
+            ("研究与优化", "参数扫描、自动优化与容差分析", "optimization"),
+            ("模型分析", "代理模型、关键因素与预测可靠性", "machine_learning"),
+            ("模型解释", "SHAP 结果、主要因素与物理公式", "explainability"),
             ("教学实验", "装调失配、模场整形与实验报告", "teaching"),
         ):
             row = QHBoxLayout()
@@ -374,19 +297,29 @@ class HomePage(QWidget):
         self.context.project.set_project(default_project())
         self.context.tasks.add("新建项目", "项目", "已完成", 100, "已重置为默认四透镜耦合系统", page="home")
 
+    def assistant_context(self) -> dict:
+        project = self.context.project.project
+        metrics = dict(getattr(project, "metrics", {}) or {})
+        tasks = [dict(item) for item in list(getattr(self.context.tasks, "tasks", []) or []) if isinstance(item, dict)]
+        active = [item for item in tasks if str(item.get("status", "")) not in {"已完成", "已取消", "失败"}]
+        return {
+            "page": "首页",
+            "current_view": "平台总览",
+            "project_name": str(getattr(project, "name", "") or ""),
+            "project_version": str(getattr(project, "version", "") or ""),
+            "wavelength_nm": float(getattr(project, "wavelength_nm", 0.0) or 0.0),
+            "surface_count": len(getattr(project, "surfaces", []) or []),
+            "has_project_metrics": bool(metrics),
+            "coupling_efficiency": metrics.get("coupling_efficiency"),
+            "active_task_count": len(active),
+            "total_task_count": len(tasks),
+            "current_task": str(dict(getattr(self.context.project, "research_context", {}) or {}).get("current_task", "") or ""),
+        }
+
     def _refresh(self, project):
-        self.project.set_value(project.name, note=f"版本 {project.version}")
-        self.wave.set_value(f"{project.wavelength_nm:.0f}", "nm")
-        self.surface.set_value(len(project.surfaces), "个")
-        metrics = project.metrics or {}
-        efficiency = metrics.get("coupling_efficiency")
-        self.eff.set_value(f"{100 * efficiency:.1f}" if isinstance(efficiency, (int, float)) else "—", "%")
-        self.state.set_value("待正式验证" if metrics else "待计算")
-        self.project_summary.setText(
-            f"{project.version} · {project.wavelength_nm:.0f} nm · {len(project.surfaces)} 个表面\n"
-            "当前项目作为仿真、研究与优化、智能分析和高级解释的共同上下文。"
-        )
-        self._refresh_quality(project)
+        # 首页不再重复显示“当前工作/当前工程”卡片；项目状态由全局状态区和
+        # 各工作区上下文呈现。保留刷新钩子仅用于兼容项目状态事件。
+        return
 
     def _refresh_quality(self, project):
         while self.quality_rows.count():
@@ -395,7 +328,7 @@ class HomePage(QWidget):
                 item.widget().deleteLater()
         metrics = project.metrics or {}
         entries = [
-            ("正式结果", "尚未生成" if not metrics else "待正式复核", "待处理", "warning"),
+            ("完整结果", "尚未生成" if not metrics else "待质量检查", "待处理", "warning"),
             ("网格收敛", "65 / 129 / 257 / 513", "待执行", "warning"),
             ("光瞳收敛", "17 / 33 / 49 / 65", "待执行", "warning"),
         ]
@@ -406,15 +339,9 @@ class HomePage(QWidget):
             self.quality_rows.addWidget(InfoRow(label, value, status, tone))
 
     def _refresh_tasks(self, tasks):
-        active = [item for item in tasks if item.get("status") not in ("已完成", "已取消")]
-        self.task_count.set_value(len(active), "个")
-        if not tasks:
-            self.task_text.setText("暂无任务。可从仿真、参数研究或教学中心发起任务。")
-            return
-        lines = []
-        for item in tasks[:3]:
-            lines.append(f"{item.get('kind', '任务')}｜{item.get('name', '—')}\n{item.get('status', '—')} · {item.get('progress', 0)}%")
-        self.task_text.setText("\n\n".join(lines))
+        # 首页不承担任务中心摘要；任务入口统一位于全局底栏/工具箱。
+        return
+
 
     def _refresh_remote_assets(self, force: bool = False) -> None:
         registry = self.context.registry
@@ -435,11 +362,13 @@ class HomePage(QWidget):
 
     def _registry_datasets_changed(self, records: list[dict]) -> None:
         self._remote_datasets = [dict(item) for item in records if isinstance(item, dict)]
-        self._populate_asset_table()
+        if hasattr(self, "asset_text"):
+            self._populate_asset_table()
 
     def _registry_models_changed(self, records: list[dict]) -> None:
         self._remote_models = [dict(item) for item in records if isinstance(item, dict)]
-        self._populate_asset_table()
+        if hasattr(self, "asset_text"):
+            self._populate_asset_table()
 
     def _api_failed(self, key: str, _message: str) -> None:
         if key == "home.datasets":

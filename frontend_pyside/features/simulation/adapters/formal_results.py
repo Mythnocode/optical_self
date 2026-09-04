@@ -8,7 +8,7 @@ from ..ray_data_model import FormalRayDataset
 from ..ray_view_adapters import RayViewOptions, build_ray_view_plots
 from .array_utils import _error_text
 from .coupling_results import _coupling_plots, _derived_coupling_views, _mode_overlay_from_pair
-from .wave_results import _mtf_plot, _psf_plot, _spot_plot
+from .wave_results import _mtf_plot, _psf_plot, _spot_plot, _psf_profile_plot, _psf_size_plot, _wavefront_plot
 from frontend_pyside.shared.plotting.engineering_views import (
     build_energy_flow,
     build_multi_plane_evolution,
@@ -30,7 +30,7 @@ def formal_result_to_plots(
     requested = set(requested_keys or {
         "光路", "3D光路", "点列图", "PSF", "MTF", "端面匹配", "光束包络",
         "束腰位置", "模式重叠", "耦合场", "中心截面", "振幅", "相位",
-        "相位对比", "多平面演化", "能量分解",
+        "相位对比", "多平面演化", "能量分解", "焦面截面", "光斑尺寸", "光纤基模", "XY模场比较", "重叠贡献", "波前",
     })
     plots: dict[str, dict[str, Any]] = {}
 
@@ -51,7 +51,7 @@ def formal_result_to_plots(
             plots.update({key: value for key, value in ray_plots.items() if key in requested})
 
     if "点列图" in requested:
-        spot = _spot_plot(arrays)
+        spot = _spot_plot(arrays, metrics=dict(result.get("metrics", {}) or {}))
         if spot:
             plots["点列图"] = spot
 
@@ -60,15 +60,30 @@ def formal_result_to_plots(
         if psf:
             plots["PSF"] = psf
 
+    if "焦面截面" in requested:
+        profile = _psf_profile_plot(arrays, project)
+        if profile:
+            plots["焦面截面"] = profile
+
+    if "光斑尺寸" in requested:
+        size = _psf_size_plot(arrays, project)
+        if size:
+            plots["光斑尺寸"] = size
+
     if "MTF" in requested:
         mtf = _mtf_plot(arrays)
         if mtf:
             plots["MTF"] = mtf
 
+    if "波前" in requested:
+        wavefront = _wavefront_plot(arrays)
+        if wavefront:
+            plots["波前"] = wavefront
+
     coupling_keys = {
         "端面匹配", "光束包络", "束腰位置", "模式重叠", "耦合场",
         "中心截面", "振幅", "相位", "相位对比", "多平面演化",
-        "能量分解",
+        "能量分解", "光纤基模", "XY模场比较", "重叠贡献",
     }
     if requested & coupling_keys:
         coupling_plots = _coupling_plots(

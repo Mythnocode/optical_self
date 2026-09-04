@@ -1,0 +1,83 @@
+{
+  "bundle_id": "video_demo_780nm_xz_v1",
+  "label": "内置演示·780 nm 四透镜 X/Z 耦合数据与模型",
+  "generated_by_real_pipeline": true,
+  "wavelength_nm": 780.0,
+  "precision": "standard",
+  "source_project_id": "demo-video-780nm-four-lens",
+  "engine_version": "native-optical-core-v3.2",
+  "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+  "datasets": [
+    "dataset-880bdde6c292"
+  ],
+  "models": [
+    "model-63d9d3ea55cf"
+  ],
+  "dataset_sample_count": 139,
+  "model_test_metrics": {
+    "mae": 0.028451853080106705,
+    "rmse": 0.035492194063622466,
+    "r2": 0.9402176386041832,
+    "max_absolute_error": 0.10432318276798469
+  },
+  "feature_scope": [
+    {
+      "path": "receiver.offset_x_mm",
+      "display_name": "光纤横向位置 X",
+      "range_mm": [
+        -0.002,
+        0.002
+      ]
+    },
+    {
+      "path": "receiver.axial_offset_z_mm",
+      "display_name": "光纤轴向位置",
+      "range_mm": [
+        -0.05,
+        0.05
+      ]
+    }
+  ],
+  "shap_physics_check": {
+    "global_order": [
+      "receiver.axial_offset_z_mm",
+      "receiver.offset_x_mm"
+    ],
+    "spearman_abs_x_vs_shap": -0.9523275591121336,
+    "spearman_abs_z_vs_shap": -0.8780818581769496,
+    "interpretation": "绝对横向偏移和绝对轴向离焦增大时，SHAP 对模式耦合效率的贡献显著变负；在本演示范围内轴向位置的全局影响高于横向位置。",
+    "spearman_abs_x_p_value": 1.6514138262107236e-72,
+    "spearman_abs_z_p_value": 1.0800767688967216e-45,
+    "recommended_video_view": "主要因素 / 整体规律 / 单参数规律；当前系统瀑布图的基准是模型平均基准，不是理想光学状态"
+  },
+  "results": [],
+  "notes": [
+    "本资产按3分钟演示脚本的780 nm四透镜系统真实生成，不是手工构造结果。",
+    "X/Z两变量用于录像中的正向预测、反向预测与SHAP解释；另加入11个真实轴向扫描锚点（每10 μm一个，含Z=+30 μm关键工况），独立测试集保持原LHS测试样本。",
+    "128个样本均通过能量/边缘检查；保守Nyquist预警仅在257→513实际采样收敛通过时允许进入训练。",
+    "示例资产不会自动成为当前模型；用户仍需明确采用模型。",
+    "录像正式结果页的67.5%/53.6%为总耦合效率；代理模型目标coupling_efficiency为模式耦合效率，界面必须明确区分两者。",
+    "SHAP录像优先展示全局主要因素/整体规律/单参数规律；局部瀑布图的基准为模型平均预测基准，不能解释成理想光学状态。",
+    "教学3D光束只允许消费正式raytrace路径；当前基准正式计算包含1793条真实光线，显示层最多抽取9条真实代表光线。"
+  ],
+  "sampling_design": "128 LHS + 11 formal axial anchors",
+  "video_flow_reference": {
+    "z0_mode_coupling": 0.9521742176876733,
+    "z0_total_coupling": 0.6752702256655362,
+    "z30um_mode_coupling": 0.7561305681359246,
+    "z30um_total_coupling": 0.5362384844001704,
+    "scan31_best_z_mm": -0.003333333333333334,
+    "scan31_best_mode_coupling": 0.9525143729006081,
+    "optimization48_best_x_mm": 3.3334031060064774e-07,
+    "optimization48_best_z_mm": -0.0018943998847161733,
+    "optimization48_best_mode_coupling": 0.9529712531923787,
+    "tolerance256_mean": 0.7544781430214402,
+    "tolerance256_std": 0.16250406969701262,
+    "tolerance256_p05": 0.4234757323270753,
+    "tolerance256_yield_at_80pct": 0.50390625,
+    "ml_forward_z30_mode_coupling_prediction": 0.7775444783954593,
+    "ml_inverse_target_90_formal_result": 0.9001606505980989,
+    "formal_ray_count": 1793,
+    "formal_ray_representatives_for_teaching_3d": 9
+  }
+}

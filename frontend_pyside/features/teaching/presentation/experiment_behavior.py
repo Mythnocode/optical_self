@@ -157,8 +157,8 @@ class TeachingExperimentMixin:
         widget = QWidget()
         root = QVBoxLayout(widget)
         buttons = QHBoxLayout()
-        save_a = SecondaryButton("保存方案 A")
-        save_b = SecondaryButton("保存方案 B")
+        save_a = SecondaryButton("保存快照 A")
+        save_b = SecondaryButton("保存快照 B")
         compare = PrimaryButton("比较 A / B")
         buttons.addWidget(save_a)
         buttons.addWidget(save_b)
@@ -167,7 +167,7 @@ class TeachingExperimentMixin:
         buttons.addWidget(QLabel("建议只改变一个关键变量，便于解释差异。"))
         root.addLayout(buttons)
         self.compare_table = DataTable(0, 4)
-        self.compare_table.setHorizontalHeaderLabels(["指标", "方案 A", "方案 B", "差值 / 结论"])
+        self.compare_table.setHorizontalHeaderLabels(["指标", "快照 A", "快照 B", "差值 / 结论"])
         root.addWidget(self.compare_table)
         self.scheme_a = None
         self.scheme_b = None

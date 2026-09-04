@@ -13,7 +13,8 @@ import traceback
 from typing import Any, Callable
 
 from backend.optical_ml_app.jobs.cancellation import CancellationToken
-from backend.optical_ml_app.jobs.progress import ProgressMessage
+from backend.optical_ml_app.jobs.progress import ProgressMessage, worker_progress_fraction
+from backend.optical_ml_app.jobs.process_lifecycle import arm_parent_death_signal
 
 _logger = logging.getLogger(__name__)
 
@@ -46,7 +47,7 @@ class PersistentProgressReporter:
                     self._worker_id,
                     self._job_id,
                     ProgressMessage(
-                        float(max(0.0, min(1.0, progress))),
+                        worker_progress_fraction(progress),
                         str(stage),
                         int(completed_items),
                         max(1, int(total_items)),
@@ -166,6 +167,7 @@ def _persistent_worker_main(
     function_loader: Callable[[bytes], Any],
     internal_thread_limit: int,
 ) -> None:
+    arm_parent_death_signal()
     _limit_native_threads(internal_thread_limit)
     resources: dict[str, Any] = {}
     user_job_seen = threading.Event()

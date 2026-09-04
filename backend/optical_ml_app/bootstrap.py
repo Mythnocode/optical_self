@@ -1,4 +1,5 @@
 from backend.optical_ml_app.runtime_env import configure_native_thread_limits
+from backend.optical_ml_app.demo_assets import install_packaged_demo_assets
 
 configure_native_thread_limits()
 
@@ -31,6 +32,9 @@ def create_services():
     settings = load_settings()
     settings.user_data_dir.mkdir(parents=True, exist_ok=True)
     configure_logging(settings.user_data_dir / "logs", settings.log_level)
+    # Copy only missing packaged 示例 assets.  This never changes current model or
+    # current project state and never overwrites user-created files.
+    install_packaged_demo_assets(settings.user_data_dir)
 
     event_bus = JobEventBus()
     job_repository = FileJobRepository(settings.user_data_dir / "jobs")
@@ -46,6 +50,17 @@ def create_services():
         persistent_workers={
             "simulation": settings.simulation_worker_count,
             "training": settings.training_worker_count,
+            "bilstm_structure_training": settings.training_worker_count,
+            # These long-running research jobs used to spawn a fresh process
+            # and rebuild the optical engine on every submission.  Keep one
+            # lazily-created worker for each job family so repeated research
+            # work can reuse process imports and worker-local engine caches.
+            "scan": settings.analysis_worker_count,
+            "tolerance": settings.analysis_worker_count,
+            "dataset": settings.analysis_worker_count,
+            "headless_dataset": settings.analysis_worker_count,
+            "optimization": settings.analysis_worker_count,
+            "verification": settings.analysis_worker_count,
         },
         internal_thread_limit=settings.native_thread_limit,
     )

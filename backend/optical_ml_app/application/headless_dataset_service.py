@@ -88,7 +88,10 @@ def _project_from_sample(sample: dict[str, Any]) -> SimpleNamespace:
         surfaces=surfaces,
         object_distance_mm=float(project_data.get("object_distance_mm", 100.0)),
         image_distance_mm=float(project_data.get("image_distance_mm", 150.0)),
-        wavelength_nm=float(project_data.get("wavelength_nm", 1550.0)),
+        # ProjectSnapshot stores the active wavelength under source.wavelength_nm.
+        # Falling back directly to 1550 nm here silently generated a dataset with a
+        # different physical wavelength from the simulation page.
+        wavelength_nm=float(project_data.get("wavelength_nm", source_data.get("wavelength_nm", 1550.0))),
         wavelength_f_nm=float(project_data.get("wavelength_f_nm", 486.1)),
         wavelength_c_nm=float(project_data.get("wavelength_c_nm", 656.3)),
         pupil_radius_mm=float(project_data.get("pupil_radius_mm", 2.0)),
@@ -495,7 +498,9 @@ def _run_headless_coupling_dataset_task(
     output_dir: str,
     dataset_root: str | None,
 ):
-    engine = create_optical_simulation_engine()
+    engine = context.get_or_create_resource(
+        "optical_engine", create_optical_simulation_engine
+    )
     store = FileDatasetStore(Path(dataset_root)) if dataset_root else None
     output_path = Path(output_dir)
     writer = NativeCouplingDatasetWriter(output_path, dataset_id)

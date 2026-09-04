@@ -164,11 +164,23 @@ def powell_refine(
     tolerance: float,
 ) -> tuple[np.ndarray, float, int]:
     evaluations = 0
+    # ``scipy.optimize.minimize(method="Powell")`` may terminate because the
+    # function-evaluation budget is exhausted while its current line-search point
+    # is worse than a point evaluated earlier in the same refinement.  Returning
+    # only ``result.x/result.fun`` can therefore discard the best *physically
+    # simulated* candidate already seen.  Keep the best evaluated point explicitly
+    # so the optimization result and the history cannot contradict each other.
+    best_x = np.asarray(x0, dtype=float).copy()
+    best_value = float("inf")
 
     def counted(x: np.ndarray) -> float:
-        nonlocal evaluations
+        nonlocal evaluations, best_x, best_value
         evaluations += 1
-        return float(objective(x))
+        value = float(objective(x))
+        if np.isfinite(value) and value < best_value:
+            best_value = value
+            best_x = np.asarray(x, dtype=float).copy()
+        return value
 
     result = minimize(
         counted,
@@ -181,7 +193,13 @@ def powell_refine(
             "ftol": float(tolerance),
         },
     )
-    return np.asarray(result.x, dtype=float), float(result.fun), evaluations
+    result_x = np.asarray(result.x, dtype=float)
+    result_value = float(result.fun)
+    if np.isfinite(result_value) and result_value < best_value:
+        return result_x, result_value, evaluations
+    if np.isfinite(best_value):
+        return best_x, best_value, evaluations
+    return result_x, result_value, evaluations
 
 
 def run_hybrid_search(

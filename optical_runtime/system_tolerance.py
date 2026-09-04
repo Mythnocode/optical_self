@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import math
 from typing import Any, Iterable
 
@@ -32,97 +32,182 @@ class SystemToleranceRunner:
         request: ToleranceAnalysisRequest,
         *,
         max_workers: int = 1,
+        progress: Any = None,
+        cancellation: Any = None,
     ) -> ToleranceAnalysisResult:
         parameters = [item for item in request.parameters if item.enabled]
+        metric_name = str(request.options.get("response_metric", "coupling_efficiency"))
+
+        # Validate the exact nominal design before spending time on the whole batch.
+        if progress is not None:
+            progress.update(0.02, "preflight", 0, max(1, int(request.sample_count)))
+        preflight_result = self.simulator.evaluate(
+            base_request.model_copy(
+                deep=True,
+                update={
+                    "request_id": f"{request.request_id}:preflight:nominal",
+                    "analyses": list(request.analyses),
+                    "precision": request.precision,
+                    "options": {
+                        **dict(base_request.options),
+                        **dict(request.options.get("simulation_options", {})),
+                    },
+                },
+            ),
+            cancellation=cancellation,
+        )
+        preflight_reason = _quality_rejection_reason(preflight_result, request.options)
+        preflight_value = _extract_metric(preflight_result.metrics, metric_name)
+        if preflight_reason is None and (preflight_value is None or not np.isfinite(preflight_value)):
+            preflight_reason = f"metric {metric_name!r} unavailable"
+        if preflight_reason is not None:
+            category = _rejection_category(preflight_reason)
+            return ToleranceAnalysisResult(
+                request_id=request.request_id,
+                status="failed",
+                metrics={
+                    "system_tolerance_requested_sample_count": int(request.sample_count),
+                    "system_tolerance_attempted_sample_count": 0,
+                    "system_tolerance_accepted_sample_count": 0,
+                    "system_tolerance_rejected_sample_count": 0,
+                    "system_tolerance_acceptance_ratio": 0.0,
+                    "system_tolerance_preflight_pass": False,
+                    "system_tolerance_preflight_response": preflight_value,
+                    "system_tolerance_energy_failure_count": int(category == "energy"),
+                    "system_tolerance_edge_failure_count": int(category == "edge"),
+                    "system_tolerance_nyquist_failure_count": int(category == "nyquist"),
+                    "system_tolerance_backend_failure_count": int(category in {"simulation", "metric", "other"}),
+                },
+                arrays={"system_tolerance_rejected_samples": []},
+                warnings=[f"Nominal preflight failed: {preflight_reason}"],
+                metadata={
+                    "algorithm_version": self.algorithm_version,
+                    "stage": "tolerance.preflight",
+                    "sampling_method": request.sampling_method,
+                    "response_metric": metric_name,
+                    "preflight_reason": preflight_reason,
+                    "provenance": dict(request.options.get("provenance", {}) or {}),
+                    "reference_data_used_as_input": False,
+                    "zemax_data_used_as_input": False,
+                },
+            )
+
         samples = sample_tolerance_parameters(
-            parameters,
-            sample_count=request.sample_count,
-            method=request.sampling_method,
-            random_seed=request.random_seed,
-            correlation_matrix=request.correlation_matrix,
+            parameters, sample_count=request.sample_count, method=request.sampling_method,
+            random_seed=request.random_seed, correlation_matrix=request.correlation_matrix,
         )
         simulation_requests = [
             self._sample_request(base_request, request, parameters, row, index)
             for index, row in enumerate(samples)
         ]
+        total_samples = len(simulation_requests)
+        results: list[Any] = [None] * total_samples
         if max_workers > 1:
             with ThreadPoolExecutor(max_workers=int(max_workers)) as pool:
-                results = list(pool.map(self.simulator.evaluate, simulation_requests))
+                futures = {
+                    pool.submit(self.simulator.evaluate, item, cancellation=cancellation): index
+                    for index, item in enumerate(simulation_requests)
+                }
+                completed = 0
+                for future in as_completed(futures):
+                    index = futures[future]
+                    results[index] = future.result()
+                    completed += 1
+                    if progress is not None:
+                        progress.update(
+                            0.04 + 0.90 * completed / max(total_samples, 1),
+                            "simulation",
+                            completed,
+                            total_samples,
+                        )
+                    is_cancelled = getattr(cancellation, "is_cancelled", False)
+                    if callable(is_cancelled):
+                        is_cancelled = is_cancelled()
+                    if is_cancelled:
+                        for pending in futures:
+                            if not pending.done():
+                                pending.cancel()
+                        break
         else:
-            results = [self.simulator.evaluate(item) for item in simulation_requests]
+            for index, item in enumerate(simulation_requests):
+                results[index] = self.simulator.evaluate(item, cancellation=cancellation)
+                if progress is not None:
+                    progress.update(
+                        0.04 + 0.90 * (index + 1) / max(total_samples, 1),
+                        "simulation",
+                        index + 1,
+                        total_samples,
+                    )
 
-        metric_name = str(request.options.get("response_metric", "coupling_efficiency"))
+        paired = [
+            (row, result)
+            for row, result in zip(samples, results, strict=True)
+            if result is not None
+        ]
+
         accepted_values: list[float] = []
         accepted_rows: list[np.ndarray] = []
         rejected: list[dict[str, Any]] = []
-        for index, (row, result) in enumerate(zip(samples, results, strict=True)):
+        for index, (row, result) in enumerate(paired):
             reason = _quality_rejection_reason(result, request.options)
             value = _extract_metric(result.metrics, metric_name)
             if reason is None and value is not None and np.isfinite(value):
-                accepted_values.append(float(value))
-                accepted_rows.append(np.asarray(row, dtype=float))
+                accepted_values.append(float(value)); accepted_rows.append(np.asarray(row, dtype=float))
             else:
-                rejected.append(
-                    {
-                        "sample_index": index,
-                        "reason": reason or f"metric {metric_name!r} unavailable",
-                        "status": result.status,
-                    }
-                )
+                reason = reason or f"metric {metric_name!r} unavailable"
+                rejected.append({"sample_index": index, "reason": reason, "category": _rejection_category(reason), "status": result.status})
 
         values = np.asarray(accepted_values, dtype=float)
         rows = np.asarray(accepted_rows, dtype=float)
         threshold = _resolve_yield_threshold(values, request)
+        if progress is not None:
+            progress.update(0.96, "summarising", len(paired), total_samples)
         metrics, arrays = _summarise_samples(parameters, rows, values, threshold)
         deterministic_warnings: list[str] = []
         if bool(request.options.get("include_deterministic_budget", False)):
-            budget_metrics, budget_arrays, deterministic_warnings = self._deterministic_budget(
-                base_request, request, parameters, metric_name
-            )
-            metrics.update(budget_metrics)
-            arrays.update(budget_arrays)
-        metrics.update(
-            {
-                "system_tolerance_requested_sample_count": int(request.sample_count),
-                "system_tolerance_accepted_sample_count": int(values.size),
-                "system_tolerance_rejected_sample_count": int(len(rejected)),
-                "system_tolerance_acceptance_ratio": float(values.size / max(request.sample_count, 1)),
-                "system_tolerance_threshold_efficiency": threshold,
-            }
-        )
+            budget_metrics, budget_arrays, deterministic_warnings = self._deterministic_budget(base_request, request, parameters, metric_name)
+            metrics.update(budget_metrics); arrays.update(budget_arrays)
+        breakdown = _rejection_breakdown(rejected)
+        metrics.update({
+            "system_tolerance_requested_sample_count": int(request.sample_count),
+            "system_tolerance_attempted_sample_count": int(request.sample_count),
+            "system_tolerance_accepted_sample_count": int(values.size),
+            "system_tolerance_rejected_sample_count": int(len(rejected)),
+            "system_tolerance_acceptance_ratio": float(values.size / max(request.sample_count, 1)),
+            "system_tolerance_threshold_efficiency": threshold,
+            "system_tolerance_preflight_pass": True,
+            "system_tolerance_preflight_response": float(preflight_value),
+            "system_tolerance_energy_failure_count": int(breakdown.get("energy", 0)),
+            "system_tolerance_edge_failure_count": int(breakdown.get("edge", 0)),
+            "system_tolerance_nyquist_failure_count": int(breakdown.get("nyquist", 0)),
+            "system_tolerance_backend_failure_count": int(breakdown.get("simulation", 0)+breakdown.get("metric", 0)+breakdown.get("other", 0)),
+        })
         arrays["system_tolerance_rejected_samples"] = rejected
         metadata = {
             "algorithm_version": self.algorithm_version,
-            "sampling_method": request.sampling_method,
-            "random_seed": request.random_seed,
-            "parameter_paths": [item.path for item in parameters],
-            "response_metric": metric_name,
+            "sampling_method": request.sampling_method, "random_seed": request.random_seed,
+            "parameter_paths": [item.path for item in parameters], "response_metric": metric_name,
+            "provenance": dict(request.options.get("provenance", {}) or {}),
             "quality_filter": {
                 "require_converged": bool(request.options.get("require_converged", False)),
                 "reject_energy_failure": bool(request.options.get("reject_energy_failure", True)),
                 "reject_edge_failure": bool(request.options.get("reject_edge_failure", True)),
                 "reject_nyquist_failure": bool(request.options.get("reject_nyquist_failure", True)),
             },
-            "reference_data_used_as_input": False,
-            "zemax_data_used_as_input": False,
+            "reference_data_used_as_input": False, "zemax_data_used_as_input": False,
         }
         warnings: list[str] = list(deterministic_warnings)
         if max_workers > 1:
-            warnings.append(
-                "System tolerance used thread-level parallelism; configure numerical-library "
-                "thread counts to avoid oversubscription."
-            )
+            warnings.append("System tolerance used thread-level parallelism; configure numerical-library thread counts to avoid oversubscription.")
         if values.size == 0:
             warnings.append("No system-tolerance sample passed the simulation quality filter.")
         elif len(rejected) / max(request.sample_count, 1) > 0.05:
             warnings.append("More than 5% of system-tolerance samples were rejected by quality checks.")
+        if progress is not None:
+            progress.update(1.0, "completed", len(paired), total_samples)
         return ToleranceAnalysisResult(
-            request_id=request.request_id,
-            status="completed" if values.size else "failed",
-            metrics=metrics,
-            arrays=arrays,
-            warnings=warnings,
-            metadata=metadata,
+            request_id=request.request_id, status="completed" if values.size else "failed",
+            metrics=metrics, arrays=arrays, warnings=warnings, metadata=metadata,
         )
 
     def _deterministic_budget(
@@ -407,6 +492,24 @@ def _extract_metric(metrics: dict[str, Any], requested: str) -> float | None:
     return matches[0] if len(matches) == 1 else None
 
 
+def _rejection_category(reason: str | None) -> str:
+    text = str(reason or "").lower()
+    if "energy_pass" in text or "energy" in text: return "energy"
+    if "edge_pass" in text or "edge" in text: return "edge"
+    if "nyquist_pass" in text or "nyquist" in text: return "nyquist"
+    if "simulation status" in text or "converge" in text: return "simulation"
+    if "metric" in text and "unavailable" in text: return "metric"
+    return "other"
+
+
+def _rejection_breakdown(rejected: list[dict[str, Any]]) -> dict[str, int]:
+    counts = {key: 0 for key in ("energy", "edge", "nyquist", "simulation", "metric", "other")}
+    for item in rejected:
+        category = str(item.get("category") or _rejection_category(item.get("reason")))
+        counts[category if category in counts else "other"] += 1
+    return counts
+
+
 def _quality_rejection_reason(result: Any, options: dict[str, Any]) -> str | None:
     if result.status != "completed":
         return f"simulation status={result.status}"
@@ -421,8 +524,23 @@ def _quality_rejection_reason(result: Any, options: dict[str, Any]) -> str | Non
         if not bool(options.get(option_name, True)):
             continue
         value = _extract_metric(result.metrics, metric_name)
-        if value is not None and not bool(value):
-            return f"quality check failed: {metric_name}"
+        if value is None or bool(value):
+            continue
+        # The scaled-Fresnel preflight Nyquist estimate is intentionally conservative.
+        # For the 780 nm coupling workflow it can flag the input-pupil chirp even when
+        # an explicit 257→513 resampling check shows the propagated complex field is
+        # numerically stable.  Tolerance must use the same evidence hierarchy as the
+        # formal simulation and ML dataset generator: never waive energy/edge failures,
+        # but allow a Nyquist warning when an actual sampling-convergence calculation
+        # has passed.  This prevents the nominal design from being rejected before a
+        # single Monte-Carlo/LHS sample is evaluated.
+        if metric_name == "coupling_propagation_nyquist_pass":
+            sampling_pass = _extract_metric(result.metrics, "sampling_convergence_pass")
+            if sampling_pass is None:
+                sampling_pass = _extract_metric(result.metrics, "coupling_propagation_sampling_convergence_pass")
+            if bool(sampling_pass):
+                continue
+        return f"quality check failed: {metric_name}"
     return None
 
 

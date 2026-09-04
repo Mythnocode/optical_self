@@ -7,6 +7,29 @@ from frontend_pyside.features.simulation.result_adapter import preview_result_to
 
 
 class SimulationPreviewMixin:
+    @staticmethod
+    def _apply_candidate_changes_to_snapshot(project, changes: dict) -> None:
+        for path, raw in dict(changes or {}).items():
+            try:
+                value = float(raw)
+            except (TypeError, ValueError):
+                continue
+            if path == "source.wavelength_nm":
+                project.wavelength_nm = value
+            elif path == "receiver.mode_field_diameter_x_um":
+                project.receiver_mfd_um = value
+            elif path.startswith("surfaces["):
+                try:
+                    index = int(path.split("[", 1)[1].split("]", 1)[0])
+                    field = path.split("].", 1)[1]
+                except (ValueError, IndexError):
+                    continue
+                if 0 <= index < len(project.surfaces):
+                    if field == "distance_to_next_mm":
+                        project.surfaces[index].thickness_mm = value
+                    elif field == "radius_mm":
+                        project.surfaces[index].radius_mm = value
+
 
 
     def _geometry_changed(self) -> None:
@@ -73,12 +96,15 @@ class SimulationPreviewMixin:
         )
         self.preview_state.set_tone("warning")
         project_snapshot = deepcopy(self.context.project.project)
+        candidate_changes = deepcopy(dict(getattr(self, "_candidate_preview_changes", {}) or {}))
+        if candidate_changes:
+            self._apply_candidate_changes_to_snapshot(project_snapshot, candidate_changes)
         profile = self.context.services.ui_preferences.render_profile
         ray_limit = int(profile.representative_rays)
 
         def prepare():
             started = perf_counter()
-            data = self.preview_workflow.run(project=project_snapshot, quality=quality)
+            data = self.preview_workflow.run(project=project_snapshot, quality=quality, parameter_changes=candidate_changes)
             self._limit_preview_rays(data, ray_limit)
             return data, max(0.0, perf_counter() - started)
 
@@ -116,7 +142,12 @@ class SimulationPreviewMixin:
         metrics = dict(data.pop("__metrics__", {}) or {})
         data.pop("__quality__", None)
         if metrics:
-            self.context.project.update_metrics(metrics)
+            if dict(getattr(self, "_candidate_preview_changes", {}) or {}):
+                setter = getattr(self, "_set_candidate_preview_metrics", None)
+                if callable(setter):
+                    setter(metrics)
+            else:
+                self.context.project.update_metrics(metrics)
 
         plots = preview_result_to_plots(data)
         for index, plot in enumerate(plots.values()):
@@ -141,7 +172,12 @@ class SimulationPreviewMixin:
     def _display_preview(self, data: dict, elapsed_s: float) -> None:
         metrics = dict(data.pop("__metrics__", {}) or {}) if isinstance(data, dict) else {}
         if metrics:
-            self.context.project.update_metrics(metrics)
+            if dict(getattr(self, "_candidate_preview_changes", {}) or {}):
+                setter = getattr(self, "_set_candidate_preview_metrics", None)
+                if callable(setter):
+                    setter(metrics)
+            else:
+                self.context.project.update_metrics(metrics)
         plots = preview_result_to_plots(data)
         for index, plot in enumerate(plots.values()):
             plot.setdefault("render_key", f"preview:high:{index}:{elapsed_s:.9f}")
@@ -155,8 +191,13 @@ class SimulationPreviewMixin:
             self.cards["coupling_eff"].set_value(
                 f"{100.0 * float(preview_efficiency):.2f}", "%", note="快速预览"
             )
-        self.preview_state.setText("预览已同步")
-        self.preview_state.set_tone("success")
+        if dict(getattr(self, "_candidate_preview_changes", {}) or {}):
+            self.preview_state.setText("候选预览已同步 · 待正式验证")
+            self.preview_state.set_tone("warning")
+            self.results.set_status("候选快速预览已同步；尚未写入当前系统。", tone="warning")
+        else:
+            self.preview_state.setText("预览已同步")
+            self.preview_state.set_tone("success")
         self._manual_preview_requested = False
 
         if self._record_preview_usage:

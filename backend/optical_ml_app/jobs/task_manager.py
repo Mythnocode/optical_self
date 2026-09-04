@@ -19,9 +19,12 @@ from shared_contracts.jobs import JobStatus
 
 from backend.optical_ml_app.domain.errors import BackendApplicationError
 from backend.optical_ml_app.jobs.cancellation import CancellationToken
-from backend.optical_ml_app.jobs.progress import PartialResultMessage, PipeProgressReporter, ProgressMessage
+from backend.optical_ml_app.jobs.progress import (
+    PartialResultMessage, PipeProgressReporter, ProgressMessage, WORKER_PROGRESS_CEILING
+)
 from backend.optical_ml_app.jobs.task_models import JobRecord
 from backend.optical_ml_app.jobs.persistent_pool import PersistentTaskPool
+from backend.optical_ml_app.jobs.process_lifecycle import arm_parent_death_signal
 
 # ---------------------------------------------------------------------------
 
@@ -30,7 +33,36 @@ from backend.optical_ml_app.jobs.persistent_pool import PersistentTaskPool
 GRACE_PERIOD = 5.0          
 FORCE_KILL_PERIOD = 3.0     
 PIPE_POLL_INTERVAL = 0.25   
-HEARTBEAT_INTERVAL = 5.0    
+HEARTBEAT_INTERVAL = 5.0
+WATCHDOG_INTERVAL = 1.0
+
+
+def _env_timeout(name: str, default: float) -> float:
+    try:
+        return max(0.0, float(os.getenv(name, str(default))))
+    except (TypeError, ValueError):
+        return float(default)
+
+
+def _default_queue_timeout(job_type: str) -> float:
+    defaults = {
+        "simulation": 300.0, "scan": 900.0, "tolerance": 900.0, "verification": 900.0,
+        "dataset": 1800.0, "headless_dataset": 1800.0, "training": 1800.0,
+        "bilstm_structure_training": 1800.0, "optimization": 1800.0,
+    }
+    key = str(job_type).upper().replace("-", "_")
+    return _env_timeout(f"OPTICAL_{key}_QUEUE_TIMEOUT_SECONDS", defaults.get(str(job_type), 900.0))
+
+
+def _default_stall_timeout(job_type: str) -> float:
+    defaults = {
+        "simulation": 900.0, "scan": 1800.0, "tolerance": 1800.0, "verification": 1800.0,
+        "dataset": 3600.0, "headless_dataset": 3600.0, "training": 3600.0,
+        "bilstm_structure_training": 3600.0, "optimization": 3600.0,
+    }
+    key = str(job_type).upper().replace("-", "_")
+    return _env_timeout(f"OPTICAL_{key}_STALL_TIMEOUT_SECONDS", defaults.get(str(job_type), 1800.0))
+
 
 _logger = logging.getLogger(__name__)
 
@@ -144,6 +176,7 @@ def _worker_target(
     import logging as _logging
     import sys as _sys
 
+    arm_parent_death_signal()
     func = _function_pickle.loads(func_data)
     reporter = PipeProgressReporter(conn)
     token = CancellationToken(cancel_event)
@@ -222,6 +255,11 @@ class TaskManager:
         }
         self._internal_thread_limit = max(1, int(internal_thread_limit))
         self._persistent_pool = None
+        self._watchdog_stop = threading.Event()
+        self._watchdog_thread = threading.Thread(
+            target=self._watchdog_loop, name="task-manager-watchdog", daemon=True
+        )
+        self._watchdog_thread.start()
 
     def __del__(self) -> None:
         
@@ -281,25 +319,50 @@ class TaskManager:
     def submit(self, job_type: str, function, *args, **kwargs) -> str:
 
         on_result = kwargs.pop("on_result", None)
+        idempotency_key = str(kwargs.pop("idempotency_key", "") or "").strip()
         timeout_seconds = kwargs.pop("timeout_seconds", None)
+        queue_timeout_seconds = kwargs.pop("queue_timeout_seconds", None)
+        stall_timeout_seconds = kwargs.pop("stall_timeout_seconds", None)
+        retry_of = str(kwargs.pop("retry_of", "") or "") or None
+        queue_timeout_seconds = (
+            _default_queue_timeout(job_type)
+            if queue_timeout_seconds is None
+            else max(0.0, float(queue_timeout_seconds))
+        )
+        stall_timeout_seconds = (
+            _default_stall_timeout(job_type)
+            if stall_timeout_seconds is None
+            else max(0.0, float(stall_timeout_seconds))
+        )
         job_id = "job-" + uuid.uuid4().hex[:12]
-        status = JobStatus(
-            job_id=job_id,
-            job_type=job_type,
-            status="queued",
-            created_at=now(),
-        )
-        record = JobRecord(
-            status=status,
-            cancellation=CancellationToken(),
-            on_result=on_result,
-            timeout_seconds=timeout_seconds,
-            submitted_perf=time.perf_counter(),
-        )
 
         with self._lock:
             if self._shutdown:
                 raise RuntimeError("task manager has been shut down")
+
+        if idempotency_key:
+            claimer = getattr(self.repository, "claim_idempotency", None)
+            if callable(claimer):
+                claimed_job_id = str(claimer(idempotency_key, job_id) or job_id)
+                if claimed_job_id != job_id:
+                    # 相同业务请求已经被后端接收。网络重试必须返回同一个真实任务，
+                    # 不能因为客户端没有收到第一次响应而重复执行科研计算。
+                    return claimed_job_id
+
+        created_at = now()
+        status = JobStatus(
+            job_id=job_id, job_type=job_type, status="queued", created_at=created_at,
+            retry_of=retry_of, last_activity_at=created_at,
+        )
+        submitted_perf = time.perf_counter()
+        record = JobRecord(
+            status=status, cancellation=CancellationToken(), on_result=on_result,
+            timeout_seconds=timeout_seconds, queue_timeout_seconds=queue_timeout_seconds,
+            stall_timeout_seconds=stall_timeout_seconds, submitted_perf=submitted_perf,
+            last_activity_perf=submitted_perf,
+        )
+
+        with self._lock:
             self.records[job_id] = record
 
         self.repository.save_status(status)
@@ -323,6 +386,23 @@ class TaskManager:
         except Exception as exc:
             self._mark_start_failure(job_id, record, exc, stage="worker.serialization")
             return job_id
+
+        try:
+            callback_data = None if on_result is None else _function_pickle.dumps(on_result)
+            retry_payload = _function_pickle.dumps({
+                "job_type": str(job_type), "func_data": func_data, "args": tuple(args),
+                "kwargs": dict(kwargs), "on_result_data": callback_data,
+                "timeout_seconds": timeout_seconds, "queue_timeout_seconds": queue_timeout_seconds,
+                "stall_timeout_seconds": stall_timeout_seconds,
+            })
+            saver = getattr(self.repository, "save_retry_payload", None)
+            if callable(saver):
+                saver(job_id, retry_payload)
+                record.status.retry_available = True
+                self.repository.save_status(record.status)
+        except Exception:
+            record.status.retry_available = False
+            self.logger.warning("retry payload is not persistable for %s", job_id, exc_info=True)
 
         if job_type in self._persistent_worker_counts and self._persistent_pool is None:
             self.start_persistent_workers(ready_job_types={job_type})
@@ -353,6 +433,29 @@ class TaskManager:
                 self._queue.append((job_id, record, func_data, args, kwargs))
 
         return job_id
+
+    def retry(self, job_id: str) -> JobStatus:
+        original = self.get_status(job_id)
+        if original.status not in {"failed", "cancelled"}:
+            raise ValueError("job is not in a retryable terminal state")
+        if original.status == "failed" and original.error is not None and not original.error.retryable:
+            raise PermissionError("job failure is marked as not retryable")
+        loader = getattr(self.repository, "load_retry_payload", None)
+        if not original.retry_available or not callable(loader):
+            raise FileNotFoundError("retry payload is not available")
+        payload = _function_pickle.loads(loader(job_id))
+        function = _function_pickle.loads(payload["func_data"])
+        callback_data = payload.get("on_result_data")
+        on_result = _function_pickle.loads(callback_data) if callback_data else None
+        new_job_id = self.submit(
+            str(payload.get("job_type") or original.job_type), function,
+            *tuple(payload.get("args") or ()), on_result=on_result,
+            timeout_seconds=payload.get("timeout_seconds"),
+            queue_timeout_seconds=payload.get("queue_timeout_seconds"),
+            stall_timeout_seconds=payload.get("stall_timeout_seconds"),
+            retry_of=str(job_id), **dict(payload.get("kwargs") or {}),
+        )
+        return self.get_status(new_job_id)
 
     def cancel(self, job_id: str) -> bool:
 
@@ -494,16 +597,23 @@ class TaskManager:
 
     def get_status(self, job_id: str) -> JobStatus:
 
+        # Return an immutable point-in-time snapshot.  Persistence/progress worker
+        # threads mutate ``record.status`` in place; returning that same object to
+        # FastAPI can otherwise produce a torn JSON response (for example
+        # ``status=running`` paired with the later ``result_available=true``).
+        # Copy while holding the task-manager lock so all lifecycle fields belong
+        # to the same authoritative instant.
         with self._lock:
             record = self.records.get(job_id)
-        if record is not None:
-            return record.status
-        return self.repository.load_status(job_id)
+            if record is not None:
+                return record.status.model_copy(deep=True)
+        persisted = self.repository.load_status(job_id)
+        return persisted.model_copy(deep=True)
 
     def get_result(self, job_id: str):
 
         status = self.get_status(job_id)
-        if not status.result_available:
+        if status.status != "completed" or not status.result_available:
             raise RuntimeError("result not available")
         with self._lock:
             record = self.records.get(job_id)
@@ -532,7 +642,7 @@ class TaskManager:
     def get_result_summary(self, job_id: str):
 
         status = self.get_status(job_id)
-        if not status.result_available:
+        if status.status != "completed" or not status.result_available:
             raise RuntimeError("result not available")
         loader = getattr(self.repository, "load_result_summary", None)
         if callable(loader):
@@ -556,7 +666,7 @@ class TaskManager:
     def get_result_analysis(self, job_id: str, analysis: str):
 
         status = self.get_status(job_id)
-        if not status.result_available:
+        if status.status != "completed" or not status.result_available:
             raise RuntimeError("result not available")
         loader = getattr(self.repository, "load_result_analysis", None)
         if not callable(loader):
@@ -568,12 +678,22 @@ class TaskManager:
 
     def list_jobs(self, limit: int = 20, offset: int = 0, status: str | None = None, job_type: str | None = None) -> list[dict]:
 
-        return self.repository.list_jobs(
-            limit=limit,
-            offset=offset,
-            status_filter=status,
-            job_type=job_type,
+        items = self.repository.list_jobs(
+            limit=limit, offset=offset, status_filter=status, job_type=job_type,
         )
+        checker = getattr(self.repository, "has_retry_payload", None)
+        for item in items:
+            job_id = str(item.get("job_id", "") or "")
+            if callable(checker) and job_id:
+                item["retry_available"] = bool(checker(job_id))
+            try:
+                current = self.get_status(job_id) if job_id else None
+            except FileNotFoundError:
+                current = None
+            if current is not None:
+                item["retry_of"] = current.retry_of
+                item["last_activity_at"] = current.last_activity_at
+        return items
 
     def shutdown(self, wait: bool = True) -> None:
 
@@ -581,6 +701,7 @@ class TaskManager:
             if self._shutdown:
                 return
             self._shutdown = True
+            self._watchdog_stop.set()
             job_ids = [
                 jid for jid, r in self.records.items()
                 if r.status.status in {"queued", "running"}
@@ -621,6 +742,9 @@ class TaskManager:
             record.monitor_thread = None
         
         
+        watchdog = getattr(self, "_watchdog_thread", None)
+        if wait and watchdog is not None and watchdog is not threading.current_thread() and watchdog.is_alive():
+            watchdog.join(timeout=2.0)
         with self._lock:
             self.records.clear()
             self._queue.clear()
@@ -632,6 +756,73 @@ class TaskManager:
     # ==================================================================
     
     # ==================================================================
+
+    def _watchdog_loop(self) -> None:
+        while not self._watchdog_stop.wait(WATCHDOG_INTERVAL):
+            try:
+                self._watchdog_tick()
+            except Exception:
+                self.logger.exception("task watchdog iteration failed")
+
+    def _watchdog_tick(self) -> None:
+        now_perf = time.perf_counter()
+        candidates: list[tuple[str, JobRecord, ApplicationError]] = []
+        with self._lock:
+            if self._shutdown:
+                return
+            for job_id, record in tuple(self.records.items()):
+                state = record.status.status
+                if state == "queued" and record.queue_timeout_seconds and record.queue_timeout_seconds > 0:
+                    elapsed = now_perf - record.submitted_perf
+                    if elapsed > record.queue_timeout_seconds:
+                        candidates.append((job_id, record, ApplicationError(
+                            code="QUEUE_TIMEOUT", stage="queue.watchdog",
+                            message=f"任务排队超过 {record.queue_timeout_seconds:.0f} 秒，未获得执行资源",
+                            retryable=True, context={"elapsed_seconds": round(elapsed, 3)},
+                        )))
+                elif state == "running" and record.stall_timeout_seconds and record.stall_timeout_seconds > 0:
+                    last_activity = record.last_activity_perf or record.worker_started_perf or record.dispatched_perf
+                    if last_activity > 0 and now_perf - last_activity > record.stall_timeout_seconds:
+                        elapsed = now_perf - last_activity
+                        candidates.append((job_id, record, ApplicationError(
+                            code="WORKER_STALLED", stage=record.status.stage or "worker.watchdog",
+                            message=f"任务连续 {record.stall_timeout_seconds:.0f} 秒没有新的工作进度，Worker 可能失去响应",
+                            retryable=True, context={"stalled_seconds": round(elapsed, 3)},
+                        )))
+        for job_id, record, error in candidates:
+            self._fail_watchdog_job(job_id, record, error)
+
+    def _fail_watchdog_job(self, job_id: str, record: JobRecord, error: ApplicationError) -> None:
+        with self._lock:
+            if record.status.status not in {"queued", "running"}:
+                return
+            was_queued = record.status.status == "queued"
+            record.status.status = "failed"
+            record.status.stage = error.stage
+            record.status.error = error
+            record.status.finished_at = now()
+            record.status.last_activity_at = now()
+            self._queue = [item for item in self._queue if item[0] != job_id]
+            self.repository.save_status(record.status)
+        if record.persistent:
+            pool = self._persistent_pool
+            if pool is not None:
+                try:
+                    pool.cancel(job_id, grace_period=0.25, kill_period=0.5)
+                except Exception:
+                    self.logger.exception("failed to stop watchdog job %s", job_id)
+        elif not was_queued:
+            record.cancellation.cancel()
+            with record.process_lock:
+                process = record.process
+                if process is not None and process.is_alive():
+                    process.terminate()
+        self._publish_event(job_id, {
+            "type": "failed", "status": "failed", "progress": record.status.progress,
+            "stage": error.stage, "error": error.model_dump(),
+        })
+        if was_queued and not record.persistent:
+            self._finalize_job(record)
 
     def persistent_pool_info(self) -> dict[str, Any]:
         pool = self._persistent_pool
@@ -665,6 +856,8 @@ class TaskManager:
                     return
                 record.dispatched_perf = now_perf
                 record.worker_started_perf = now_perf
+                record.last_activity_perf = now_perf
+                record.status.last_activity_at = now()
                 record.status.status = "running"
                 record.status.progress = max(float(record.status.progress), 0.01)
                 record.status.stage = f"{record.status.job_type}.starting"
@@ -691,6 +884,9 @@ class TaskManager:
         if record.status.status in {"completed", "failed", "cancelled"}:
             return
 
+        record.last_activity_perf = now_perf
+        record.status.last_activity_at = now()
+
         if kind == "progress" and isinstance(payload, ProgressMessage):
             with self._lock:
                 if record.first_message_perf <= 0.0:
@@ -699,7 +895,7 @@ class TaskManager:
                         record.status.timings_ms["worker_ready_to_first_progress"] = round(
                             (now_perf - record.worker_started_perf) * 1000.0, 3
                         )
-                record.status.progress = float(payload.progress)
+                record.status.progress = min(WORKER_PROGRESS_CEILING, float(payload.progress))
                 record.status.stage = str(payload.stage)
                 record.status.completed_items = int(payload.completed_items)
                 record.status.total_items = int(payload.total_items)
@@ -748,8 +944,8 @@ class TaskManager:
             with self._lock:
                 if record.cancellation.is_cancelled or record.status.status == "cancelled":
                     return
-                record.status.progress = max(0.98, float(record.status.progress))
-                record.status.stage = "result.persisting"
+                record.status.progress = 0.95
+                record.status.stage = "result.materializing"
                 record.status.timings_ms["worker_compute"] = round(
                     float(worker_elapsed_ms), 3
                 )
@@ -763,7 +959,7 @@ class TaskManager:
                     "type": "progress",
                     "status": "running",
                     "progress": record.status.progress,
-                    "stage": "result.persisting",
+                    "stage": "result.materializing",
                     "metrics": dict(record.status.metrics),
                 },
             )
@@ -882,7 +1078,7 @@ class TaskManager:
             record.result = None
             record.status.status = semantic_status
             record.status.progress = 1.0
-            record.status.result_available = True
+            record.status.result_available = semantic_status == "completed"
             record.status.partial_result_available = False
             record.status.result_version += 1
             record.status.finished_at = now()
@@ -907,7 +1103,7 @@ class TaskManager:
             "type": semantic_status,
             "status": semantic_status,
             "progress": 1.0,
-            "result_available": True,
+            "result_available": bool(record.status.result_available),
             "result_version": record.status.result_version,
             "metrics": dict(record.status.metrics),
             "timings_ms": dict(record.status.timings_ms),
@@ -956,6 +1152,8 @@ class TaskManager:
             }
             record.status.partial_result_available = True
             record.status.result_version += 1
+            record.status.progress = 0.97
+            record.status.stage = "result.local_ready"
             record.status.timings_ms["local_result_transport"] = round(elapsed_ms, 3)
             version = record.status.result_version
             self.repository.save_status(record.status)
@@ -964,7 +1162,7 @@ class TaskManager:
             {
                 "type": "partial",
                 "status": "running",
-                "progress": max(0.98, float(record.status.progress)),
+                "progress": float(record.status.progress),
                 "stage": "result.local_ready",
                 "result_version": version,
                 "partial": {
@@ -980,6 +1178,22 @@ class TaskManager:
     ) -> None:
 
         self._publish_local_live_result(job_id, record, result)
+        with self._lock:
+            if record.cancellation.is_cancelled or record.status.status == "cancelled":
+                return
+            record.status.progress = 0.98
+            record.status.stage = "result.persisting"
+            self.repository.save_status(record.status)
+        self._publish_event(
+            job_id,
+            {
+                "type": "progress",
+                "status": "running",
+                "progress": 0.98,
+                "stage": "result.persisting",
+                "metrics": dict(record.status.metrics),
+            },
+        )
         if not record.persistent:
             self._persist_completed_result(job_id, record, result)
             return
@@ -1083,6 +1297,8 @@ class TaskManager:
 
         dispatch_started = time.perf_counter()
         record.dispatched_perf = dispatch_started
+        record.last_activity_perf = dispatch_started
+        record.status.last_activity_at = now()
         if record.submitted_perf > 0.0:
             record.status.timings_ms["queue_wait"] = round(
                 (dispatch_started - record.submitted_perf) * 1000.0, 3
@@ -1255,6 +1471,8 @@ class TaskManager:
                 msg = conn.recv()
                 last_heartbeat_at = time.monotonic()
                 message_at = time.perf_counter()
+                record.last_activity_perf = message_at
+                record.status.last_activity_at = now()
                 if record.first_message_perf <= 0.0:
                     record.first_message_perf = message_at
                     if record.dispatched_perf > 0.0:
@@ -1293,7 +1511,7 @@ class TaskManager:
 
                 elif isinstance(msg, ProgressMessage):
                     with self._lock:
-                        record.status.progress = msg.progress
+                        record.status.progress = min(WORKER_PROGRESS_CEILING, float(msg.progress))
                         record.status.stage = msg.stage
                         record.status.completed_items = msg.completed_items
                         record.status.total_items = msg.total_items
@@ -1319,8 +1537,8 @@ class TaskManager:
                             if not record.cancellation.is_cancelled:
                                 record.result = result
                                 record.persistence_pending = True
-                                record.status.progress = max(0.98, float(record.status.progress))
-                                record.status.stage = "result.persisting"
+                                record.status.progress = 0.95
+                                record.status.stage = "result.materializing"
                                 if record.dispatched_perf > 0.0:
                                     record.status.timings_ms["worker_compute"] = round(
                                         (message_at - record.dispatched_perf) * 1000.0, 3
@@ -1336,7 +1554,7 @@ class TaskManager:
                                     "type": "progress",
                                     "status": "running",
                                     "progress": record.status.progress,
-                                    "stage": "result.persisting",
+                                    "stage": "result.materializing",
                                     "metrics": dict(record.status.metrics),
                                 },
                             )

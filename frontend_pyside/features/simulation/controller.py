@@ -7,7 +7,7 @@ import logging
 
 from PySide6.QtCore import QObject, QThreadPool, QTimer, Signal
 
-from frontend_pyside.shared.task_display import extract_error_message, terminal_progress
+from frontend_pyside.shared.task_display import extract_error_message, friendly_job_stage, terminal_progress
 from frontend_pyside.shared.lifecycle import safe_single_shot
 from frontend_pyside.shared.performance import record_perf
 from frontend_pyside.infrastructure.local_array_transport import materialize_local_arrays
@@ -416,8 +416,13 @@ class SimulationController(QObject):
         elif status == "completed":
             note = "正在加载结果"
         else:
-            note = str(body.get("stage", "") or "后端正在处理")
-        self._update_task(status, progress, note)
+            note = friendly_job_stage(body.get("stage", "")) or "后端正在处理"
+        self._update_task(
+            status,
+            progress,
+            note,
+            result_available=bool(body.get("result_available", False)),
+        )
         self.stateChanged.emit(status, progress, note)
         if status == "completed":
             self.poll_timer.stop()
@@ -462,11 +467,20 @@ class SimulationController(QObject):
         previous_project = dict(self.last_project_payload)
         if status == "completed":
             converged = bool(body.get("converged", False))
+            terminal_status = "completed" if converged else "not_converged"
+            terminal_note = "正式仿真结果已返回" if converged else "结果已返回，但未通过收敛判定"
             self._update_task(
-                "completed" if converged else "not_converged",
+                terminal_status,
                 1.0,
-                "正式仿真结果已返回" if converged else "结果已返回，但未通过收敛判定",
+                terminal_note,
+                result_available=bool(converged),
             )
+            # Result delivery through the persisted/analysis endpoint used to clear
+            # the job and emit only ``formalResultReady``.  The page therefore
+            # received the data but never received the terminal state transition,
+            # leaving PrimaryButton's spinner active forever.  WebSocket/local-live
+            # delivery already emits this terminal state; keep both paths identical.
+            self.stateChanged.emit(terminal_status, 1.0, terminal_note)
             self._clear_job()
             self.formalResultReady.emit(emitted, previous_project)
             return
@@ -518,7 +532,7 @@ class SimulationController(QObject):
             return
         if self._live_result_displayed and float(progress) < 1.0:
             return
-        note = stage or "后端运行中"
+        note = friendly_job_stage(stage) or "后端运行中"
         signature = (int(max(0.0, min(1.0, float(progress))) * 100.0), note)
         if signature == self._last_progress_signature:
             return
@@ -773,6 +787,7 @@ class SimulationController(QObject):
             "completed" if converged else "not_converged",
             1.0,
             "正式仿真结果已返回" if converged else "结果已返回，但未通过收敛判定",
+            result_available=bool(converged),
         )
         self.stateChanged.emit(
             "completed" if converged else "not_converged",
@@ -820,7 +835,14 @@ class SimulationController(QObject):
         self._clear_job()
         self.formalFailed.emit(category, str(message))
 
-    def _update_task(self, status: str, progress: float, note: str) -> None:
+    def _update_task(
+        self,
+        status: str,
+        progress: float,
+        note: str,
+        *,
+        result_available: bool | None = None,
+    ) -> None:
         if not self.current_task_id:
             return
         labels = {
@@ -832,14 +854,16 @@ class SimulationController(QObject):
             "failed": "失败",
             "cancelled": "已取消",
         }
-        self.context.tasks.update_task(
-            self.current_task_id,
-            status=labels.get(status, status),
-            progress=terminal_progress(status, progress),
-            note=note,
-            stage=status if status in {"completed", "not_converged", "failed", "cancelled"} else "",
-            error_message=note if status in {"failed", "not_converged"} else "",
-        )
+        changes = {
+            "status": labels.get(status, status),
+            "progress": terminal_progress(status, progress),
+            "note": note,
+            "stage": status if status in {"completed", "not_converged", "failed", "cancelled"} else "",
+            "error_message": note if status in {"failed", "not_converged"} else "",
+        }
+        if result_available is not None:
+            changes["result_available"] = bool(result_available)
+        self.context.tasks.update_task(self.current_task_id, **changes)
 
     def _clear_job(self) -> None:
         old_job_id = self.current_job_id

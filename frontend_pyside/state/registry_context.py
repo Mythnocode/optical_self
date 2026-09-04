@@ -14,6 +14,7 @@ class RegistryContext(QObject):
     training_tasks_changed = Signal(list)
     current_dataset_changed = Signal(str)
     current_model_changed = Signal(str)
+    recent_model_changed = Signal(str)
     current_training_task_changed = Signal(str)
     registry_invalidated = Signal(str)
 
@@ -26,6 +27,7 @@ class RegistryContext(QObject):
         self._training_tasks: list[dict] = []
         self._current_dataset_id = ""
         self._current_model_id = ""
+        self._recent_model_id = ""
         self._current_training_task_id = ""
         self._refreshed_at = {"datasets": 0.0, "models": 0.0, "training_tasks": 0.0}
         self._refreshing: set[str] = set()
@@ -49,6 +51,11 @@ class RegistryContext(QObject):
     @property
     def current_model_id(self) -> str:
         return self._current_model_id
+
+    @property
+    def recent_model_id(self) -> str:
+        """Most recently trained/imported model; does not imply global adoption."""
+        return self._recent_model_id
 
     @property
     def current_training_task_id(self) -> str:
@@ -115,6 +122,13 @@ class RegistryContext(QObject):
         self._current_model_id = value
         self.current_model_changed.emit(value)
 
+    def set_recent_model(self, model_id: str) -> None:
+        value = str(model_id or "")
+        if value == self._recent_model_id:
+            return
+        self._recent_model_id = value
+        self.recent_model_changed.emit(value)
+
     def set_current_training_task(self, task_id: str) -> None:
         value = str(task_id or "")
         if value == self._current_training_task_id:
@@ -143,13 +157,33 @@ class RegistryContext(QObject):
         return {
             "dataset_id": self._current_dataset_id,
             "model_id": self._current_model_id,
+            "recent_model_id": self._recent_model_id,
             "training_task_id": self._current_training_task_id,
         }
 
     def _set_records(self, kind: str, records: list[dict]) -> None:
         self._require_kind(kind)
-        normalized = [dict(item) for item in records if isinstance(item, dict)]
+        incoming = [dict(item) for item in records if isinstance(item, dict)]
         existing = self._records(kind)
+
+        # Different pages may receive records of different detail levels for the
+        # same dataset/model (for example a freshly completed training job versus
+        # the full registry listing).  Replacing the whole record with a shorter
+        # version silently drops fields such as test_metrics and feature_paths.
+        # Keep the authoritative incoming list/order, but preserve fields that are
+        # absent from an incoming record with the same id.  Explicit non-empty
+        # incoming values always win.
+        existing_by_id = {
+            self._record_id(item, kind): dict(item)
+            for item in existing
+            if self._record_id(item, kind)
+        }
+        normalized: list[dict] = []
+        for item in incoming:
+            record_id = self._record_id(item, kind)
+            base = existing_by_id.get(record_id, {}) if record_id else {}
+            normalized.append(self._merge_record_fields(base, item))
+
         changed = normalized != existing
         if kind == "datasets":
             self._datasets = normalized
@@ -163,6 +197,24 @@ class RegistryContext(QObject):
         if changed:
             self._signal(kind).emit(deepcopy(normalized))
 
+
+    @classmethod
+    def _merge_record_fields(cls, existing: dict, incoming: dict) -> dict:
+        """Merge registry records without losing richer fields from another view.
+
+        Registry list endpoints and background-job results intentionally expose
+        overlapping but not always identical fields.  Missing keys in a shorter
+        record must not erase fields already known for the same object.
+        """
+        merged = deepcopy(existing) if isinstance(existing, dict) else {}
+        for key, value in dict(incoming or {}).items():
+            previous = merged.get(key)
+            if isinstance(previous, dict) and isinstance(value, dict):
+                merged[key] = cls._merge_record_fields(previous, value)
+            else:
+                merged[key] = deepcopy(value)
+        return merged
+
     def _merge_record(self, kind: str, record: dict) -> None:
         if not isinstance(record, dict):
             return
@@ -173,8 +225,7 @@ class RegistryContext(QObject):
         found = False
         for item in self._records(kind):
             if self._record_id(item, kind) == record_id:
-                value = dict(item)
-                value.update(record)
+                value = self._merge_record_fields(item, record)
                 merged.append(value)
                 found = True
             else:
@@ -194,8 +245,11 @@ class RegistryContext(QObject):
         valid_ids = {self._record_id(item, kind) for item in self._records(kind)}
         if kind == "datasets" and self._current_dataset_id and self._current_dataset_id not in valid_ids:
             self.set_current_dataset("")
-        elif kind == "models" and self._current_model_id and self._current_model_id not in valid_ids:
-            self.set_current_model("")
+        elif kind == "models":
+            if self._current_model_id and self._current_model_id not in valid_ids:
+                self.set_current_model("")
+            if self._recent_model_id and self._recent_model_id not in valid_ids:
+                self.set_recent_model("")
         elif kind == "training_tasks" and self._current_training_task_id and self._current_training_task_id not in valid_ids:
             self.set_current_training_task("")
 

@@ -28,19 +28,19 @@ class PageSpec:
 
 PAGE_SPECS: tuple[PageSpec, ...] = (
     PageSpec(
-        "home", "首页", "home", "项目",
+        "home", "项目总览", "home", "项目",
         "frontend_pyside.features.home.page:HomePage",
         lifetime="resident",
     ),
     # 教学中心紧跟首页，先理解和复盘，再进入正式仿真与研究流程。
     PageSpec(
-        "teaching", "教学中心", "teaching", "项目",
+        "teaching", "教学", "teaching", "项目",
         "frontend_pyside.features.teaching.page:TeachingPage",
         lifetime="cached",
         release_after_s=900.0,
     ),
     PageSpec(
-        "simulation", "仿真系统", "simulation", "项目",
+        "simulation", "仿真工作台", "simulation", "项目",
         "frontend_pyside.features.simulation.page:SimulationPage",
         lifetime="resident",
         idle_preload_order=1,
@@ -53,19 +53,19 @@ PAGE_SPECS: tuple[PageSpec, ...] = (
         idle_preload_order=2,
     ),
     PageSpec(
-        "machine_learning", "智能分析", "machine_learning", "智能分析",
+        "machine_learning", "代理模型", "machine_learning", "分析",
         "frontend_pyside.features.machine_learning.page:MachineLearningPage",
         lifetime="cached",
         release_after_s=900.0,
     ),
     PageSpec(
-        "explainability", "智能失配诊断", "explainability", "智能分析",
+        "explainability", "模型解释", "explainability", "分析",
         "frontend_pyside.features.explainability.page:ExplainabilityPage",
         lifetime="cached",
         release_after_s=900.0,
     ),
     PageSpec(
-        "tasks", "任务中心", "tasks", "管理",
+        "tasks", "任务状态", "tasks", "管理",
         "frontend_pyside.features.tasks.page:TasksPage",
         lifetime="releasable",
         release_after_s=600.0,

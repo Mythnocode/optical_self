@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import re
 
 
@@ -132,6 +133,7 @@ class ParameterStateMixin:
             ),
             zero_padding_factor=float(self.calc_padding.value()),
             output_extent_mm=float(self.calc_extent.value()),
+            auto_expand_output=bool(getattr(self, "calc_auto_numerics", None) and self.calc_auto_numerics.isChecked()),
             analyses=tuple(analyses),
             only_visible_results=bool(
                 self.output_boxes["only_visible_results"].isChecked()
@@ -150,6 +152,76 @@ class ParameterStateMixin:
             calculation=calculation,
             alignment=alignment,
         )
+
+    def apply_project_payload(self, payload: dict | None) -> None:
+        """Load externally confirmed shared physical inputs without recreating the page.
+
+        The caller is responsible for loop prevention.  Values are written with signals
+        blocked and a single ``changed`` signal is emitted afterwards.
+        """
+        payload = dict(payload or {})
+        source = dict(payload.get("source", {}) or {})
+        receiver = dict(payload.get("receiver", {}) or {})
+        updates = []
+
+        def add(widget, value):
+            if widget is None or value is None:
+                return
+            try:
+                numeric = float(value)
+            except (TypeError, ValueError):
+                return
+            updates.append((widget, numeric))
+
+        add(getattr(self, "system_wavelength", None), source.get("wavelength_nm"))
+        if "waist_x_mm" in source:
+            add(getattr(self, "source_waist_x", None), float(source["waist_x_mm"]) * 1e3)
+        if "waist_y_mm" in source:
+            add(getattr(self, "source_waist_y", None), float(source["waist_y_mm"]) * 1e3)
+        add(getattr(self, "source_m2_x", None), source.get("beam_quality_m2_x"))
+        add(getattr(self, "source_m2_y", None), source.get("beam_quality_m2_y"))
+        add(getattr(self, "source_waist_position", None), source.get("waist_position_x_mm"))
+
+        add(getattr(self, "receiver_mfd_x", None), receiver.get("mode_field_diameter_x_um"))
+        add(getattr(self, "receiver_mfd_y", None), receiver.get("mode_field_diameter_y_um"))
+        add(getattr(self, "receiver_na_x", None), receiver.get("na_x"))
+        add(getattr(self, "receiver_na_y", None), receiver.get("na_y"))
+        if "offset_x_mm" in receiver:
+            add(getattr(self, "receiver_offset_x", None), float(receiver["offset_x_mm"]) * 1e3)
+        if "offset_y_mm" in receiver:
+            add(getattr(self, "receiver_offset_y", None), float(receiver["offset_y_mm"]) * 1e3)
+        if "axial_offset_z_mm" in receiver:
+            add(getattr(self, "receiver_offset_z", None), float(receiver["axial_offset_z_mm"]) * 1e3)
+        if "tilt_x_deg" in receiver:
+            add(getattr(self, "receiver_tilt_x", None), math.radians(float(receiver["tilt_x_deg"])) * 1e6)
+        if "tilt_y_deg" in receiver:
+            add(getattr(self, "receiver_tilt_y", None), math.radians(float(receiver["tilt_y_deg"])) * 1e6)
+
+        system_fields = (
+            ("object_distance_mm", "system_object_distance"),
+            ("image_distance_mm", "system_image_distance"),
+            ("pupil_radius_mm", "system_pupil_radius"),
+        )
+        for key, attr in system_fields:
+            add(getattr(self, attr, None), payload.get(key))
+
+        if not updates:
+            return
+        changed = False
+        for widget, value in updates:
+            try:
+                if abs(float(widget.value()) - value) <= 1e-12:
+                    continue
+                blocked = widget.blockSignals(True)
+                try:
+                    widget.setValue(value)
+                finally:
+                    widget.blockSignals(blocked)
+                changed = True
+            except Exception:
+                continue
+        if changed:
+            self.changed.emit()
 
     def apply_alignment_solution(self, solution) -> None:
 

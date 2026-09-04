@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import re
+import os
 from typing import Any
 
 import numpy as np
@@ -108,8 +109,14 @@ def _try_write_parquet(path: Path, rows: list[dict]) -> bool:
 
 
 def _write_npz(path: Path, arrays: dict[str, np.ndarray]) -> None:
+    # Deflate compression is CPU-heavy and used to dominate the visible 98-99%
+    # tail of otherwise fast jobs.  Stored NPZ preserves dtype/shape/values
+    # exactly and is fully compatible with np.load; compression remains opt-in
+    # for disk-constrained deployments.
+    mode = str(os.getenv("OPTICAL_RESULT_NPZ_COMPRESSION", "stored") or "stored").strip().lower()
+    writer = np.savez_compressed if mode in {"compressed", "deflate", "zip"} else np.savez
     with Path(path).open("wb") as handle:
-        np.savez_compressed(handle, **arrays)
+        writer(handle, **arrays)
 
 
 def save_result_bundle(job_dir: Path, payload: Any) -> dict[str, Any]:
@@ -124,6 +131,11 @@ def save_result_bundle(job_dir: Path, payload: Any) -> dict[str, Any]:
         "arrays": None,
         "sections": {},
         "analysis_views": {},
+        "array_container": "npz",
+        "array_compression": (
+            "deflate" if str(os.getenv("OPTICAL_RESULT_NPZ_COMPRESSION", "stored")).strip().lower()
+            in {"compressed", "deflate", "zip"} else "stored"
+        ),
     }
     if not isinstance(payload, dict):
         payload = {"result": payload}

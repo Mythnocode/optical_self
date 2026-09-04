@@ -1,0 +1,70 @@
+AI助手与非实验功能回归记录
+日期：2026-08-15
+
+范围：AI助手、可变结构候选、教学中心3D第二阶段、单位输入、静默异常治理。
+实验验证：冻结，未修改。
+
+[静态检查]
+COMPILEALL_OK
+实验验证 experiment_validation.py：UNCHANGED
+实验验证 experiment_validation_data.py：UNCHANGED
+后端 routes_validation.py：UNCHANGED
+
+[AI助手]
+AI_RESEARCH_ADVISOR_OK
+- 下一步
+- 可靠性
+- 当前主要问题
+- 研究状态总结
+- “模型还能用于 SHAP 吗？”自然措辞
+- 证据链
+- 旧结果/需更新
+- 具体参数证据检索
+- 参数研究优先级
+- 助手能力说明
+- 定型判断
+- 证据冲突
+- R²<0 时排除 SHAP
+- 高效率区误差降级
+- 模型差不否决正式物理结果
+- 正/负方向语义冲突检测
+
+[可变结构]
+STRUCTURE_CANDIDATE_OK
+STRUCTURE_MODEL_GATE_OK
+GET /api/v1/structure-models -> HTTP 200
+结构模型列表在干净 user_data 中返回空列表，接口连通。
+R² 缺失、<0、0.59：默认阻止候选排名；0.60：允许辅助筛选。
+
+[单位解析]
+UNIT_PARSE_OK
+200 μm -> 0.2 mm
+0.2 mm -> 200 μm
+780 nm -> 0.78 μm
+10 mrad -> deg
+1 deg -> mrad
+31% -> 31%
+
+[教学3D]
+QML_STATUS_READY
+QML_GAUSSIAN_PANELS_OK
+可移动截面和光纤端面模场放大镜 QML 结构/绑定通过。
+已验证跨完整有效光路的截面插值逻辑。
+已知环境限制：offscreen/software Qt 无 QRhi，因此 View3D 在容器内不输出真实3D像素。
+
+[逐页 1366x768 回归]
+首页 HomePage OK / AI_CONTEXT 首页
+仿真系统 SimulationPage OK / AI_CONTEXT 仿真系统
+参数研究与优化 OptimizationPage OK / AI_CONTEXT 参数研究与优化
+模型分析 MachineLearningPage OK / AI_CONTEXT 模型分析
+SHAP分析 ExplainabilityPage OK / AI_CONTEXT SHAP分析
+任务中心 TasksPage OK / AI_CONTEXT 任务中心
+教学中心 TeachingPage OK / AI_CONTEXT 教学中心
+PAGE_REGRESSION_OK
+
+[实际启动]
+后端 /api/v1/health -> HTTP 200 healthy
+后端 /api/v1/structure-models -> HTTP 200
+前端 offscreen/software 启动 12 秒无崩溃；由测试 timeout 主动终止。
+
+FINAL_AI_NON_VALIDATION_REGRESSION_OK

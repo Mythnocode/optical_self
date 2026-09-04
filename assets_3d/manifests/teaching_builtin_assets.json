@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "coordinate_system": {
+    "world_unit": "teaching_scene_unit",
+    "x": "main optical propagation",
+    "y": "vertical",
+    "z": "transverse"
+  },
+  "principle": "visual_only_assets_never_drive_physics",
+  "assets": [
+    {
+      "kind": "aperture",
+      "asset_id": "aperture_mount_001",
+      "qml": "assets/TeachingAperture.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.42,
+        0.56,
+        0.42
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 1,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "beam_analyzer",
+      "asset_id": "beam_analyzer_001",
+      "qml": "assets/TeachingCamera.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.54,
+        0.54,
+        0.55
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "beam_expander",
+      "asset_id": "beam_expander_001",
+      "qml": "assets/TeachingBeamExpander.qml",
+      "tier": "B",
+      "pick_scale": [
+        0.9,
+        0.52,
+        0.48
+      ],
+      "estimated_models": 7,
+      "transparent_materials": 4,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "beam_sampler",
+      "asset_id": "sampler_mount_001",
+      "qml": "assets/TeachingSplitter.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.48,
+        0.5,
+        0.38
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 2,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "camera",
+      "asset_id": "camera_001",
+      "qml": "assets/TeachingCamera.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.54,
+        0.54,
+        0.55
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "cylindrical_lens",
+      "asset_id": "cyl_lens_mount_001",
+      "qml": "assets/TeachingCylindricalLens.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.5,
+        0.58,
+        0.38
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 1,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "fiber",
+      "asset_id": "fiber_stage_001",
+      "qml": "assets/TeachingFiberStage.qml",
+      "tier": "B",
+      "pick_scale": [
+        0.58,
+        0.62,
+        0.55
+      ],
+      "estimated_models": 6,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "focus_scan_module",
+      "asset_id": "focus_scan_001",
+      "qml": "assets/TeachingCamera.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.66,
+        0.54,
+        0.55
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "half_wave_plate",
+      "asset_id": "waveplate_mount_001",
+      "qml": "assets/TeachingWavePlate.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.42,
+        0.54,
+        0.42
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 1,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "imaging_camera",
+      "asset_id": "imaging_camera_001",
+      "qml": "assets/TeachingCamera.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.54,
+        0.54,
+        0.55
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "isolator",
+      "asset_id": "isolator_001",
+      "qml": "assets/TeachingIsolator.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.4,
+        0.48,
+        0.4
+      ],
+      "estimated_models": 4,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "laser",
+      "asset_id": "laser_lab_001",
+      "qml": "assets/TeachingLaser.qml",
+      "tier": "B",
+      "pick_scale": [
+        0.9,
+        0.48,
+        0.52
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "lens",
+      "asset_id": "lens_mount_001",
+      "qml": "assets/TeachingLens.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.48,
+        0.58,
+        0.48
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 1,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "mirror",
+      "asset_id": "mirror_mount_001",
+      "qml": "assets/TeachingMirror.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.44,
+        0.58,
+        0.46
+      ],
+      "estimated_models": 6,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "oscilloscope",
+      "asset_id": "oscilloscope_001",
+      "qml": "assets/TeachingInstrumentBox.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.62,
+        0.55,
+        0.62
+      ],
+      "estimated_models": 4,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "pbs",
+      "asset_id": "pbs_mount_001",
+      "qml": "assets/TeachingSplitter.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.48,
+        0.5,
+        0.38
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 2,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "photodetector",
+      "asset_id": "photodetector_001",
+      "qml": "assets/TeachingPowerMeter.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.52,
+        0.55,
+        0.52
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "power_meter",
+      "asset_id": "power_sensor_001",
+      "qml": "assets/TeachingPowerMeter.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.52,
+        0.55,
+        0.52
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "splitter",
+      "asset_id": "splitter_mount_001",
+      "qml": "assets/TeachingSplitter.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.48,
+        0.5,
+        0.38
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 2,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    },
+    {
+      "kind": "wavefront_sensor",
+      "asset_id": "wavefront_sensor_001",
+      "qml": "assets/TeachingWavefrontSensor.qml",
+      "tier": "A",
+      "pick_scale": [
+        0.58,
+        0.54,
+        0.58
+      ],
+      "estimated_models": 5,
+      "transparent_materials": 0,
+      "source": "Chen built-in procedural asset",
+      "license": "project-owned",
+      "physics_role": "visual_only"
+    }
+  ]
+}

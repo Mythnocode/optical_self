@@ -1,4 +1,5 @@
 import logging
+import threading
 import uuid
 from contextlib import asynccontextmanager
 
@@ -21,6 +22,7 @@ from backend.optical_ml_app.api import (
     routes_tolerance,
     routes_training,
     routes_verification,
+    routes_validation,
     routes_ws,
 )
 from backend.optical_ml_app.api.error_handlers import (
@@ -46,19 +48,40 @@ def create_app() -> FastAPI:
         )
         start_workers = getattr(current_manager, "start_persistent_workers", None)
         if callable(start_workers):
-            
-            
-            
-            
-            ready = start_workers(
-                wait_ready=True,
+            # Do not block API readiness on worker construction.  Jobs can be
+            # queued immediately while the persistent simulation worker warms
+            # in the background; this removes the several-second blank startup
+            # pause without changing any numerical calculation.
+            start_workers(
+                wait_ready=False,
                 ready_job_types={"simulation"},
-                timeout=30.0,
             )
-            if not ready:
-                logging.getLogger(__name__).warning(
-                    "persistent simulation workers did not finish prewarming"
+
+        def _background_ml_prewarm() -> None:
+            try:
+                # Import-only warmup.  No model/data result is precomputed here;
+                # it simply removes first-use import latency from prediction and
+                # explainability routes.
+                import numpy  # noqa: F401
+                import sklearn  # noqa: F401
+                try:
+                    import xgboost  # noqa: F401
+                except Exception:
+                    pass
+                try:
+                    import shap  # noqa: F401
+                except Exception:
+                    pass
+            except Exception:
+                logging.getLogger(__name__).debug(
+                    "background ML import warmup skipped", exc_info=True
                 )
+
+        threading.Thread(
+            target=_background_ml_prewarm,
+            name="backend-ml-import-warmup",
+            daemon=True,
+        ).start()
         try:
             yield
         finally:
@@ -112,6 +135,7 @@ def create_app() -> FastAPI:
         routes_scan.router,
         routes_optimization.router,
         routes_verification.router,
+        routes_validation.router,
     ):
         app.include_router(router, prefix="/api/v1")
 

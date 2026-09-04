@@ -37,6 +37,8 @@ class HybridPipeline:
         "field_x_deg",
         "field_y_deg",
         "sampling_role",
+        "polarization_sensitive",
+        "vector_coupling_enabled",
     }
 
     def __init__(self, *, prepared_coupling_cache_entries: int = 8) -> None:
@@ -258,6 +260,7 @@ class HybridPipeline:
             apply_surface_physics=bool(opts.get("apply_surface_physics", True)),
             environment_temperature_c=float(opts.get("environment_temperature_c", 20.0)),
             include_group_delay=bool(opts.get("include_group_delay", False)),
+            polarization_sensitive=bool(opts.get("polarization_sensitive", False) or opts.get("vector_coupling_enabled", False)),
         )
 
         trace = trace_ray_batch(system, rays, trace_options)
@@ -840,12 +843,20 @@ def _as_int_tuple(value: Any) -> tuple[int, ...]:
 
 
 def _tilt_rad_from_options(opts: dict[str, Any], axis: str) -> float:
-    rad_key = f"{axis}_rad"
-    urad_key = f"{axis}_urad"
-    if rad_key in opts:
-        return float(opts[rad_key])
-    if urad_key in opts:
-        return float(opts[urad_key]) * 1.0e-6
+    """Return receiver tilt in radians from any supported UI/runtime unit.
+
+    The GUI serializes receiver tilt through ``receiver.tilt_*_deg`` while
+    research/legacy callers may supply rad, urad, or mrad directly.  Keep a
+    deterministic precedence so an explicit low-level runtime override wins
+    over the project-level degree value compiled from the GUI.
+    """
+    for suffix, scale in (("rad", 1.0), ("urad", 1.0e-6), ("mrad", 1.0e-3)):
+        key = f"{axis}_{suffix}"
+        if key in opts:
+            return float(opts[key]) * scale
+    deg_key = f"{axis}_deg"
+    if deg_key in opts:
+        return float(np.deg2rad(float(opts[deg_key])))
     return 0.0
 
 

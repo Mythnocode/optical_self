@@ -175,8 +175,6 @@ class ExplainabilityApiMixin:
         self.output.blockSignals(False)
 
         model_id = self._record_id(record, "model") if record else ""
-        if model_id:
-            self.context.registry.set_current_model(model_id)
         model_dataset_id = str(record.get("dataset_id", ""))
         preferred_dataset = model_dataset_id or self.context.registry.current_dataset_id
         if preferred_dataset:
@@ -185,13 +183,86 @@ class ExplainabilityApiMixin:
                 self.dataset.setCurrentIndex(index)
         self._refresh_context_summary()
 
+    def _set_shap_ready_message(self, title: str, message: str, *, show_prepare: bool) -> None:
+        card = getattr(self, "shap_empty_card", None)
+        if card is not None and getattr(card, "title_label", None) is not None:
+            card.title_label.setText(str(title))
+        hint = getattr(self, "shap_empty_hint", None)
+        if hint is not None:
+            hint.setText(str(message))
+        button = getattr(self, "shap_prepare_button", None)
+        if button is not None:
+            button.setVisible(bool(show_prepare))
+
+        # Keep the main explanation area in the same place before and after the
+        # calculation.  A selected model means this view is generatable, so show
+        # one truthful preview slot instead of leaving the lower half of the page
+        # blank.  The remaining views appear only after real SHAP data exists.
+        model_id = str(self.model.currentData() or "") if hasattr(self, "model") else ""
+        has_result = bool(getattr(self, "_feature_records", []) or [])
+        view_card = getattr(self, "shap_view_card", None)
+        tabs = getattr(self, "shap_view_tabs", None)
+        if view_card is not None and not has_result:
+            view_card.setVisible(bool(model_id))
+        if tabs is not None and not has_result:
+            tabs.setTabVisible(0, bool(model_id))
+            tabs.setTabVisible(1, False)
+            tabs.setTabVisible(2, False)
+            tabs.setTabVisible(3, False)
+            if model_id:
+                tabs.setCurrentIndex(0)
+
     def _refresh_context_summary(self, *_args) -> None:
         dataset_id = str(self.dataset.currentData() or "")
         model_id = str(self.model.currentData() or "")
         if dataset_id:
             self.context.registry.set_current_dataset(dataset_id)
-        if model_id:
-            self.context.registry.set_current_model(model_id)
+        adopted = str(getattr(self.context.registry, "current_model_id", "") or "")
+        record = self._selected_model_record()
+        r2 = None
+        for block_name in ("test_metrics", "evaluation", "metrics", "validation_metrics"):
+            block = record.get(block_name)
+            if not isinstance(block, dict):
+                continue
+            for key in ("r2", "test_r2", "R2"):
+                if isinstance(block.get(key), (int, float)):
+                    r2 = float(block[key]); break
+            if r2 is not None: break
+        if not model_id:
+            self._set_explain_button_state("先准备模型", enabled=False)
+            self._set_shap_ready_message(
+                "还没有可以分析的模型",
+                "先去模型分析准备数据并训练一个模型。模型有了测试结果以后，再回来查看哪些参数最重要、它们在当前系统里起什么作用。",
+                show_prepare=True,
+            )
+        elif model_id and adopted and model_id != adopted:
+            self._set_explain_button_state("先确认当前模型", enabled=False)
+            self._set_shap_ready_message(
+                "先确认要分析哪个模型",
+                "你选中的模型和项目现在使用的模型不是同一个。先去模型分析确认要使用哪一个，再回来查看这些参数为什么重要。",
+                show_prepare=True,
+            )
+        elif r2 is None:
+            self._set_explain_button_state("先看看也可以", enabled=bool(model_id))
+            self._set_shap_ready_message(
+                "还不能判断模型够不够准",
+                "这个模型还没有独立测试结果。可以先看看 SHAP 图了解模型在关注什么，但暂时不要据此修改参数。",
+                show_prepare=True,
+            )
+        elif r2 < 0.60:
+            self._set_explain_button_state("先看看也可以", enabled=bool(model_id))
+            self._set_shap_ready_message(
+                "模型预测还不够准",
+                f"独立测试 R²={r2:.3f}。可以先用 SHAP 了解模型，但不建议据此修改参数或确定最终设计。先改进模型会更稳妥。",
+                show_prepare=True,
+            )
+        else:
+            self._set_explain_button_state("开始分析", enabled=bool(model_id))
+            self._set_shap_ready_message(
+                "可以开始分析",
+                f"当前模型的独立测试 R²={r2:.3f}。可以开始查看主要因素、当前系统、整体规律和单参数规律。",
+                show_prepare=False,
+            )
 
     def _request_explain(self) -> None:
         model_id = str(self.model.currentData() or "")
@@ -200,6 +271,10 @@ class ExplainabilityApiMixin:
         record = self._selected_model_record()
         if not model_id:
             self._set_info(self.shap_status_info, "当前状态", "没有可解释的真实模型")
+            return
+        adopted = str(getattr(self.context.registry, "current_model_id", "") or "")
+        if adopted and model_id != adopted:
+            self._set_info(self.shap_status_info, "当前状态", "当前选择的模型不是项目正在使用的模型。请先去模型分析确认要使用的模型。")
             return
         model_dataset_id = str(record.get("dataset_id", "") or "")
         if model_dataset_id and dataset_id != model_dataset_id:
@@ -275,8 +350,19 @@ class ExplainabilityApiMixin:
     def _shap_prepared(self, channel: str, token: int, payload: object) -> None:
         if channel != "explain-shap" or not self.lifecycle.generations.is_current(token, "explain-shap"):
             return
-        self._pending_shap_meta.pop(token, None)
+        model_id = self._pending_shap_meta.pop(token, None)
         data = dict(payload or {})
+        record = self._selected_model_record()
+        for block_name in ("test_metrics", "evaluation", "metrics", "validation_metrics"):
+            block = record.get(block_name)
+            if not isinstance(block, dict):
+                continue
+            for key in ("r2", "test_r2", "R2"):
+                if isinstance(block.get(key), (int, float)):
+                    data.setdefault("model_test_r2", float(block[key]))
+                    break
+            if "model_test_r2" in data:
+                break
         self._shap_data = data
         self._shap_available = True
         self._set_explain_button_state("重新计算解释", enabled=True)
@@ -287,6 +373,40 @@ class ExplainabilityApiMixin:
             "当前状态",
             f"分析完成：{int(data.get('sample_count', 0) or 0)} 个样本 · {data.get('explainer', 'SHAP')}",
         )
+        # SHAP 向共享上下文发布结构化证据。只记录“模型观察到什么”，不自动把参数加入优化或缩小范围。
+        try:
+            top_features = [dict(item) for item in data.get("top_features", []) if isinstance(item, dict)]
+            if not top_features:
+                targets = [dict(item) for item in data.get("targets", []) if isinstance(item, dict)]
+                if targets:
+                    top_features = [dict(item) for item in targets[0].get("top_features", []) if isinstance(item, dict)]
+            self.context.project.update_research_context(
+                current_task="SHAP分析",
+                current_model=str(model_id or ""),
+                current_dataset=str(data.get("dataset_id", "")),
+            )
+            for item in top_features[:3]:
+                name = str(item.get("name") or item.get("feature") or "")
+                if not name:
+                    continue
+                signed = float(item.get("mean_shap", item.get("shap_value", 0.0)) or 0.0)
+                direction = str(item.get("direction") or ("正向" if signed > 0 else "负向" if signed < 0 else "中性"))
+                self.context.project.publish_finding(
+                    source="SHAP",
+                    parameter=name,
+                    display_name=name,
+                    scope="当前模型/数据集",
+                    evidence={
+                        "mean_abs_shap": float(item.get("mean_abs_shap", abs(signed)) or 0.0),
+                        "mean_shap": signed,
+                        "direction": direction,
+                        "sample_count": int(data.get("sample_count", 0) or 0),
+                        "model_id": str(model_id or ""),
+                    },
+                    status="当前",
+                )
+        except Exception:
+            pass
         if bool(getattr(self, "_page_active", True)):
             self._update_shap_from_api(data)
         else:

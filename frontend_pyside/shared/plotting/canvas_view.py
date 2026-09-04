@@ -117,7 +117,7 @@ def fit_optical_scene_3d(ax, data: dict, *, zoom: float = 1.0) -> None:
     centre = 0.5 * (low + high)
 
     
-    margin = np.asarray([0.10, 0.13, 0.13]) / max(float(zoom), 1.0e-6)
+    margin = np.asarray([0.10, 0.13, 0.13])
     half = 0.5 * spans * (1.0 + 2.0 * margin)
     
     
@@ -132,11 +132,31 @@ def fit_optical_scene_3d(ax, data: dict, *, zoom: float = 1.0) -> None:
     transverse = max(2.0 * half[1], 2.0 * half[2], 1.0e-6)
     axial = max(2.0 * half[0], 1.0e-6)
     
-    visual_axial = min(max(axial, 3.2 * transverse), 5.4 * transverse)
+    # Long optical trains need more axial visual room than ordinary 3D plots.
+    # Keep a moderate cap so lenses remain legible without compressing a four-lens
+    # train into the small 5.4:1 box used by the older implementation.
+    visual_axial = min(max(axial, 3.2 * transverse), 10.0 * transverse)
+    display_zoom = max(0.62, min(1.18, 0.94 * float(zoom)))
     try:
-        ax.set_box_aspect((visual_axial, transverse, transverse), zoom=0.98)
+        ax.set_box_aspect((visual_axial, transverse, transverse), zoom=display_zoom)
     except TypeError:
         ax.set_box_aspect((visual_axial, transverse, transverse))
+
+
+def apply_optical_scene_3d_zoom(ax, *, zoom: float = 1.0) -> None:
+    """Change 3D display scale without cropping the physical data limits."""
+    try:
+        x0, x1 = ax.get_xlim(); y0, y1 = ax.get_ylim(); z0, z1 = ax.get_zlim()
+        axial = max(abs(float(x1 - x0)), 1e-6)
+        transverse = max(abs(float(y1 - y0)), abs(float(z1 - z0)), 1e-6)
+        visual_axial = min(max(axial, 3.2 * transverse), 10.0 * transverse)
+        display_zoom = max(0.62, min(1.18, 0.94 * float(zoom)))
+        try:
+            ax.set_box_aspect((visual_axial, transverse, transverse), zoom=display_zoom)
+        except TypeError:
+            ax.set_box_aspect((visual_axial, transverse, transverse))
+    except Exception:
+        return
 
 
 def fit_optical_section_2d(ax, data: dict) -> None:
@@ -175,4 +195,4 @@ def zoom_axes_at_event(ax, event, *, base_scale: float = 1.18) -> bool:
     return True
 
 
-__all__ = ["fit_optical_scene_3d", "fit_optical_section_2d", "zoom_axes_at_event"]
+__all__ = ["apply_optical_scene_3d_zoom", "fit_optical_scene_3d", "fit_optical_section_2d", "zoom_axes_at_event"]

@@ -9,13 +9,21 @@ from backend.optical_ml_app.application.ports import (
     EngineResolverPort,
     TaskManagerPort,
 )
+from backend.optical_ml_app.runtime_env import configured_batch_worker_count
 
 
 def _run_dataset_task(context, request, dataset_root: str):
     store = FileDatasetStore(Path(dataset_root))
-    engine = create_optical_simulation_engine()
+    engine = context.get_or_create_resource(
+        "optical_engine", create_optical_simulation_engine
+    )
     generator = DatasetGenerator(engine, store)
-    return generator.generate(request, None, context.progress)
+    return generator.generate(
+        request,
+        context.cancellation,
+        context.progress,
+        max_workers=configured_batch_worker_count(),
+    )
 
 
 class DatasetApplicationService:

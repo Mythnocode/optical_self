@@ -100,10 +100,13 @@ def _run_single_verification(
     overrides: dict[str, float] | None,
     model_registry_root: str,
     request_index: int,
+    *,
+    engine: Any | None = None,
+    predictor: Any | None = None,
 ) -> dict[str, Any]:
 
-    engine = _create_engine()
-    predictor = _create_predictor(model_registry_root)
+    engine = engine or _create_engine()
+    predictor = predictor or _create_predictor(model_registry_root)
 
     project = (
         _apply_parameter_overrides(base_project, overrides)
@@ -154,6 +157,11 @@ def _run_verification_task(
     model_registry_root: str,
 ) -> dict[str, Any]:
 
+    engine = context.get_or_create_resource("optical_engine", _create_engine)
+    predictor = context.get_or_create_resource(
+        f"predictor:{model_registry_root}",
+        lambda: _create_predictor(model_registry_root),
+    )
     results: list[dict[str, Any]] = []
     for idx, overrides in enumerate(parameter_sets):
         if context.cancellation.is_cancelled:
@@ -164,6 +172,8 @@ def _run_verification_task(
             overrides=overrides,
             model_registry_root=model_registry_root,
             request_index=idx,
+            engine=engine,
+            predictor=predictor,
         )
         results.append(result)
         if context.progress:

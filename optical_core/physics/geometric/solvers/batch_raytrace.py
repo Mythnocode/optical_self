@@ -52,7 +52,13 @@ def _plane_record(
     )
 
 
-def trace_ray_batch(system: SequentialOpticalSystem, rays: RayBundle, options: TraceOptions | None = None) -> TraceBundle:
+def trace_ray_batch(
+    system: SequentialOpticalSystem,
+    rays: RayBundle,
+    options: TraceOptions | None = None,
+    *,
+    progress_callback=None,
+) -> TraceBundle:
 
     options = options or TraceOptions()
     output_level = str(options.output_level).strip().lower()
@@ -65,7 +71,9 @@ def trace_ray_batch(system: SequentialOpticalSystem, rays: RayBundle, options: T
         support = compact_trace_support(system, options)
         if support.supported:
             return trace_ray_batch_compact(
-                system, rays, options, output_level="planes" if output_level == "planes" else "final"
+                system, rays, options,
+                output_level="planes" if output_level == "planes" else "final",
+                progress_callback=progress_callback,
             )
     n = rays.positions_mm.shape[0]
     final_positions = np.full((n, 3), np.nan, dtype=float)
@@ -100,6 +108,9 @@ def trace_ray_batch(system: SequentialOpticalSystem, rays: RayBundle, options: T
     )
 
     details: list[DetailedRayTrace] = []
+    progress_stride = max(1, n // 24) if n else 1
+    if progress_callback is not None:
+        progress_callback(0.0)
     for i in range(n):
         wavelength_nm = float(options.wavelength_nm or system.wavelength_nm)
         ray = Ray(
@@ -131,6 +142,8 @@ def trace_ray_batch(system: SequentialOpticalSystem, rays: RayBundle, options: T
         reasons[i] = detail.termination_reason
         if detail.termination_reason:
             warnings.append(f"ray[{i}] {ray_ids[i]}: {detail.termination_reason}")
+        if progress_callback is not None and (i + 1 == n or (i + 1) % progress_stride == 0):
+            progress_callback((i + 1) / max(1, n))
 
     max_segments = max((len(item.segment_lengths_mm) for item in details), default=0)
     segment_lengths = np.full((n, max_segments), np.nan, dtype=float)
@@ -216,4 +229,5 @@ def trace_ray_batch(system: SequentialOpticalSystem, rays: RayBundle, options: T
         phase_offsets_rad=phase_offsets,
         polarization_vectors_xyz=polarization_vectors,
         surface_interaction_records=surface_interactions,
+        surface_physics_applied=bool(options.apply_surface_physics),
     )

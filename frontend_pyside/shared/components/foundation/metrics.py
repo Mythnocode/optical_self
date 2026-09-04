@@ -8,7 +8,9 @@ from PySide6.QtWidgets import (
     QLabel,
     QSizePolicy,
     QWidget,
+    QVBoxLayout,
 )
+from frontend_pyside.shared import layout_tokens as ui_layout
 
 from .cards import Card
 
@@ -67,6 +69,11 @@ class InlineMetric(QFrame):
         self.value_label = QLabel(str(value))
         self.value_label.setObjectName("inlineMetricValue")
         self.value_label.setMinimumWidth(54)
+        # 14–15 pt metric text needs a little more vertical breathing room than
+        # QLabel's compact size hint under the Linux CJK fallback font.  Without
+        # this, the simulation summary values are squeezed to ~24 px and can clip
+        # glyph tops/bottoms even though the metric frame itself has spare height.
+        self.value_label.setMinimumHeight(28)
         self.value_label.setSizePolicy(
             QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
         )
@@ -96,9 +103,15 @@ class SummaryStrip(QFrame):
     def __init__(self, items: Iterable[tuple[str, str]], parent=None):
         super().__init__(parent)
         self.setObjectName("summaryStrip")
+        self.setMinimumHeight(66)
         self._layout = QHBoxLayout(self)
-        self._layout.setContentsMargins(12, 7, 12, 7)
-        self._layout.setSpacing(10)
+        self._layout.setContentsMargins(
+            ui_layout.CARD_PADDING,
+            ui_layout.CONTROL_GAP,
+            ui_layout.CARD_PADDING,
+            ui_layout.CONTROL_GAP,
+        )
+        self._layout.setSpacing(ui_layout.CONTROL_GAP)
         self._value_labels: list[QLabel] = []
         self.set_items(items)
 
@@ -112,9 +125,9 @@ class SummaryStrip(QFrame):
         values = [(str(label), str(value)) for label, value in items]
         for index, (label, value) in enumerate(values):
             item = QWidget()
-            item_layout = QHBoxLayout(item)
+            item_layout = QVBoxLayout(item)
             item_layout.setContentsMargins(0, 0, 0, 0)
-            item_layout.setSpacing(5)
+            item_layout.setSpacing(2)
             key_label = QLabel(label)
             key_label.setObjectName("summaryKey")
             value_label = QLabel(value)
@@ -122,13 +135,12 @@ class SummaryStrip(QFrame):
             item_layout.addWidget(key_label)
             item_layout.addWidget(value_label)
             self._value_labels.append(value_label)
-            self._layout.addWidget(item)
+            self._layout.addWidget(item, 1)
             if index < len(values) - 1:
                 divider = QFrame()
                 divider.setFrameShape(QFrame.Shape.VLine)
                 divider.setObjectName("summaryDivider")
                 self._layout.addWidget(divider)
-        self._layout.addStretch()
 
     def set_values(self, values: Iterable[str]) -> None:
         for label, value in zip(self._value_labels, values):

@@ -175,7 +175,7 @@ def evaluate_design(state: DesignState) -> DesignMetrics:
         bottleneck = "接收模场匹配"
         recommendation = "优先调整末级焦距、末级间距和中间波前整形，使束腰与曲率接近目标模式。"
     if not feasible:
-        recommendation = "当前方案数学上可能有较高效率，但机械或孔径约束不成立，应更换焦距组合或镜片。"
+        recommendation = "当前系统数学上可能有较高效率，但机械或孔径约束不成立，应更换焦距组合或镜片。"
 
     return DesignMetrics(
         target_waist_um=target_waist,
@@ -416,13 +416,13 @@ class TeachingDesignPage(QWidget):
         root.addWidget(self.design_splitter, 1)
 
         actions = QHBoxLayout()
-        reset = SecondaryButton("恢复课程初始方案")
+        reset = SecondaryButton("恢复课程初始状态")
         reset.clicked.connect(self.reset_design)
         previous = SecondaryButton("上一步")
         previous.clicked.connect(lambda: self.set_step(self.current_step - 1))
         next_button = PrimaryButton("下一步")
         next_button.clicked.connect(lambda: self.set_step(self.current_step + 1))
-        save = SecondaryButton("保存候选方案")
+        save = SecondaryButton("保存候选结果")
         save.clicked.connect(self.save_candidate)
         workbench = PrimaryButton("进入工作台正式验证")
         workbench.clicked.connect(self._request_workbench)
@@ -816,7 +816,7 @@ class TeachingDesignPage(QWidget):
     def save_candidate(self) -> None:
         self.saved_candidates.append((self.state, self.metrics))
         self.saved_label.setText(f"已保存候选：{len(self.saved_candidates)}")
-        QMessageBox.information(self, "候选方案", f"已保存当前 {self.state.lens_count} 片方案，总效率 {self.metrics.total_efficiency * 100:.1f}%。")
+        QMessageBox.information(self, "候选结果", f"已保存当前 {self.state.lens_count} 片设计状态，总效率 {self.metrics.total_efficiency * 100:.1f}%。")
 
     def reset_design(self) -> None:
         mode = self.state.mode

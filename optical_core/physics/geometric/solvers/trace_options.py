@@ -15,6 +15,7 @@ class TraceOptions:
     evaluate_apertures: bool = True
     max_intersection_iterations: int = 12
     apply_surface_physics: bool = True
+    polarization_sensitive: bool = False
     environment_temperature_c: float = 20.0
     include_group_delay: bool = False
     output_level: Literal["full", "planes", "final"] = "full"

@@ -13,7 +13,7 @@ import time
 from shared_contracts.jobs import JobStatus
 from shared_contracts.errors import ApplicationError
 from backend.optical_ml_app.infrastructure.json_utils import to_storage_value
-from backend.optical_ml_app.storage.atomic_files import atomic_write_text
+from backend.optical_ml_app.storage.atomic_files import atomic_write_bytes, atomic_write_text
 from backend.optical_ml_app.storage.job_index import JobIndex
 from backend.optical_ml_app.storage.job_retention import JobRetentionManager
 from backend.optical_ml_app.storage.local_result_transport import create_local_result_view
@@ -99,6 +99,24 @@ class FileJobRepository:
         if not path.exists():
             raise FileNotFoundError(path)
         return JobStatus.model_validate_json(path.read_text(encoding="utf-8"))
+
+    def save_retry_payload(self, job_id: str, payload: bytes) -> None:
+        atomic_write_bytes(self._dir(job_id) / "retry_payload.bin", bytes(payload))
+
+    def load_retry_payload(self, job_id: str) -> bytes:
+        path = self._dir(job_id, create=False) / "retry_payload.bin"
+        if not path.exists():
+            raise FileNotFoundError(path)
+        return path.read_bytes()
+
+    def has_retry_payload(self, job_id: str) -> bool:
+        try:
+            return (self._dir(job_id, create=False) / "retry_payload.bin").exists()
+        except FileNotFoundError:
+            return False
+
+    def claim_idempotency(self, idempotency_key: str, job_id: str) -> str:
+        return self.index.claim_idempotency(idempotency_key, job_id)
 
     def create_local_result_view(self, job_id, result):
         self._prune_local_result_views()
@@ -235,7 +253,7 @@ class FileJobRepository:
                 status.error = ApplicationError(
                     code="BACKEND_RESTARTED",
                     stage="backend.restarted",
-                    message="backend restarted before the job reached a terminal state",
+                    message="后端在任务进入终态前发生重启，本次任务没有产生正式结果",
                     retryable=True,
                 )
                 try:

@@ -25,6 +25,7 @@ from frontend_pyside.shared.performance import record_perf
 from frontend_pyside.shared.font_fallback import configure_qt_font
 from frontend_pyside.infrastructure.workers.worker import FunctionWorker
 from frontend_pyside.shared.plotting.fast_heatmap import prewarm_fast_heatmap
+from frontend_pyside.shared.components.safe_inputs import install_wheel_safety
 
 
 def main() -> int:
@@ -35,10 +36,11 @@ def main() -> int:
     QCoreApplication.setApplicationVersion(APP_VERSION)
 
     app = QApplication.instance() or QApplication(sys.argv)
+    install_wheel_safety(app)
     install_exception_hook()
     try:
         apply_application_theme(app)
-        configure_qt_font(app, point_size=12.5)
+        configure_qt_font(app, point_size=13.5)
         window = create_main_window()
         
         
@@ -59,7 +61,7 @@ def main() -> int:
 
         QTimer.singleShot(700, start_result_path_prewarm)
     except Exception:
-        show_fatal_startup_error(app, "FRONTEND STARTUP FAILED", traceback.format_exc())
+        show_fatal_startup_error(app, "前端启动失败", traceback.format_exc())
         return 1
     return app.exec()
 

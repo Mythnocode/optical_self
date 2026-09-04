@@ -55,7 +55,7 @@ def _coupling_tail(*, start: float = 1040.0, y: float = 310.0, lenses: int = 2, 
 
 def _diagnostic_sampler(*, x: float = 930.0, y: float = 310.0, instrument: str = "beam_analyzer", label: str = "光束分析仪") -> list[NodeSpec]:
     return [
-        ("beam_sampler", x, y, 0, "诊断取样片", {"monitor_fraction": 0.01, "split_ratio": 0.01}),
+        ("beam_sampler", x, y, 0, "诊断取样片", {"monitor_fraction": 0.01, "split_ratio": 0.01, "branch_offset_deg": -90.0}),
         (instrument, x, 90, 90, label, {"plane_offset_mm": 0.0}),
     ]
 
@@ -77,6 +77,49 @@ _add(
     result="归一化系统效率与纯耦合效率",
     description="真实公共平台：功率归一化、可插拔整形、诊断取样、双/三/四透镜耦合与五轴接收共用机械基准。",
     specs=tuple(_common_prefix() + _diagnostic_sampler() + _coupling_tail(start=1040, lenses=2)),
+)
+
+_add(
+    key="lm135c_four_lens_benchmark", group="实验基准", label="780 nm · 四透镜 · LM135C",
+    active_control="保持四透镜顺序，扫描 L4 后 10/15/17.5/27.5/37.5 mm 接收面",
+    coupled_quantities="X/Y 束腰、像散、质心、椭圆率和二阶矩半径随接收面位置共同变化",
+    diagnostics="LM135C 4.65 µm 像元、M=1、像元积分、背景扣除和饱和检查",
+    compensation="先统一 ISO 11146 二阶矩与 ROI，再比较实验和正式仿真残差",
+    result="RMSx、RMSy、径向 RMS、1/e² 半径、拟合残差、椭圆率和质心",
+    description="LM135C 四透镜实验基准。当前镜片按焦距推导近似处方；补齐厂家曲率、厚度、材料、口径与镀膜后方可作为器件级验证。",
+    specs=(
+        ("laser", 90, 310, 0, "780 nm 椭圆高斯源", {
+            "wavelength_nm": 780.0, "source_type": "gaussian", "object_distance_mm": 10.0,
+            "waist_x_um": 800.0, "waist_y_um": 670.0,
+            "beam_quality_m2_x": 7.5, "beam_quality_m2_y": 2.4,
+        }),
+        ("lens", 570, 310, 0, "L1 f=50 mm", {
+            "focal_mm": 50.0, "air_gap_after_mm": 7.5, "material": "N-BK7",
+            "thickness_mm": 3.0, "semi_aperture_mm": 12.5,
+            "coating": "780 nm AR（待器件资料核验）", "coating_min_nm": 650.0, "coating_max_nm": 1050.0,
+        }),
+        ("lens", 790, 310, 0, "L2 f=100 mm", {
+            "focal_mm": 100.0, "air_gap_after_mm": 7.5, "material": "N-BK7",
+            "thickness_mm": 3.0, "semi_aperture_mm": 12.5,
+            "coating": "780 nm AR（待器件资料核验）", "coating_min_nm": 650.0, "coating_max_nm": 1050.0,
+        }),
+        ("lens", 1010, 310, 0, "L3 f=200 mm", {
+            "focal_mm": 200.0, "air_gap_after_mm": 10.0, "material": "N-BK7",
+            "thickness_mm": 3.0, "semi_aperture_mm": 12.5,
+            "coating": "780 nm AR（待器件资料核验）", "coating_min_nm": 650.0, "coating_max_nm": 1050.0,
+        }),
+        ("lens", 1230, 310, 0, "L4 f=200 mm", {
+            "focal_mm": 200.0, "air_gap_after_mm": 17.5, "material": "N-BK7",
+            "thickness_mm": 3.0, "semi_aperture_mm": 12.5,
+            "coating": "780 nm AR（待器件资料核验）", "coating_min_nm": 650.0, "coating_max_nm": 1050.0,
+        }),
+        ("imaging_camera", 1480, 310, 180, "LM135C 接收面", {
+            "camera_model": "LM135C", "pixel_pitch_um": 4.65, "magnification": 1.0,
+            "pixel_integration": True, "background_subtraction": True, "saturation_check": True,
+            "scan_positions_mm": "10,15,17.5,27.5,37.5", "plane_offset_mm": 0.0,
+            "spot_definition": "ISO 11146 二阶矩",
+        }),
+    ),
 )
 _add(
     key="lateral_scan", group="五轴装调", label="横向偏移扫描",
@@ -154,7 +197,7 @@ _add(
 )
 _add(
     key="cylindrical_astigmatism", group="模场整形", label="柱面整形与像散",
-    active_control="柱面镜间距、柱面轴角（零光焦度方向）和模块位置",
+    active_control="柱面镜间距、整体旋转角和模块位置",
     coupled_quantities="椭圆率、X/Y 发散角、两方向束腰位置与像散共同变化",
     diagnostics="多位置 w_x(z)、w_y(z) 与波前像散",
     compensation="分别拟合 q_x、q_y，再优化光纤 Z",
@@ -174,13 +217,13 @@ for count, label in ((2, "双透镜耦合"), (3, "三透镜耦合"), (4, "四透
         coupled_quantities="有效焦距、最终束腰、焦面位置和像差共同改变",
         diagnostics="端面匹配、束腰位置和正式复场耦合",
         compensation="先寻焦，再优化空气间隔，最后替换不合适透镜",
-        result="正式复核耦合效率、系统效率与可实现空气间隔",
+        result="检查耦合效率、系统效率与可实现空气间隔",
         description=f"公共平台保持不变，仅替换{count}透镜耦合模块，用于比较结构自由度与可实现效率。",
         specs=tuple(_common_prefix() + _diagnostic_sampler() + _coupling_tail(start=1040, lenses=count)),
     )
 
 EXPERIMENT_PRESETS: dict[str, ExperimentPreset] = {item.key: item for item in _PRESETS}
-EXPERIMENT_GROUPS: tuple[str, ...] = ("公共平台", "五轴装调", "光束指向", "模场整形", "耦合模块比较")
+EXPERIMENT_GROUPS: tuple[str, ...] = ("实验基准", "公共平台", "五轴装调", "光束指向", "模场整形", "耦合模块比较")
 
 
 def presets_for_group(group: str) -> tuple[ExperimentPreset, ...]:

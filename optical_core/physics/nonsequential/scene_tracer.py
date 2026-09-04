@@ -140,6 +140,32 @@ def _nudge(ray: Ray, epsilon_mm: float) -> Ray:
     return _copy_ray(ray, position_mm=tuple(float(v) for v in point))
 
 
+def _sphere_intersection(
+    ray: Ray,
+    center_mm: np.ndarray,
+    radius_mm: float,
+    *,
+    epsilon_mm: float,
+) -> tuple[np.ndarray, float] | None:
+    """Nearest forward intersection of a unit ray with a sphere."""
+    direction = _normalise(ray.direction)
+    origin = np.asarray(ray.position_mm, dtype=float)
+    offset = origin - np.asarray(center_mm, dtype=float)
+    radius = max(1.0e-6, float(radius_mm))
+    half_b = float(np.dot(direction, offset))
+    c_term = float(np.dot(offset, offset) - radius * radius)
+    discriminant = half_b * half_b - c_term
+    if discriminant < 0.0:
+        return None
+    root = math.sqrt(discriminant)
+    # Prefer the nearer forward root; fall back to the far side if needed.
+    for distance in (-half_b - root, -half_b + root):
+        if distance > float(epsilon_mm) and np.isfinite(distance):
+            point = origin + direction * distance
+            return point, float(distance)
+    return None
+
+
 def _candidate_hit(
     system: SequentialOpticalSystem,
     ray: Ray,
@@ -150,6 +176,36 @@ def _candidate_hit(
 ) -> dict[str, Any] | None:
     surface = system.surfaces[surface_index]
     rotation, origin = _surface_pose(surface, vertex_z_mm)
+    metadata = dict(getattr(surface, "metadata", {}) or {})
+    hit_shape = str(metadata.get("hit_shape", "") or "").strip().lower()
+
+    if hit_shape == "sphere":
+        radius = float(
+            metadata.get(
+                "hit_radius_mm",
+                getattr(surface, "clear_aperture_mm", None) or 5.0,
+            )
+            or 5.0
+        )
+        sphere_hit = _sphere_intersection(ray, origin, radius, epsilon_mm=epsilon_mm)
+        if sphere_hit is None:
+            return None
+        global_point, distance = sphere_hit
+        local_point = rotation.T @ (global_point - origin)
+        local_ray = _transform_ray(ray, rotation, origin, to_local=True)
+        return {
+            "surface_index": int(surface_index),
+            "surface": surface,
+            "rotation": rotation,
+            "origin": origin,
+            "local_ray": local_ray,
+            "local_point": local_point,
+            "global_point": global_point,
+            "distance_mm": float(distance),
+            "inside_aperture": True,
+            "metadata": metadata,
+        }
+
     local_ray = _transform_ray(ray, rotation, origin, to_local=True)
     try:
         hit = intersect_ray_with_surface(local_ray, surface, vertex_z_mm=0.0)
@@ -159,7 +215,6 @@ def _candidate_hit(
         return None
     local_point = np.asarray(hit.point_mm, dtype=float)
     inside = bool(point_passes_surface_aperture(local_point, surface))
-    metadata = dict(getattr(surface, "metadata", {}) or {})
     if not inside and not bool(metadata.get("block_outside_aperture", False)):
         return None
     global_point = origin + rotation @ local_point

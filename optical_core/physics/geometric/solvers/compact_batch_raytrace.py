@@ -32,7 +32,7 @@ def compact_trace_support(system: SequentialOpticalSystem, options: TraceOptions
         if bool(getattr(surface, "has_pose_transform", False)):
             return CompactTraceSupport(False, "decentered/tilted surfaces require the full posed-surface tracer")
         surface_type = str(surface.surface_type).strip().lower()
-        if surface_type not in {"refractive", "transmissive", "refraction", ""}:
+        if surface_type not in {"refractive", "transmissive", "refraction", "aspheric", "spherical", "plane", ""}:
             return CompactTraceSupport(False, f"surface type {surface.surface_type!r} requires the full tracer")
         if surface.coating_layers:
             return CompactTraceSupport(False, "multilayer coatings require the full tracer")
@@ -183,10 +183,20 @@ def _uncoated_amplitudes(cos_i: np.ndarray, n1: float, n2: float) -> tuple[np.nd
     qsp = np.divide(float(n2), cos_t, out=np.full_like(cos_t, np.inf), where=cos_t > 0.0)
     with np.errstate(divide="ignore", invalid="ignore", over="ignore"):
         ts = 2.0 * q0s / (q0s + qss)
-        tp = 2.0 * q0p / (q0p + qsp)
-        flux = np.divide(float(n2) * cos_t, float(n1) * cos_i, out=np.zeros_like(cos_i), where=cos_i > 0.0)
-        Ts = flux * np.abs(ts) ** 2
-        Tp = flux * np.abs(tp) ** 2
+        # The p characteristic-matrix/admittance coefficient is a tangential-E
+        # coefficient.  Convert it to the coefficient of the unit p vector used
+        # by the ray Jones representation, while computing power with the p
+        # optical-admittance ratio.  This mirrors coating._single_polarization
+        # and prevents R+T>1 / compact-vs-full drift at oblique incidence.
+        tp_tangential = 2.0 * q0p / (q0p + qsp)
+        tp = np.divide(
+            tp_tangential * cos_i,
+            cos_t,
+            out=np.zeros_like(tp_tangential),
+            where=cos_t > 0.0,
+        )
+        Ts = np.divide(qss, q0s, out=np.zeros_like(cos_i), where=q0s > 0.0) * np.abs(ts) ** 2
+        Tp = np.divide(qsp, q0p, out=np.zeros_like(cos_i), where=np.isfinite(q0p) & (q0p > 0.0)) * np.abs(tp_tangential) ** 2
     for array in (ts, tp, Ts, Tp):
         array[~np.isfinite(array)] = 0.0
     Ts = np.maximum(Ts, 0.0)
@@ -211,6 +221,7 @@ def _transmit_batch(
     n_after: float,
     wavelength_nm: float,
     apply_surface_physics: bool,
+    polarization_sensitive: bool,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     n = directions.shape[0]
     out_directions = directions.copy()
@@ -239,11 +250,6 @@ def _transmit_batch(
         p_out, p_out_ok = _normalise_rows(np.cross(s, transmitted))
         ts, tp, Ts, Tp, _, coating_tir = _uncoated_amplitudes(cos_i, n_before, n_after)
         pol = polarizations[indices]
-        es = np.sum(np.conj(s) * pol, axis=1)
-        ep = np.sum(np.conj(p_incident) * pol, axis=1)
-        incident_norm2 = np.maximum(np.abs(es) ** 2 + np.abs(ep) ** 2, 1.0e-30)
-        vector = ts[:, None] * es[:, None] * s + tp[:, None] * ep[:, None] * p_out
-        vector_norm = np.sqrt(np.sum(np.abs(vector) ** 2, axis=1))
         explicit_survival = 1.0 - float(surface.surface_absorption_fraction)
         if float(surface.roughness_rms_nm) > 0.0:
             roughness_survival = np.exp(
@@ -253,16 +259,38 @@ def _transmit_batch(
         else:
             roughness_survival = np.ones_like(cos_i)
         survival = explicit_survival * roughness_survival
-        fraction = (
-            (Ts * np.abs(es) ** 2 + Tp * np.abs(ep) ** 2) / incident_norm2
-        ) * survival
-        coherent = (np.conj(es) * ts * es + np.conj(ep) * tp * ep) / incident_norm2
-        phase = np.angle(coherent)
-        branch_ok = basis_ok & p_out_ok & (vector_norm > 1.0e-30) & (fraction > 0.0) & ~coating_tir
+        if polarization_sensitive:
+            es = np.sum(np.conj(s) * pol, axis=1)
+            ep = np.sum(np.conj(p_incident) * pol, axis=1)
+            incident_norm2 = np.maximum(np.abs(es) ** 2 + np.abs(ep) ** 2, 1.0e-30)
+            vector = ts[:, None] * es[:, None] * s + tp[:, None] * ep[:, None] * p_out
+            vector_norm = np.sqrt(np.sum(np.abs(vector) ** 2, axis=1))
+            fraction = (
+                (Ts * np.abs(es) ** 2 + Tp * np.abs(ep) ** 2) / incident_norm2
+            ) * survival
+            coherent = (np.conj(es) * ts * es + np.conj(ep) * tp * ep) / incident_norm2
+            phase = np.angle(coherent)
+            branch_ok = basis_ok & p_out_ok & (vector_norm > 1.0e-30) & (fraction > 0.0) & ~coating_tir
+            normalized_vector = np.zeros_like(vector)
+            np.divide(vector, vector_norm[:, None], out=normalized_vector, where=vector_norm[:, None] > 0.0)
+            out_polarizations[indices] = normalized_vector
+        else:
+            # Scalar / polarization-insensitive tracing must not inherit the arbitrary
+            # lab-X Jones vector used as a storage placeholder.  Use the equal s/p
+            # power average for an unpolarized scalar throughput, while retaining a
+            # transverse placeholder vector only for diagnostics.
+            fraction = 0.5 * (Ts + Tp) * survival
+            coherent = 0.5 * (ts + tp)
+            phase = np.angle(coherent)
+            projected = pol - np.sum(np.conj(transmitted) * pol, axis=1)[:, None] * transmitted
+            vector_norm = np.sqrt(np.sum(np.abs(projected) ** 2, axis=1))
+            fallback = vector_norm <= 1.0e-30
+            if np.any(fallback):
+                projected[fallback] = s[fallback].astype(np.complex128)
+                vector_norm[fallback] = 1.0
+            out_polarizations[indices] = projected / np.maximum(vector_norm[:, None], 1.0e-30)
+            branch_ok = (fraction > 0.0) & ~coating_tir
         local_valid &= branch_ok
-        normalized_vector = np.zeros_like(vector)
-        np.divide(vector, vector_norm[:, None], out=normalized_vector, where=vector_norm[:, None] > 0.0)
-        out_polarizations[indices] = normalized_vector
         amplitude_factor[indices] = np.sqrt(np.maximum(fraction, 0.0))
         power_factor[indices] = np.maximum(fraction, 0.0)
         phase_delta[indices] = phase
@@ -307,6 +335,7 @@ def trace_ray_batch_compact(
     options: TraceOptions,
     *,
     output_level: OutputLevel,
+    progress_callback=None,
 ) -> TraceBundle:
 
     support = compact_trace_support(system, options)
@@ -355,9 +384,15 @@ def trace_ray_batch_compact(
     plane_paths = np.full((segment_count, n), np.nan, dtype=float) if output_level == "planes" else None
     plane_valid = np.zeros((segment_count, n), dtype=bool) if output_level == "planes" else None
 
+    # ``plane_valid`` means that a ray physically reached the surface/plane, not
+    # that it also survived the interaction.  This matches the detailed tracer
+    # and lets us reconstruct the exact ray polyline used by the ray-trace view.
     wavelength_nm = float(options.wavelength_nm or system.wavelength_nm)
     vertices = system.surface_vertex_z_positions()
     segment = 0
+    progress_total = max(1, len(system.surfaces) + (1 if options.propagate_to_image and system.surfaces else 0))
+    if progress_callback is not None:
+        progress_callback(0.0)
     for surface_index, (surface, vertex_z) in enumerate(zip(system.surfaces, vertices)):
         before = valid.copy()
         points, distances, hit_valid = _intersect_batch(
@@ -368,6 +403,7 @@ def trace_ray_batch_compact(
             status_codes[index] = "INTERSECTION_FAILED"
             reasons[index] = "surface intersection failed"
         valid &= hit_valid
+        reached = valid.copy()
         n_before = float(system.material_index(surface.material_before, wavelength_nm))
         lengths = np.abs(distances)
         optical_paths[valid] += lengths[valid] * n_before
@@ -390,6 +426,7 @@ def trace_ray_batch_compact(
             directions, polarizations, points, valid, surface,
             n_before=n_before, n_after=n_after, wavelength_nm=wavelength_nm,
             apply_surface_physics=options.apply_surface_physics,
+            polarization_sensitive=options.polarization_sensitive,
         )
         failed_refraction = valid & ~transmit_valid
         for index in np.flatnonzero(failed_refraction):
@@ -403,11 +440,15 @@ def trace_ray_batch_compact(
         phase_offsets[valid] += phase_delta[valid]
         if output_level == "planes":
             assert plane_positions is not None and plane_directions is not None and plane_paths is not None and plane_valid is not None
-            plane_positions[segment, valid] = positions[valid]
-            plane_directions[segment, valid] = directions[valid]
-            plane_paths[segment, valid] = optical_paths[valid]
-            plane_valid[segment] = valid
+            plane_positions[segment, reached] = positions[reached]
+            # Successful rays carry their outgoing direction; rays terminated at
+            # this surface keep the incoming direction, exactly like DetailedRayTrace.
+            plane_directions[segment, reached] = directions[reached]
+            plane_paths[segment, reached] = optical_paths[reached]
+            plane_valid[segment] = reached
         segment += 1
+        if progress_callback is not None:
+            progress_callback(segment / progress_total)
 
     if options.propagate_to_image and system.surfaces:
         before = valid.copy()
@@ -422,6 +463,7 @@ def trace_ray_batch_compact(
             status_codes[index] = "IMAGE_PROPAGATION_FAILED"
             reasons[index] = "cannot propagate to image plane"
         valid &= image_ok
+        reached = valid.copy()
         points = positions + distances[:, None] * directions
         n_image = float(system.material_index(system.surfaces[-1].material_after, wavelength_nm))
         lengths = np.abs(distances)
@@ -433,10 +475,12 @@ def trace_ray_batch_compact(
         cumulative_opl[valid, segment] = optical_paths[valid]
         if output_level == "planes":
             assert plane_positions is not None and plane_directions is not None and plane_paths is not None and plane_valid is not None
-            plane_positions[segment, valid] = positions[valid]
-            plane_directions[segment, valid] = directions[valid]
-            plane_paths[segment, valid] = optical_paths[valid]
-            plane_valid[segment] = valid
+            plane_positions[segment, reached] = positions[reached]
+            plane_directions[segment, reached] = directions[reached]
+            plane_paths[segment, reached] = optical_paths[reached]
+            plane_valid[segment] = reached
+        if progress_callback is not None:
+            progress_callback(1.0)
 
     status_codes[valid] = "REACHED_IMAGE" if options.propagate_to_image else "REACHED_LAST_SURFACE"
     final_positions = np.full((n, 3), np.nan, dtype=float)
@@ -469,6 +513,29 @@ def trace_ray_batch_compact(
                 polarizations=polarizations,
             )
 
+    path_points = None
+    path_offsets = None
+    path_surface_indices = None
+    if output_level == "planes":
+        assert plane_positions is not None and plane_valid is not None
+        flat_points: list[np.ndarray] = []
+        flat_indices: list[int] = []
+        offsets = [0]
+        for ray_index in range(n):
+            flat_points.append(input_positions[ray_index])
+            flat_indices.append(-1)
+            for item in range(segment_count):
+                if plane_valid[item, ray_index]:
+                    flat_points.append(plane_positions[item, ray_index])
+                    flat_indices.append(item)
+            offsets.append(len(flat_points))
+        path_points = (
+            np.asarray(flat_points, dtype=float).reshape((-1, 3))
+            if flat_points else np.empty((0, 3), dtype=float)
+        )
+        path_offsets = np.asarray(offsets, dtype=np.int64)
+        path_surface_indices = np.asarray(flat_indices, dtype=np.int32)
+
     warnings = [f"ray[{i}] {ray_ids[i]}: {reason}" for i, reason in enumerate(reasons) if reason]
     return TraceBundle(
         final_positions_mm=final_positions, final_directions=final_directions,
@@ -478,11 +545,12 @@ def trace_ray_batch_compact(
         surface_records=surface_records, warnings=warnings, ray_ids=ray_ids,
         pupil_coordinates_normalized=(None if rays.pupil_coordinates_normalized is None else rays.pupil_coordinates_normalized.copy()),
         status_codes=status_codes, termination_reasons=reasons,
-        path_points_mm=None, path_offsets=None, path_surface_indices=None,
+        path_points_mm=path_points, path_offsets=path_offsets, path_surface_indices=path_surface_indices,
         segment_lengths_mm=segment_lengths, segment_refractive_indices=segment_indices,
         segment_opl_mm=segment_opl, cumulative_opl_mm=cumulative_opl,
         phase_offsets_rad=phase_offsets, polarization_vectors_xyz=polarizations,
         surface_interaction_records=[[] for _ in range(n)],
+        surface_physics_applied=bool(options.apply_surface_physics),
     )
 
 

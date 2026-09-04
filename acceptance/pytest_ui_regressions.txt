@@ -1,0 +1,6 @@
+﻿..........F........                                                      [100%]
+================================== FAILURES ===================================
+D:\optical_ml_workspace\tests\test_simulation_research_experiment_scene_regressions.py:238: assert 5 == 1
+=========================== short test summary info ===========================
+FAILED tests/test_simulation_research_experiment_scene_regressions.py::test_quick3d_world_projection_uses_one_formal_ray_when_available
+1 failed, 18 passed in 6.65s

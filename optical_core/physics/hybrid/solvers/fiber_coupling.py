@@ -744,15 +744,23 @@ def solve_fiber_coupling(
     prepared_problem: PreparedCouplingProblem | None = None,
 ) -> FiberCouplingSolverResult:
     problem = prepared_problem or prepare_fiber_coupling(trace, options)
-    options = problem.options
+
+    # The prepared problem deliberately excludes receiver alignment and, for the
+    # scalar solver, MFD from its cache key so scans/optimisation/tolerance runs
+    # can reuse the expensive pupil propagation.  Therefore the *current*
+    # request options must remain authoritative for those lightweight overlap
+    # coordinates.  Replacing ``options`` with ``problem.options`` here would
+    # silently restore the nominal cached values and make every tolerance sample
+    # look identical.
+    active_options = options
     evaluation = problem.evaluate(
-        offset_x_mm=options.offset_x_mm,
-        offset_y_mm=options.offset_y_mm,
-        receiver_axial_offset_z_mm=options.receiver_axial_offset_z_mm,
-        tilt_x_rad=options.tilt_x_rad,
-        tilt_y_rad=options.tilt_y_rad,
-        mode_field_diameter_x_um=options.mode_field_diameter_x_um,
-        mode_field_diameter_y_um=options.mode_field_diameter_y_um,
+        offset_x_mm=active_options.offset_x_mm,
+        offset_y_mm=active_options.offset_y_mm,
+        receiver_axial_offset_z_mm=active_options.receiver_axial_offset_z_mm,
+        tilt_x_rad=active_options.tilt_x_rad,
+        tilt_y_rad=active_options.tilt_y_rad,
+        mode_field_diameter_x_um=active_options.mode_field_diameter_x_um,
+        mode_field_diameter_y_um=active_options.mode_field_diameter_y_um,
     )
     field_obj = evaluation.receiver_field
     mode = evaluation.receiving_mode
@@ -762,12 +770,16 @@ def solve_fiber_coupling(
     centered_eval = problem.evaluate(
         offset_x_mm=0.0,
         offset_y_mm=0.0,
+        receiver_axial_offset_z_mm=active_options.receiver_axial_offset_z_mm,
         tilt_x_rad=0.0,
         tilt_y_rad=0.0,
+        mode_field_diameter_x_um=active_options.mode_field_diameter_x_um,
+        mode_field_diameter_y_um=active_options.mode_field_diameter_y_um,
     )
     centered = decompose_scalar_overlap(
         centered_eval.receiver_field, centered_eval.receiving_mode
     )
+    options = active_options
     scalar_eta = actual.complex_efficiency
     alignment_efficiency = (
         scalar_eta / centered.complex_efficiency
@@ -843,6 +855,30 @@ def solve_fiber_coupling(
     mode_power = float(mode.integrated_power)
     field_diag = _field_diagnostics(field_obj)
     mode_diag = _field_diagnostics(mode)
+
+    # A single-mode receiver can be much smaller than a same-pitch angular-spectrum
+    # output grid.  In that case a Gaussian/LP mode collapses to one sample and the
+    # discrete overlap becomes spuriously insensitive to tilt.  Automatic GUI
+    # numerics select a scaled receiver-plane propagation that resolves the mode;
+    # expert/manual settings are still honoured, but the result is explicitly
+    # flagged when the requested target mode is under-resolved.
+    mode_sampling_metrics: dict[str, Any] = {}
+    analytic_mode = str(options.mode_model) in {"gaussian", "lp01", "he11"}
+    if analytic_mode:
+        radius_x_mm = max(float(options.mode_field_diameter_x_um) * 0.5e-3, 1.0e-15)
+        radius_y_mm = max(float(options.mode_field_diameter_y_um) * 0.5e-3, 1.0e-15)
+        points_x = radius_x_mm / max(abs(float(field_obj.grid.dx_mm)), 1.0e-30)
+        points_y = radius_y_mm / max(abs(float(field_obj.grid.dy_mm)), 1.0e-30)
+        minimum_points_per_radius = 4.0
+        mode_sampling_pass = bool(
+            points_x >= minimum_points_per_radius and points_y >= minimum_points_per_radius
+        )
+        mode_sampling_metrics = {
+            "coupling_mode_sampling_points_per_radius_x": float(points_x),
+            "coupling_mode_sampling_points_per_radius_y": float(points_y),
+            "coupling_mode_sampling_min_points_per_radius": minimum_points_per_radius,
+            "coupling_mode_sampling_pass": mode_sampling_pass,
+        }
     valid = np.asarray(trace.valid_mask, dtype=bool)
     geometric_fraction = float(np.count_nonzero(valid) / valid.size) if valid.size else 0.0
 
@@ -887,6 +923,7 @@ def solve_fiber_coupling(
         "coupling_mode_rms_x_um": mode_diag["rms_x_um"],
         "coupling_mode_rms_y_um": mode_diag["rms_y_um"],
         "coupling_mode_rms_radius_um": mode_diag["rms_radius_um"],
+        **mode_sampling_metrics,
         **vector_metrics,
         **field_result.metrics,
         **problem.fiber_metrics,
@@ -920,12 +957,21 @@ def solve_fiber_coupling(
             "x_polarization_x_fiber_interface"
         ),
         "surface_physics_in_main_chain": bool(
-            any(bool(records) for records in getattr(trace, "surface_interaction_records", []))
+            getattr(trace, "surface_physics_applied", False)
+            or any(bool(records) for records in getattr(trace, "surface_interaction_records", []))
         ),
         **field_result.metadata,
     }
 
     warnings = [*problem.warnings, *field_result.warnings, *vector_warnings]
+    if mode_sampling_metrics and not bool(mode_sampling_metrics.get("coupling_mode_sampling_pass", True)):
+        warnings.append(
+            "Receiver mode is under-resolved on the propagated field grid "
+            f"({mode_sampling_metrics['coupling_mode_sampling_points_per_radius_x']:.3g} × "
+            f"{mode_sampling_metrics['coupling_mode_sampling_points_per_radius_y']:.3g} samples per mode radius; "
+            f"need >= {mode_sampling_metrics['coupling_mode_sampling_min_points_per_radius']:.0f}). "
+            "Use automatic sampling or a scaled receiver-plane propagation before interpreting coupling/alignment results."
+        )
     if options.receiver_na_x is not None and gaussian_mode_na_x > float(options.receiver_na_x) * 1.001:
         warnings.append(
             f"Gaussian-equivalent mode NA_x={gaussian_mode_na_x:.6g} exceeds receiver NA_x={float(options.receiver_na_x):.6g}."
@@ -977,9 +1023,14 @@ def solve_fiber_coupling(
             **field_result.arrays,
         }
     elif array_policy == "field_only":
+        # UI diagnostics need the target mode as well as the incident complex field.
+        # This does not alter coupling physics; it only exposes the already-computed mode
+        # so mode matching / overlap-contribution plots never fall back to fabricated data.
         arrays = {
             "coupling_field_real": np.asarray(field_obj.values.real),
             "coupling_field_imag": np.asarray(field_obj.values.imag),
+            "coupling_mode_intensity": np.asarray(np.abs(mode.values) ** 2, dtype=np.float32),
+            "coupling_mode_phase_rad": np.asarray(np.angle(mode.values), dtype=np.float32),
             "coupling_grid_x_mm": np.asarray(field_obj.grid.x_mm),
             "coupling_grid_y_mm": np.asarray(field_obj.grid.y_mm),
         }

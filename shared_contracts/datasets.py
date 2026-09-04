@@ -25,6 +25,10 @@ class DatasetGenerationRequest(BaseModel):
     random_seed: int = 42
     precision: str = "standard"
     engine: Optional[str] = None
+    # Some curated demo/interpretability datasets intentionally train only on
+    # user-controlled variables.  Keeping the default True preserves the richer
+    # physics-residual feature set for normal research datasets.
+    include_derived_physics_features: bool = True
 
 
 class DatasetManifest(BaseModel):

@@ -144,6 +144,8 @@ def diagnosis_confidence(shap_data: dict[str, Any] | None) -> tuple[str, str]:
     targets = list(data.get("targets", []) or [])
     target = targets[0] if targets and isinstance(targets[0], dict) else {}
     sample_count = int(data.get("sample_count", target.get("sample_count", 0)) or 0)
+    test_r2 = data.get("model_test_r2", data.get("test_r2"))
+    additivity_error = data.get("additivity_error", target.get("additivity_error"))
     in_domain = data.get("within_training_domain", data.get("in_training_domain"))
     if in_domain is None:
         in_domain = target.get("within_training_domain", target.get("in_training_domain"))
@@ -154,14 +156,18 @@ def diagnosis_confidence(shap_data: dict[str, Any] | None) -> tuple[str, str]:
         for row in rows
     )
     if in_domain is False:
-        return "较低", "当前方案超出训练范围；失配方向仅供参考，建议运行正式扫描。"
-    if sample_count < 10:
-        return "暂不可判断", "有效解释样本不足10个，暂不评价诊断稳定性。"
-    if in_domain is True and formal_reviewed:
-        return "较高", "当前方案位于训练范围内，并有正式仿真值可用于复核。"
-    if in_domain is True or sample_count >= 20:
+        return "较低", "当前系统超出训练范围；失配方向仅供参考，建议运行正式扫描。"
+    if isinstance(test_r2, (int, float)) and float(test_r2) < 0.60:
+        return "仅探索", f"独立测试 R²={float(test_r2):.3f}，模型尚不足以支持物理结论。"
+    if isinstance(additivity_error, (int, float)) and abs(float(additivity_error)) > 0.01:
+        return "较低", f"SHAP 加和误差为 {float(additivity_error):.4g}，解释一致性未通过门槛。"
+    if sample_count < 20:
+        return "仅探索", "有效解释样本不足20个；少量轴向测点应优先使用拟合、残差和正式参数扫描。"
+    if isinstance(test_r2, (int, float)) and float(test_r2) >= 0.80 and in_domain is True and formal_reviewed:
+        return "较高", "当前系统位于训练范围内，并有正式仿真值可用于复核。"
+    if isinstance(test_r2, (int, float)) and float(test_r2) >= 0.60 and (in_domain is True or sample_count >= 20):
         return "中等", "模型可用于判断失配方向，最终效率仍应以正式仿真为准。"
-    return "较低", "训练域或正式复核信息不足，建议补充正式仿真。"
+    return "暂不可判断", "缺少独立测试 R²、训练域或完整仿真信息，不能把 SHAP 贡献解释为物理原因。"
 
 
 def formula_binding_for_feature(feature_name: str) -> tuple[str, str, str, str]:
@@ -362,7 +368,7 @@ def build_markdown_report(
         local_rows = anomaly_rows(data, limit=10)
         if local_rows:
             lines.extend([
-                "| 样本 | 总 |SHAP| | 主导特征 | 主导贡献 | 输出 |",
+                "| 样本 | 总 |SHAP| | 候选主导特征 | 候选贡献 | 输出 |",
                 "|---|---:|---|---:|---|",
             ])
             for sample_id, total, feature, contribution, output in local_rows:
@@ -511,7 +517,7 @@ def build_structured_report_html(
         parts.append("<div class='card'><h2>局部样本解释</h2>")
         local = anomaly_rows(data, limit=8)
         if local:
-            parts.append("<table class='grid'><tr><th>样本</th><th>总绝对贡献</th><th>主导特征</th><th>主导贡献</th></tr>")
+            parts.append("<table class='grid'><tr><th>样本</th><th>总绝对贡献</th><th>候选主导特征</th><th>候选贡献</th></tr>")
             for sample_id, total, feature, contribution, _output in local:
                 parts.append(
                     f"<tr><td>{escape(str(sample_id))}</td><td>{float(total):.6g}</td>"
@@ -533,7 +539,7 @@ def build_structured_report_html(
             )
         else:
             parts.append(
-                "<tr><td>当前主导特征尚无可直接使用的解析公式，应通过参数扫描和正式仿真复核。</td></tr>"
+                "<tr><td>当前候选特征尚无可直接使用的解析公式，应通过参数扫描和正式仿真复核。</td></tr>"
             )
         parts.append("</table></div>")
 
@@ -544,8 +550,8 @@ def build_structured_report_html(
         parts.append(
             "<div class='card'><h2>一致性与异常说明</h2><table class='grid'>"
             f"<tr><td class='key'>SHAP 加性误差</td><td>{escape(str(additive))}</td></tr>"
-            f"<tr><td class='key'>训练域状态</td><td>{escape(domain_text)}</td></tr>"
-            "<tr><td class='key'>正式复核</td><td>高贡献样本仍需结合正式光学仿真复核。</td></tr>"
+            f"<tr><td class='key'>训练范围</td><td>{escape(domain_text)}</td></tr>"
+            "<tr><td class='key'>完整仿真</td><td>高贡献样本仍需结合正式光学仿真复核。</td></tr>"
             "</table></div>"
         )
 

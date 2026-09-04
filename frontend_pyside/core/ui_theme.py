@@ -68,10 +68,10 @@ def apply_application_theme(app: QApplication) -> None:
     app.setPalette(_application_palette())
     font = QFont(_available_font_family())
     try:
-        point_size = float(os.environ.get("OPTICAL_UI_FONT_PT", "12.5"))
+        point_size = float(os.environ.get("OPTICAL_UI_FONT_PT", "13.5"))
     except ValueError:
-        point_size = 12.5
-    font.setPointSizeF(max(10.5, min(point_size, 15.0)))
+        point_size = 13.5
+    font.setPointSizeF(max(10.5, min(point_size, 16.0)))
     font.setHintingPreference(QFont.HintingPreference.PreferFullHinting)
     app.setFont(font)
 

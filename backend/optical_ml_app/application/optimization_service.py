@@ -1,6 +1,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -138,6 +139,63 @@ def _evaluate_candidate(
     )
 
 
+
+def _formal_candidate_summary(
+    *,
+    final_x: np.ndarray,
+    best_metrics: dict[str, Any],
+    best_merit: float,
+    history: list[OptimizationIteration],
+    variables: list[dict],
+    limit: int = 3,
+) -> list[dict[str, Any]]:
+    """Return a few *already formally simulated* and meaningfully distinct candidates.
+
+    Inverse design should not show cosmetic A/B/C rows fabricated from the same optimum.
+    The optimizer history contains formal simulations, so reuse those verified points and
+    suppress near-duplicates in normalized design-variable space.
+    """
+    rows: list[tuple[np.ndarray, dict[str, Any], float]] = [
+        (np.asarray(final_x, dtype=float), dict(best_metrics), float(best_merit))
+    ]
+    for item in sorted(history, key=lambda record: float(record.merit)):
+        vector = np.asarray(item.variables, dtype=float)
+        if vector.size != len(variables) or not np.all(np.isfinite(vector)):
+            continue
+        rows.append((vector, dict(item.metrics), float(item.merit)))
+
+    spans = np.asarray(
+        [max(float(v["upper_bound"]) - float(v["lower_bound"]), 1e-12) for v in variables],
+        dtype=float,
+    )
+    chosen: list[tuple[np.ndarray, dict[str, Any], float]] = []
+    for vector, metrics, merit in rows:
+        if any(np.linalg.norm((vector - other[0]) / spans) < 0.025 for other in chosen):
+            continue
+        chosen.append((vector, metrics, merit))
+        if len(chosen) >= max(1, int(limit)):
+            break
+
+    output: list[dict[str, Any]] = []
+    for index, (vector, metrics, merit) in enumerate(chosen):
+        variables_map = {variables[i]["path"]: float(vector[i]) for i in range(len(variables))}
+        efficiency = metrics.get("coupling_efficiency")
+        system_efficiency = metrics.get("system_efficiency")
+        output.append(
+            {
+                "label": f"方案{chr(65 + index)}",
+                "name": f"方案{chr(65 + index)}",
+                "variables": variables_map,
+                "metrics": metrics,
+                "merit": merit,
+                "formal_efficiency": efficiency,
+                "coupling_efficiency": efficiency,
+                "system_efficiency": system_efficiency,
+                "verification_status": "formal_simulation",
+            }
+        )
+    return output
+
 def _select_surrogate_model(
     model_registry: Any,
     requested_model_id: str,
@@ -258,12 +316,22 @@ def _run_optimization_task(
     base_request: SimulationRequest,
     opt_request: OptimizationRequest,
     dataset_root: str | None = None,
-    model_registry: Any | None = None,
+    model_registry_root: str | None = None,
 ) -> OptimizationResult:
     from optical_runtime import create_optical_simulation_engine
+    # Worker arguments must remain spawn/persistent-worker serializable.
+    # FileModelRegistry contains an RLock for its in-process cache, so passing the
+    # live registry object through multiprocessing leaves optimization jobs stuck
+    # in queued. Reconstruct the lightweight registry inside the worker instead.
+    model_registry = None
+    if model_registry_root:
+        from machine_learning.registry.model_registry import FileModelRegistry
+        model_registry = FileModelRegistry(Path(model_registry_root))
 
     context.progress.update(0.03, "optimization.initializing", 0, 1)
-    engine = create_optical_simulation_engine()
+    engine = context.get_or_create_resource(
+        "optical_engine", create_optical_simulation_engine
+    )
     context.progress.update(0.05, "optimization.preparing", 0, 1)
     objectives = [objective.model_dump() for objective in opt_request.objectives]
     active_variables = [
@@ -399,6 +467,29 @@ def _run_optimization_task(
         )
         return float(_compute_merit(metrics, objectives) + constraint_penalty)
 
+    # The current system is a first-class candidate.  Without this formal baseline
+    # an inaccurate surrogate can seed refinement in a poor region and return an
+    # "optimised" design that is worse than the system the user started from.
+    # Count this baseline inside the user's fixed evaluation budget.
+    baseline_merit = formal_objective(initial_x)
+    remaining_budget = max_evaluations - 1
+    if remaining_budget < 8:
+        return OptimizationResult(
+            request_id=opt_request.request_id,
+            status="failed",
+            optimizer=opt_request.optimizer,
+            best_variables={
+                active_variables[index]["path"]: float(initial_x[index])
+                for index in range(len(active_variables))
+            },
+            best_metrics=dict(history[0].metrics) if history else {},
+            best_merit=float(baseline_merit),
+            history=history,
+            total_evaluations=formal_counter,
+            total_iterations=len(history),
+            warnings=["Optimization budget is too small after formal baseline verification"],
+        )
+
     coarse_objective = surrogate_objective if surrogate_predict else formal_objective
     try:
         search = run_hybrid_search(
@@ -407,7 +498,7 @@ def _run_optimization_task(
             initial_x,
             coarse_method=opt_request.optimizer,
             seed=opt_request.random_seed,
-            max_evaluations=max_evaluations,
+            max_evaluations=remaining_budget,
             tolerance=opt_request.convergence_tolerance,
             coarse_fraction=coarse_fraction,
             refinement_objective=formal_objective if surrogate_predict else None,
@@ -426,9 +517,11 @@ def _run_optimization_task(
         )
 
     final_key = tuple(np.round(search.final_x, 12))
-    best_metrics = evaluated_metrics.get(final_key)
-    if best_metrics is None:
-        best_metrics, _, _, warnings = _evaluate_candidate(
+    search_final_metrics = evaluated_metrics.get(final_key)
+    if search_final_metrics is None:
+        # Defensive fallback only. run_hybrid_search normally verifies final_x via
+        # formal_objective, which already records the point in history.
+        search_final_metrics, search_final_merit, _feasible, warnings = _evaluate_candidate(
             search.final_x,
             active_variables,
             base_request,
@@ -439,6 +532,22 @@ def _run_optimization_task(
             collimation_constraint,
         )
         constraint_warnings.update(warnings)
+        history.append(
+            OptimizationIteration(
+                iteration=len(history),
+                evaluations=formal_counter + 1,
+                variables=np.asarray(search.final_x, dtype=float).tolist(),
+                metrics=dict(search_final_metrics),
+                merit=float(search_final_merit),
+            )
+        )
+
+    # Select the best point among *all formally simulated candidates*, including
+    # the baseline current system.  Search termination points are not privileged.
+    best_iteration = min(history, key=lambda record: float(record.merit))
+    best_x = np.asarray(best_iteration.variables, dtype=float)
+    best_metrics = dict(best_iteration.metrics)
+    best_merit = float(best_iteration.merit)
 
     feedback_sample_id = ""
     feedback_dataset_id = str(
@@ -448,7 +557,7 @@ def _run_optimization_task(
         from machine_learning.workflow.feedback import append_verified_result
 
         verified_project = _candidate_project(
-            search.final_x, active_variables, base_request
+            best_x, active_variables, base_request
         )
         feedback_sample_id = append_verified_result(
             dataset_root,
@@ -456,7 +565,7 @@ def _run_optimization_task(
             request_id=opt_request.request_id,
             project=verified_project,
             feature_values={
-                active_variables[index]["path"]: float(search.final_x[index])
+                active_variables[index]["path"]: float(best_x[index])
                 for index in range(len(active_variables))
             },
             target_values=best_metrics,
@@ -477,7 +586,7 @@ def _run_optimization_task(
     hard_collimation_required = bool(
         collimation_constraint and collimation_constraint.hard
     )
-    success = np.isfinite(search.final_value) and (
+    success = np.isfinite(best_merit) and (
         not hard_collimation_required or collimation_feasible
     )
     fallback_warning = (
@@ -496,11 +605,19 @@ def _run_optimization_task(
         status="completed" if success else "failed",
         optimizer=opt_request.optimizer,
         best_variables={
-            active_variables[index]["path"]: float(search.final_x[index])
+            active_variables[index]["path"]: float(best_x[index])
             for index in range(len(active_variables))
         },
         best_metrics=best_metrics,
-        best_merit=float(search.final_value),
+        best_merit=best_merit,
+        candidates=_formal_candidate_summary(
+            final_x=best_x,
+            best_metrics=best_metrics,
+            best_merit=best_merit,
+            history=history,
+            variables=active_variables,
+            limit=3,
+        ),
         history=history,
         total_evaluations=surrogate_counter + formal_counter,
         total_iterations=len(history),
@@ -526,11 +643,23 @@ def _run_optimization_task(
             "coarse_predicted_merit": search.coarse_value,
             "coarse_formal_merit": search.coarse_verified_value,
             "powell_best_merit": search.refined_value,
+            "baseline_formal_merit": float(baseline_merit),
+            # Freeze task-submit baseline/target semantics in the result.  The UI
+            # must never reconstruct "before" from a project that the user may
+            # already have changed or applied a candidate to.
+            "baseline_metrics": dict(history[0].metrics) if history else {},
+            "objective_definitions": [dict(item) for item in objectives],
+            "search_final_formal_merit": float(search.final_value),
+            "selected_best_formal_merit": best_merit,
+            "selected_best_is_baseline": bool(np.allclose(best_x, initial_x, rtol=0.0, atol=1e-12)),
             "surrogate_evaluations": surrogate_counter,
             "formal_evaluations": formal_counter,
             "coarse_evaluations": search.coarse_evaluations,
             "powell_evaluations": search.refinement_evaluations,
             "active_variables": [item["path"] for item in active_variables],
+            "parameter_snapshot": list(
+                opt_request.options.get("parameter_snapshot", []) or []
+            ),
             "objectives": [item["metric"] for item in objectives],
             "constraints": list(opt_request.constraints),
             "collimation_constraint_enabled": bool(collimation_constraint),
@@ -553,6 +682,10 @@ class OptimizationApplicationService:
         self.task_manager = task_manager
         self.dataset_root = dataset_root
         self.model_registry = model_registry
+        # Only a filesystem path may cross the worker boundary. The registry
+        # instance itself owns a thread RLock and is intentionally not picklable.
+        root = getattr(model_registry, "root", None) if model_registry is not None else None
+        self.model_registry_root = str(root) if root is not None else None
 
     def submit(
         self,
@@ -581,6 +714,7 @@ class OptimizationApplicationService:
             base_request,
             opt_request,
             self.dataset_root,
-            self.model_registry,
+            self.model_registry_root,
             timeout_seconds=timeout_seconds,
+            idempotency_key=f"optimization:{opt_request.request_id}",
         )

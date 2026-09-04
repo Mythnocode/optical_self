@@ -1,0 +1,14 @@
+﻿D:\anaconda\python.exe : Traceback (most recent call last):
+所在位置 C:\Users\21695\AppData\Local\Temp\ps-script-297c6c2d-bcbf-4202-b6df-8bb6be661a2e.ps1:88 字符: 39
++ ... _workspace; D:\anaconda\python.exe tools\platform_click_audit.py 2>&1 ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "D:\optical_ml_workspace\tools\platform_click_audit.py", line 327, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "D:\optical_ml_workspace\tools\platform_click_audit.py", line 322, in main
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'gbk' codec can't encode character '\u25f7' in position 1771: illegal multibyte sequence

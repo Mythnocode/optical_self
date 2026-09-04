@@ -1,0 +1,105 @@
+{
+  "name": "four_lens",
+  "label": "Laser → L1(f50) → L2(f100) → L3(f200) → L4(f200) → CCD",
+  "wavelength_nm": 780.0,
+  "ccd_scan_positions_mm": [10.0, 15.0, 17.5, 27.5, 37.5],
+  "components": [
+    {
+      "kind": "laser",
+      "id": "laser",
+      "label": "Laser",
+      "x": 90,
+      "y": 310,
+      "rotation_deg": 0,
+      "params": {
+        "wavelength_nm": 780.0,
+        "source_type": "gaussian",
+        "object_distance_mm": 10.0,
+        "waist_x_um": 800.0,
+        "waist_y_um": 670.0,
+        "beam_quality_m2_x": 7.5,
+        "beam_quality_m2_y": 2.4
+      }
+    },
+    {
+      "kind": "lens",
+      "id": "lens_1",
+      "label": "L1 f=50",
+      "x": 570,
+      "y": 310,
+      "rotation_deg": 0,
+      "params": {
+        "focal_mm": 50.0,
+        "air_gap_after_mm": 7.5,
+        "material": "N-BK7",
+        "thickness_mm": 3.0,
+        "semi_aperture_mm": 12.5,
+        "enabled": true
+      }
+    },
+    {
+      "kind": "lens",
+      "id": "lens_2",
+      "label": "L2 f=100",
+      "x": 790,
+      "y": 310,
+      "rotation_deg": 0,
+      "params": {
+        "focal_mm": 100.0,
+        "air_gap_after_mm": 7.5,
+        "material": "N-BK7",
+        "thickness_mm": 3.0,
+        "semi_aperture_mm": 12.5,
+        "enabled": true
+      }
+    },
+    {
+      "kind": "lens",
+      "id": "lens_3",
+      "label": "L3 f=200",
+      "x": 1010,
+      "y": 310,
+      "rotation_deg": 0,
+      "params": {
+        "focal_mm": 200.0,
+        "air_gap_after_mm": 10.0,
+        "material": "N-BK7",
+        "thickness_mm": 3.0,
+        "semi_aperture_mm": 12.5,
+        "enabled": true
+      }
+    },
+    {
+      "kind": "lens",
+      "id": "lens_4",
+      "label": "L4 f=200",
+      "x": 1230,
+      "y": 310,
+      "rotation_deg": 0,
+      "params": {
+        "focal_mm": 200.0,
+        "air_gap_after_mm": 17.5,
+        "material": "N-BK7",
+        "thickness_mm": 3.0,
+        "semi_aperture_mm": 12.5,
+        "enabled": true
+      }
+    },
+    {
+      "kind": "ccd",
+      "id": "ccd",
+      "label": "CCD",
+      "x": 1480,
+      "y": 310,
+      "rotation_deg": 180,
+      "params": {
+        "camera_model": "LM135C",
+        "pixel_pitch_um": 4.65,
+        "magnification": 1.0,
+        "scan_positions_mm": "10,15,17.5,27.5,37.5",
+        "plane_offset_mm": 0.0,
+        "spot_definition": "ISO 11146 二阶矩"
+      }
+    }
+  ]
+}

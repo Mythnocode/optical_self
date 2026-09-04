@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from frontend_pyside.shared.components.basic import InfoRow
-from frontend_pyside.shared.task_display import progress_percent, stable_progress_text
+from frontend_pyside.shared.task_display import progress_percent, stable_progress_text, terminal_progress
 
 
 class TaskDetailMixin:
@@ -85,6 +85,8 @@ class TaskDetailMixin:
         if selected_type != "全部类型" and selected_type not in localized_kind:
             return False
         selected_status = self.status_filter.currentText()
+        if selected_status == "全部任务":
+            return True
         if selected_status == "全部未完成":
             return status in {"运行中", "等待中", "已暂停"}
         if selected_status == "等待中":
@@ -94,6 +96,13 @@ class TaskDetailMixin:
         return selected_status == status
 
     def _apply_filter(self, *_):
+        # Preserve selection by the task/job identity, never by display text.
+        # Several scans legitimately share the same name and kind, so a visual
+        # (name, kind) identity can silently attach the detail panel to another
+        # task after a remote refresh.
+        selected_before = self._selected_task()
+        selected_job_id = str((selected_before or {}).get("job_id", "") or "")
+        selected_task_id = str((selected_before or {}).get("id", "") or "")
         active = [task for task in self._all_tasks if self._matches(task)]
         self._visible_tasks = active
         rows: list[list[str]] = []
@@ -127,6 +136,23 @@ class TaskDetailMixin:
         self.table.set_rows(rows, tooltips=tooltips, align_columns=(1, 2, 3))
         if not active:
             self._clear_detail()
+        elif selected_job_id or selected_task_id:
+            selected_index = next(
+                (
+                    index
+                    for index, task in enumerate(active)
+                    if (selected_job_id and str(task.get("job_id", "") or "") == selected_job_id)
+                    or (selected_task_id and str(task.get("id", "") or "") == selected_task_id)
+                ),
+                -1,
+            )
+            if selected_index >= 0:
+                self.table.setCurrentCell(selected_index, 0)
+                # setCurrentCell does not emit when the numerical row happens to
+                # stay unchanged, so refresh detail explicitly with the newest
+                # authoritative task object.
+                self._selected_task_override = None
+                self._show_task_detail(active[selected_index])
 
         completed = [
             task
@@ -148,8 +174,10 @@ class TaskDetailMixin:
             ]
             for task in completed
         ]
-        self.completed_table.set_rows(completed_rows, align_columns=(0, 2, 3, 4), eager_rows=50)
-        self.history_section.header.setText(f"任务历史　{len(completed)} 个")
+        if hasattr(self, "completed_table"):
+            self.completed_table.set_rows(completed_rows, align_columns=(0, 2, 3, 4), eager_rows=50)
+        if hasattr(self, "history_section"):
+            self.history_section.header.setText(f"任务历史　{len(completed)} 个")
 
     def _task_at(self, row: int) -> dict | None:
         return self._visible_tasks[row] if 0 <= row < len(self._visible_tasks) else None
@@ -183,6 +211,17 @@ class TaskDetailMixin:
         )
         self.detail_badge.setText(status)
         self.detail_badge.set_tone(tone)
+        if hasattr(self, "detail_empty"):
+            self.detail_empty.hide()
+        if hasattr(self, "detail_tabs"):
+            self.detail_tabs.show()
+        if hasattr(self, "failure_banner"):
+            if status == "失败":
+                reason = str(task.get("note") or task.get("error") or "后端未返回明确失败原因")
+                self.failure_banner.setText(f"× 任务失败：{reason}")
+                self.failure_banner.show()
+            else:
+                self.failure_banner.hide()
         self._set_info(self.detail_name, "任务名称", str(task.get("name", "—")))
         self._set_info(self.detail_kind, "任务类型", self._kind_text(task.get("kind", "—")))
         self._set_info(
@@ -203,8 +242,31 @@ class TaskDetailMixin:
             self._format_duration(task.get("duration_s")),
         )
         self._set_info(self.detail_note, "当前信息", str(task.get("note", "—")))
-        progress = progress_percent(task.get("progress", 0))
+        self._set_info(self.detail_job_id, "任务 ID", str(task.get("job_id") or task_id or "—"))
+        error_code = str(task.get("error_code", "") or "")
+        error_stage = str(task.get("error_stage", "") or "")
+        self._set_info(
+            self.detail_error_code,
+            "错误代码",
+            (f"{error_code} · {error_stage}" if error_code and error_stage else error_code or "—"),
+        )
+        progress = terminal_progress(task.get("status", ""), task.get("progress", 0))
         self.progress.setValue(progress)
+        if status == "已完成":
+            progress_text = "已完成 · 100%"
+        elif status == "运行中":
+            progress_text = f"运行中 · {progress}%"
+        elif status == "等待中":
+            progress_text = f"等待计算 · {progress}%"
+        elif status == "失败":
+            progress_text = f"失败 · 保留 {progress}%"
+        elif status == "已取消":
+            progress_text = f"已取消 · {progress}%"
+        elif status == "已暂停":
+            progress_text = f"已暂停 · {progress}%"
+        else:
+            progress_text = f"{status} · {progress}%"
+        self.progress.setFormat(progress_text)
         logs = self.context.tasks.logs(task_id)
         if logs:
             self.log_text.setText(
@@ -225,9 +287,23 @@ class TaskDetailMixin:
             else "当前任务尚未缓存结果产物。"
         )
         if hasattr(self, "retry_button"):
-            self.retry_button.setEnabled(status in {"失败", "已取消"})
+            can_retry = bool(task.get("job_id")) and bool(task.get("retry_available", False)) and status in {"失败", "已取消"}
+            if status == "失败":
+                can_retry = can_retry and bool(task.get("error_retryable", False))
+            self.retry_button.setEnabled(can_retry)
+            self.retry_button.setToolTip("重新向后端提交一个新的任务" if can_retry else "该任务当前不能直接重新运行")
         if hasattr(self, "cancel_button"):
             self.cancel_button.setEnabled(status in {"运行中", "等待中", "已暂停"})
+        if hasattr(self, "detail_view_result"):
+            formal_result_available = status == "已完成" and (
+                cached_result is not None or bool(task.get("result_available", False))
+            )
+            self.detail_view_result.setEnabled(formal_result_available)
+            self.detail_view_result.setToolTip(
+                "查看该任务的正式结果"
+                if formal_result_available
+                else "只有已完成且后端确认存在正式结果的任务才能查看结果"
+            )
         if hasattr(self, "detail_section"):
             self.detail_section.set_expanded(True)
 
@@ -242,6 +318,12 @@ class TaskDetailMixin:
         self._selected_task_override = None
         self.detail_badge.setText("未选择")
         self.detail_badge.set_tone("info")
+        if hasattr(self, "detail_empty"):
+            self.detail_empty.show()
+        if hasattr(self, "detail_tabs"):
+            self.detail_tabs.hide()
+        if hasattr(self, "failure_banner"):
+            self.failure_banner.hide()
         for widget, label in (
             (self.detail_name, "任务名称"),
             (self.detail_kind, "任务类型"),
@@ -249,36 +331,36 @@ class TaskDetailMixin:
             (self.detail_source, "执行来源"),
             (self.detail_duration, "运行耗时"),
             (self.detail_note, "当前信息"),
+            (self.detail_job_id, "任务 ID"),
+            (self.detail_error_code, "错误代码"),
         ):
             self._set_info(widget, label, "—")
         self.progress.setValue(0)
+        self.progress.setFormat("未选择任务")
         self.log_text.setText("选择任务后显示关键日志。")
         if hasattr(self, "retry_button"):
             self.retry_button.setEnabled(False)
         if hasattr(self, "cancel_button"):
             self.cancel_button.setEnabled(False)
+        if hasattr(self, "detail_view_result"):
+            self.detail_view_result.setEnabled(False)
 
     def _retry_selected(self):
         task = self._selected_task()
         if not task:
             return
         job_id = self._job_id(task)
-        if job_id:
-            self.job_client.get_status(f"tasks.retry.{job_id}", job_id)
-            self.context.tasks.add(
-                f"重试：{task.get('name', '任务')}",
-                task.get("kind", "其他"),
-                "等待后端",
-                0,
-                f"重新查询 job_id: {job_id}",
-                page="tasks",
-            )
-        else:
-            self.context.tasks.add(
-                f"重试：{task.get('name', '任务')}",
-                task.get("kind", "其他"),
-                "等待后端",
-                0,
-                "由任务中心创建的重试任务（无关联后端job）",
-                page="tasks",
-            )
+        if not job_id or not bool(task.get("retry_available", False)):
+            self.context.tasks.append_log(str(task.get("id", "")), "该任务缺少可重放的后端提交信息", level="ERROR")
+            return
+        if self._normalized_status(task) == "失败" and not bool(task.get("error_retryable", False)):
+            self.context.tasks.append_log(str(task.get("id", "")), "该失败类型被后端标记为不可直接重试", level="ERROR")
+            return
+        pending = getattr(self, "_pending_retries", None)
+        if pending is None:
+            pending = self._pending_retries = {}
+        pending[job_id] = dict(task)
+        self.retry_button.setEnabled(False)
+        self.job_client.retry(f"tasks.retry.{job_id}", job_id)
+        self.context.tasks.append_log(str(task.get("id", "")), "正在向后端重新提交任务")
+

@@ -56,13 +56,29 @@ def _single_polarization(
     c_term = matrix[1, 0] + matrix[1, 1] * qs
     denominator = q0 * b + c_term
     r = complex((q0 * b - c_term) / denominator)
-    t = complex(2.0 * q0 / denominator)
+    t_tangential = complex(2.0 * q0 / denominator)
+
+    # The characteristic-matrix p admittance q=n/cos(theta) is written for
+    # tangential electric field.  Downstream Jones propagation, however, stores
+    # coefficients against unit s/p polarization vectors.  Convert the p
+    # transmission coefficient back to the full electric-field amplitude; for s
+    # the two conventions are identical.  Power transmission must use the same
+    # optical-admittance convention as the characteristic matrix.  Reusing
+    # n*cos(theta) for p can produce the unphysical result R+T>1 at oblique
+    # incidence.
+    if polarization == "p":
+        if abs(coss) <= 1.0e-30:
+            t = 0.0j
+        else:
+            t = complex(t_tangential * cos0 / coss)
+    else:
+        t = t_tangential
+
     reflectance = float(abs(r) ** 2)
-    incident_flux = max(float(np.real(n_incident * cos0)), 1.0e-30)
-    transmitted_flux = max(float(np.real(n_substrate * coss)), 0.0)
-    transmittance = float(transmitted_flux / incident_flux * abs(t) ** 2)
-    
-    
+    incident_flux = max(float(np.real(q0)), 1.0e-30)
+    transmitted_flux = max(float(np.real(qs)), 0.0)
+    transmittance = float(transmitted_flux / incident_flux * abs(t_tangential) ** 2)
+
     reflectance = max(reflectance, 0.0)
     transmittance = max(transmittance, 0.0)
     absorption = max(1.0 - reflectance - transmittance, 0.0)

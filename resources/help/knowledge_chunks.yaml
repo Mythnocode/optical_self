@@ -1,0 +1,224 @@
+# Supplemental knowledge chunks merged into resources/help/help.db by
+# tools/rebuild_help_knowledge.py.  Existing DB entries are preserved unless
+# an id is listed here (same id = update).
+
+synonyms:
+  自动优化:
+    - 参数优化
+    - 连续优化
+    - 调参优化
+  物理反向设计:
+    - 反向设计
+    - 逆设计
+    - 目标驱动设计
+  反向预测:
+    - 代理模型反向预测
+    - ML反向预测
+    - 机器学习反推
+  系统效率:
+    - 总系统效率
+    - 链路效率
+  教学中心:
+    - 教学实验
+    - 自由实验
+    - 3D教学
+
+chunks:
+  - id: faq.metrics.coupling_vs_system
+    title: 耦合效率与系统效率的区别
+    module: 仿真系统
+    entry_type: faq
+    summary: 耦合效率描述入纤模式匹配；系统效率描述从光源到接收端的总链路损耗，两者不应混读。
+    content: >
+      在本平台中，「耦合效率」通常指 mode coupling / 模式投影效率：入射到接收面的复场
+      与目标光纤本征模式的重叠程度，反映对准、离焦、尺寸与波前是否匹配。
+      「系统效率」则包含光源耦合、元件透射、界面反射、遮挡与接收器截断等链路因素，
+      数值往往低于单独的耦合效率。
+      演示或汇报时不要拿 95% 的耦合效率与 67% 的系统效率直接对比——它们回答的是不同问题。
+      正式仿真结果区会分别标注；教学中心的快速估算也只用于趋势理解，不能替代正式追迹。
+    keywords:
+      - 耦合效率
+      - 系统效率
+      - mode coupling
+      - 总效率
+      - 入纤效率
+    aliases:
+      - 两个效率为什么不一样
+      - 效率指标区别
+    related:
+      - principles.coupling.mode_projection
+      - diagnostics.coupling.low_efficiency
+    actions:
+      - simulation.open_formal_analysis
+    route: simulation
+    anchor: metrics
+
+  - id: guides.optimization.auto_vs_inverse
+    title: 自动优化与物理反向设计的区别
+    module: 参数研究与优化
+    entry_type: guide
+    summary: 自动优化在既定结构上连续调参；物理反向设计按目标效率搜索多组候选参数，二者输入、输出与使用场景不同。
+    content: >
+      「自动优化」适用于结构已经确定、需要在允许范围内把耦合效率/RMS 等指标调到更好的情况。
+      你选择优化变量、目标函数与算法，平台用正式光学仿真迭代搜索，输出通常是一条收敛的最优解。
+      「物理反向设计」适用于先给定目标（例如耦合效率达到 95%），再让引擎在允许调整的变量上搜索可行候选。
+      输出是多组参数方案，每一组都需要用正式仿真复核，不能直接把候选当作最终定版。
+      若已有训练好的代理模型，还可以使用「代理模型反向预测」做快速反推，但语义上属于 ML 近似搜索，
+      最终仍应回到正式仿真验证。三者不要混称为同一种“优化”。
+    keywords:
+      - 自动优化
+      - 物理反向设计
+      - 反向设计
+      - 优化变量
+      - 候选参数
+    aliases:
+      - 反向设计和自动优化有什么区别
+      - 逆设计与优化
+    related:
+      - guides.focus.best_coupling_plane
+      - faq.results.preview_vs_formal
+    actions:
+      - optimization.open_convergence
+    route: optimization
+    anchor: research-mode
+
+  - id: guides.optimization.ml_inverse_prediction
+    title: 代理模型反向预测怎么用
+    module: 参数研究与优化
+    entry_type: guide
+    summary: 用已训练代理模型快速反推参数候选，速度快但必须在训练域内并由正式仿真验证。
+    content: >
+      代理模型反向预测适合“先有一个还不错的 RF/神经网络代理，想快速试几组能达到目标的参数”。
+      流程是：在「模型构建/模型比较」中采用当前模型 → 进入优化页的反向预测模式 →
+      设定目标与允许调整的变量 → 提交后平台用代理模型做粗搜索，并对最终候选执行正式物理验证。
+      若样本超出训练域、特征契约不一致或模型 R² 过低，预测与反推结果都不可信。
+      不要把 ML 候选直接当成定版结果；应查看正式验证后的耦合效率与诊断项。
+    keywords:
+      - 反向预测
+      - 代理模型
+      - 机器学习反推
+      - 训练域
+      - 正式验证
+    aliases:
+      - ML反向设计
+      - 用模型反推参数
+    related:
+      - diagnostics.machine_learning.out_of_domain
+      - guides.optimization.auto_vs_inverse
+    actions:
+      - machine_learning.open_prediction
+    route: optimization
+    anchor: ml-inverse
+
+  - id: guides.teaching.workbench_overview
+    title: 教学中心能做什么
+    module: 使用指南
+    entry_type: guide
+    summary: 教学中心用于自由搭光路与五类失配实验；快速估算看趋势，红色光束只来自正式追迹。
+    content: >
+      教学中心是沙盒环境：可拖放激光、透镜、分束器、光纤与探测器，用 2D/3D 观察光路。
+      顶部「研究变量」下拉可加载横向、角度、尺寸、轴向、曲率五类失配实验模板。
+      效率读数来自教学快速估算，用于理解参数变化方向；与顶栏「仿真」里的正式结果不是同一套数值。
+      3D 视图中的红色光束仅在正式光学引擎返回代表性光线后显示，不会因为简单连线或拓扑连接而出现。
+      右侧探索面板可查看失配机理、相位与对比模式，不会修改正式工程设计 revision。
+    keywords:
+      - 教学中心
+      - 自由实验
+      - 五类失配
+      - 教学估算
+      - 3D光路
+    aliases:
+      - 教学页面怎么用
+      - 教学沙盒
+    related:
+      - faq.results.preview_vs_formal
+      - diagnostics.coupling.interaction
+    actions: []
+    route: teaching
+    anchor: workbench
+
+  - id: guides.teaching.import_to_simulation
+    title: 教学参数如何带入正式仿真
+    module: 使用指南
+    entry_type: guide
+    summary: 教学实验保存的参数可通过实验库或导入教学参数进入仿真；透镜以焦距近似映射，不是全表面处方转移。
+    content: >
+      若要把教学实验接到正式链路，可使用「实验库」保存的场景，或在仿真页使用「导入教学参数」。
+      当前版本对透镜采用焦距与位置近似映射，不会把 L1–L4 的完整面型处方逐项复制到序列仿真。
+      光纤接收器的横向偏移、倾角、离焦等五轴位姿会尽量保留，但仍需在正式仿真中复核网格、采样与窗口。
+      建议流程：教学里理解失配机理 → 导入近似参数 → 正式仿真确认耦合效率与系统效率 → 再进入优化或容差。
+    keywords:
+      - 导入教学参数
+      - 实验库
+      - 带入正式仿真
+      - 焦距近似
+    aliases:
+      - 教学转到仿真
+      - 教学和仿真怎么联动
+    related:
+      - guides.teaching.workbench_overview
+      - parameters.receiver.five_axis
+    actions:
+      - simulation.open_formal_analysis
+    route: simulation
+    anchor: import-teaching
+
+  - id: guides.assistant.coupling_questions
+    title: 如何向 AI 助手提问激光耦合问题
+    module: 使用指南
+    entry_type: guide
+    summary: 结合当前页面与工程状态提问效果最好；助手可解释、诊断与导航，不会擅自改参或开算。
+    content: >
+      智能助手分两层：本地知识库回答耦合原理、失配诊断与平台操作；研究顾问读取你当前的
+      正式仿真、优化与模型结果，解释“为什么效率低”“结果是否可靠”“下一步做什么”。
+      推荐问法示例：「耦合效率和系统效率有什么区别？」「为什么效率低？」
+      「横向偏移对耦合有什么影响？」「当前结果可靠吗？」「哪些参数值得优化？」
+      在仿真、优化或教学页打开助手时，它会自动带上页面上下文，回答更贴当前工程。
+      助手可以带你定位到按钮与设置，但不会未经确认修改参数或提交耗时计算。
+    keywords:
+      - AI助手
+      - 智能助手
+      - 激光耦合
+      - 怎么提问
+      - 研究顾问
+    aliases:
+      - 助手能回答什么
+      - 怎么问耦合问题
+    related:
+      - faq.metrics.coupling_vs_system
+      - diagnostics.coupling.low_efficiency
+    actions: []
+    route: null
+    anchor: assistant
+
+  - id: guides.workflow.fiber_coupling_780nm
+    title: 780 nm 多透镜光纤耦合典型流程
+    module: 使用指南
+    entry_type: guide
+    summary: 从教学理解失配 → 正式仿真定基准 → 参数研究/优化/容差 → 代理模型与解释的闭环流程。
+    content: >
+      以 780 nm 单模激光耦合多透镜系统为例，推荐闭环是：
+      1) 教学中心用五类失配实验理解横向、角度、尺寸、离焦、曲率谁主导；
+      2) 顶栏「仿真」运行正式计算，分别查看耦合效率与系统效率，并检查边缘功率与能量闭合；
+      3) 「优化」里先做参数研究或焦面扫描找敏感方向，再用自动优化精调，或用物理反向设计搜索达标候选；
+      4) 需要量产鲁棒性时做容差/Monte Carlo；
+      5) 「代理模型」用扫描数据训练 surrogate，做快速正向预测或反向预测，并在「模型解释」查看 SHAP；
+      6) 重要结论回到正式仿真复核，避免把教学估算或 ML 近似当成最终定版。
+    keywords:
+      - 780nm
+      - 四透镜
+      - 光纤耦合
+      - 演示流程
+      - 闭环
+    aliases:
+      - 780纳米耦合怎么做
+      - 多透镜耦合流程
+    related:
+      - principles.optical.complete_chain
+      - guides.optimization.auto_vs_inverse
+      - guides.teaching.workbench_overview
+    actions:
+      - simulation.open_formal_analysis
+      - optimization.open_focus_scan
+    route: home
+    anchor: workflow

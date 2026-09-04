@@ -20,3 +20,6 @@ class JobStatus(BaseModel):
     timings_ms: Dict[str, float] = Field(default_factory=dict)
     result_version: int = 0
     partial_result_available: bool = False
+    retry_available: bool = False
+    retry_of: Optional[str] = None
+    last_activity_at: Optional[str] = None

@@ -7,8 +7,9 @@ import json
 from typing import Any, Mapping
 
 _RECEIVER_ALIGNMENT_KEYS = {
-    "offset_x_mm", "offset_y_mm", "tilt_x_rad", "tilt_y_rad", "tilt_x_deg",
-    "tilt_y_deg", "receiver_axial_offset_z_mm", "axial_offset_z_mm",
+    "offset_x_mm", "offset_y_mm", "tilt_x_rad", "tilt_y_rad",
+    "tilt_x_urad", "tilt_y_urad", "tilt_x_mrad", "tilt_y_mrad",
+    "tilt_x_deg", "tilt_y_deg", "receiver_axial_offset_z_mm", "axial_offset_z_mm",
 }
 _RECEIVER_MODE_SIZE_KEYS = {"mode_field_diameter_x_um", "mode_field_diameter_y_um"}
 _RESULT_ONLY_KEYS = {
@@ -122,6 +123,10 @@ def build_project_dependency_keys(
         ),
         "tilt_x_rad": hybrid.get("tilt_x_rad"),
         "tilt_y_rad": hybrid.get("tilt_y_rad"),
+        "tilt_x_urad": hybrid.get("tilt_x_urad"),
+        "tilt_y_urad": hybrid.get("tilt_y_urad"),
+        "tilt_x_mrad": hybrid.get("tilt_x_mrad"),
+        "tilt_y_mrad": hybrid.get("tilt_y_mrad"),
         "tilt_x_deg": hybrid.get("tilt_x_deg", receiver.get("tilt_x_deg", 0.0)),
         "tilt_y_deg": hybrid.get("tilt_y_deg", receiver.get("tilt_y_deg", 0.0)),
     }

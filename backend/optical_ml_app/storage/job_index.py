@@ -56,6 +56,18 @@ class JobIndex:
             connection.execute(
                 "CREATE INDEX IF NOT EXISTS idx_jobs_status_type ON jobs(status, job_type)"
             )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS job_idempotency (
+                    idempotency_key TEXT PRIMARY KEY,
+                    job_id TEXT NOT NULL,
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )
+                """
+            )
+            connection.execute(
+                "CREATE INDEX IF NOT EXISTS idx_job_idempotency_job ON job_idempotency(job_id)"
+            )
 
     def bootstrap_existing(self) -> None:
         
@@ -160,13 +172,31 @@ class JobIndex:
     def update_result_size(self, job_id: str, size: int, *, updated_mtime: float) -> None:
         with self._connect() as connection:
             connection.execute(
-                "UPDATE jobs SET result_size=?, result_available=1, updated_mtime=? WHERE job_id=?",
+                "UPDATE jobs SET result_size=?, updated_mtime=? WHERE job_id=?",
                 (max(0, int(size)), float(updated_mtime), str(job_id)),
             )
 
     def delete(self, job_id: str) -> None:
         with self._connect() as connection:
+            connection.execute(
+                "DELETE FROM job_idempotency WHERE job_id=?", (str(job_id),)
+            )
             connection.execute("DELETE FROM jobs WHERE job_id=?", (str(job_id),))
+
+    def claim_idempotency(self, idempotency_key: str, job_id: str) -> str:
+        key = str(idempotency_key or "").strip()
+        if not key:
+            return str(job_id)
+        with self._connect() as connection:
+            connection.execute(
+                "INSERT OR IGNORE INTO job_idempotency(idempotency_key, job_id) VALUES (?, ?)",
+                (key, str(job_id)),
+            )
+            row = connection.execute(
+                "SELECT job_id FROM job_idempotency WHERE idempotency_key=?",
+                (key,),
+            ).fetchone()
+        return str(row[0]) if row is not None else str(job_id)
 
     def count(self) -> int:
         with self._connect() as connection:

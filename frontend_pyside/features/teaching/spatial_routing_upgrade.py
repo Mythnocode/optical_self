@@ -1,29 +1,20 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+import copy
 import math
 from typing import Any
-from uuid import uuid4
 
 from PySide6.QtCore import QPointF, QRectF, Qt, Signal, QTimer
-from PySide6.QtGui import (
-    QColor,
-    QCursor,
-    QLinearGradient,
-    QMouseEvent,
-    QPainter,
-    QPainterPath,
-    QPainterPathStroker,
-    QPen,
-    QPolygonF,
-)
+from PySide6.QtGui import QColor, QCursor, QMouseEvent, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import (
+    QButtonGroup,
     QCheckBox,
+    QComboBox,
     QDoubleSpinBox,
     QFrame,
-    QGraphicsItem,
-    QGraphicsObject,
+    QGraphicsPathItem,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -32,24 +23,26 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QToolButton,
     QVBoxLayout,
+    QWidget,
 )
 
 from frontend_pyside.resources import theme_tokens as theme
-from frontend_pyside.api.job_client import JobClient
-from frontend_pyside.api.simulation_client import SimulationClient
+from frontend_pyside.shared.icons import icon
 
 from . import spatial_workbench as spatial
 from . import unified_workbench as base
 from . import component_catalog as catalog
 from . import experiment_presets
-from teaching_runtime.physical_scene import (
-    TeachingEngineTrace,
-    TeachingOpticalEngineBridge,
-    TeachingPhysicalNode,
-    TeachingPhysicalScene,
-    resolve_teaching_optical_params,
+from frontend_pyside.features.simulation.adapters.formal_results import formal_ray_dataset_from_result
+from .experiment_scene import (
+    main_rail_y,
+    project_formal_rays_2d,
+    formal_rays_scene_3d,
+    project_scene_node_2d,
 )
-from teaching_runtime.trace_scheduler import TeachingTraceScheduler
+from .asset_registry import asset_for_kind
+from . import scene_style as scene_style
+from .formal_physics import TeachingFormalPhysicsController
 
 
 ORIGINAL_EXPERIMENT_MODEL = base.ExperimentModel
@@ -62,29 +55,17 @@ MEASUREMENT_LABELS = {kind: catalog.NODE_LABELS[kind] for kind in MEASUREMENT_KI
 @dataclass(frozen=True, slots=True)
 class BeamSegmentInfo:
     edge_id: str
-    source_id: str | None
-    target_id: str | None
+    source_id: str
+    target_id: str
     angle_deg: float
-    start_x: float
-    start_y: float
-    start_z_mm: float
-    end_x: float
-    end_y: float
-    end_z_mm: float
+    start_x: float = 0.0
+    start_y: float = 0.0
+    start_z_mm: float = 82.0
+    end_x: float = 0.0
+    end_y: float = 0.0
+    end_z_mm: float = 82.0
     power_fraction: float = 1.0
-    path_id: str = ""
-    ray_id: str = ""
     is_chief_ray: bool = False
-    signature: str = ""
-    termination_reason: str = ""
-
-    @property
-    def start_point(self) -> QPointF:
-        return QPointF(float(self.start_x), float(self.start_y))
-
-    @property
-    def end_point(self) -> QPointF:
-        return QPointF(float(self.end_x), float(self.end_y))
 
 
 def _segment_fraction(point: QPointF, start: QPointF, end: QPointF) -> float:
@@ -114,20 +95,180 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
 
     def __init__(self) -> None:
         self._segment_info: dict[str, BeamSegmentInfo] = {}
-        self._physical_segments: list[BeamSegmentInfo] = []
-        self._engine_bridge = TeachingOpticalEngineBridge()
-        self._trace_scheduler = TeachingTraceScheduler(self._engine_bridge)
-        self._trace_generation = 0
-        self._trace_applied_generation = -1
-        self._trace_pending_quality = ""
-        self._engine_trace_result: TeachingEngineTrace | None = None
-        self._engine_trace_errors: tuple[str, ...] = ()
-        self._engine_trace_warnings: tuple[str, ...] = ()
-        self._engine_trace_elapsed_ms: float = 0.0
-        self._engine_trace_metadata: dict[str, Any] = {}
-        self._engine_trace_frame = None
         self.active_experiment_key = ""
+        self._formal_physics_revision = -1
+        self._formal_rays_mm: tuple[tuple[tuple[float, float, float], ...], ...] = ()
+        self._formal_rays_scene: tuple[tuple[tuple[float, float, float], ...], ...] = ()
+        self._formal_rays_world: tuple[tuple[tuple[float, float, float], ...], ...] = ()
+        self._formal_metrics: dict[str, float] = {}
+        self._formal_project: dict[str, Any] = {}
+        self._formal_validation_messages: tuple[str, ...] = ()
+        self._formal_ccd: dict[str, Any] = {}
+        self._formal_ccd_scan: list[dict[str, Any]] = []
         super().__init__()
+
+    def mark_changed(self) -> None:
+        super().mark_changed()
+        # Any physical edit invalidates the previous formal raytrace.  Rendering
+        # must fall back to “pending” rather than reconnecting object centres.
+        self._formal_physics_revision = -1
+        self._formal_rays_mm = ()
+        self._formal_rays_scene = ()
+        self._formal_rays_world = ()
+        self._formal_metrics = {}
+        self._formal_project = {}
+        self._formal_validation_messages = ()
+        self._formal_ccd = {}
+        self._formal_ccd_scan = []
+
+    def set_formal_validation(self, revision: int, messages: list[str] | tuple[str, ...]) -> None:
+        if int(revision) != int(self.revision):
+            return
+        self._formal_validation_messages = tuple(str(item) for item in messages if str(item).strip())
+        self._scene_snapshot_cache = None
+
+    def set_formal_physics_result(self, result: dict[str, Any], project: dict[str, Any], revision: int) -> bool:
+        if int(revision) != int(self.revision):
+            return False
+        result = dict(result or {})
+        scene_rays = tuple(
+            tuple(tuple(float(v) for v in point) for point in ray)
+            for ray in (result.get("scene_rays") or ())
+            if len(ray) >= 2
+        )
+        world_rays = tuple(
+            tuple(tuple(float(v) for v in point) for point in ray)
+            for ray in (result.get("world_rays") or ())
+            if len(ray) >= 2
+        )
+        engine_rays = tuple(
+            tuple(tuple(float(v) for v in point) for point in ray)
+            for ray in (result.get("engine_rays") or ())
+            if len(ray) >= 2
+        )
+        if not scene_rays and not world_rays and not engine_rays:
+            dataset = formal_ray_dataset_from_result(result, dict(project or {}))
+            if dataset is None:
+                return False
+            rays: list[tuple[tuple[float, float, float], ...]] = []
+            for ray in dataset.rays:
+                if ray.failed:
+                    continue
+                points = tuple((float(p[0]), float(p[1]), float(p[2])) for p in ray.points_mm)
+                if len(points) >= 2:
+                    rays.append(points)
+            self._formal_rays_mm = tuple(rays)
+            self._formal_rays_scene = ()
+            self._formal_rays_world = ()
+        else:
+            self._formal_rays_mm = engine_rays or scene_rays
+            self._formal_rays_scene = scene_rays
+            self._formal_rays_world = world_rays
+        self._formal_metrics = {
+            str(key): float(value)
+            for key, value in dict(result.get("metrics", {}) or {}).items()
+            if isinstance(value, (int, float))
+        }
+        self._formal_project = dict(project or {})
+        self._formal_physics_revision = int(revision)
+        self._formal_ccd = dict(result.get("ccd", {}) or {})
+        scan = result.get("ccd_scan", [])
+        self._formal_ccd_scan = list(scan) if isinstance(scan, list) else []
+        self._scene_snapshot_cache = None
+        return True
+
+    def instrument_reading(self, node_id: str) -> dict[str, Any]:
+        reading = super().instrument_reading(node_id)
+        node = self.nodes.get(node_id)
+        if node is None or str(getattr(node, "kind", "")) not in {"ccd", "imaging_camera", "camera"}:
+            return reading
+        if self._formal_physics_revision != self.revision or not self._formal_ccd:
+            return reading
+        formal = dict(self._formal_ccd)
+        if not formal.get("valid"):
+            return reading
+        reading = dict(reading or {})
+        reading.update({
+            "valid": True,
+            "kind": node.kind,
+            "rms_x_um": formal.get("rms_x_um"),
+            "rms_y_um": formal.get("rms_y_um"),
+            "radial_rms_um": formal.get("radial_rms_um"),
+            "centroid_x_um": formal.get("centroid_x_um"),
+            "centroid_y_um": formal.get("centroid_y_um"),
+            "radius_x_um": formal.get("radius_x_um"),
+            "radius_y_um": formal.get("radius_y_um"),
+            "center_x_um": formal.get("centroid_x_um"),
+            "center_y_um": formal.get("centroid_y_um"),
+            "intensity_matrix": formal.get("intensity_matrix"),
+            "ccd_scan": list(self._formal_ccd_scan),
+            "metric_source": formal.get("metric_source", "正式几何追迹"),
+        })
+        return reading
+
+    def load_four_lens_json(self, path: str | None = None) -> None:
+        """Load Laser→L1..L4→CCD from presets/four_lens.json into OpticalSystem."""
+        from pathlib import Path
+        import json
+
+        preset_path = Path(path) if path else Path(__file__).resolve().parent / "presets" / "four_lens.json"
+        payload = json.loads(preset_path.read_text(encoding="utf-8"))
+        self.mode = "free"
+        self.nodes.clear()
+        self.edges.clear()
+        self.active_experiment_key = "four_lens"
+        self.wavelength_nm = float(payload.get("wavelength_nm", 780.0) or 780.0)
+        self.max_system_length_mm = 120.0
+        for item in list(payload.get("components", []) or []):
+            kind = str(item.get("kind", ""))
+            self.add_node(
+                kind,
+                float(item.get("x", 0.0)),
+                float(item.get("y", 310.0)),
+                label=str(item.get("label") or None) or None,
+                params=dict(item.get("params") or {}),
+                node_id=str(item.get("id") or None) or None,
+                record=False,
+                rotation_deg=float(item.get("rotation_deg", 0.0) or 0.0),
+            )
+        # Sequential train: connect laser → lenses → ccd in x order.
+        ordered = sorted(self.nodes.values(), key=lambda node: float(node.x))
+        for left, right in zip(ordered, ordered[1:]):
+            self.add_edge(left.id, right.id, record=False)
+        self.sync_optical_system()
+        self.record("已载入 four_lens.json：Laser→L1→L2→L3→L4→CCD。")
+        self.latest_cause = "四透镜＋CCD 配置已进入统一 OpticalSystem。"
+
+    def _formalized_metrics(self, fallback: base.WorkbenchMetrics) -> base.WorkbenchMetrics:
+        return fallback
+
+    def evaluate(self) -> base.WorkbenchMetrics:
+        return super().evaluate()
+
+    def scene_snapshot(self) -> base.TeachingSceneSnapshot:
+        snapshot = super().scene_snapshot()
+        verified = self._formal_physics_revision == self.revision
+        blocked = any(str(item).startswith("错误：") for item in self._formal_validation_messages)
+        has_fiber = any(node.kind == "fiber" for node in self.nodes.values())
+        preview_source = str(getattr(self, "_preview_metrics_source", "") or "")
+        return base.TeachingSceneSnapshot(
+            revision=snapshot.revision,
+            metrics=snapshot.metrics,
+            current_radii=snapshot.current_radii,
+            ideal_radii=snapshot.ideal_radii,
+            formal_rays_mm=self._formal_rays_mm if verified else (),
+            formal_rays_scene=self._formal_rays_scene if verified else (),
+            formal_rays_world=self._formal_rays_world if verified else (),
+            physics_source=("场景光线追迹" if verified else "正式光线已阻止" if blocked else "正式光线待计算"),
+            physics_status=("verified" if verified else "blocked" if blocked else "pending"),
+            efficiency_source=(
+                preview_source if preview_source else
+                "教学快速估算" if has_fiber else
+                "相机测量模式：耦合效率不适用"
+            ),
+            efficiency_status=("preview" if has_fiber else "not_applicable"),
+            validation_messages=self._formal_validation_messages,
+        )
 
     def _default_params(self, kind: str) -> dict[str, float | str | bool]:
         values = super()._default_params(kind)
@@ -137,33 +278,9 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
             values.setdefault("beam_target_id", "")
             values.setdefault("beam_t", 0.50)
             values.setdefault("follow_beam_orientation", True)
-        if kind in {"lens", "cylindrical_lens"}:
-            values.setdefault("optical_model", "physical_surface")
-            values.setdefault("material", "N-BK7")
-            values.setdefault("diameter_mm", 12.7)
-            values.setdefault("center_thickness_mm", 2.0)
-            values.setdefault("design_refractive_index", 1.5168)
-            values.setdefault("conic1", 0.0)
-            values.setdefault("conic2", 0.0)
-            values.setdefault("asphere_a2_1", 0.0)
-            values.setdefault("asphere_a2_2", 0.0)
-            values.setdefault("geometry_source", "focal_derived_physical")
-        if kind == "cylindrical_lens":
-            # axis_angle_deg 是界面输入，统一表示传统柱面轴（零光焦度方向）。
-            values["axis_angle_deg"] = float(values.get("axis_angle_deg", 0.0) or 0.0) % 180.0
-            values.setdefault("surface_geometry", "cylindrical")
-        if kind == "mirror":
-            values.setdefault("diameter_mm", 25.4)
         if kind in {"splitter", "pbs", "beam_sampler"}:
-            values.setdefault("diameter_mm", 20.0)
             values.setdefault("split_ratio", float(values.get("monitor_fraction", 0.05)))
             values.setdefault("branch_offset_deg", 90.0)
-        if kind == "fiber":
-            values.setdefault("diameter_mm", 4.0)
-            values.setdefault("mode_field_diameter_um", float(self.receiver_mode_radius_um) * 2.0 if hasattr(self, "receiver_mode_radius_um") else 5.6)
-            values.setdefault("na", float(self.receiver_na) if hasattr(self, "receiver_na") else 0.12)
-        if kind == "laser":
-            values.setdefault("beam_radius_y_mm", float(values.get("beam_radius_mm", 0.72) or 0.72))
         return values
 
     def snapshot(self) -> dict[str, Any]:
@@ -210,6 +327,8 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         return outgoing
 
     def _apply_beam_attachments(self) -> None:
+
+
         for node in self.nodes.values():
             if node.kind not in base.INSTRUMENT_TYPES or not bool(node.params.get("beam_attached", False)):
                 continue
@@ -219,243 +338,70 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                 node.params["beam_attached"] = False
                 continue
             t = max(0.08, min(0.92, float(node.params.get("beam_t", 0.5))))
-            segment = next((
-                info for info in self._physical_segments
-                if info.is_chief_ray and info.source_id == source.id and info.target_id == target.id
-            ), None)
-            if segment is None:
-                # 真实追迹结果里没有该段的被跟踪主光线时保持原位，不再回退到节点间直线插值。
-                continue
-            node.x = segment.start_x + (segment.end_x - segment.start_x) * t
-            node.y = segment.start_y + (segment.end_y - segment.start_y) * t
-            node.params["z_mm"] = segment.start_z_mm + (segment.end_z_mm - segment.start_z_mm) * t
+            node.x = source.x + (target.x - source.x) * t
+            node.y = source.y + (target.y - source.y) * t
+            source_z = float(source.params.get("z_mm", 82.0))
+            target_z = float(target.params.get("z_mm", 82.0))
+            node.params["z_mm"] = source_z + (target_z - source_z) * t
             if bool(node.params.get("follow_beam_orientation", True)):
-                node.rotation_deg = (segment.angle_deg + 180.0) % 360.0
-
-    def _physical_scene(self, *, generation: int | None = None, quality: str = "settled") -> TeachingPhysicalScene:
-        physical_nodes: list[TeachingPhysicalNode] = []
-        for node in self.nodes.values():
-            physical = TeachingPhysicalNode(
-                node_id=node.id,
-                kind=node.kind,
-                label=node.label,
-                scene_x=float(node.x),
-                scene_y=float(node.y),
-                height_mm=float(node.params.get("z_mm", 82.0)),
-                yaw_deg=float(node.rotation_deg),
-                pitch_deg=float(node.params.get("pitch_deg", 0.0)),
-                roll_deg=float(node.params.get("roll_deg", 0.0)),
-                enabled=spatial._enabled(node),
-                params=dict(node.params),
-            )
-            if node.kind in {"lens", "cylindrical_lens"}:
-                resolved = resolve_teaching_optical_params(physical)
-                physical = TeachingPhysicalNode(
-                    node_id=physical.node_id, kind=physical.kind, label=physical.label,
-                    scene_x=physical.scene_x, scene_y=physical.scene_y, height_mm=physical.height_mm,
-                    yaw_deg=physical.yaw_deg, pitch_deg=physical.pitch_deg, roll_deg=physical.roll_deg,
-                    enabled=physical.enabled, params=resolved,
-                )
-            physical_nodes.append(physical)
-        nodes = tuple(physical_nodes)
-        return TeachingPhysicalScene(
-            nodes=nodes,
-            wavelength_nm=float(self.wavelength_nm),
-            input_power_mw=float(self.input_power_mw),
-            max_system_length_mm=float(self.max_system_length_mm),
-            scene_width_units=float(base.SCENE_RECT.width()),
-            scene_height_units=float(base.SCENE_RECT.height()),
-            generation=int(self._trace_generation if generation is None else generation),
-            trace_quality=str(quality),
-        )
-
-    def beam_segments(self) -> tuple[BeamSegmentInfo, ...]:
-        self.rebuild_auto_paths()
-        return tuple(self._physical_segments)
-
-    def engine_trace_status(self) -> dict[str, Any]:
-        frame = self._engine_trace_frame
-        result = self._engine_trace_result
-        return {
-            "errors": self._engine_trace_errors,
-            "warnings": self._engine_trace_warnings,
-            "elapsed_ms": self._engine_trace_elapsed_ms,
-            "engine": "OpticalSimulationEngine",
-            "analysis": "scene_raytrace",
-            "generation": int(self._trace_generation),
-            "applied_generation": int(self._trace_applied_generation),
-            "pending_quality": str(self._trace_pending_quality),
-            "quality": "" if result is None else str(result.quality),
-            "sample_count": 0 if result is None else int(result.sample_count),
-            "ray_count": 0 if result is None else len(result.rays),
-            "metadata": dict(self._engine_trace_metadata),
-            "coordinate_frame": None if frame is None else {
-                "origin_scene": (frame.laser_scene_x, frame.laser_scene_y, frame.laser_height_mm),
-                "laser_yaw_deg": frame.laser_yaw_deg,
-                "mm_per_scene_unit": frame.mm_per_scene_unit,
-                "axial_shift_mm": frame.axial_shift_mm,
-            },
-        }
-
-    def node_physical_position_mm(self, node_id: str) -> tuple[float, float, float] | None:
-        node = self.nodes.get(node_id)
-        frame = self._engine_trace_frame
-        if node is None or frame is None:
-            return None
-        return frame.scene_to_world(node.x, node.y, float(node.params.get("z_mm", 82.0)))
-
-    def _next_trace_generation(self) -> int:
-        self._trace_generation += 1
-        return int(self._trace_generation)
-
-    def teaching_trace_result(self) -> TeachingEngineTrace | None:
-        return self._engine_trace_result
-
-    def resolved_optical_parameters(self, node_id: str) -> dict[str, Any]:
-        node = self.nodes.get(node_id)
-        if node is None:
-            return {}
-        physical = TeachingPhysicalNode(
-            node_id=node.id, kind=node.kind, label=node.label,
-            scene_x=float(node.x), scene_y=float(node.y),
-            height_mm=float(node.params.get("z_mm", 82.0)),
-            yaw_deg=float(node.rotation_deg),
-            pitch_deg=float(node.params.get("pitch_deg", 0.0)),
-            roll_deg=float(node.params.get("roll_deg", 0.0)),
-            enabled=spatial._enabled(node), params=dict(node.params),
-        )
-        return resolve_teaching_optical_params(physical)
-
-    def _request_engine_trace(self, quality: str = "settled", *, synchronous: bool = False) -> int:
-        if self._suspend_auto:
-            return int(self._trace_generation)
-        self._apply_beam_attachments()
-        generation = self._next_trace_generation()
-        scene = self._physical_scene(generation=generation, quality=quality)
-        self._trace_pending_quality = str(quality)
-        # 当前场景已经提交给完整引擎，避免视图刷新再次提交同一状态。
-        self._routing_dirty = False
-        if synchronous:
-            traced = self._engine_bridge.trace(scene)
-            self._apply_engine_trace(traced)
-        else:
-            self._trace_scheduler.submit(scene, generation=generation, quality=quality)
-        return generation
-
-    def request_live_trace(self) -> int:
-        return self._request_engine_trace("live", synchronous=False)
-
-    def request_settled_trace(self) -> int:
-        return self._request_engine_trace("settled", synchronous=False)
-
-    def poll_trace_update(self) -> bool:
-        traced = self._trace_scheduler.poll_latest()
-        if traced is None:
-            return False
-        if int(traced.generation) < int(self._trace_generation):
-            return False
-        return self._apply_engine_trace(traced)
-
-    def close_trace_scheduler(self) -> None:
-        self._trace_scheduler.close()
+                incoming = math.degrees(math.atan2(target.y - source.y, target.x - source.x)) % 360.0
+                node.rotation_deg = (incoming + 180.0) % 360.0
 
     def rebuild_auto_paths(self) -> None:
-        if self._suspend_auto or not self._routing_dirty:
+
+
+        if self._suspend_auto:
             return
-        # 初次构造需要立刻拥有可用拓扑；之后的交互全部异步执行。
-        if self._engine_trace_result is None:
-            self._request_engine_trace("settled", synchronous=True)
-        else:
-            self._request_engine_trace("settled", synchronous=False)
-
-    def _apply_engine_trace(self, traced: TeachingEngineTrace) -> bool:
-        if int(traced.generation) < int(self._trace_applied_generation):
-            return False
-        self._engine_trace_result = traced
-        self._trace_applied_generation = int(traced.generation)
-        self._trace_pending_quality = "" if int(traced.generation) >= int(self._trace_generation) else self._trace_pending_quality
-        self._engine_trace_errors = tuple(traced.errors)
-        self._engine_trace_warnings = tuple(traced.warnings)
-        self._engine_trace_elapsed_ms = float(traced.elapsed_ms)
-        self._engine_trace_metadata = dict(traced.metadata)
-        self._engine_trace_frame = traced.frame
-
+        self._apply_beam_attachments()
         self.edges.clear()
         self._incident_angles.clear()
         self._auto_path_segments.clear()
         self._segment_info.clear()
-        self._physical_segments.clear()
-        if not traced.success:
-            self._routing_dirty = False
-            return True
 
-        seen_physical: set[tuple[Any, ...]] = set()
-        logical_pairs: dict[tuple[str, str, str], str] = {}
-        physical_counter = 0
         edge_counter = 0
+        rays: list[tuple[str, QPointF, float, frozenset[str], int]] = []
+        for laser in self.nodes.values():
+            if laser.kind == "laser" and spatial._enabled(laser):
+                rays.append((laser.id, QPointF(laser.x, laser.y), laser.rotation_deg % 360.0, frozenset({laser.id}), 0))
 
-        for path in traced.paths:
-            points = list(path.points)
-            if len(points) < 2:
+
+        visited_states: set[tuple[str, int, int]] = set()
+        while rays and edge_counter < 120:
+            source_id, origin, angle, visited, depth = rays.pop(0)
+            if depth > 18:
                 continue
-            is_chief = str(path.ray_id) == "R00"
-            for index in range(len(points) - 1):
-                start_point = points[index]
-                end_point = points[index + 1]
-                dx = float(end_point.scene_x - start_point.scene_x)
-                dy = float(end_point.scene_y - start_point.scene_y)
-                if math.hypot(dx, dy) <= 1.0e-7 and abs(float(end_point.height_mm - start_point.height_mm)) <= 1.0e-7:
-                    continue
-                source_id = start_point.node_id if start_point.node_id in self.nodes else None
-                target_id = end_point.node_id if end_point.node_id in self.nodes else None
-                angle = math.degrees(math.atan2(dy, dx)) % 360.0
-                dedupe_key = (
-                    str(path.ray_id),
-                    round(float(start_point.scene_x), 4), round(float(start_point.scene_y), 4), round(float(start_point.height_mm), 4),
-                    round(float(end_point.scene_x), 4), round(float(end_point.scene_y), 4), round(float(end_point.height_mm), 4),
-                    source_id, target_id,
-                )
-                if dedupe_key in seen_physical:
-                    continue
-                seen_physical.add(dedupe_key)
-                physical_counter += 1
-                segment_id = f"engine_segment_{physical_counter}"
+            state_key = (source_id, int(round(angle * 2.0)) % 720, depth)
+            if state_key in visited_states:
+                continue
+            visited_states.add(state_key)
 
-                logical_edge_id = ""
-                # 代表光线用于显示光束，不参与教学拓扑；拓扑只由中心光线定义。
-                if is_chief and source_id is not None and target_id is not None and source_id != target_id:
-                    logical_key = (source_id, target_id, path.signature[: max(0, index + 1)])
-                    logical_edge_id = logical_pairs.get(logical_key, "")
-                    if not logical_edge_id:
-                        edge_counter += 1
-                        logical_edge_id = f"engine_edge_{edge_counter}"
-                        logical_pairs[logical_key] = logical_edge_id
-                        self.edges[logical_edge_id] = base.ExperimentEdge(logical_edge_id, source_id, target_id)
-                        self._incident_angles[target_id] = angle
-                        self._auto_path_segments.append((source_id, target_id, angle))
+            hit = self._ray_hit(origin, angle, excluded=set(visited))
+            if hit is None:
+                continue
+            target, _distance = hit
+            edge_counter += 1
+            edge_id = f"auto_edge_{edge_counter}"
+            self.edges[edge_id] = base.ExperimentEdge(edge_id, source_id, target.id)
+            self._incident_angles[target.id] = angle % 360.0
+            self._auto_path_segments.append((source_id, target.id, angle % 360.0))
+            self._segment_info[edge_id] = BeamSegmentInfo(edge_id, source_id, target.id, angle % 360.0)
 
-                info = BeamSegmentInfo(
-                    edge_id=logical_edge_id or segment_id,
-                    source_id=source_id,
-                    target_id=target_id,
-                    angle_deg=angle,
-                    start_x=float(start_point.scene_x),
-                    start_y=float(start_point.scene_y),
-                    start_z_mm=float(start_point.height_mm),
-                    end_x=float(end_point.scene_x),
-                    end_y=float(end_point.scene_y),
-                    end_z_mm=float(end_point.height_mm),
-                    power_fraction=float(path.power_fraction),
-                    path_id=str(path.path_id),
-                    ray_id=str(path.ray_id),
-                    is_chief_ray=bool(is_chief),
-                    signature=str(path.signature),
-                    termination_reason=str(path.termination_reason if index == len(points) - 2 else ""),
-                )
-                self._physical_segments.append(info)
-                self._segment_info[info.edge_id] = info
-                if logical_edge_id:
-                    self._segment_info[logical_edge_id] = info
+            next_visited = frozenset(set(visited) | {target.id})
+            if target.kind in base.TERMINAL_TYPES or target.kind == "oscilloscope":
+                continue
+            target_point = QPointF(target.x, target.y)
+            if target.kind == "mirror":
+                outgoing = self._mirror_outgoing_angle(target, angle)
+                rays.append((target.id, target_point, outgoing, next_visited, depth + 1))
+            elif target.kind in {"splitter", "pbs", "beam_sampler"}:
+                transmitted = angle % 360.0
+                reflected = self._splitter_branch_angle(target, angle)
+                rays.append((target.id, target_point, transmitted, next_visited, depth + 1))
+                if abs(((reflected - transmitted + 180.0) % 360.0) - 180.0) > 1.0:
+                    rays.append((target.id, target_point, reflected, next_visited, depth + 1))
+            else:
+                rays.append((target.id, target_point, angle % 360.0, next_visited, depth + 1))
+
 
         reached = ORIGINAL_EXPERIMENT_MODEL.reached_nodes(self) if self.edges else set()
         scopes = [node for node in self.nodes.values() if node.kind == "oscilloscope" and spatial._enabled(node)]
@@ -468,18 +414,20 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                 edge_counter += 1
                 edge_id = f"auto_signal_{edge_counter}"
                 self.edges[edge_id] = base.ExperimentEdge(edge_id, detector.id, scope.id)
-        self._routing_dirty = False
-        return True
 
     def segment_info(self, edge_id: str) -> BeamSegmentInfo | None:
         self.rebuild_auto_paths()
         return self._segment_info.get(edge_id)
 
     def edge_fraction(self, edge_id: str, point: QPointF) -> float:
-        info = self.segment_info(edge_id)
-        if info is None:
+        edge = self.edges.get(edge_id)
+        if edge is None:
             return 0.5
-        return _segment_fraction(point, info.start_point, info.end_point)
+        source = self.nodes.get(edge.source)
+        target = self.nodes.get(edge.target)
+        if source is None or target is None:
+            return 0.5
+        return _segment_fraction(point, QPointF(source.x, source.y), QPointF(target.x, target.y))
 
     def nearest_beam_segment(
         self,
@@ -491,34 +439,39 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
 
         self.rebuild_auto_paths()
         best: tuple[str, float, float] | None = None
-        for info in self._physical_segments:
-            if info.edge_id not in self.edges:
+        for edge_id in self._segment_info:
+            edge = self.edges.get(edge_id)
+            if edge is None:
                 continue
-            if info.source_id is None or info.target_id is None or info.source_id == info.target_id:
+            source = self.nodes.get(edge.source)
+            target = self.nodes.get(edge.target)
+            if source is None or target is None:
                 continue
-            distance, fraction = _distance_to_segment(point, info.start_point, info.end_point)
+            distance, fraction = _distance_to_segment(
+                point,
+                QPointF(source.x, source.y),
+                QPointF(target.x, target.y),
+            )
             if distance > float(max_distance):
                 continue
             if best is None or distance < best[2]:
-                best = (info.edge_id, fraction, distance)
+                best = (edge_id, fraction, distance)
         return best
 
     def attach_instrument_to_edge(self, kind: str, edge_id: str, t: float = 0.50) -> str | None:
         if kind not in MEASUREMENT_KINDS:
             return None
         edge = self.edges.get(edge_id)
-        info = self.segment_info(edge_id)
-        if edge is None or info is None:
+        if edge is None:
             return None
         source = self.nodes.get(edge.source)
         target = self.nodes.get(edge.target)
         if source is None or target is None:
             return None
         t = max(0.08, min(0.92, float(t)))
-        x = info.start_x + (info.end_x - info.start_x) * t
-        y = info.start_y + (info.end_y - info.start_y) * t
-        z_mm = info.start_z_mm + (info.end_z_mm - info.start_z_mm) * t
-        incoming = info.angle_deg
+        x = source.x + (target.x - source.x) * t
+        y = source.y + (target.y - source.y) * t
+        incoming = math.degrees(math.atan2(target.y - source.y, target.x - source.x)) % 360.0
         node_id = self.add_node(
             kind,
             x,
@@ -528,7 +481,6 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
                 "beam_source_id": source.id,
                 "beam_target_id": target.id,
                 "beam_t": t,
-                "z_mm": z_mm,
                 "follow_beam_orientation": True,
             },
             rotation_deg=(incoming + 180.0) % 360.0,
@@ -536,7 +488,7 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         )
         self.selected_node_id = node_id
         self.selected_edge_id = None
-        self.record(f"将{self.nodes[node_id].label}吸附到光束段；接收面已自动对准。")
+        self.record(f"将{self.nodes[node_id].label}关联到所选测量截面。")
         return node_id
 
     def set_attachment_fraction(self, node_id: str, fraction: float, *, record: bool = True) -> None:
@@ -544,11 +496,9 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         if node is None or not bool(node.params.get("beam_attached", False)):
             return
         node.params["beam_t"] = max(0.08, min(0.92, float(fraction)))
-        self.mark_changed()
+        self.rebuild_auto_paths()
         if record:
             self.record(f"沿光束移动{node.label}。")
-        else:
-            self.request_live_trace()
 
     def detach_instrument(self, node_id: str, *, record: bool = True) -> None:
         node = self.nodes.get(node_id)
@@ -558,107 +508,18 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         node.params["beam_source_id"] = ""
         node.params["beam_target_id"] = ""
         if record:
-            self.record(f"解除{node.label}的沿光束吸附，可自由移动和旋转。")
+            self.record(f"取消{node.label}的测量截面关联，可自由移动和旋转。")
 
     def move_node(self, node_id: str, x: float, y: float, *, record: bool = True) -> None:
         node = self.nodes.get(node_id)
-        if node is None:
-            return
-        if node.kind in base.INSTRUMENT_TYPES and bool(node.params.get("beam_attached", False)):
+        if node is not None and node.kind in base.INSTRUMENT_TYPES and bool(node.params.get("beam_attached", False)):
             source = self.nodes.get(str(node.params.get("beam_source_id", "")))
             target = self.nodes.get(str(node.params.get("beam_target_id", "")))
             if source is not None and target is not None:
-                info = next((
-                    item for item in self._physical_segments
-                    if item.is_chief_ray and item.source_id == source.id and item.target_id == target.id
-                ), None)
-                if info is None:
-                    # 没有真实追迹段时无法计算沿光束位置，保持吸附位置不动。
-                    return
-                fraction = _segment_fraction(QPointF(float(x), float(y)), info.start_point, info.end_point)
+                fraction = _segment_fraction(QPointF(float(x), float(y)), QPointF(source.x, source.y), QPointF(target.x, target.y))
                 self.set_attachment_fraction(node_id, fraction, record=record)
                 return
-        old = (float(node.x), float(node.y))
-        node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(x)))
-        node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(y)))
-        if self.mode == "layout":
-            if node.kind in base.OPTICAL_TYPES:
-                node.y = base.MAIN_RAIL_Y
-            elif node.kind != "oscilloscope":
-                node.y = base.BRANCH_RAIL_Y
-        changed = abs(old[0] - node.x) > 0.1 or abs(old[1] - node.y) > 0.1
-        if not changed:
-            return
-        self.mark_changed()
-        if record:
-            self.record(f"移动{node.label}；系统已重新追迹光路。")
-        else:
-            self.request_live_trace()
-
-    def move_node_3d(self, node_id: str, x: float, y: float, z_mm: float, *, record: bool = True) -> None:
-        node = self.nodes.get(node_id)
-        if node is None:
-            return
-        node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(x)))
-        node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(y)))
-        node.params["z_mm"] = max(12.0, min(180.0, float(z_mm)))
-        self.mark_changed()
-        if record:
-            self.record(f"在3D平台中移动{node.label}。")
-        else:
-            self.request_live_trace()
-
-    def set_orientation(
-        self,
-        node_id: str,
-        *,
-        yaw_deg: float | None = None,
-        pitch_deg: float | None = None,
-        roll_deg: float | None = None,
-        record: bool = True,
-    ) -> None:
-        node = self.nodes.get(node_id)
-        if node is None:
-            return
-        if yaw_deg is not None:
-            node.rotation_deg = float(yaw_deg) % 360.0
-        if pitch_deg is not None:
-            node.params["pitch_deg"] = max(-89.0, min(89.0, float(pitch_deg)))
-        if roll_deg is not None:
-            node.params["roll_deg"] = float(roll_deg) % 360.0
-        self.mark_changed()
-        if record:
-            self.record(f"调整{node.label}的空间姿态。")
-        else:
-            self.request_live_trace()
-
-    def update_node_params(self, node_id: str, changes: dict[str, Any], *, record: bool = True) -> None:
-        node = self.nodes.get(node_id)
-        if node is None:
-            return
-        spatial_changes = dict(changes)
-        if "rotation_deg" in spatial_changes:
-            node.rotation_deg = float(spatial_changes.pop("rotation_deg")) % 360.0
-        node.params.update(spatial_changes)
-        if node.kind == "cylindrical_lens":
-            if "cylinder_axis_deg" in spatial_changes:
-                axis_deg = float(spatial_changes["cylinder_axis_deg"]) % 180.0
-            elif "axis_angle_deg" in spatial_changes:
-                axis_deg = float(spatial_changes["axis_angle_deg"]) % 180.0
-            elif "cylinder_power_axis_deg" in spatial_changes:
-                axis_deg = (float(spatial_changes["cylinder_power_axis_deg"]) - 90.0) % 180.0
-            else:
-                axis_deg = float(node.params.get("cylinder_axis_deg", node.params.get("axis_angle_deg", 0.0)) or 0.0) % 180.0
-            node.params["axis_angle_deg"] = axis_deg
-            node.params["cylinder_axis_deg"] = axis_deg
-            node.params["cylinder_power_axis_deg"] = (axis_deg + 90.0) % 180.0
-            node.params["cylinder_axis_definition"] = "zero_power_axis"
-        self.mark_changed()
-        if record:
-            description = "、".join(f"{key}={value}" for key, value in changes.items())
-            self.record(f"更新{node.label}：{description}。")
-        else:
-            self.request_live_trace()
+        super().move_node(node_id, x, y, record=record)
 
     
     def _replace_with_nodes(self, specs: list[tuple[str, float, float, float, str, dict[str, Any]]], description: str) -> None:
@@ -668,6 +529,9 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         self._counter = 0
         for kind, x, y, rotation, label, params in specs:
             self.add_node(kind, x, y, label=label, params=params, rotation_deg=rotation, record=False)
+        laser = next((node for node in self.nodes.values() if node.kind == "laser"), None)
+        if laser is not None and isinstance(laser.params.get("wavelength_nm"), (int, float)):
+            self.wavelength_nm = float(laser.params["wavelength_nm"])
         self.selected_node_id = next((node.id for node in self.nodes.values() if node.kind == "lens"), None)
         self.selected_edge_id = None
         self._suspend_auto = False
@@ -676,6 +540,21 @@ class FlexibleSpatialExperimentModel(spatial.SpatialExperimentModel):
         self.record(description)
 
     def load_layout_preset(self, preset: str) -> None:
+        if str(preset) == "four_lens_json":
+            self.load_four_lens_json()
+            return
+        if str(preset) == "minimal_laser_lens_ccd":
+            self.active_experiment_key = "minimal_laser_lens_ccd"
+            self.max_system_length_mm = 120.0
+            self._replace_with_nodes(
+                [
+                    ("laser", 120, 310, 0, "Laser", {"wavelength_nm": 808.0, "object_distance_mm": 50.0, "beam_radius_mm": 0.72}),
+                    ("lens", 420, 310, 0, "Lens001", {"focal_mm": 50.0, "air_gap_after_mm": 50.0, "thickness_mm": 3.0, "material": "N-BK7", "semi_aperture_mm": 12.5, "enabled": True}),
+                    ("ccd", 720, 310, 180, "CCD", {"scan_positions_mm": "10,15,17.5,27.5,37.5", "plane_offset_mm": 0.0}),
+                ],
+                "最小闭环：Laser → Lens f=50 → CCD；光线来自正式几何追迹。",
+            )
+            return
         teaching_preset = experiment_presets.EXPERIMENT_PRESETS.get(str(preset))
         if teaching_preset is not None:
             
@@ -784,135 +663,230 @@ class SelectableBeamSegmentItem(base.OpticalConnectionItem):
             painter.drawPath(self._path())
 
 
-class PhysicalBeamSegmentItem(QGraphicsObject):
-    segmentActivated = Signal(str, QPointF)
 
-    def __init__(
-        self,
-        info: BeamSegmentInfo,
-        *,
-        source_radius: float = 6.0,
-        target_radius: float = 6.0,
-        ideal_source_radius: float | None = None,
-        ideal_target_radius: float | None = None,
-        display_layer: str = "overlay",
-        placement_active: bool = False,
-        selectable: bool = False,
-        parent=None,
-    ) -> None:
+class EngineeringProjectionScene(base.ExperimentScene):
+    """Light engineering work surface matching the Quick3D teaching scene.
+
+    Side/top views are orthographic projections of the same ExperimentScene, but
+    they do not need identical backgrounds: side view shows the table edge/horizon
+    while top view shows the breadboard surface and hole pattern.  Both use the
+    exact neutral palette of the Quick3D workbench.
+    """
+
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.info = info
-        self.edge_id = info.edge_id
-        self.source_radius = max(2.0, float(source_radius))
-        self.target_radius = max(2.0, float(target_radius))
-        self.ideal_source_radius = max(2.0, float(ideal_source_radius if ideal_source_radius is not None else source_radius))
-        self.ideal_target_radius = max(2.0, float(ideal_target_radius if ideal_target_radius is not None else target_radius))
-        self.display_layer = display_layer if display_layer in base.DISPLAY_LAYER_LABELS else "overlay"
-        self.placement_active = bool(placement_active)
-        self.selectable = bool(selectable)
-        self._hovered = False
-        self.setZValue(2.0)
-        buttons = Qt.MouseButton.LeftButton | Qt.MouseButton.RightButton if self.selectable else Qt.MouseButton.NoButton
-        self.setAcceptedMouseButtons(buttons)
-        self.setAcceptHoverEvents(self.selectable)
+        self.projection_plane = "side"
+        self.reference_rail_y = float(base.MAIN_RAIL_Y)
 
-    def _path(self) -> QPainterPath:
-        path = QPainterPath(self.info.start_point)
-        path.lineTo(self.info.end_point)
-        return path
+    def set_reference_rail_y(self, rail_y: float) -> None:
+        rail_y = float(rail_y)
+        if abs(rail_y - self.reference_rail_y) < 1e-6:
+            return
+        self.reference_rail_y = rail_y
+        self.update()
 
-    def _envelope(self, source_radius: float, target_radius: float) -> QPolygonF | None:
-        start = self.info.start_point
-        end = self.info.end_point
-        dx = end.x() - start.x()
-        dy = end.y() - start.y()
-        length = math.hypot(dx, dy)
-        if length < 1.0e-8:
-            return None
-        nx, ny = -dy / length, dx / length
-        r0 = max(2.0, min(18.0, float(source_radius)))
-        r1 = max(2.0, min(18.0, float(target_radius)))
-        return QPolygonF([
-            QPointF(start.x() + nx * r0, start.y() + ny * r0),
-            QPointF(end.x() + nx * r1, end.y() + ny * r1),
-            QPointF(end.x() - nx * r1, end.y() - ny * r1),
-            QPointF(start.x() - nx * r0, start.y() - ny * r0),
-        ])
+    def set_projection_plane(self, plane: str) -> None:
+        plane = "top" if str(plane).lower() == "top" else "side"
+        if plane == self.projection_plane:
+            return
+        self.projection_plane = plane
+        self.update()
+
+    def drawBackground(self, painter: QPainter, rect: QRectF) -> None:
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        painter.fillRect(rect, QColor(scene_style.SCENE_BACKGROUND))
+        board = base.SCENE_RECT.adjusted(24, 24, -24, -24)
+
+        if self.projection_plane == "top":
+            # Top view is a real orthographic view of the optical breadboard.
+            painter.setPen(QPen(QColor(scene_style.TABLE_EDGE), 1.4))
+            painter.setBrush(QColor(scene_style.TABLE_SURFACE))
+            painter.drawRoundedRect(board, 12, 12)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(QColor(174, 187, 196, 92))
+            for x in range(72, 1545, 56):
+                for y in range(76, 836, 56):
+                    painter.drawEllipse(QPointF(float(x), float(y)), 1.45, 1.45)
+        else:
+            # Side projection shares the pale Quick3D world background and shows
+            # only the optical-table slab below the apparatus.  It must not look
+            # like the old dark top-down CAD grid.
+            table_top = self.reference_rail_y + 58.0
+            table_rect = QRectF(board.left(), table_top, board.width(), max(80.0, board.bottom() - table_top))
+            painter.setPen(QPen(QColor(scene_style.TABLE_EDGE), 1.2))
+            painter.setBrush(QColor(scene_style.TABLE_SURFACE))
+            painter.drawRoundedRect(table_rect, 8, 8)
+            painter.setPen(QPen(QColor(scene_style.TABLE_EDGE), 1.0))
+            painter.drawLine(QPointF(board.left(), table_top), QPointF(board.right(), table_top))
+
+        # The Quick3D scene has no heavy metal rail running through the optical
+        # centres.  Keep only a restrained optical-axis guide; the experiment
+        # hardware is visibly supported by the table below.
+        axis_color = QColor(scene_style.AXIS)
+        axis_color.setAlpha(92)
+        painter.setPen(QPen(axis_color, 1.0, Qt.PenStyle.DashLine))
+        painter.drawLine(QPointF(60, self.reference_rail_y), QPointF(1540, self.reference_rail_y))
+
+
+class ProjectedOpticalNodeItem(spatial.SpatialOpticalNodeItem):
+    """2-D orthographic silhouette of the same registered 3-D teaching asset.
+
+    The old 2-D workbench used an independent set of hand-drawn icons.  That made
+    a lens/mount, laser or detector look like a different apparatus after switching
+    to 3-D.  This item derives its envelope from the *same* asset registry used by
+    Quick3D and only simplifies the projection for engineering readability.
+    """
+
+    def __init__(self, node: base.ExperimentNode, movable: bool, *, plane: str, display_layer: str = "overlay", parent=None) -> None:
+        self.projection_plane = "top" if str(plane).lower() == "top" else "side"
+        super().__init__(node, movable, display_layer=display_layer, parent=parent)
 
     def boundingRect(self) -> QRectF:
-        margin = max(self.source_radius, self.target_radius, self.ideal_source_radius, self.ideal_target_radius) + 24.0
-        return self._path().boundingRect().adjusted(-margin, -margin, margin, margin)
-
-    def shape(self) -> QPainterPath:
-        stroker = QPainterPathStroker()
-        stroker.setWidth(max(20.0, 2.0 * max(self.source_radius, self.target_radius)))
-        return stroker.createStroke(self._path())
-
-    def hoverEnterEvent(self, event) -> None:
-        self._hovered = True
-        self.update()
-        super().hoverEnterEvent(event)
-
-    def hoverLeaveEvent(self, event) -> None:
-        self._hovered = False
-        self.update()
-        super().hoverLeaveEvent(event)
-
-    def mousePressEvent(self, event) -> None:
-        if self.selectable:
-            self.segmentActivated.emit(self.edge_id, event.scenePos())
-            event.accept()
-            return
-        super().mousePressEvent(event)
+        return QRectF(-82.0, -82.0, 164.0, 168.0)
 
     def paint(self, painter: QPainter, option, widget=None) -> None:
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-        start = self.info.start_point
-        end = self.info.end_point
-        power = max(0.04, min(1.0, float(self.info.power_fraction)))
-        alpha = int(34 + 58 * math.sqrt(power))
-        polygon = self._envelope(self.source_radius, self.target_radius)
-        if polygon is not None:
-            gradient = QLinearGradient(start, end)
-            gradient.setColorAt(0.0, QColor(255, 74, 74, max(24, alpha - 14)))
-            gradient.setColorAt(0.55, QColor(255, 52, 52, alpha))
-            gradient.setColorAt(1.0, QColor(255, 104, 104, max(22, alpha - 18)))
-            painter.setPen(Qt.PenStyle.NoPen)
-            painter.setBrush(gradient)
-            painter.drawPolygon(polygon)
-        if self.display_layer in {"principle", "overlay"}:
-            ideal = self._envelope(self.ideal_source_radius, self.ideal_target_radius)
-            if ideal is not None:
-                painter.setBrush(Qt.BrushStyle.NoBrush)
-                painter.setPen(QPen(QColor(33, 118, 180, 145), 1.2, Qt.PenStyle.DashLine))
-                painter.drawPolygon(ideal)
-        painter.setBrush(Qt.BrushStyle.NoBrush)
-        painter.setPen(QPen(QColor(theme.ERROR), 2.15, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
-        painter.drawLine(start, end)
-        if self.placement_active or self._hovered:
-            painter.setPen(QPen(QColor(theme.PRIMARY), 5.0 if self.placement_active else 3.0, Qt.PenStyle.DashLine, Qt.PenCapStyle.RoundCap))
-            painter.drawLine(start, end)
+        asset = asset_for_kind(self.kind)
+        width = max(22.0, min(106.0, 104.0 * float(asset.pick_scale[0])))
+        depth_or_height = float(asset.pick_scale[2] if self.projection_plane == "top" else asset.pick_scale[1])
+        height = max(24.0, min(104.0, 104.0 * depth_or_height))
 
+        painter.save()
+        if self.projection_plane == "top":
+            painter.rotate(float(self.rotation_deg))
+
+        if self.isSelected():
+            painter.setPen(QPen(QColor(scene_style.SELECTION), 2.2, Qt.PenStyle.DashLine))
+            painter.setBrush(QColor(21, 94, 239, 22))
+            painter.drawRoundedRect(QRectF(-width/2-8, -height/2-8, width+16, height+16), 8, 8)
+
+        # Use the same mechanical palette and support semantics as Quick3D.
+        # Side view preserves the body -> holder -> post -> base chain; top view
+        # preserves the body/base footprints and the post centre.
+        painter.setPen(QPen(QColor("#111820"), 1.0))
+        if self.projection_plane == "side":
+            base_y = max(height/2 + 18.0, 47.0)
+            painter.setBrush(QColor(scene_style.BASE))
+            painter.drawRoundedRect(QRectF(-max(30.0, width*0.48), base_y, max(60.0, width*0.96), 10.0), 2, 2)
+            painter.setBrush(QColor(scene_style.POST))
+            painter.drawRoundedRect(QRectF(-3.5, height/2-1.0, 7.0, max(8.0, base_y-height/2+2.0)), 2, 2)
+            painter.setBrush(QColor(scene_style.FRAME))
+            painter.drawRoundedRect(QRectF(-max(12.0, width*0.20), height/2-4.0, max(24.0, width*0.40), 8.0), 2, 2)
+        else:
+            painter.setBrush(QColor(scene_style.BASE))
+            painter.drawRoundedRect(QRectF(-max(28.0, width*0.46), -max(20.0, height*0.42), max(56.0, width*0.92), max(40.0, height*0.84)), 4, 4)
+            painter.setBrush(QColor(scene_style.POST))
+            painter.drawEllipse(QRectF(-4.0, -4.0, 8.0, 8.0))
+
+        kind = self.kind
+        outline = QPen(QColor("#111820"), 1.45)
+        optic_pen = QPen(QColor(scene_style.GLASS_EDGE), 1.25)
+        optic_brush = QColor(109, 213, 231, 105)
+
+        thin_optics = {"lens", "aperture", "half_wave_plate", "mirror"}
+        box_instruments = {"power_meter", "photodetector", "camera", "beam_analyzer", "imaging_camera", "ccd", "focus_scan_module", "wavefront_sensor", "oscilloscope"}
+
+        painter.setPen(outline)
+        if kind == "laser":
+            body = QRectF(-width, -height/2, max(18.0, width-7.0), height)
+            painter.setBrush(QColor(scene_style.LASER_BODY)); painter.drawRoundedRect(body, 5, 5)
+            painter.setBrush(QColor(scene_style.FRAME)); painter.drawEllipse(QRectF(-8, -9, 16, 18))
+            painter.setBrush(QColor(scene_style.BEAM)); painter.setPen(Qt.PenStyle.NoPen); painter.drawEllipse(QRectF(-2.5, -2.5, 5, 5))
+        elif kind == "fiber":
+            body = QRectF(-width*0.82, -height*0.42, width*0.72, height*0.84)
+            painter.setPen(outline); painter.setBrush(QColor("#252F37")); painter.drawRoundedRect(body, 5, 5)
+            painter.setBrush(QColor("#202B33")); painter.drawEllipse(QRectF(-15, -15, 30, 30))
+            painter.setPen(optic_pen); painter.setBrush(QColor("#7ED7E7")); painter.drawEllipse(QRectF(-6.5, -6.5, 13, 13))
+        elif kind in thin_optics:
+            thin = max(10.0, min(18.0, width * 0.30))
+            body = QRectF(-thin/2, -height/2, thin, height)
+            painter.setBrush(QColor(scene_style.FRAME)); painter.drawRoundedRect(body, 3, 3)
+            inner = body.adjusted(3.0, 5.0, -3.0, -5.0)
+            if kind == "mirror":
+                painter.setPen(QPen(QColor("#98A6B1"), 1.2)); painter.setBrush(QColor(scene_style.MIRROR_FACE))
+            elif kind == "aperture":
+                painter.setPen(QPen(QColor("#A8E1EA"), 1.1)); painter.setBrush(QColor("#11181D"))
+            else:
+                painter.setPen(optic_pen); painter.setBrush(optic_brush)
+            painter.drawRoundedRect(inner, 2, 2)
+        elif kind in {"splitter", "pbs", "beam_sampler"}:
+            plate_w = max(18.0, width * 0.58)
+            plate_h = max(26.0, height * 0.78)
+            body = QRectF(-plate_w/2, -plate_h/2, plate_w, plate_h)
+            painter.setBrush(QColor("#28343D")); painter.drawRoundedRect(body, 3, 3)
+            painter.setPen(QPen(QColor(scene_style.SPLITTER_GLASS), 1.2)); painter.setBrush(QColor(168, 224, 234, 105))
+            inner = body.adjusted(4.0, 4.0, -4.0, -4.0)
+            painter.drawRoundedRect(inner, 2, 2); painter.drawLine(inner.bottomLeft(), inner.topRight())
+        elif kind == "isolator":
+            body = QRectF(-width/2, -height*0.34, width, height*0.68)
+            painter.setBrush(QColor("#303943")); painter.drawRoundedRect(body, height*0.28, height*0.28)
+            painter.setPen(QPen(QColor("#6B7782"), 1.2)); painter.setBrush(QColor("#121A20")); painter.drawEllipse(QRectF(width*0.25, -height*0.18, height*0.36, height*0.36))
+        elif kind == "beam_expander":
+            body = QRectF(-width/2, -height*0.33, width, height*0.66)
+            painter.setBrush(QColor("#33404A")); painter.drawRoundedRect(body, height*0.26, height*0.26)
+            painter.setPen(QPen(QColor("#75CFDC"), 1.2)); painter.setBrush(QColor(117, 207, 220, 88))
+            painter.drawEllipse(QRectF(width*0.24, -height*0.20, height*0.40, height*0.40))
+        elif kind in box_instruments:
+            body = QRectF(-width/2, -height/2, width, height)
+            body_color = "#33404A" if kind in {"camera", "beam_analyzer", "imaging_camera", "ccd", "focus_scan_module"} else "#303B44"
+            painter.setBrush(QColor(body_color)); painter.drawRoundedRect(body, 5, 5)
+            painter.setPen(QPen(QColor("#6FCAD6"), 1.2)); painter.setBrush(QColor("#151D23")); painter.drawEllipse(QRectF(-width/2-5, -9, 18, 18))
+        else:
+            body = QRectF(-width/2, -height/2, width, height)
+            painter.setBrush(QColor(scene_style.BODY)); painter.drawRoundedRect(body, 5, 5)
+
+        painter.restore()
+
+        # 2-D keeps concise engineering annotations, but not the old large card
+        # labels.  This preserves identity while the apparatus itself remains the
+        # dominant visual, like in 3-D.
+        label_y = 62.0 if self.projection_plane == "top" else max(64.0, height/2 + 58.0)
+        label_rect = QRectF(-78, label_y, 156, 24)
+        painter.setPen(QColor(scene_style.TEXT_SECONDARY if not self.isSelected() else scene_style.TEXT))
+        font = painter.font(); font.setBold(self.isSelected())
+        painter.setFont(font)
+        painter.drawText(label_rect, Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop, self.label)
 
 class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
+    """Engineering projection of the shared ExperimentScene.
+
+    Apparatus comes from the experiment model; *physical light* comes only from
+    ``TeachingSceneSnapshot.formal_rays_mm``.  The former automatically snapped
+    topology edges are intentionally not rendered as beams.
+    """
+
     beamSegmentActivated = Signal(str, float, float)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        old_scene = self.scene_obj
+        self.scene_obj = EngineeringProjectionScene(self)
+        self.scene_obj.set_display_layer(self._display_layer)
+        self.scene_obj.set_projection_plane("side")
+        self.setScene(self.scene_obj)
+        old_scene.deleteLater()
         self._instrument_placement_kind: str | None = None
+        self._projection_plane = "side"
+        self._formal_ray_items: list[QGraphicsPathItem] = []
+        # Compatibility guard for the former live-trace implementation. Drag
+        # motion only updates geometry; a formal trace is requested after the
+        # move is committed by the workbench.
         self._live_trace_timer = QTimer(self)
         self._live_trace_timer.setSingleShot(True)
-        self._live_trace_timer.setInterval(35)
-        self._live_trace_timer.timeout.connect(self._submit_live_trace)
 
-    def _submit_live_trace(self) -> None:
-        model = self._model
-        if isinstance(model, FlexibleSpatialExperimentModel):
-            model.mark_changed()
-            model.request_live_trace()
+    @property
+    def projection_plane(self) -> str:
+        return self._projection_plane
 
-    def _stop_live_trace_timer(self, *_args) -> None:
-        self._live_trace_timer.stop()
+    def set_projection_plane(self, plane: str) -> None:
+        plane = "top" if str(plane).lower() == "top" else "side"
+        if plane == self._projection_plane:
+            return
+        self._projection_plane = plane
+        if hasattr(self.scene_obj, "set_projection_plane"):
+            self.scene_obj.set_projection_plane(plane)
+        if self._model is not None:
+            self.set_model(self._model, preserve_view=True)
 
     def set_instrument_placement_kind(self, kind: str | None) -> None:
         self._instrument_placement_kind = kind if kind in MEASUREMENT_KINDS else None
@@ -920,25 +894,50 @@ class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
         if self._model is not None:
             self.set_model(self._model, preserve_view=True)
 
-    def _on_item_position_changed(self, node_id: str) -> None:
-        model = self._model
-        item = self._node_items.get(node_id)
-        if isinstance(model, FlexibleSpatialExperimentModel) and item is not None and node_id in model.nodes:
-            node = model.nodes[node_id]
-            node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(item.pos().x())))
-            node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(item.pos().y())))
-            if model.mode == "layout":
-                if node.kind in base.OPTICAL_TYPES:
-                    node.y = base.MAIN_RAIL_Y
-                elif node.kind != "oscilloscope":
-                    node.y = base.BRANCH_RAIL_Y
-        if not self._live_trace_timer.isActive():
-            self._live_trace_timer.start()
-        # 只刷新与移动节点相邻的光路图元；其余静态图元由 DeviceCoordinateCache 提供缓存。
-        for edge_id, edge_item in self._edge_items.items():
-            info = getattr(edge_item, "info", None)
-            if info is not None and (info.source_id == node_id or info.target_id == node_id):
-                edge_item.update()
+    def set_rays_only(self, enabled: bool) -> None:
+        self._rays_only = bool(enabled)
+        for item in self._node_items.values():
+            item.setVisible(not self._rays_only)
+        for item in self._formal_ray_items:
+            item.setVisible(True)
+        self.viewport().update()
+
+    def _add_formal_rays(self, model: FlexibleSpatialExperimentModel, scene_snapshot: base.TeachingSceneSnapshot) -> None:
+        scene_rays = tuple(getattr(scene_snapshot, "formal_rays_scene", ()) or ())
+        if scene_rays:
+            # Free-placement solver already returns scene coordinates.
+            projected = []
+            for ray in scene_rays:
+                if self._projection_plane == "top":
+                    projected.append(tuple((float(p[0]), float(p[1])) for p in ray))
+                else:
+                    rail = main_rail_y(model)
+                    projected.append(tuple((float(p[0]), rail - (float(p[2]) - 82.0)) for p in ray))
+        else:
+            projected = project_formal_rays_2d(
+                model,
+                scene_snapshot.formal_rays_mm,
+                plane=self._projection_plane,
+                rail_y=main_rail_y(model),
+            )
+        for index, ray in enumerate(projected):
+            if len(ray) < 2:
+                continue
+            path = QPainterPath(QPointF(*ray[0]))
+            for x, y in ray[1:]:
+                path.lineTo(QPointF(x, y))
+            glow = QGraphicsPathItem(path)
+            glow.setPen(QPen(QColor(217, 72, 1, 46), 6.0, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin))
+            glow.setZValue(2.4)
+            glow.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+            self.scene_obj.addItem(glow)
+            self._formal_ray_items.append(glow)
+            item = QGraphicsPathItem(path)
+            item.setPen(QPen(QColor(scene_style.BEAM), 2.0, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin))
+            item.setZValue(2.6 + index * 0.001)
+            item.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+            self.scene_obj.addItem(item)
+            self._formal_ray_items.append(item)
 
     def set_model(
         self,
@@ -950,53 +949,89 @@ class FlexibleSpatialGraphicsView(spatial.SpatialExperimentGraphicsView):
         transform = self.transform()
         center_scene = self.mapToScene(self.viewport().rect().center())
         self._model = model
-        self.scene_obj.clear()
         self.scene_obj.set_display_layer(self._display_layer)
-        self._node_items = {}
+        # Topology edges remain in the model for experiment structure, history and
+        # measurement attachment, but they are not a source of physical light.
         self._edge_items = {}
+        # Formal rays are rebuilt on every refresh; remove the previous set
+        # explicitly because the scene is no longer cleared wholesale.
+        for item in self._formal_ray_items:
+            self.scene_obj.removeItem(item)
+        self._formal_ray_items = []
         scene_snapshot = snapshot or model.scene_snapshot()
-        metrics = scene_snapshot.metrics
-        reached = set(metrics.reached_node_ids)
-        current_radii = scene_snapshot.current_radii
-        ideal_radii = scene_snapshot.ideal_radii
         movable = model.mode in {"layout", "free", "diagnostic"}
-        for node in model.nodes.values():
-            node_movable = movable and not (model.mode == "layout" and node.kind in {"laser", "isolator", "half_wave_plate", "pbs", "splitter"})
-            item = spatial.SpatialOpticalNodeItem(node, node_movable, display_layer=self._display_layer)
-            if not node_movable:
-                item.setCacheMode(QGraphicsItem.CacheMode.DeviceCoordinateCache)
-            item.activated.connect(self.nodeActivated)
-            item.positionChanged.connect(self._on_item_position_changed)
-            item.movementFinished.connect(self._stop_live_trace_timer)
-            item.movementFinished.connect(self.nodeMoved)
-            self.scene_obj.addItem(item)
-            self._node_items[node.id] = item
-        for info in model.beam_segments():
-            source_id = info.source_id or ""
-            target_id = info.target_id or ""
-            source_radius = current_radii.get(source_id, current_radii.get(target_id, 6.0))
-            target_radius = current_radii.get(target_id, source_radius)
-            ideal_source_radius = ideal_radii.get(source_id, ideal_radii.get(target_id, source_radius))
-            ideal_target_radius = ideal_radii.get(target_id, ideal_source_radius)
-            selectable = info.edge_id in model.edges and source_id != target_id
-            item = PhysicalBeamSegmentItem(
-                info,
-                source_radius=source_radius,
-                target_radius=target_radius,
-                ideal_source_radius=ideal_source_radius,
-                ideal_target_radius=ideal_target_radius,
-                display_layer=self._display_layer,
-                placement_active=bool(self._instrument_placement_kind and selectable),
-                selectable=selectable,
+        rail_y = main_rail_y(model)
+        if hasattr(self.scene_obj, "set_reference_rail_y"):
+            self.scene_obj.set_reference_rail_y(rail_y)
+
+        # Side view is a projection of the same canonical world transform.  Hide
+        # only off-axis diagnostic instruments that collapse exactly on top of the
+        # main train; the physical node still remains in the scene model and
+        # reappears in top/3-D views.
+        hidden_kinds = set(base.INSTRUMENT_TYPES) | {"photodetector", "camera", "wavefront_sensor", "beam_analyzer"}
+        visible_ids = {
+            node.id
+            for node in model.nodes.values()
+            if not (
+                self._projection_plane == "side"
+                and abs(float(getattr(node, "y", rail_y)) - rail_y) > 70.0
+                and str(getattr(node, "kind", "")) in hidden_kinds
             )
-            # 光束图元在拖拽期间几何不变，设备坐标缓存避免逐帧重绘。
-            item.setCacheMode(QGraphicsItem.CacheMode.DeviceCoordinateCache)
-            if selectable:
-                item.segmentActivated.connect(lambda edge_id, point: self.beamSegmentActivated.emit(edge_id, point.x(), point.y()))
-            self.scene_obj.addItem(item)
-            self._edge_items[info.edge_id] = item
-        if model.selected_node_id in self._node_items:
-            self._node_items[model.selected_node_id].setSelected(True)
+        }
+
+        # Reconcile projected node items in place instead of clearing the scene,
+        # so a refresh triggered from inside an item's own mouse handler never
+        # destroys the item being pressed or dragged.
+        for node_id in tuple(self._node_items):
+            if node_id not in model.nodes or node_id not in visible_ids:
+                item = self._node_items.pop(node_id)
+                self.scene_obj.removeItem(item)
+                item.deleteLater()
+
+        for node in model.nodes.values():
+            if node.id not in visible_ids:
+                continue
+            projected_x, projected_y = project_scene_node_2d(
+                node, plane=self._projection_plane, rail_y=rail_y
+            )
+            try:
+                display_node = replace(node, x=projected_x, y=projected_y)
+            except TypeError:
+                # Lightweight integration tests and plugin adapters may expose
+                # dataclass-compatible node objects without actually using a
+                # dataclass.  Project a shallow view copy; never mutate the
+                # canonical experiment node merely to draw another plane.
+                display_node = copy.copy(node)
+                display_node.x = projected_x
+                display_node.y = projected_y
+            node_movable = movable and self._projection_plane == "top" and not (model.mode == "layout" and node.kind in {"laser", "isolator", "half_wave_plate", "pbs", "splitter"})
+            item = self._node_items.get(node.id)
+            if item is None or item.kind != node.kind:
+                if item is not None:
+                    self.scene_obj.removeItem(item)
+                    item.deleteLater()
+                item = ProjectedOpticalNodeItem(
+                    display_node,
+                    node_movable,
+                    plane=self._projection_plane,
+                    display_layer=self._display_layer,
+                )
+                item.activated.connect(self.nodeActivated)
+                item.positionChanged.connect(self._on_item_position_changed)
+                item.movementFinished.connect(self.nodeMoved)
+                self.scene_obj.addItem(item)
+                self._node_items[node.id] = item
+            else:
+                item.projection_plane = self._projection_plane
+                item.update_from_node(
+                    display_node,
+                    movable=node_movable,
+                    display_layer=self._display_layer,
+                    show_ports=False,
+                )
+            item.setSelected(node.id == model.selected_node_id)
+            item.setVisible(not self._rays_only)
+        self._add_formal_rays(model, scene_snapshot)
         if preserve_view and self._initial_fit_done:
             self.setTransform(transform)
             self.centerOn(center_scene)
@@ -1011,16 +1046,6 @@ class FlexibleSpatial3DView(spatial.SpatialExperiment3DView):
         super().__init__(parent)
         self._instrument_placement_kind: str | None = None
         self._beam_screen_segments: dict[str, tuple[QPointF, QPointF]] = {}
-        self._live_trace_timer = QTimer(self)
-        self._live_trace_timer.setSingleShot(True)
-        self._live_trace_timer.setInterval(35)
-        self._live_trace_timer.timeout.connect(self._submit_live_trace)
-
-    def _submit_live_trace(self) -> None:
-        model = self._model
-        if isinstance(model, FlexibleSpatialExperimentModel) and self._interaction in {"move_node", "rotate_node"}:
-            model.mark_changed()
-            model.request_live_trace()
 
     def set_instrument_placement_kind(self, kind: str | None) -> None:
         self._instrument_placement_kind = kind if kind in MEASUREMENT_KINDS else None
@@ -1031,27 +1056,31 @@ class FlexibleSpatial3DView(spatial.SpatialExperiment3DView):
         self._beam_screen_segments = {}
         if self._model is None:
             return
-        reached = set(self._metrics.reached_node_ids if self._metrics else ())
+        rail_y = main_rail_y(self._model)
         if self._layer_flags["axis"]:
-            p1 = self._project(60, base.MAIN_RAIL_Y, 82)[0]
-            p2 = self._project(1540, base.MAIN_RAIL_Y, 82)[0]
+            p1 = self._project(60, rail_y, 82)[0]
+            p2 = self._project(1540, rail_y, 82)[0]
             painter.setPen(QPen(QColor(185, 199, 211, 72), 1.0, Qt.PenStyle.DashLine))
             painter.drawLine(p1, p2)
-        if not self._layer_flags["beam"]:
+        if not self._layer_flags.get("beam", True):
             return
-        current_radii, _ideal = base.ExperimentGraphicsView._beam_radii(self._model)
-        for info in self._model.beam_segments():
-            a = self._project(info.start_x, info.start_y, info.start_z_mm)[0]
-            b = self._project(info.end_x, info.end_y, info.end_z_mm)[0]
-            selectable = info.edge_id in self._model.edges and info.source_id != info.target_id
-            if selectable:
-                self._beam_screen_segments[info.edge_id] = (a, b)
-            if self._instrument_placement_kind and selectable:
-                painter.setPen(QPen(QColor(76, 187, 236, 105), 18.0, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+        if not self._layer_flags.get("chief_ray", True):
+            return
+        snapshot = self._snapshot or self._model.scene_snapshot()
+        # Same formal raytrace used by the 2-D engineering projection.  If the
+        # formal solver has not returned yet, show no physical light instead of
+        # reconnecting apparatus centres.
+        rays = formal_rays_scene_3d(self._model, snapshot.formal_rays_mm)
+        for ray_index, ray in enumerate(rays):
+            for segment_index, (start3, end3) in enumerate(zip(ray, ray[1:])):
+                a = self._project(*start3)[0]
+                b = self._project(*end3)[0]
+                key = f"formal:{ray_index}:{segment_index}"
+                self._beam_screen_segments[key] = (a, b)
+                painter.setPen(QPen(QColor(255, 115, 45, 70), 8.0, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
                 painter.drawLine(a, b)
-            source_radius = current_radii.get(info.source_id or "", current_radii.get(info.target_id or "", 8.0))
-            target_radius = current_radii.get(info.target_id or "", source_radius)
-            self._draw_beam_segment(painter, a, b, source_radius, target_radius)
+                painter.setPen(QPen(QColor(theme.CHART_ORANGE), 2.35, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+                painter.drawLine(a, b)
 
     def _beam_at(self, pos: QPointF) -> tuple[str, float] | None:
         best: tuple[str, float, float] | None = None
@@ -1062,23 +1091,15 @@ class FlexibleSpatial3DView(spatial.SpatialExperiment3DView):
         return (best[0], best[1]) if best is not None else None
 
     def mousePressEvent(self, event: QMouseEvent) -> None:  
+        # Physical rays are formal solver output and are not interchangeable with
+        # topology edge IDs.  Measurement attachment therefore stays an explicit
+        # free-experiment action rather than snapping an instrument to a rendered ray.
         if event.button() == Qt.MouseButton.LeftButton and self._instrument_placement_kind:
             hit = self._beam_at(event.position())
             if hit is not None:
-                self.beamSegmentActivated.emit(hit[0], hit[1])
                 event.accept()
                 return
         super().mousePressEvent(event)
-
-    def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        interaction_before = self._interaction
-        super().mouseMoveEvent(event)
-        if interaction_before in {"move_node", "rotate_node"} and not self._live_trace_timer.isActive():
-            self._live_trace_timer.start()
-
-    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        self._live_trace_timer.stop()
-        super().mouseReleaseEvent(event)
 
     def align_to_selected_beam(self) -> None:
         if self._model is None:
@@ -1101,177 +1122,298 @@ class FlexibleSpatial3DView(spatial.SpatialExperiment3DView):
 
 class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
 
+    phenomenonRequested = Signal(str)
+    sceneStateChanged = Signal(object, object)
+    model_class = FlexibleSpatialExperimentModel
+    graphics_view_class = FlexibleSpatialGraphicsView
 
     def __init__(self, context, parent=None) -> None:
-        
-        
-        
-        spatial.SpatialExperimentModel = FlexibleSpatialExperimentModel
-        spatial.SpatialExperimentGraphicsView = FlexibleSpatialGraphicsView
-        spatial.SpatialExperiment3DView = FlexibleSpatial3DView
         self._pending_instrument_kind: str | None = None
+        self._formal_physics: TeachingFormalPhysicsController | None = None
         super().__init__(context, parent)
+        self._live_commit_timer = QTimer(self)
+        self._live_commit_timer.setSingleShot(True)
+        self._live_commit_timer.setInterval(420)
+        self._live_commit_timer.timeout.connect(self._commit_pending_live_edit)
+        self._pending_live_commit = False
         self.graphics_view.beamSegmentActivated.connect(self._on_2d_beam_segment)
         self.view_3d.beamSegmentActivated.connect(self._on_3d_beam_segment)
+        self._create_teaching_navigation()
         self._create_measurement_placement_hint()
-        self._trace_poll_timer = QTimer(self)
-        self._trace_poll_timer.setInterval(33)
-        self._trace_poll_timer.timeout.connect(self._poll_engine_trace)
-        self._trace_poll_timer.start()
-        # 正式仿真：提交后台任务，轮询状态并在完成后展示带来源标注的结果。
-        self._formal_job_id = ""
-        self._formal_status_text = "未提交正式仿真。"
-        self._formal_poll_timer = QTimer(self)
-        self._formal_poll_timer.setInterval(700)
-        self._formal_poll_timer.timeout.connect(self._poll_formal_job)
-        self.context.api_client.completed.connect(self._on_api_completed)
-        self.context.api_client.failed.connect(self._on_api_failed)
-        # 复场验证：解析复场模式重叠，settle 完成后自动刷新结果。
-        self._field_verification_result: dict[str, Any] | None = None
+        self._formal_physics = TeachingFormalPhysicsController(context, self)
+        self._formal_physics.resultReady.connect(self._on_formal_physics_result)
+        self._formal_physics.stateChanged.connect(self._on_formal_physics_state)
+        self.set_view_kind("3d")
+        self._hide_legacy_overlay_controls()
         self._refresh_all(preserve_view=True)
 
-    def _poll_engine_trace(self) -> None:
-        if isinstance(self.model, FlexibleSpatialExperimentModel) and self.model.poll_trace_update():
-            self._refresh_all(preserve_view=True)
-            if self.model.engine_trace_status().get("quality") in {"settled", "formal"}:
-                self._auto_field_verification()
+    def _hide_legacy_overlay_controls(self) -> None:
+        """Keep the QML teaching controls as the only visible control layer."""
+        for name in ("camera_bar", "lens_strip", "measurement_hint"):
+            widget = getattr(self, name, None)
+            if widget is not None:
+                widget.hide()
+        for name in ("view_control_buttons", "left_buttons", "right_buttons", "rotate_buttons", "nudge_buttons"):
+            for button in getattr(self, name, ()):
+                button.hide()
+        for name in ("experiment_scene_stage", "experiment_analysis_stage", "experiment_record_stage"):
+            widget = getattr(self, name, None)
+            if widget is not None:
+                widget.hide()
+        if hasattr(self, "view_3d_button"):
+            self.view_3d_button.hide()
+        # Primary workflow entry points stay visible; only duplicate QML chrome is hidden.
+        if hasattr(self, "scheme_menu_button"):
+            self.scheme_menu_button.show()
+        navigation = self.findChild(QWidget, "teachingExperimentNavigation")
+        if navigation is not None:
+            navigation.show()
+        if hasattr(self, "teaching_physics_status"):
+            self.teaching_physics_status.show()
 
-    def _run_field_verification(self) -> None:
-        model = self.model
-        if not isinstance(model, FlexibleSpatialExperimentModel):
-            return
-        result = model.field_verification()
-        self._field_verification_result = result
-        efficiency = float(result.get("coupling_efficiency", 0.0))
-        model.record(f"完成复场验证：模式重叠耦合效率 {efficiency * 100.0:.1f}%。")
-        self._update_field_label()
+    def _create_overlay_buttons(self) -> None:
+        # Keep the canvas rails limited to universal tools. Teaching topics live in
+        # the compact semantic navigation above the canvas instead of occupying a
+        # fourth text-heavy button on the right edge.
+        super()._create_overlay_buttons()
 
-    def _auto_field_verification(self) -> None:
-        self._field_verification_result = self.model.field_verification()
-        self._update_field_label()
+    def _create_teaching_navigation(self) -> None:
+        """Expose the five physical mismatch experiments directly.
 
-    def _update_field_label(self) -> None:
-        label = getattr(self, "field_result_label", None)
-        result = self._field_verification_result
+        The former semantic navigation (phenomenon/diagnosis/model/free) made the
+        teaching center behave like a textbook website.  These buttons now load
+        a concrete experiment so the learner changes one dominant physical
+        quantity first and only opens explanation when needed.
+        """
+        wrapper = QWidget(self)
+        wrapper.setObjectName("teachingExperimentNavigation")
+        outer = QVBoxLayout(wrapper)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.setSpacing(4)
+        nav = QHBoxLayout()
+        nav.setContentsMargins(0, 0, 0, 0)
+        nav.setSpacing(6)
+        specs = [
+            ("横向失配", "lateral_scan", "改变光纤横向位置，观察模场中心与耦合效率"),
+            ("角度失配", "fiber_angle", "改变光纤端面倾角，观察线性相位与耦合效率"),
+            ("尺寸失配", "spherical_expansion", "改变完整 q 参数，观察模场尺寸匹配"),
+            ("轴向失配", "axial_defocus", "改变 Z，观察束腰、曲率与耦合效率联动"),
+            ("曲率失配", "curvature_matching", "观察尺寸近似一致但波前曲率不同的状态"),
+        ]
+        nav.addWidget(QLabel("研究变量"))
+        self.teaching_mismatch_combo = QComboBox(self)
+        self.teaching_mismatch_combo.setObjectName("teachingMismatchCombo")
+        for label, preset, tooltip in specs:
+            self.teaching_mismatch_combo.addItem(label, preset)
+            self.teaching_mismatch_combo.setItemData(self.teaching_mismatch_combo.count() - 1, tooltip, Qt.ItemDataRole.ToolTipRole)
+        self.teaching_mismatch_combo.currentIndexChanged.connect(
+            lambda _index: self._select_mismatch_experiment(str(self.teaching_mismatch_combo.currentData() or "lateral_scan"))
+        )
+        nav.addWidget(self.teaching_mismatch_combo)
+        nav.addStretch(1)
+        # 原理、曲线和测量不再永久占顶部；统一从“测量与分析”或右侧按需打开。
+        self.teaching_principle_button = QToolButton(self)
+        self.teaching_principle_button.setText("原理")
+        self.teaching_principle_button.clicked.connect(self._open_principle_panel)
+        self.teaching_principle_button.hide()
+        self.teaching_process_hint = QLabel("")
+        self.teaching_process_hint.hide()
+        self.teaching_physics_status = QLabel("正式光学：等待计算")
+        self.teaching_physics_status.setObjectName("helperText")
+        self.teaching_physics_status.setToolTip("只有正式光学引擎返回的代表性光线才会显示为红色光束；场景连接不会冒充物理结果。")
+        nav.addWidget(self.teaching_physics_status)
+        # 侧视/俯视是同一 ExperimentScene 的语义化工程投影；3D 仍然
+        # 使用同一实验状态和同一正式 raytrace，不维护第二套光路。
+        if hasattr(self, "view_3d_button"):
+            self.view_3d_button.setText("3D")
+            nav.addWidget(self.view_3d_button)
+        outer.addLayout(nav)
+        root = self.layout()
+        if isinstance(root, QVBoxLayout):
+            root.insertWidget(1, wrapper)
+        self._apply_teaching_compact_header()
+
+    def _set_projection_view(self, plane: str) -> None:
+        plane = "top" if str(plane).lower() == "top" else "side"
+        if hasattr(self, "graphics_view") and hasattr(self.graphics_view, "set_projection_plane"):
+            self.graphics_view.set_projection_plane(plane)
+        # set_projection_plane() already refreshes the 2-D scene.  Avoid calling
+        # set_view_kind() again when 2-D is already active: the duplicate
+        # synchronous refresh re-enters the lens strip QListWidget while its
+        # previous item delegates are being destroyed on Windows.
+        if self._view_kind != "2d":
+            super().set_view_kind("2d")
+        else:
+            self.view_stack.setCurrentIndex(0)
+        self.view_2d_button.setChecked(plane == "side")
+        if hasattr(self, "view_top_button"):
+            self.view_top_button.setChecked(plane == "top")
+        if hasattr(self, "view_3d_button"):
+            self.view_3d_button.setChecked(False)
+
+    def set_view_kind(self, kind: str) -> None:
+        super().set_view_kind(kind)
+        if str(kind).lower() == "3d":
+            if hasattr(self, "view_top_button"):
+                self.view_top_button.setChecked(False)
+        else:
+            plane = getattr(self.graphics_view, "projection_plane", "side")
+            if hasattr(self, "view_2d_button"):
+                self.view_2d_button.setChecked(plane == "side")
+            if hasattr(self, "view_top_button"):
+                self.view_top_button.setChecked(plane == "top")
+
+    def _on_formal_physics_state(self, state: str, message: str) -> None:
+        label = getattr(self, "teaching_physics_status", None)
         if label is None:
             return
-        if not result or not result.get("ok"):
-            label.setText("复场验证：光路未连通，无法计算。")
-            return
-        efficiency = float(result.get("coupling_efficiency", 0.0))
-        side = int(result.get("sample_side", 0))
-        lines = [
-            f"复场验证 · 解析高斯复场与光纤模场模式重叠（{side}×{side} 采样）",
-            f"耦合效率 η = {efficiency * 100.0:.1f}%",
-            f"接收面束腰 {float(result['waist_x_um']):.2f}×{float(result['waist_y_um']):.2f} μm"
-            f" · 模场半径 {float(result['fiber_mode_radius_um']):.2f} μm",
-        ]
-        label.setText("\n".join(lines))
+        prefix = {
+            "verified": "正式光学：已验证",
+            "running": "正式光学：计算中",
+            "pending": "正式光学：等待计算",
+            "blocked": "正式光学：已阻止",
+            "error": "正式光学：失败",
+        }.get(str(state), "正式光学")
+        label.setText(prefix)
+        label.setToolTip(str(message or prefix) + "。红色光束只来自正式 raytrace；诊断支路若未被正式求解则不会伪造光路。")
+        if str(state) == "blocked":
+            # Validation is part of the current scene snapshot. Refresh once so
+            # the visible result card and principle inspector show the blocker;
+            # the controller already marked this revision handled, so this does
+            # not resubmit the same invalid scene.
+            self._refresh_all(preserve_view=True)
 
-    def _submit_formal_simulation(self) -> None:
-        model = self.model
-        if not isinstance(model, FlexibleSpatialExperimentModel):
-            return
-        if self._formal_job_id:
-            self._formal_status_text = f"已有后台任务 #{self._formal_job_id} 运行中，请等待完成。"
-            self._update_formal_label()
-            return
-        try:
-            scene = model._physical_scene(quality="formal")
-            project, engine_options = model._engine_bridge.compile_project(scene)
-        except Exception as exc:
-            self._formal_status_text = f"场景编译失败：{exc}"
-            self._update_formal_label()
-            return
-        request_id = f"teaching-formal-{uuid4().hex[:8]}"
-        payload = {
-            "request_id": request_id,
-            "project": project.model_dump(mode="json"),
-            "analyses": ["scene_raytrace"],
-            "precision": "high",
-            "random_seed": 0,
-            "options": dict(engine_options),
-        }
-        self._formal_status_text = "已提交正式仿真，等待后台任务响应……"
-        self._update_formal_label()
-        SimulationClient(self.context.api_client).submit(
-            f"teaching.formal.submit:{request_id}", payload
-        )
+    def _on_formal_physics_result(self, result: object, project: object, revision: int) -> None:
+        if self.model.set_formal_physics_result(dict(result or {}), dict(project or {}), int(revision)):
+            # Do not mark the model changed here: a solver result belongs to the
+            # revision that triggered it and should update both projections/3-D in place.
+            self._refresh_all(preserve_view=True, skip_physics_request=True)
 
-    def _poll_formal_job(self) -> None:
-        job_id = self._formal_job_id
-        if not job_id:
-            self._formal_poll_timer.stop()
-            return
-        JobClient(self.context.api_client).get_status(f"teaching.formal.status:{job_id}", job_id)
+    def _refresh_live_preview(self) -> None:
+        """Update visible metrics and 3-D scene without formal raytrace or drawer churn."""
+        snapshot = self.model.scene_snapshot()
+        self._refresh_views(preserve_view=True, snapshot=snapshot)
+        metrics = snapshot.metrics
+        self.total_metric.setText(f"总效率  {metrics.total_efficiency * 100:.1f}%")
+        self.system_metric.setText(f"系统效率 {metrics.system_efficiency * 100:.1f}%")
+        self.receiver_metric.setText(f"接收效率 {metrics.receiver_efficiency * 100:.1f}%")
+        self.feasible_metric.setText("工程可实现：通过" if metrics.feasible else "工程可实现：需检查")
+        self.sceneStateChanged.emit(self.model, snapshot)
 
-    def _on_api_completed(self, key: str, data: object) -> None:
-        if not key.startswith("teaching.formal."):
+    def _commit_pending_live_edit(self) -> None:
+        if not self._pending_live_commit:
             return
-        payload = data.get("data") if isinstance(data, dict) else None
-        if key.startswith("teaching.formal.submit:"):
-            job_id = str((payload or {}).get("job_id", ""))
-            if job_id:
-                self._formal_job_id = job_id
-                self._formal_status_text = f"正式仿真任务 #{job_id} 已排队，等待完成……"
-                self._formal_poll_timer.start()
-            else:
-                self._formal_status_text = "后台未返回任务编号。"
-            self._update_formal_label()
-            return
-        if key.startswith("teaching.formal.status:"):
-            status = str((payload or {}).get("status", ""))
-            if status == "completed":
-                job_id = self._formal_job_id
-                self._formal_poll_timer.stop()
-                JobClient(self.context.api_client).get_result(
-                    f"teaching.formal.result:{job_id}", job_id
-                )
-            elif status in {"failed", "cancelled"}:
-                self._formal_poll_timer.stop()
-                error = (payload or {}).get("error") or {}
-                detail = str(error.get("message", "") or "") if isinstance(error, dict) else ""
-                self._formal_status_text = f"正式仿真任务已{status}。{detail}"
-                self._formal_job_id = ""
-                self._update_formal_label()
-            return
-        if key.startswith("teaching.formal.result:"):
-            self._formal_poll_timer.stop()
-            self._show_formal_result(payload if isinstance(payload, dict) else {})
+        self._pending_live_commit = False
+        self.model.mark_changed()
+        self._refresh_all(preserve_view=True)
 
-    def _on_api_failed(self, key: str, error: str) -> None:
-        if not key.startswith("teaching.formal."):
+    def _schedule_live_commit(self) -> None:
+        self._pending_live_commit = True
+        self._live_commit_timer.start()
+
+    def _on_node_moved(self, node_id: str, x: float, y: float) -> None:
+        if self.model.mode == "standard":
+            self._refresh_views(preserve_view=True)
             return
-        self._formal_poll_timer.stop()
-        self._formal_job_id = ""
-        self._formal_status_text = f"后台正式仿真不可用：{str(error)[:120]}"
-        self._update_formal_label()
+        self.model.selected_node_id = node_id
+        self.model.selected_edge_id = None
+        self.model.move_node(node_id, x, y, record=True)
+        self.model.mark_changed()
+        snapshot = self.model.scene_snapshot()
+        self._refresh_views(preserve_view=True, snapshot=snapshot)
+        metrics = snapshot.metrics
+        self.total_metric.setText(f"总效率  {metrics.total_efficiency * 100:.1f}%")
+        self.system_metric.setText(f"系统效率 {metrics.system_efficiency * 100:.1f}%")
+        self.receiver_metric.setText(f"接收效率 {metrics.receiver_efficiency * 100:.1f}%")
+        self.feasible_metric.setText("工程可实现：通过" if metrics.feasible else "工程可实现：需检查")
+        for button in self.nudge_buttons:
+            button.setEnabled(bool(self.model.selected_node_id))
+        for button in self.rotate_buttons:
+            button.setEnabled(bool(self.model.selected_node_id))
+        self.sceneStateChanged.emit(self.model, snapshot)
+        revision = int(self.model.revision)
+        if revision != int(getattr(self.model, "_formal_physics_revision", -1)):
+            controller = getattr(self, "_formal_physics", None)
+            if controller is not None:
+                controller.request(self.model)
 
-    def _show_formal_result(self, result: dict) -> None:
-        metrics = dict(result.get("metrics") or {})
-        lines = [f"正式结果 · 后台任务 #{self._formal_job_id} · 完整 optical_core 链路"]
-        engine = str(result.get("engine_name", "") or "")
-        version = str(result.get("engine_version", "") or "")
-        if engine:
-            lines.append(f"引擎：{engine}" + (f" v{version}" if version else ""))
-        elapsed = result.get("elapsed_ms")
-        if elapsed is not None:
-            lines.append(f"耗时：{float(elapsed):.0f} ms")
-        shown = 0
-        for name, value in metrics.items():
-            if isinstance(value, (str, int, float)) and not isinstance(value, bool):
-                lines.append(f"{name} = {value}")
-                shown += 1
-                if shown >= 6:
-                    break
-        self._formal_job_id = ""
-        self._formal_status_text = "\n".join(lines)
-        self._update_formal_label()
+    def _refresh_all(self, *, preserve_view: bool = True, skip_physics_request: bool = False) -> None:
+        super()._refresh_all(preserve_view=preserve_view)
+        snapshot = self.model.scene_snapshot()
+        self.sceneStateChanged.emit(self.model, snapshot)
+        if skip_physics_request:
+            return
+        revision = int(self.model.revision)
+        if revision == int(getattr(self.model, "_formal_physics_revision", -1)):
+            return
+        controller = getattr(self, "_formal_physics", None)
+        if controller is not None:
+            controller.request(self.model)
 
-    def _update_formal_label(self) -> None:
-        label = getattr(self, "formal_result_label", None)
-        if label is not None:
-            label.setText(self._formal_status_text)
+    def closeEvent(self, event) -> None:
+        controller = getattr(self, "_formal_physics", None)
+        if controller is not None:
+            controller.dispose()
+            self._formal_physics = None
+        super().closeEvent(event)
+
+    def _apply_teaching_compact_header(self) -> None:
+        """Remove redundant header prose before narrow screens start clipping controls."""
+        compact = self.width() < 900
+        hint = getattr(self, "teaching_process_hint", None)
+        if hint is not None:
+            hint.setVisible(not compact)
+        badge = getattr(self, "teaching_badge", None)
+        if badge is not None:
+            badge.setVisible(not compact)
+        # Keep the actual experiment menu and the 2D/3D state controls visible;
+        # only redundant explanatory chrome is removed in portrait layouts.
+        if hasattr(self, "scheme_menu_button"):
+            self.scheme_menu_button.setText("实验库")
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self._apply_teaching_compact_header()
+
+    def _select_mismatch_experiment(self, preset: str) -> None:
+        combo = getattr(self, "teaching_mismatch_combo", None)
+        if combo is not None:
+            index = combo.findData(str(preset))
+            if index >= 0 and combo.currentIndex() != index:
+                combo.blockSignals(True)
+                combo.setCurrentIndex(index)
+                combo.blockSignals(False)
+        if self.model.mode != "free":
+            self.set_mode("free", force=True)
+        self._load_layout_preset(preset)
+        if hasattr(self, "experiment_info_label"):
+            self.experiment_info_label.setVisible(False)
+        if hasattr(self, "right_drawer") and self.right_drawer.isVisible():
+            self.right_drawer.hide()
+        if self._view_kind == "3d" and hasattr(self, "view_3d"):
+            self.view_3d.set_view_preset("paper")
+
+    def _open_principle_panel(self) -> None:
+        """Route principle analysis into the unified exploration inspector.
+
+        The old workbench opened a second floating panel with essentially the
+        same mismatch visualisation as the exploration lab.  Keeping one
+        analysis surface avoids stacked, immovable windows and keeps the bench
+        visible beside the explanation.
+        """
+        selected = "curvature"
+        fiber = next((node for node in self.model.nodes.values() if node.kind == "fiber"), None)
+        if fiber is not None:
+            fp = fiber.params
+            candidates = {
+                "lateral": math.hypot(float(fp.get("offset_x_um", 0.0)), float(fp.get("offset_y_um", 0.0))) / 3.0,
+                "defocus": abs(float(fp.get("offset_z_um", 0.0))) / 50.0,
+                "angle": math.hypot(float(fp.get("pitch_mrad", 0.0)), float(fp.get("yaw_mrad", 0.0))) / 20.0,
+                "curvature": abs(float(fp.get("curvature_waves", 0.0))) / 0.2,
+            }
+            if max(candidates.values(), default=0.0) > 0.0:
+                selected = max(candidates, key=candidates.get)
+        self.phenomenonRequested.emit(f"mismatch:{selected}")
 
     def _create_measurement_placement_hint(self) -> None:
         self.measurement_hint = QFrame(self.overlay_host)
@@ -1282,17 +1424,14 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         self.measurement_hint_label = QLabel("请选择一段有效光束")
         layout.addWidget(self.measurement_hint_label)
         cancel = QToolButton()
-        cancel.setText("取消")
+        cancel.setIcon(icon("close", "#667085", 16))
+        cancel.setToolTip("取消放置测量仪器")
         cancel.clicked.connect(self._cancel_instrument_placement)
         layout.addWidget(cancel)
         self.measurement_hint.hide()
 
     def _create_3d_camera_bar(self) -> None:
         super()._create_3d_camera_bar()
-        button = QToolButton()
-        button.setText("沿当前光束")
-        button.clicked.connect(self.view_3d.align_to_selected_beam)
-        self.camera_bar.layout().insertWidget(6, button)
 
     def _position_overlays(self) -> None:
         super()._position_overlays()
@@ -1303,52 +1442,54 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
 
     
     def _populate_library_drawer(self) -> None:
+        """Show a compact experiment library; free-build components live one level deeper."""
         self.left_drawer.clear_body()
+        title = QLabel("选择实验")
+        title.setObjectName("drawerObjectTitle")
+        self.left_drawer.body_layout.addWidget(title)
+        hint = QLabel("载入一套真实实验状态。失配类型、测量方式和系统配置在实验内部切换，不再拆成十几个入口。")
+        hint.setWordWrap(True)
+        hint.setObjectName("helperText")
+        self.left_drawer.body_layout.addWidget(hint)
 
-        for group_name in experiment_presets.EXPERIMENT_GROUPS:
-            presets = experiment_presets.presets_for_group(group_name)
-            if not presets:
-                continue
-            group, group_layout = self._group_box(group_name)
-            grid = QGridLayout()
-            grid.setHorizontalSpacing(10)
-            grid.setVerticalSpacing(7)
-            grid.setColumnStretch(0, 1)
-            grid.setColumnStretch(1, 1)
-            for index, preset in enumerate(presets):
-                button = QPushButton(preset.label)
-                button.setToolTip(preset.description)
-                button.setMinimumWidth(0)
-                button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-                button.setEnabled(self.model.mode == "free")
-                button.clicked.connect(
-                    lambda checked=False, value=preset.key: self._load_layout_preset(value)
-                )
-                grid.addWidget(button, index // 2, index % 2)
-            group_layout.addLayout(grid)
-            self.left_drawer.body_layout.addWidget(group)
-
-        legacy_group, legacy_layout = self._group_box("基础空间布局")
-        legacy_grid = QGridLayout()
-        for index, (text, key) in enumerate([
-            ("直线型", "straight"), ("L形折叠", "l_shape"),
-            ("Z形折叠", "z_shape"), ("T形监测", "t_shape"), ("双支路", "dual_branch"),
-        ]):
-            button = QPushButton(text)
-            button.setEnabled(self.model.mode == "free")
+        core = [
+            ("最小闭环 Laser-Lens-CCD", "minimal_laser_lens_ccd", "拖拽闭环验收：Laser + f50 透镜 + CCD"),
+            ("四透镜 four_lens.json", "four_lens_json", "Laser→L1(50)→L2(100)→L3(200)→L4(200)→CCD，含 10–37.5 mm RMS"),
+            ("780 nm 四透镜 · LM135C", "lm135c_four_lens_benchmark", "相机接收、五个轴向位置与完整光斑指标基准"),
+            ("基础耦合与失配", "common_platform", "横向、角度、尺寸、轴向和曲率失配共享同一实验台"),
+            ("五轴耦合装调", "lateral_scan", "XYZ + Tilt/Pitch 装调与耦合最大化"),
+            ("光束指向与测量", "dual_mirror_position", "双镜调节，并结合功率/光束/波前测量"),
+            ("模场匹配与整形", "spherical_expansion", "q 参数、束腰尺寸与波前曲率匹配"),
+            ("耦合系统设计", "coupling_4_lens", "双/三/四透镜配置在实验内部比较"),
+        ]
+        for label, key, tip in core:
+            button = QPushButton(label)
+            button.setToolTip(tip)
+            button.setMinimumHeight(38)
             button.clicked.connect(lambda checked=False, value=key: self._load_layout_preset(value))
-            legacy_grid.addWidget(button, index // 2, index % 2)
-        legacy_layout.addLayout(legacy_grid)
-        self.left_drawer.body_layout.addWidget(legacy_group)
+            self.left_drawer.body_layout.addWidget(button)
 
-        info_group, info_layout = self._group_box("当前实验逻辑")
-        self.experiment_info_label = QLabel("请选择实验预设。")
+        free_button = QPushButton("自由实验…")
+        free_button.setToolTip("进入元件库，自由添加、移动、旋转器件和测量仪器")
+        free_button.clicked.connect(self._populate_free_experiment_tools)
+        self.left_drawer.body_layout.addWidget(free_button)
+
+        self.experiment_info_label = QLabel("")
         self.experiment_info_label.setObjectName("helperText")
         self.experiment_info_label.setWordWrap(True)
-        info_layout.addWidget(self.experiment_info_label)
-        self.left_drawer.body_layout.addWidget(info_group)
+        self.left_drawer.body_layout.addWidget(self.experiment_info_label)
         self._update_experiment_info(getattr(self.model, "active_experiment_key", ""))
+        self.left_drawer.body_layout.addStretch(1)
 
+    def _populate_free_experiment_tools(self) -> None:
+        self.left_drawer.clear_body()
+        back = QPushButton("← 返回实验库")
+        back.clicked.connect(self._populate_library_drawer)
+        self.left_drawer.body_layout.addWidget(back)
+        hint = QLabel("自由实验：这里才显示完整元件和测量工具。所有操作仍修改同一个实验状态。")
+        hint.setWordWrap(True)
+        hint.setObjectName("helperText")
+        self.left_drawer.body_layout.addWidget(hint)
         for title, kinds in [
             ("光源与偏振", catalog.SOURCE_POLARIZATION_KINDS),
             ("光路与取样", catalog.ROUTING_SAMPLING_KINDS),
@@ -1356,72 +1497,23 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         ]:
             group, group_layout = self._group_box(title)
             tray = spatial.ComponentTrayList(list(kinds))
-            tray.setEnabled(self.model.mode == "free")
             tray.componentRequested.connect(self._add_component)
             group_layout.addWidget(tray)
             self.left_drawer.body_layout.addWidget(group)
-
         instrument_group, instrument_layout = self._group_box("测量仪器")
-        instruction = QLabel(
-            "可将仪器直接拖入2D平台：靠近有效光束时自动吸附并对准，拖到空白处则自由放置；"
-            "已放置仪器也可在2D中继续拖动。双击仪器仍可选择2D或3D光束位置。"
-        )
-        instruction.setWordWrap(True)
-        instruction.setObjectName("helperText")
-        instrument_layout.addWidget(instruction)
         instruments = spatial.ComponentTrayList(list(MEASUREMENT_KINDS) + ["oscilloscope"])
-        instruments.setEnabled(self.model.mode == "free")
         instruments.componentRequested.connect(self._request_instrument_or_scope)
         instrument_layout.addWidget(instruments)
         self.left_drawer.body_layout.addWidget(instrument_group)
-
         action_group, action_layout = self._group_box("平台操作")
         standard = QPushButton("恢复标准起始布局")
-        standard.setEnabled(self.model.mode == "free")
         standard.clicked.connect(self._reset_free_to_standard)
         action_layout.addWidget(standard)
         clear = QPushButton("清空实验平台")
-        clear.setEnabled(self.model.mode == "free")
         clear.clicked.connect(self._clear_free_platform)
         action_layout.addWidget(clear)
-        field = QPushButton("复场验证（模式重叠）")
-        field.setEnabled(self.model.mode == "free")
-        field.clicked.connect(self._run_field_verification)
-        action_layout.addWidget(field)
-        self.field_result_label = QLabel("复场验证：尚未计算。")
-        self.field_result_label.setObjectName("helperText")
-        self.field_result_label.setWordWrap(True)
-        action_layout.addWidget(self.field_result_label)
-        self._update_field_label()
-        formal = QPushButton("提交正式仿真（后台任务）")
-        formal.setEnabled(self.model.mode == "free")
-        formal.clicked.connect(self._submit_formal_simulation)
-        action_layout.addWidget(formal)
-        self.formal_result_label = QLabel(self._formal_status_text)
-        self.formal_result_label.setObjectName("helperText")
-        self.formal_result_label.setWordWrap(True)
-        action_layout.addWidget(self.formal_result_label)
         self.left_drawer.body_layout.addWidget(action_group)
         self.left_drawer.body_layout.addStretch(1)
-
-    def _on_node_moved(self, node_id: str, x: float, y: float) -> None:
-        if self.model.mode == "standard" or node_id not in self.model.nodes:
-            self._refresh_views(preserve_view=True)
-            return
-        node = self.model.nodes[node_id]
-        if node.kind in base.INSTRUMENT_TYPES and bool(node.params.get("beam_attached", False)):
-            self.model.move_node(node_id, x, y, record=True)
-        else:
-            node.x = max(45.0, min(base.SCENE_RECT.width() - 45.0, float(x)))
-            node.y = max(70.0, min(base.SCENE_RECT.height() - 70.0, float(y)))
-            if self.model.mode == "layout":
-                if node.kind in base.OPTICAL_TYPES:
-                    node.y = base.MAIN_RAIL_Y
-                elif node.kind != "oscilloscope":
-                    node.y = base.BRANCH_RAIL_Y
-            self.model.mark_changed()
-            self.model.record(f"移动{node.label}；系统已重新追迹光路。")
-        self._refresh_all(preserve_view=True)
 
     def _update_experiment_info(self, preset_key: str) -> None:
         label = getattr(self, "experiment_info_label", None)
@@ -1429,7 +1521,7 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
             return
         preset = experiment_presets.EXPERIMENT_PRESETS.get(str(preset_key))
         if preset is None:
-            label.setText("当前为基础自由布局；器件移动、旋转和测量位置在2D/3D中同步。")
+            label.setText("当前为基础自由布局；器件移动、旋转和测量位置在工程视图/3D中同步。")
             return
         label.setText("\n".join((preset.description, *experiment_presets.metadata_lines(preset))))
 
@@ -1449,19 +1541,6 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         if self.model.mode != "free":
             return
         if kind in MEASUREMENT_KINDS:
-            nearest = self.model.nearest_beam_segment(QPointF(float(x), float(y)))
-            if nearest is not None:
-                edge_id, fraction, _distance = nearest
-                node_id = self.model.attach_instrument_to_edge(kind, edge_id, fraction)
-                if node_id is not None:
-                    self.model.latest_cause = (
-                        f"已将{MEASUREMENT_LABELS[kind]}拖入2D平台并吸附到最近光束；"
-                        "可继续沿光束拖动。"
-                    )
-                    self._refresh_all(preserve_view=True)
-                    if self.left_drawer.isVisible() and self._left_drawer_key == "library":
-                        self._populate_library_drawer()
-                    return
             node_id = self.model.add_node(
                 kind,
                 float(x),
@@ -1471,21 +1550,16 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
             )
             self.model.selected_node_id = node_id
             self.model.latest_cause = (
-                f"已将{MEASUREMENT_LABELS[kind]}拖入2D平台空白位置；"
-                "可自由拖动，靠近光束后也可重新选择吸附位置。"
+                f"已将{MEASUREMENT_LABELS[kind]}放置到当前实验位置；"
+                "位置不会自动贴到光束，需要取样时请明确选择测量截面。"
             )
             self._refresh_all(preserve_view=True)
-            if self.left_drawer.isVisible() and self._left_drawer_key == "library":
-                self._populate_library_drawer()
             return
         super()._add_component_at(kind, x, y)
 
     
     def _request_instrument_or_scope(self, kind: str) -> None:
-        if kind == "oscilloscope":
-            self._add_component(kind)
-            return
-        self._begin_instrument_placement(kind)
+        self._add_component(kind)
 
     def _begin_instrument_placement(self, kind: str) -> None:
         if self.model.mode != "free" or kind not in MEASUREMENT_KINDS:
@@ -1493,7 +1567,7 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         self._pending_instrument_kind = kind
         self.graphics_view.set_instrument_placement_kind(kind)
         self.view_3d.set_instrument_placement_kind(kind)
-        self.measurement_hint_label.setText(f"放置{MEASUREMENT_LABELS[kind]}：点击一段高亮光束，接收面将自动对准")
+        self.measurement_hint_label.setText(f"选择{MEASUREMENT_LABELS[kind]}的测量截面：点击需要取样的高亮光束")
         self.measurement_hint.show()
         self.measurement_hint.raise_()
         self.left_drawer.hide()
@@ -1534,7 +1608,7 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         if self.model.mode != "free":
             return
         menu = QMenu(self)
-        title = menu.addAction("在此光束段放置检测仪器")
+        title = menu.addAction("在此测量截面放置检测仪器")
         title.setEnabled(False)
         menu.addSeparator()
         for kind in MEASUREMENT_KINDS:
@@ -1552,46 +1626,20 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
     def _populate_object_drawer(self) -> None:
         super()._populate_object_drawer()
         node = self.model.nodes.get(self.model.selected_node_id or "")
-        if node is None:
+        if node is None or node.kind not in base.INSTRUMENT_TYPES or node.kind == "oscilloscope":
             return
         layout = self.right_drawer.body_layout
-        if node.kind == "cylindrical_lens":
-            if layout.count() and layout.itemAt(layout.count() - 1).spacerItem() is not None:
-                layout.takeAt(layout.count() - 1)
-            group, group_layout = self._group_box("柱面轴")
-            row = QHBoxLayout()
-            row.addWidget(QLabel("轴角"))
-            axis = QDoubleSpinBox()
-            axis.setRange(0.0, 179.9)
-            axis.setDecimals(1)
-            axis.setSingleStep(1.0)
-            axis.setSuffix(" °")
-            axis.setValue(float(node.params.get("axis_angle_deg", node.params.get("cylinder_axis_deg", 0.0)) or 0.0) % 180.0)
-            axis.setToolTip("柱面轴为零光焦度方向；实际光焦度方向与柱面轴正交。")
-            axis.valueChanged.connect(lambda value, nid=node.id: self.model.update_node_params(nid, {"axis_angle_deg": float(value)}, record=False))
-            axis.editingFinished.connect(lambda nid=node.id, box=axis: self.model.update_node_params(nid, {"axis_angle_deg": float(box.value())}, record=True))
-            row.addWidget(axis)
-            group_layout.addLayout(row)
-            hint = QLabel("轴角按传统柱面镜定义：沿柱面轴方向无光焦度，光焦度方向 = 轴角 + 90°。")
-            hint.setWordWrap(True)
-            hint.setObjectName("helperText")
-            group_layout.addWidget(hint)
-            self.right_drawer.body_layout.addWidget(group)
-            self.right_drawer.body_layout.addStretch(1)
-            return
-        if node.kind not in base.INSTRUMENT_TYPES or node.kind == "oscilloscope":
-            return
         if layout.count() and layout.itemAt(layout.count() - 1).spacerItem() is not None:
             layout.takeAt(layout.count() - 1)
         group, group_layout = self._group_box("测量位置")
         attached = bool(node.params.get("beam_attached", False))
-        status = QLabel("已吸附到光束，拖动仪器时将沿光束前后移动。" if attached else "自由移动：位置或接收面偏离光束时可能无有效读数。")
+        status = QLabel("已关联测量截面；调整截面位置会同步更新取样位置。" if attached else "自由放置：当前未关联测量截面，可能没有有效读数。")
         status.setWordWrap(True)
         status.setObjectName("helperText")
         group_layout.addWidget(status)
         if attached:
             row = QHBoxLayout()
-            row.addWidget(QLabel("沿光束位置"))
+            row.addWidget(QLabel("截面位置"))
             fraction = QDoubleSpinBox()
             fraction.setRange(8.0, 92.0)
             fraction.setSuffix(" %")
@@ -1600,11 +1648,11 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
             fraction.editingFinished.connect(lambda nid=node.id, box=fraction: self._set_attachment_fraction(nid, box.value() / 100.0, live=False))
             row.addWidget(fraction)
             group_layout.addLayout(row)
-            detach = QPushButton("解除吸附，改为自由移动")
+            detach = QPushButton("取消测量截面关联")
             detach.clicked.connect(lambda checked=False, nid=node.id: self._detach_instrument(nid))
             group_layout.addWidget(detach)
         else:
-            start = QPushButton("重新选择光束位置")
+            start = QPushButton("选择测量截面")
             start.clicked.connect(lambda checked=False, kind=node.kind: self._begin_instrument_placement(kind))
             group_layout.addWidget(start)
         self.right_drawer.body_layout.addWidget(group)
@@ -1628,17 +1676,6 @@ class FlexibleSpatialTeachingWorkbench(spatial.SpatialTeachingWorkbench):
         super().set_view_kind(kind)
         self.graphics_view.set_instrument_placement_kind(self._pending_instrument_kind)
         self.view_3d.set_instrument_placement_kind(self._pending_instrument_kind)
-
-    def closeEvent(self, event) -> None:
-        timer = getattr(self, "_trace_poll_timer", None)
-        if timer is not None:
-            timer.stop()
-        formal_timer = getattr(self, "_formal_poll_timer", None)
-        if formal_timer is not None:
-            formal_timer.stop()
-        if isinstance(getattr(self, "model", None), FlexibleSpatialExperimentModel):
-            self.model.close_trace_scheduler()
-        super().closeEvent(event)
 
     def keyPressEvent(self, event) -> None:  
         if event.key() == Qt.Key.Key_Escape and self._pending_instrument_kind:

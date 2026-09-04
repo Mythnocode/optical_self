@@ -1,0 +1,204 @@
+{
+  "failures": 2,
+  "total": 33,
+  "rows": [
+    {
+      "area": "顶栏",
+      "action": "命令按钮齐全",
+      "status": "FAIL",
+      "detail": "缺少: ['machine_learning']"
+    },
+    {
+      "area": "工具箱",
+      "action": "抽屉可打开",
+      "status": "PASS",
+      "detail": "visible"
+    },
+    {
+      "area": "工具箱",
+      "action": "搜索参数研究",
+      "status": "PASS",
+      "detail": "hits=1"
+    },
+    {
+      "area": "shell",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "area": "首页",
+      "action": "平台标题可见",
+      "status": "PASS",
+      "detail": "'激光耦合仿真系统及智能优化平台'"
+    },
+    {
+      "area": "home",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "area": "仿真",
+      "action": "收起/显示参数",
+      "status": "PASS",
+      "detail": "[310, 1016]->[0, 1334]->[310, 1016]"
+    },
+    {
+      "area": "仿真",
+      "action": "开始计算按钮",
+      "status": "PASS",
+      "detail": "开始计算"
+    },
+    {
+      "area": "仿真",
+      "action": "打开参数研究任务窗",
+      "status": "PASS",
+      "detail": "optimization.scan"
+    },
+    {
+      "area": "仿真",
+      "action": "打开容差分析任务窗",
+      "status": "PASS",
+      "detail": "optimization.tolerance"
+    },
+    {
+      "area": "仿真",
+      "action": "切换结果视图·光路",
+      "status": "PASS",
+      "detail": "set_current_result ok"
+    },
+    {
+      "area": "仿真",
+      "action": "切换结果视图·模场匹配",
+      "status": "PASS",
+      "detail": "set_current_result ok"
+    },
+    {
+      "area": "simulation",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "area": "优化",
+      "action": "开始研究/优化按钮可见",
+      "status": "PASS",
+      "detail": "◷ 优化中"
+    },
+    {
+      "area": "优化",
+      "action": "结果区尺寸合理",
+      "status": "PASS",
+      "detail": "1016x360"
+    },
+    {
+      "area": "optimization",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "area": "代理模型",
+      "action": "流程按钮数量",
+      "status": "PASS",
+      "detail": "count=4"
+    },
+    {
+      "area": "代理模型",
+      "action": "切换到数据准备",
+      "status": "PASS",
+      "detail": "stack=1"
+    },
+    {
+      "area": "代理模型",
+      "action": "切换到模型训练",
+      "status": "PASS",
+      "detail": "stack=2"
+    },
+    {
+      "area": "代理模型",
+      "action": "切换到模型比较",
+      "status": "PASS",
+      "detail": "stack=3"
+    },
+    {
+      "area": "代理模型",
+      "action": "切换到预测",
+      "status": "PASS",
+      "detail": "stack=4"
+    },
+    {
+      "area": "ml",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "area": "模型解释",
+      "action": "页面加载",
+      "status": "PASS",
+      "detail": "ExplainabilityPage"
+    },
+    {
+      "area": "explainability",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "area": "教学",
+      "action": "工作台加载",
+      "status": "PASS",
+      "detail": "FlexibleSpatialTeachingWorkbench"
+    },
+    {
+      "area": "教学",
+      "action": "研究变量下拉存在",
+      "status": "PASS",
+      "detail": "teachingMismatchCombo"
+    },
+    {
+      "area": "教学",
+      "action": "点搭建打开抽屉",
+      "status": "PASS",
+      "detail": "library"
+    },
+    {
+      "area": "教学",
+      "action": "搭建抽屉含元件",
+      "status": "PASS",
+      "detail": "实验库  ← 返回实验库 自由实验：这里才显示完整元件和测量工具。所有操作仍修改同一个实验状态。 恢复标准起始布局 清空实验平台"
+    },
+    {
+      "area": "教学",
+      "action": "放反射镜后不跳实验库首页",
+      "status": "PASS",
+      "detail": "实验库  ← 返回实验库 自由实验：这里才显示完整元件和测量工具。所有操作仍修改同一个实验状态。 恢复标准起始布局 清空实验平台"
+    },
+    {
+      "area": "教学",
+      "action": "3D按钮可见",
+      "status": "FAIL",
+      "detail": "view_3d_button hidden (may be expected in compact header)"
+    },
+    {
+      "area": "teaching",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "area": "AI助手",
+      "action": "对话框打开",
+      "status": "PASS",
+      "detail": "AiAssistantDialog"
+    },
+    {
+      "area": "assistant",
+      "action": "workflow",
+      "status": "PASS",
+      "detail": "ok"
+    }
+  ]
+}

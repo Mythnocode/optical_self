@@ -28,10 +28,13 @@ class JobRecord:
     semaphore: Any | None = None
     on_result: Any | None = None
     timeout_seconds: float | None = None
+    queue_timeout_seconds: float | None = None
+    stall_timeout_seconds: float | None = None
     _finalized: bool = False
     persistent: bool = False
     persistence_pending: bool = False
     submitted_perf: float = 0.0
+    last_activity_perf: float = 0.0
     dispatched_perf: float = 0.0
     worker_started_perf: float = 0.0
     first_message_perf: float = 0.0

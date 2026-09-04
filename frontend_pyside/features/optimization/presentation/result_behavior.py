@@ -4,9 +4,9 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QTableWidgetItem
 
 from frontend_pyside.shared.components.basic import InfoRow
+from frontend_pyside.features.optimization.experiment_validation_data import threshold_interval
 from frontend_pyside.shared.plotting.lazy_workspace import ResultWorkspace
 from frontend_pyside.shared.display_names import metric_label, parameter_label
-from frontend_pyside.shared.research_summary import humanize_parameter_name
 from frontend_pyside.shared.plotting.engineering_views import (
     build_before_after_comparison,
     build_candidate_comparison,
@@ -14,6 +14,44 @@ from frontend_pyside.shared.plotting.engineering_views import (
     build_correlation_view,
 )
 from shared_contracts.metrics import metric_definition
+
+
+def _parameter_result_rows(
+    best_variables: dict,
+    snapshot: object,
+) -> tuple[list[dict], list[dict]]:
+    """Build display rows from the best vector and its frozen input snapshot."""
+    snapshot_rows = [item for item in list(snapshot or []) if isinstance(item, dict)]
+    snapshot_by_path = {
+        str(item.get("path", "")): item
+        for item in snapshot_rows
+        if str(item.get("path", "")).strip()
+    }
+
+    optimized_rows: list[dict] = []
+    optimized_paths = {str(path) for path in best_variables}
+    for path, value in best_variables.items():
+        path = str(path)
+        submitted = snapshot_by_path.get(path, {})
+        optimized_rows.append({
+            "path": path,
+            "label": str(submitted.get("label", "") or parameter_label(path)),
+            "value": value,
+            "unit": str(submitted.get("unit", "") or ""),
+        })
+
+    fixed_rows: list[dict] = []
+    for item in snapshot_rows:
+        path = str(item.get("path", "")).strip()
+        if not path or path in optimized_paths or bool(item.get("optimized", False)):
+            continue
+        fixed_rows.append({
+            "path": path,
+            "label": str(item.get("label", "") or parameter_label(path)),
+            "value": item.get("value"),
+            "unit": str(item.get("unit", "") or ""),
+        })
+    return optimized_rows, fixed_rows
 
 
 class OptimizationResultMixin:
@@ -24,6 +62,23 @@ class OptimizationResultMixin:
             self._pending_result_render = ("scan", dict(result or {}))
             return
         self._ensure_result_workspace("scan")
+        self._has_research_result = True
+        self._active_research_result_kind = "scan"
+        if hasattr(self, "apply_best_design_button"):
+            self.apply_best_design_button.hide()
+            self.verify_best_design_button.hide()
+            if hasattr(self, "preview_best_design_button"):
+                self.preview_best_design_button.hide()
+        if hasattr(self, "auto_results_block"):
+            self.auto_results_block.setVisible(True)
+        if hasattr(self, "auto_tolerance_button"):
+            self.auto_tolerance_button.setEnabled(True)
+        if hasattr(self, "main_result"):
+            self.main_result.setVisible(True)
+        if hasattr(self, "detail_panel"):
+            self.detail_panel.setVisible(True)
+        self._responsive_band = ""
+        self._apply_responsive_layout()
         metric = self._metric_key(self.scan_metric.currentText())
         raw_values = [float(value) for value in list(result.get("response_values", {}).get(metric, []))]
         grid = [list(row) for row in list(result.get("parameter_grid", [])) if row]
@@ -84,7 +139,7 @@ class OptimizationResultMixin:
             "current_point": current_point,
             "best_point": [best_x, best_y],
             "verified_point": verified_point,
-            "title": "参数响应",
+            "title": "",
             "x_label": f"{parameter_name}{f' / {unit}' if unit else ''}",
             "y_label": y_name,
         }
@@ -103,7 +158,7 @@ class OptimizationResultMixin:
             names = list(result.get("parameter_names", []) or [])
             relation_plot = {
                 "kind": "heatmap",
-                "title": "二维参数响应",
+                "title": "",
                 "x": unique_x,
                 "y": unique_y,
                 "z": matrix,
@@ -120,9 +175,10 @@ class OptimizationResultMixin:
             response_plot,
             {"kind": "empty", "message": "参数扫描不生成优化前后对比。"},
             {"kind": "empty", "message": "参数扫描没有优化迭代。"},
-            {"kind": "empty", "message": "单次扫描不生成候选方案排序。"},
+            {"kind": "empty", "message": "单次扫描不生成候选结果排序。"},
             relation_plot,
         ]
+        self.result_view_buttons[0].setText("参数响应")
         self._select_main_result(0)
         self._set_result_view_visibility((True, False, False, False, parameter_count >= 2))
 
@@ -132,19 +188,32 @@ class OptimizationResultMixin:
 
         high_ranges: list[tuple[str, float, float]] = []
         if higher_is_better and best_y != 0:
+            half_interval = threshold_interval(x, values, 0.5)
+            if half_interval is not None:
+                high_ranges.append(("3 dB（50%峰值）", half_interval[0], half_interval[1]))
             thresholds = [("≥99%峰值", best_y * 0.99), ("≥95%峰值", best_y * 0.95)]
             for label, threshold in thresholds:
                 selected = [xv for xv, yv in zip(x, values) if yv >= threshold]
                 if selected:
                     high_ranges.append((label, min(selected), max(selected)))
         if high_ranges:
-            widest_label, low, high = high_ranges[1] if len(high_ranges) > 1 else high_ranges[0]
+            preferred = next((item for item in high_ranges if item[0].startswith("3 dB")), high_ranges[-1])
+            widest_label, low, high = preferred
             self.scan_sensitivity.set_value(f"{low:.4g}～{high:.4g}", unit)
             response_plot["high_efficiency_range"] = [low, high]
             response_plot["high_efficiency_label"] = widest_label
         else:
             self.scan_sensitivity.set_value("—")
 
+        range_text = "高效区 —"
+        if high_ranges:
+            preferred = next((item for item in high_ranges if item[0].startswith("3 dB")), high_ranges[-1])
+            range_text = f"高效区 {preferred[1]:.4g}～{preferred[2]:.4g}{(' ' + unit) if unit else ''}"
+        self._set_result_summary_values(
+            first=f"最佳参数 {best_x:.4g}{(' ' + unit) if unit else ''}",
+            second=f"峰值 {best_y:.4g}{' %' if is_efficiency else ''}",
+            third=range_text,
+        )
 
         self.scan_data_table.setHorizontalHeaderLabels(["序号", f"{parameter_name}{f' / {unit}' if unit else ''}", y_name, "状态"])
         self.scan_data_table.setRowCount(count)
@@ -162,7 +231,8 @@ class OptimizationResultMixin:
             for column, value in enumerate(row_values):
                 self.scan_region_table.setItem(row_index, column, QTableWidgetItem(str(value)))
         self.scan_compare_table.setRowCount(1)
-        interval_width = high_ranges[1][2] - high_ranges[1][1] if len(high_ranges) > 1 else (high_ranges[0][2] - high_ranges[0][1] if high_ranges else 0.0)
+        preferred_range = next((item for item in high_ranges if item[0].startswith("3 dB")), high_ranges[-1] if high_ranges else None)
+        interval_width = (preferred_range[2] - preferred_range[1]) if preferred_range else 0.0
         sensitivity = "高" if interval_width and interval_width < abs(self.scan_stop.value()-self.scan_start.value())*0.15 else "中" if interval_width else "—"
         for column, value in enumerate((parameter_name, f"{best_x:.6g}", f"{best_y:.6g}", f"{interval_width:.6g}", sensitivity)):
             self.scan_compare_table.setItem(0, column, QTableWidgetItem(str(value)))
@@ -187,6 +257,44 @@ class OptimizationResultMixin:
         self.start_research_button.setEnabled(True)
         self.header_state.set_value("已完成")
         self._set_job_info("scan", "研究完成")
+        if hasattr(self.start_research_button, "set_task_state"):
+            self.start_research_button.set_task_state("success", "研究完成")
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(1300, lambda: self.start_research_button.reset_task_state("开始研究"))
+        revision = getattr(self.context.project, "design_revision", "")
+        self._set_result_provenance(
+            f"结果来源：参数扫描 · 系统 Rev.{revision} · {count} 个真实计算点"
+        )
+        # 将“已发生的分析事实”写入共享研究证据；这里只同步证据，不自动改写后续优化范围。
+        try:
+            parameter_names = list(result.get("parameter_names", []) or [])
+            parameter_key = str(parameter_names[0]) if parameter_names else str(parameter_name)
+            evidence = {
+                "best_value": float(best_x),
+                "best_metric": float(best_y),
+                "metric": metric,
+                "unit": unit,
+                "sensitivity": sensitivity,
+                "sample_count": int(count),
+            }
+            if preferred_range is not None:
+                evidence["observed_range"] = [float(preferred_range[1]), float(preferred_range[2])]
+                evidence["range_label"] = str(preferred_range[0])
+            self.context.project.update_research_context(
+                current_task="参数研究",
+                current_target=metric,
+            )
+            self.context.project.publish_finding(
+                source="参数扫描",
+                parameter=parameter_key,
+                display_name=str(parameter_name),
+                scope="当前系统",
+                evidence=evidence,
+                status="当前",
+            )
+        except Exception:
+            # 共享证据失败不能影响正式扫描结果显示。
+            pass
         self._refresh_user_summary()
 
     def _render_optimization_result(self, result: dict) -> None:
@@ -194,7 +302,18 @@ class OptimizationResultMixin:
             self._pending_result_render = ("optimization", dict(result or {}))
             return
         self._ensure_result_workspace("optimization")
+        self._has_research_result = True
+        self._active_research_result_kind = "optimization"
+        if hasattr(self, "main_result"):
+            self.main_result.setVisible(True)
+        if hasattr(self, "detail_panel"):
+            self.detail_panel.setVisible(True)
+        self._responsive_band = ""
+        self._apply_responsive_layout()
         metadata = dict(result.get("metadata", {}) or {})
+        inverse_mode = bool(getattr(self, "_inverse_design_active", False)) and not bool(
+            getattr(self, "_ml_inverse_prediction_active", False)
+        )
         metric_key = str(metadata.get("metric") or metadata.get("target_metric") or "coupling_efficiency")
         metric_name = metric_label(metric_key)
         is_efficiency = metric_key == "coupling_efficiency"
@@ -217,19 +336,42 @@ class OptimizationResultMixin:
         } if running_best else {"kind": "empty", "message": "没有优化过程数据"}
 
         best_variables = dict(result.get("best_variables", {}) or {})
+        self._latest_best_variables = {str(k): float(v) for k, v in best_variables.items() if isinstance(v, (int, float))}
+        if hasattr(self, "apply_best_design_button"):
+            self.apply_best_design_button.setVisible(bool(self._latest_best_variables))
+            self.verify_best_design_button.setVisible(bool(self._latest_best_variables))
+            if hasattr(self, "preview_best_design_button"):
+                self.preview_best_design_button.setVisible(bool(self._latest_best_variables))
         labels = [parameter_label(name) for name in best_variables]
-        parameter_lines = [
-            f"{parameter_label(name)}　{float(value):.6g}" if isinstance(value, (int, float))
-            else f"{parameter_label(name)}　{value}"
-            for name, value in best_variables.items()
-        ]
+        parameter_snapshot = list(metadata.get("parameter_snapshot", []) or [])
+        fixed_title = "固定参数（未参与本次优化）"
+        if not parameter_snapshot and hasattr(self, "variable_selector"):
+            # Compatibility for results created before snapshots were persisted.
+            # Be explicit that these values come from the current editor state.
+            parameter_snapshot = self.variable_selector.get_parameter_snapshot()
+            optimized_paths = {str(path) for path in best_variables}
+            parameter_snapshot = [
+                {**item, "optimized": str(item.get("path", "")) in optimized_paths}
+                for item in parameter_snapshot
+            ]
+            fixed_title = "当前固定参数（旧结果未保存快照）"
+        optimized_rows, fixed_rows = _parameter_result_rows(
+            best_variables,
+            parameter_snapshot,
+        )
         response_summary = {
-            "kind": "text",
+            "kind": "parameter_summary",
             "title": "最佳参数",
-            "text": "\n".join(parameter_lines),
+            "optimized": optimized_rows,
+            "fixed": fixed_rows,
+            "fixed_title": fixed_title,
         } if best_variables else {"kind": "empty", "message": "没有最佳参数数据"}
 
         candidate_rows = [item for item in list(result.get("candidates", []) or result.get("candidate_results", []) or []) if isinstance(item, dict)]
+        self._latest_candidate_variables = [
+            {str(k): float(v) for k, v in dict(item.get("variables", {}) or {}).items() if isinstance(v, (int, float))}
+            for item in candidate_rows
+        ]
         candidate_labels: list[str] = []
         candidate_values: list[float] = []
         predicted_values: list[float] = []
@@ -242,7 +384,8 @@ class OptimizationResultMixin:
                 if is_efficiency:
                     formal_value = formal_value * 100.0 if abs(formal_value) <= 1.000001 else formal_value
                     predicted_value = predicted_value * 100.0 if abs(predicted_value) <= 1.000001 else predicted_value
-                candidate_labels.append(str(item.get("label", item.get("name", f"方案{index + 1}"))))
+                raw_label = str(item.get("label", item.get("name", "")) or "").strip()
+                candidate_labels.append(f"候选{index + 1}" if (not raw_label or raw_label.startswith("方案")) else raw_label)
                 candidate_values.append(formal_value)
                 predicted_values.append(predicted_value)
         candidate_plot = {"kind": "empty", "message": "没有候选对比数据"}
@@ -250,7 +393,7 @@ class OptimizationResultMixin:
             order = sorted(range(len(candidate_values)), key=candidate_values.__getitem__, reverse=maximize)
             candidate_plot = {
                 "kind": "bar_grouped",
-                "title": "候选方案对比",
+                "title": "候选结果对比",
                 "labels": [candidate_labels[index] for index in order],
                 "series": [
                     {"label": "正式仿真", "values": [candidate_values[index] for index in order]},
@@ -271,22 +414,68 @@ class OptimizationResultMixin:
         )
         candidate_view = build_candidate_comparison(result, efficiency=is_efficiency)
         correlation_view = build_correlation_view(result)
-        self._main_result_payloads = [
-            response_summary,
-            before_after,
-            convergence_view,
-            candidate_view,
-            correlation_view,
-        ]
+        # Auto optimisation asks "how much better did we get?".  Physical inverse
+        # design asks "did we meet the requested target, and with which variables?".
+        # They may share the same formal solver, but must not share result semantics.
+        if inverse_mode:
+            objective_defs = [item for item in list(metadata.get("objective_definitions", []) or []) if isinstance(item, dict)]
+            objective = next((item for item in objective_defs if str(item.get("metric", "")) == metric_key), objective_defs[0] if objective_defs else {})
+            target = objective.get("target_value")
+            if isinstance(target, (int, float)) and is_efficiency and abs(float(target)) <= 1.000001:
+                target = float(target) * 100.0
+            baseline_metrics = dict(metadata.get("baseline_metrics", {}) or {})
+            baseline_value = baseline_metrics.get(metric_key)
+            if isinstance(baseline_value, (int, float)) and is_efficiency and abs(float(baseline_value)) <= 1.000001:
+                baseline_value = float(baseline_value) * 100.0
+            best_value = dict(result.get("best_metrics", {}) or {}).get(metric_key)
+            if isinstance(best_value, (int, float)) and is_efficiency and abs(float(best_value)) <= 1.000001:
+                best_value = float(best_value) * 100.0
+            target_payload = {
+                "kind": "target_achievement",
+                "title": "",
+                "target": target,
+                "current": baseline_value,
+                "best": best_value,
+                "y_label": metric_name + (" / %" if is_efficiency else ""),
+                "source": "正式物理反向设计",
+            }
+            gap_text = "目标差距 —"
+            state_text = "等待正式候选"
+            if isinstance(target, (int, float)) and isinstance(best_value, (int, float)):
+                gap = float(best_value) - float(target)
+                gap_text = f"目标差距 {gap:+.3f}{' 个百分点' if is_efficiency else ''}"
+                state_text = "已达到目标" if abs(gap) <= 0.05 or gap >= 0 else "尚未达到目标"
+            feasibility = {
+                "kind": "text",
+                "title": "可行性",
+                "text": f"{state_text}\n{gap_text}\n约束状态：{'通过' if float(dict(result.get('best_metrics', {}) or {}).get('collimation_feasible', 1.0) or 1.0) >= 0.5 else '未通过'}",
+                "source": "正式物理反向设计",
+            }
+            self._main_result_payloads = [target_payload, response_summary, convergence_view, candidate_view, feasibility]
+            for button, text in zip(self.result_view_buttons, ("目标达成", "候选参数", "搜索过程", "候选对比", "可行性")):
+                button.setText(text)
+        else:
+            self._main_result_payloads = [
+                response_summary,
+                before_after,
+                convergence_view,
+                candidate_view,
+                correlation_view,
+            ]
+            for button, text in zip(self.result_view_buttons, ("最佳参数", "优化前后", "优化收敛", "候选对比", "参数相关性")):
+                button.setText(text)
         visibility = tuple(str(payload.get("kind", "empty")) != "empty" for payload in self._main_result_payloads)
         self._set_result_view_visibility(visibility)
-        selected_index = 2 if visibility[2] else next((i for i, visible in enumerate(visibility) if visible), 0)
+        selected_index = 0 if inverse_mode else (2 if visibility[2] else next((i for i, visible in enumerate(visibility) if visible), 0))
         self._select_main_result(selected_index)
 
         metrics = dict(result.get("best_metrics", {}) or {})
         efficiency = metrics.get("coupling_efficiency")
         system_efficiency = metrics.get("system_efficiency")
-        baseline = self.context.project.project.metrics.get("coupling_efficiency")
+        baseline_metrics = dict(metadata.get("baseline_metrics", {}) or {})
+        if not baseline_metrics and history:
+            baseline_metrics = dict(history[0].get("metrics", {}) or {})
+        baseline = baseline_metrics.get("coupling_efficiency", self.context.project.project.metrics.get("coupling_efficiency"))
         normalized_efficiency = None
         if isinstance(efficiency, (int, float)):
             normalized_efficiency = efficiency if efficiency <= 1.0 else efficiency / 100.0
@@ -302,6 +491,31 @@ class OptimizationResultMixin:
                 self.auto_gain.set_value(f"{gain * 100:+.3f}", "%")
                 self._set_info(self.summary_gain, "效率提升", f"{gain * 100:+.3f}%")
 
+        summary_first = f"最佳{metric_name} —"
+        summary_second = f"变量 {len(best_variables)} 个"
+        summary_third = "正式候选待复核"
+        if normalized_efficiency is not None:
+            summary_first = f"最佳{metric_name} {normalized_efficiency * 100:.3f}%"
+        if inverse_mode:
+            objective_defs = [item for item in list(metadata.get("objective_definitions", []) or []) if isinstance(item, dict)]
+            objective = next((item for item in objective_defs if str(item.get("metric", "")) == metric_key), objective_defs[0] if objective_defs else {})
+            target_raw = objective.get("target_value")
+            if isinstance(target_raw, (int, float)):
+                target_display = float(target_raw) * 100.0 if is_efficiency and abs(float(target_raw)) <= 1.000001 else float(target_raw)
+                summary_first = f"设计目标 {target_display:.3f}{'%' if is_efficiency else ''}"
+                if normalized_efficiency is not None:
+                    best_display = normalized_efficiency * 100.0 if is_efficiency else normalized_efficiency
+                    summary_second = f"最佳正式候选 {best_display:.3f}{'%' if is_efficiency else ''}"
+                    summary_third = f"目标差距 {best_display - target_display:+.3f}{' 个百分点' if is_efficiency else ''}"
+            elif candidate_values:
+                summary_third = f"候选 {len(candidate_values)} 个"
+        else:
+            if isinstance(baseline, (int, float)) and normalized_efficiency is not None:
+                summary_second = f"相比当前 {(normalized_efficiency - baseline) * 100:+.3f}%"
+            if candidate_values:
+                summary_third = f"候选 {len(candidate_values)} 个"
+        self._set_result_summary_values(first=summary_first, second=summary_second, third=summary_third)
+
         collimation_enabled = bool(metadata.get("collimation_constraint_enabled", False))
         collimation_feasible = float(metrics.get("collimation_feasible", 0.0)) >= 0.5
         self.auto_constraint.set_value("通过" if (not collimation_enabled or collimation_feasible) else "未通过")
@@ -313,7 +527,7 @@ class OptimizationResultMixin:
             for column, cell in enumerate(row_values):
                 self.auto_parameter_table.setItem(row_index, column, QTableWidgetItem(str(cell)))
 
-        rows_for_table = candidate_rows or ([{"name": "最佳方案", "formal_efficiency": efficiency, "system_efficiency": system_efficiency}] if best_variables or metrics else [])
+        rows_for_table = candidate_rows or ([{"name": "最佳候选", "formal_efficiency": efficiency, "system_efficiency": system_efficiency}] if best_variables or metrics else [])
         self.auto_candidate_table.setRowCount(len(rows_for_table))
         for row_index, item in enumerate(rows_for_table):
             formal = item.get("formal_efficiency", item.get("coupling_efficiency", efficiency))
@@ -323,7 +537,8 @@ class OptimizationResultMixin:
                     return "—"
                 value = float(value)
                 return f"{(value * 100.0 if abs(value) <= 1.000001 else value):.3f}%"
-            name = str(item.get("label", item.get("name", f"方案{chr(65 + row_index)}")))
+            raw_name = str(item.get("label", item.get("name", "")) or "").strip()
+            name = f"候选{row_index + 1}" if (not raw_name or raw_name.startswith("方案")) else raw_name
             status = "通过" if result.get("status") == "completed" else str(result.get("status", "完成"))
             values_for_row = (row_index + 1, name, pct(formal), pct(system), self.auto_constraint.value_label.text(), status)
             for column, cell in enumerate(values_for_row):
@@ -344,35 +559,95 @@ class OptimizationResultMixin:
             if predicted_norm is not None and predicted_norm > 1.0:
                 predicted_norm /= 100.0
             delta = (normalized_efficiency - predicted_norm) * 100.0 if predicted_norm is not None else None
-            row_values = ("最佳方案", f"{predicted_norm*100:.3f}%" if predicted_norm is not None else "—", f"{normalized_efficiency*100:.3f}%", f"{delta:+.3f}%" if delta is not None else "—", "完成")
+            row_values = ("最佳候选", f"{predicted_norm*100:.3f}%" if predicted_norm is not None else "—", f"{normalized_efficiency*100:.3f}%", f"{delta:+.3f}%" if delta is not None else "—", "完成")
             for column, cell in enumerate(row_values):
                 self.auto_verification_table.setItem(0, column, QTableWidgetItem(str(cell)))
 
-        self.candidate_table.setRowCount(1 if best_variables or metrics else 0)
+        compact_rows = candidate_rows or ([{
+            "label": "候选1",
+            "variables": best_variables,
+            "formal_efficiency": normalized_efficiency,
+            "verification_status": "formal_simulation" if result.get("status") == "completed" else result.get("status", "完成"),
+        }] if best_variables or metrics else [])
+        if not candidate_rows:
+            self._latest_candidate_variables = [dict(self._latest_best_variables)] if compact_rows else []
+        self.candidate_table.setRowCount(len(compact_rows))
+        for row_index, item in enumerate(compact_rows):
+            variables_map = dict(item.get("variables", {}) or {})
+            parameter_names = [parameter_label(name) for name in variables_map]
+            candidate_name = "、".join(parameter_names[:3]) or "正式候选"
+            predicted = item.get("predicted_efficiency", metadata.get("surrogate_predicted_efficiency", "—"))
+            formal_raw = item.get("formal_efficiency", item.get("coupling_efficiency"))
+            if isinstance(formal_raw, (int, float)):
+                formal_value = float(formal_raw)
+                formal = f"{(formal_value * 100.0 if abs(formal_value) <= 1.000001 else formal_value):.3f}%"
+            else:
+                formal = "—"
+            if isinstance(predicted, (int, float)):
+                predicted_value = float(predicted)
+                predicted = f"{(predicted_value * 100.0 if abs(predicted_value) <= 1.000001 else predicted_value):.3f}%"
+            raw_label = str(item.get("label", item.get("name", "")) or "").strip()
+            label = f"候选{row_index + 1}" if (not raw_label or raw_label.startswith("方案")) else raw_label
+            state = "已正式仿真" if str(item.get("verification_status", "")) == "formal_simulation" else ("通过" if result.get("status") == "completed" else str(result.get("status", "完成")))
+            for column, value in enumerate((label, candidate_name, predicted, formal, state)):
+                self.candidate_table.setItem(row_index, column, QTableWidgetItem(str(value)))
         if self.candidate_table.rowCount():
-            candidate_name = "、".join(labels[:3]) or "最佳方案"
-            predicted = metadata.get("surrogate_predicted_efficiency", "—")
-            formal = f"{normalized_efficiency * 100:.3f}%" if normalized_efficiency is not None else "—"
-            state = "通过" if result.get("status") == "completed" else str(result.get("status", "完成"))
-            for column, value in enumerate(("A", candidate_name, predicted, formal, state)):
-                self.candidate_table.setItem(0, column, QTableWidgetItem(str(value)))
+            self.candidate_table.selectRow(0)
+            if hasattr(self, "apply_best_design_button"):
+                self.apply_best_design_button.setText("应用选中候选" if self.candidate_table.rowCount() > 1 else "应用到当前系统")
         self.parameter_range_text.setText("\n".join(f"{parameter_label(name)}：{value}" for name, value in best_variables.items()) or "—")
         self.formal_verification_text.setText("已完成" if result.get("status") == "completed" else str(result.get("status", "等待")))
         if labels:
             self.main_factor_text.setText("\n".join(f"{index}. {name}" for index, name in enumerate(labels[:3], start=1)))
         warnings = [str(item) for item in list(result.get("warnings", []) or [])]
         self.advice_text.setText("\n".join(warnings[:3]) if warnings else "结果已加载")
-        self._set_info(self.summary_verification, "正式复核", "已完成" if result.get("status") == "completed" else str(result.get("status", "等待")))
+        self._set_info(self.summary_verification, "完整仿真", "已完成" if result.get("status") == "completed" else str(result.get("status", "等待")))
         if hasattr(self, "compare_status"):
             self.compare_status.set_value("优化已完成")
         self.research_progress.setValue(100)
-        self.start_research_button.setEnabled(True)
         self.header_state.set_value("已完成")
         self._set_job_info("optimization", "研究完成")
+        if hasattr(self.start_research_button, "set_task_state"):
+            label = "反向预测完成" if bool(getattr(self, "_ml_inverse_prediction_active", False)) else ("反向设计完成" if bool(getattr(self, "_inverse_design_active", False)) else "优化完成")
+            self.start_research_button.set_task_state("success", label)
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(1300, lambda: self.start_research_button.reset_task_state())
+        else:
+            self.start_research_button.setEnabled(True)
+        revision = getattr(self.context.project, "design_revision", "")
+        task_source = "正式物理反向设计任务" if inverse_mode else "正式优化任务"
+        self._set_result_provenance(
+            f"结果来源：{task_source} · 系统 Rev.{revision} · 候选不会自动覆盖当前系统"
+        )
         self._refresh_user_summary()
+        prepare_tolerance = getattr(self, "auto_prepare_tolerance", None)
+        if prepare_tolerance is not None and prepare_tolerance.isChecked():
+            try:
+                self._tolerance_sync_from_optimization(silent=True)
+                if hasattr(self, "auto_tolerance_text"):
+                    self.auto_tolerance_text.setText(
+                        "最佳候选已自动同步到容差分析。\n"
+                        "请检查制造/装调容差量级后运行 Monte Carlo/LHS/Sobol。\n"
+                        "平台不会未经确认自动启动大量随机样本计算。"
+                    )
+            except Exception as exc:
+                if hasattr(self, "auto_tolerance_text"):
+                    self.auto_tolerance_text.setText(f"最佳候选已完成，但容差参数自动同步失败：{exc}")
+
+        # Candidate metrics/actions are revealed only at terminal result time.
+        # Recompute the one outer task scroll *after* those rows become visible;
+        # otherwise the horizontal splitter can retain its pre-result 610 px
+        # height and physically overlap the plot, provenance and action rows.
+        sync_height = getattr(self, "_sync_task_content_height", None)
+        if callable(sync_height):
+            sync_height()
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(0, sync_height)
 
     def _set_result_view_visibility(self, states: tuple[bool, ...]) -> None:
         buttons = getattr(self, "result_view_buttons", [])
+        if str(getattr(self, "_task_window_target", "")) == "optimization.scan":
+            states = tuple(True for _ in buttons)
         for index, button in enumerate(buttons):
             button.setVisible(bool(states[index]) if index < len(states) else False)
         visible = [index for index, state in enumerate(states) if state]
@@ -436,8 +711,8 @@ class OptimizationResultMixin:
             )
             rows.append(
                 [
-                    "扫描" if info["kind"] == "scan" else "优化",
-                    "参数研究" if info["kind"] == "scan" else "正式优化",
+                    "扫描" if info["kind"] == "scan" else ("容差" if info["kind"] == "tolerance" else "优化"),
+                    "参数研究" if info["kind"] == "scan" else ("鲁棒性分析" if info["kind"] == "tolerance" else "正式优化"),
                     task.get("status", "运行中"),
                     f"{task.get('progress', 0)}%",
                     "—",
@@ -454,11 +729,12 @@ class OptimizationResultMixin:
                 self.history_table.setItem(row_index, column, item)
 
     def _set_job_info(self, kind: str, message: str) -> None:
-        target = (
-            getattr(self, "scan_status", None)
-            if kind == "scan"
-            else getattr(self, "auto_status", None)
-        )
+        if kind == "scan":
+            target = getattr(self, "scan_status", None)
+        elif kind == "tolerance":
+            target = getattr(self, "tolerance_status", None)
+        else:
+            target = getattr(self, "auto_status", None)
         if target is not None:
             self._set_info(target, "任务状态", message)
         guided = getattr(self, "guided_status", None)
@@ -472,11 +748,7 @@ class OptimizationResultMixin:
         header = getattr(self, "header_state", None)
         if header is not None:
             header.set_value(message.split("：", 1)[0][:12] or "运行中")
-        log_widget = (
-            getattr(self, "scan_log_text", None)
-            if kind == "scan"
-            else getattr(self, "auto_log_text", None)
-        )
+        log_widget = getattr(self, "scan_log_text", None) if kind == "scan" else getattr(self, "auto_log_text", None)
         if log_widget is not None:
             log_widget.setText(message)
 

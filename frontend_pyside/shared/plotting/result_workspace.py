@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator, Sequence
 
-from PySide6.QtCore import Signal
+from PySide6.QtCore import QSize, Signal
 from PySide6.QtWidgets import (
     QComboBox,
     QFrame,
@@ -10,12 +10,15 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QToolButton,
     QSizePolicy,
     QStackedLayout,
     QVBoxLayout,
     QWidget,
 )
 
+from frontend_pyside.resources import theme_tokens as theme
+from frontend_pyside.shared.icons import icon
 from frontend_pyside.shared.plotting.canvas import PlotCanvas
 from frontend_pyside.shared.plotting.fast_heatmap import FastHeatmapWidget
 from frontend_pyside.shared.plotting.plot_tools import PlotTools
@@ -26,6 +29,7 @@ class ResultPane(QFrame):
     surfaceSelected = Signal(int)
     surfaceActivated = Signal(int)
     itemSelected = Signal(str)
+    pointSelected = Signal(float, float)
     rendered = Signal(str)
 
     def __init__(self, title: str = "结果", parent=None) -> None:
@@ -49,11 +53,6 @@ class ResultPane(QFrame):
         self.source = QLabel("预览")
         self.source.setProperty("tone", "info")
         head.addWidget(self.source)
-        self.max_btn = QPushButton("放大")
-        self.max_btn.setFlat(True)
-        self.max_btn.setMaximumWidth(58)
-        self.max_btn.clicked.connect(lambda: self.maximizeRequested.emit(self))
-        head.addWidget(self.max_btn)
         layout.addWidget(self.header_widget)
 
         self.canvas = PlotCanvas()
@@ -61,6 +60,7 @@ class ResultPane(QFrame):
         self.canvas.surfaceSelected.connect(self.surfaceSelected.emit)
         self.canvas.surfaceActivated.connect(self.surfaceActivated.emit)
         self.canvas.itemSelected.connect(self.itemSelected.emit)
+        self.canvas.pointSelected.connect(self.pointSelected.emit)
         self._draw_cid = self.canvas.mpl_connect("draw_event", self._on_draw_event)
         self.fast_heatmap = FastHeatmapWidget()
         self.fast_heatmap.rendered.connect(self.rendered.emit)
@@ -69,19 +69,25 @@ class ResultPane(QFrame):
         self.plot_stack.setContentsMargins(0, 0, 0, 0)
         self.plot_stack.addWidget(self.canvas)
         self.plot_stack.addWidget(self.fast_heatmap)
-        layout.addWidget(self.plot_stack_widget, 1)
-
-        self.tools_widget = QWidget()
-        tools_row = QHBoxLayout(self.tools_widget)
-        tools_row.setContentsMargins(0, 0, 0, 0)
+        # 图表工具固定在标题栏右侧。相同类型的结果页不再把
+        # “恢复/保存/导出”放在图下方，避免每页形成不同的阅读顺序。
         self.plot_tools = PlotTools(
             self.canvas,
             prepare=self._prepare_matplotlib_export,
             pixmap_provider=self._active_pixmap,
         )
-        tools_row.addWidget(self.plot_tools)
-        tools_row.addStretch(1)
-        layout.addWidget(self.tools_widget)
+        head.addWidget(self.plot_tools)
+        self.max_btn = QToolButton(self.header_widget)
+        self.max_btn.setObjectName("plotIconTool")
+        self.max_btn.setIcon(icon("popout", theme.TEXT_SECONDARY, 17))
+        self.max_btn.setIconSize(QSize(17, 17))
+        self.max_btn.setToolTip("弹出当前图")
+        self.max_btn.clicked.connect(lambda: self.maximizeRequested.emit(self))
+        head.addWidget(self.max_btn)
+        # 兼容旧调用方：tools_widget 仍可被统一显隐，但不再额外占一行。
+        self.tools_widget = self.plot_tools
+
+        layout.addWidget(self.plot_stack_widget, 1)
 
         self.footer = QLabel("结果尚未加载")
         self.footer.setObjectName("helperText")
@@ -105,6 +111,11 @@ class ResultPane(QFrame):
             self.fast_heatmap.reset_view()
         else:
             self.canvas.reset_view()
+
+    def set_optical_3d_view(self, preset: str) -> bool:
+        if self.plot_stack.currentWidget() is self.fast_heatmap:
+            return False
+        return bool(self.canvas.set_optical_3d_view(preset))
 
     def _on_draw_event(self, _event) -> None:
         key = self._pending_render_key
@@ -201,9 +212,17 @@ class ResultPane(QFrame):
             )
         if kind in {"bar", "barh"}:
             return f"项目：{len(data.get('values', []))}　｜　数据来源：{data.get('source', '预览')}"
+        if kind == "histogram":
+            return f"样本：{len(data.get('values', []))}　｜　数据来源：{data.get('source', '正式容差分析')}"
+        if kind == "target_achievement":
+            return f"目标：{data.get('target', '—')}　｜　最佳候选：{data.get('best', '—')}　｜　数据来源：{data.get('source', '正式反向设计')}"
         if kind == "beeswarm":
+            sample_count = data.get("sample_count")
+            if not isinstance(sample_count, (int, float)):
+                labels = max(1, len(data.get("labels", [])))
+                sample_count = len(data.get("points", [])) // labels
             return (
-                f"样本点：{len(data.get('points', []))}　｜　"
+                f"样本：{int(sample_count)}　｜　"
                 f"特征：{len(data.get('labels', []))}　｜　数据来源：{data.get('source', '预览')}"
             )
         if kind == "beam_match":
@@ -217,13 +236,19 @@ class ResultPane(QFrame):
         if kind == "waist_position":
             return f"传播曲线：{len(data.get('series', []))} 条　｜　束腰点：{len(data.get('waist_points', []))} 个"
         if kind == "parameter_response":
-            return f"采样点：{min(len(data.get('x', [])), len(data.get('y', [])))}　｜　已合并当前点、最佳点和正式复核标记"
+            return f"采样点：{min(len(data.get('x', [])), len(data.get('y', [])))}　｜　已合并当前点、最佳点和完整仿真标记"
         if kind == "validation_scatter":
-            return f"独立测试样本：{min(len(data.get('actual', [])), len(data.get('predicted', [])))}　｜　参考线：y=x　｜　带状区域：±2×MAE 诊断带"
+            count = min(len(data.get('actual', [])), len(data.get('predicted', [])))
+            if data.get("simple"):
+                return f"独立测试样本：{count}　｜　点越靠近 y=x，预测与完整仿真越一致"
+            return f"独立测试样本：{count}　｜　参考线：y=x　｜　详细模式含诊断带"
         if kind == "residual":
-            return f"残差样本：{min(len(data.get('actual', data.get('predicted', []))), len(data.get('residual', [])))}　｜　残差定义：预测值－正式值　｜　含趋势与分布诊断"
+            count = min(len(data.get('actual', data.get('predicted', []))), len(data.get('residual', [])))
+            if data.get("simple"):
+                return f"残差样本：{count}　｜　残差＝预测值－正式值；点应尽量围绕 0 随机分布"
+            return f"残差样本：{count}　｜　残差定义：预测值－正式值　｜　详细模式含趋势与分布诊断"
         if kind == "waterfall":
-            return f"解释特征：{min(len(data.get('labels', [])), len(data.get('values', [])))}　｜　从模型基准值累加至当前预测值"
+            return f"解释特征：{min(len(data.get('labels', [])), len(data.get('values', [])))}　｜　从模型平均基准累加至当前预测值"
         if kind == "phase_comparison":
             return "入射相位、目标相位与相位差同图显示"
         if kind == "multi_plane_evolution":
@@ -235,7 +260,7 @@ class ResultPane(QFrame):
         if kind == "before_after":
             return "并列比较优化前后耦合效率、系统效率和关键参数"
         if kind == "candidate_compare":
-            return f"候选方案：{len(data.get('candidates', []))} 个"
+            return f"候选结果：{len(data.get('candidates', []))} 个"
         if kind == "convergence_curve":
             return f"正式计算点：{len(data.get('x', []))} 个"
         if kind == "correlation_heatmap":
@@ -278,6 +303,7 @@ class ResultWorkspace(QWidget):
     surfaceSelected = Signal(int)
     surfaceActivated = Signal(int)
     itemSelected = Signal(str)
+    pointSelected = Signal(float, float)
     renderCompleted = Signal(int, str)
 
     PANE_COUNT = 4
@@ -297,6 +323,8 @@ class ResultWorkspace(QWidget):
         self._pane_accessor = _PaneAccessor(self)
         self._pending_results: dict[int, tuple[str, dict]] = {}
         self._pane_header_visible = True
+        self._pane_title_visible = True
+        self._pane_source_visible = True
         self._plot_tools_visible = True
         self._footer_visible = True
         self._maximize_controls_visible = True
@@ -330,9 +358,11 @@ class ResultWorkspace(QWidget):
         self.visible_label.setObjectName("helperText")
         tools.addWidget(self.visible_label)
         tools.addStretch(1)
-        self.reset_btn = QPushButton("恢复视图")
-        self.reset_btn.setMaximumWidth(88)
-        self.reset_btn.setToolTip("重置当前图的缩放、平移和三维视角")
+        self.reset_btn = QToolButton(self.toolbar)
+        self.reset_btn.setObjectName("plotIconTool")
+        self.reset_btn.setIcon(icon("reset", theme.TEXT_SECONDARY, 17))
+        self.reset_btn.setIconSize(QSize(17, 17))
+        self.reset_btn.setToolTip("恢复当前图视图")
         tools.addWidget(self.reset_btn)
         root.addWidget(self.toolbar)
 
@@ -376,8 +406,11 @@ class ResultWorkspace(QWidget):
         pane.surfaceSelected.connect(self.surfaceSelected.emit)
         pane.surfaceActivated.connect(self.surfaceActivated.emit)
         pane.itemSelected.connect(self.itemSelected.emit)
+        pane.pointSelected.connect(self.pointSelected.emit)
         pane.rendered.connect(lambda key, pane_index=index: self.renderCompleted.emit(pane_index, key))
         pane.set_header_visible(self._pane_header_visible)
+        pane.title.setVisible(self._pane_title_visible)
+        pane.source.setVisible(self._pane_source_visible)
         pane.set_tools_visible(self._plot_tools_visible)
         pane.set_footer_visible(self._footer_visible)
         pane.max_btn.setVisible(self._maximize_controls_visible)
@@ -444,14 +477,14 @@ class ResultWorkspace(QWidget):
         self.grid.removeWidget(pane)
         self.max_layout.addWidget(pane)
         pane.show()
-        pane.max_btn.setText("还原")
+        pane.max_btn.setToolTip("还原图形布局")
         self.container_layout.setCurrentWidget(self.max_widget)
 
     def _restore_grid(self, *, clear_only: bool = False) -> None:
         pane = self._maximized
         if pane is not None:
             self.max_layout.removeWidget(pane)
-            pane.max_btn.setText("放大")
+            pane.max_btn.setToolTip("放大当前图")
             self._maximized = None
         self.container_layout.setCurrentWidget(self.grid_widget)
         for item_pane in self._created_panes():
@@ -465,6 +498,12 @@ class ResultWorkspace(QWidget):
             self._restore_grid()
         for pane in self._created_panes():
             pane.reset_view()
+
+    def set_optical_3d_view(self, preset: str, *, index: int | None = None) -> bool:
+        pane_index = self.single_view.currentIndex() if index is None else int(index)
+        if not 0 <= pane_index < self.PANE_COUNT:
+            return False
+        return self._ensure_pane(pane_index).set_optical_3d_view(preset)
 
     def set_toolbar_visible(self, visible: bool) -> None:
         self.toolbar.setVisible(bool(visible))
@@ -480,6 +519,16 @@ class ResultWorkspace(QWidget):
         self._pane_header_visible = bool(visible)
         for pane in self._created_panes():
             pane.set_header_visible(visible)
+
+    def set_pane_title_visible(self, visible: bool) -> None:
+        self._pane_title_visible = bool(visible)
+        for pane in self._created_panes():
+            pane.title.setVisible(bool(visible))
+
+    def set_pane_source_visible(self, visible: bool) -> None:
+        self._pane_source_visible = bool(visible)
+        for pane in self._created_panes():
+            pane.source.setVisible(bool(visible))
 
     def set_plot_tools_visible(self, visible: bool) -> None:
         self._plot_tools_visible = bool(visible)

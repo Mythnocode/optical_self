@@ -105,6 +105,21 @@ class WorkspaceStateStore:
         if 0 <= index < tab_widget.count():
             tab_widget.setCurrentIndex(index)
 
+    def save_scroll(self, name: str, scroll_area) -> None:
+        try:
+            value = int(scroll_area.verticalScrollBar().value())
+        except Exception:
+            return
+        self.settings.setValue(self._key(f"scroll/{name}"), value)
+
+    def restore_scroll(self, name: str, scroll_area, fallback: int = 0) -> None:
+        value = self.settings.value(self._key(f"scroll/{name}"), fallback, type=int)
+        try:
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(0, lambda: scroll_area.verticalScrollBar().setValue(int(value)))
+        except Exception:
+            return
+
     def save_drawer(self, name: str, expanded: bool) -> None:
         self.settings.setValue(self._key(f"drawer/{name}"), bool(expanded))
 
@@ -129,10 +144,83 @@ class WorkspaceStateStore:
             table.horizontalHeader().restoreState(value)
 
 
+class SimulationNumericsProfileStore:
+    """Persist the user-facing numerical strategy shared by simulation and validation.
+
+    The normal workflow keeps numerical controls automatic.  The stored custom values
+    remain available as an expert override instead of being removed from the product.
+    """
+
+    def __init__(self, settings: QSettings | None = None) -> None:
+        self.settings = settings or QSettings("Optical ML Platform", "OpticalFrontend")
+
+    def load(self) -> dict:
+        return {
+            "automatic": self.settings.value("simulation/numerics/automatic", True, type=bool),
+            "precision": self.normalize_precision(self.settings.value("simulation/numerics/precision", "257×257", type=str)),
+            "grid_size": self.settings.value("simulation/numerics/grid_size", 257, type=int),
+            "pupil_sample_count": self.settings.value("simulation/numerics/pupil_sample_count", 49, type=int),
+            "layout_pupil_sample_count": self.settings.value("simulation/numerics/layout_pupil_sample_count", 9, type=int),
+            "propagation": self.settings.value("simulation/numerics/propagation", "缩放 Fresnel", type=str),
+            "padding": self.settings.value("simulation/numerics/padding", 2.0, type=float),
+            "extent_mm": self.settings.value("simulation/numerics/extent_mm", 0.024, type=float),
+            "sampling_convergence": self.settings.value("simulation/numerics/sampling_convergence", True, type=bool),
+            "auto_display_frame": self.settings.value("simulation/numerics/auto_display_frame", True, type=bool),
+            "display_fill_fraction": self.settings.value("simulation/numerics/display_fill_fraction", 0.67, type=float),
+        }
+
+    def save(self, profile: dict) -> dict:
+        values = dict(self.load())
+        values.update(dict(profile or {}))
+        self.settings.setValue("simulation/numerics/automatic", bool(values["automatic"]))
+        self.settings.setValue("simulation/numerics/precision", str(values["precision"]))
+        self.settings.setValue("simulation/numerics/grid_size", int(values["grid_size"]))
+        self.settings.setValue("simulation/numerics/pupil_sample_count", int(values["pupil_sample_count"]))
+        self.settings.setValue("simulation/numerics/layout_pupil_sample_count", int(values["layout_pupil_sample_count"]))
+        self.settings.setValue("simulation/numerics/propagation", str(values["propagation"]))
+        self.settings.setValue("simulation/numerics/padding", float(values["padding"]))
+        self.settings.setValue("simulation/numerics/extent_mm", float(values["extent_mm"]))
+        self.settings.setValue("simulation/numerics/sampling_convergence", bool(values["sampling_convergence"]))
+        self.settings.setValue("simulation/numerics/auto_display_frame", bool(values["auto_display_frame"]))
+        fraction = min(0.9, max(0.3, float(values["display_fill_fraction"])))
+        self.settings.setValue("simulation/numerics/display_fill_fraction", fraction)
+        self.settings.sync()
+        values["display_fill_fraction"] = fraction
+        return values
+
+    @staticmethod
+    def normalize_precision(precision_text: str) -> str:
+        """Migrate old marketing-style names to transparent grid presets."""
+        text = str(precision_text or "257×257").replace(" ", "")
+        return {
+            "预览": "129×129",
+            "标准": "257×257",
+            "高精度": "513×513",
+            "研究级": "1025×1025",
+            "129×129": "129×129",
+            "257×257": "257×257",
+            "513×513": "513×513",
+            "1025×1025": "1025×1025",
+        }.get(text, "257×257")
+
+    @staticmethod
+    def recommended_sampling(precision_text: str) -> dict:
+        text = SimulationNumericsProfileStore.normalize_precision(precision_text)
+        common = {"propagation": "缩放 Fresnel", "extent_mm": 0.024}
+        preset = {
+            "129×129": {"grid_size": 129, "pupil_sample_count": 17, "layout_pupil_sample_count": 7, "padding": 1.5},
+            "257×257": {"grid_size": 257, "pupil_sample_count": 49, "layout_pupil_sample_count": 9, "padding": 2.0},
+            "513×513": {"grid_size": 513, "pupil_sample_count": 65, "layout_pupil_sample_count": 13, "padding": 2.0},
+            "1025×1025": {"grid_size": 1025, "pupil_sample_count": 65, "layout_pupil_sample_count": 17, "padding": 2.0},
+        }.get(text, {"grid_size": 257, "pupil_sample_count": 49, "layout_pupil_sample_count": 9, "padding": 2.0})
+        return {**preset, **common}
+
+
 __all__ = [
     "DISPLAY_MODES",
     "RENDER_QUALITIES",
     "RenderProfile",
     "UiPreferences",
     "WorkspaceStateStore",
+    "SimulationNumericsProfileStore",
 ]

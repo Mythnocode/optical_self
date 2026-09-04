@@ -32,31 +32,32 @@ class SimpleParameterTabs(
         content_layout = QVBoxLayout(content)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
+        content_layout.setContentsMargins(0, 0, 0, 64)
 
         self.section_by_key = {
             "source": ExpandableSection(
                 "光源",
                 self._source_page(),
                 expanded=True,
-                header_variant="primary",
+                header_variant="navigation",
             ),
             "lens": ExpandableSection(
                 "镜头",
                 self.editor,
                 expanded=False,
-                header_variant="primary",
+                header_variant="navigation",
             ),
             "fiber": ExpandableSection(
                 "光纤",
                 self._receiver_page(),
                 expanded=False,
-                header_variant="primary",
+                header_variant="navigation",
             ),
             "calculation": ExpandableSection(
                 "设置",
                 self._calculation_page(),
                 expanded=False,
-                header_variant="primary",
+                header_variant="navigation",
             ),
         }
         self._ordered_keys = ["source", "lens", "fiber", "calculation"]

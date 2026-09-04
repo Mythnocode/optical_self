@@ -124,6 +124,7 @@ class TraceBundle:
     phase_offsets_rad: np.ndarray
     polarization_vectors_xyz: np.ndarray
     surface_interaction_records: list[list[dict]]
+    surface_physics_applied: bool
 
     def __init__(
         self,
@@ -151,6 +152,7 @@ class TraceBundle:
         phase_offsets_rad: np.ndarray | None = None,
         polarization_vectors_xyz: np.ndarray | None = None,
         surface_interaction_records: list[list[dict]] | None = None,
+        surface_physics_applied: bool = False,
     ) -> None:
         positions = np.asarray(final_positions_mm, dtype=float)
         directions_array = np.asarray(final_directions, dtype=float)
@@ -196,6 +198,7 @@ class TraceBundle:
         if len(records) != n:
             raise ValueError("surface_interaction_records must have one list per ray")
         self.surface_interaction_records = records
+        self.surface_physics_applied = bool(surface_physics_applied)
 
     @property
     def integration_weights(self) -> np.ndarray:

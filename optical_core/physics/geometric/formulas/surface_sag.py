@@ -25,10 +25,14 @@ def sag_conic_asphere(
         c = 1.0 / float(radius_mm)
         q = 1.0 + float(conic)
         radicand = 1.0 - q * (c * radial) ** 2
-        if np.any(radicand < -1.0e-12):
-            raise ValueError("半口径超出二次曲面矢高有效范围。")
+        # A ray beyond the sphere's equator has no real sag.  Return NaN so the
+        # intersection solver marks the ray as missed instead of raising and
+        # aborting the whole trace for one off-surface ray.
+        invalid = radicand < -1.0e-12
         root = np.sqrt(np.maximum(radicand, 0.0))
         base = c * radial * radial / (1.0 + root)
+        if np.any(invalid):
+            base = np.where(invalid, np.nan, base)
     
     
     

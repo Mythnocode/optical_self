@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 
-from concurrent.futures import Future, ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from threading import Lock, local
 from typing import Any, Iterable, Sequence
@@ -63,35 +63,75 @@ class OpticalWorkerPool:
             self._local.engine = engine
         return engine
 
-    def _run(self, request: SimulationRequest) -> SimulationResult:
+    def _run(self, request: SimulationRequest, cancellation=None) -> SimulationResult:
         try:
-            return self._engine().evaluate(request)
+            return self._engine().evaluate(request, cancellation=cancellation)
         finally:
             with self._counter_lock:
                 self._completed += 1
 
-    def submit(self, request: SimulationRequest) -> Future[SimulationResult]:
+    def submit(self, request: SimulationRequest, *, cancellation=None) -> Future[SimulationResult]:
         if self._closed:
             raise RuntimeError("OpticalWorkerPool is closed")
         with self._counter_lock:
             self._submitted += 1
-        return self._executor.submit(self._run, request)
+        return self._executor.submit(self._run, request, cancellation)
 
-    def evaluate(self, request: SimulationRequest) -> SimulationResult:
-        return self.submit(request).result()
+    def evaluate(self, request: SimulationRequest, *, cancellation=None) -> SimulationResult:
+        return self.submit(request, cancellation=cancellation).result()
 
     def map(
         self,
         requests: Sequence[SimulationRequest] | Iterable[SimulationRequest],
         *,
         chunksize: int = 1,
+        cancellation=None,
+        progress=None,
+        stage: str = "batch.evaluate",
     ) -> list[SimulationResult]:
         if self._closed:
             raise RuntimeError("OpticalWorkerPool is closed")
         items = tuple(requests)
+        if not items:
+            return []
+        # Submit explicitly rather than executor.map so backend progress reflects
+        # completed optical samples instead of a synthetic timer.  Results are
+        # placed back into request order, preserving deterministic semantics.
+        futures: dict[Future[SimulationResult], int] = {}
         with self._counter_lock:
             self._submitted += len(items)
-        return list(self._executor.map(self._run, items, chunksize=max(1, int(chunksize))))
+        for index, request in enumerate(items):
+            futures[self._executor.submit(self._run, request, cancellation)] = index
+
+        results: list[SimulationResult | None] = [None] * len(items)
+        completed = 0
+        for future in as_completed(futures):
+            index = futures[future]
+            results[index] = future.result()
+            completed += 1
+            if progress is not None:
+                progress.update(
+                    completed / len(items),
+                    stage,
+                    completed_items=completed,
+                    total_items=len(items),
+                )
+            is_cancelled = getattr(cancellation, "is_cancelled", False)
+            if callable(is_cancelled):
+                is_cancelled = is_cancelled()
+            if is_cancelled:
+                for pending in futures:
+                    if not pending.done():
+                        pending.cancel()
+                break
+
+        # A cancellation can leave not-yet-started futures empty.  The existing
+        # batch API expects a complete list, so resolve any already-running work;
+        # cancelled jobs are discarded by the caller's cancellation state.
+        for future, index in futures.items():
+            if results[index] is None and not future.cancelled():
+                results[index] = future.result()
+        return [item for item in results if item is not None]
 
     def warmup(self, requests: Sequence[SimulationRequest]) -> list[SimulationResult]:
 

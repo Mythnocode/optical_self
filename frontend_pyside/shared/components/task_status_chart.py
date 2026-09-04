@@ -4,6 +4,7 @@ from PySide6.QtCore import QRectF, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QFont, QPainter, QPen
 from PySide6.QtWidgets import QSizePolicy, QWidget
 
+from frontend_pyside.shared.task_display import progress_percent
 from frontend_pyside.resources import theme_tokens as theme
 
 
@@ -115,7 +116,7 @@ class TaskProgressChart(QWidget):
         "已暂停": QColor(theme.TEXT_DISABLED),
     }
 
-    ROW_HEIGHT = 62
+    ROW_HEIGHT = 68
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -180,10 +181,17 @@ class TaskProgressChart(QWidget):
 
     @staticmethod
     def _progress(text: str) -> int:
-        try:
-            return max(0, min(100, int(float(str(text).replace("%", "").strip()))))
-        except (TypeError, ValueError):
-            return 0
+        # Backend/task sources may report progress as 0.31, 31 or "31%".
+        # Reuse the same normalization as the rest of the application so the
+        # task chart cannot silently render 0% for fractional values.
+        raw = str(text or "").strip()
+        if raw.endswith("%"):
+            raw = raw[:-1].strip()
+            try:
+                return max(0, min(100, round(float(raw))))
+            except (TypeError, ValueError):
+                return 0
+        return progress_percent(raw)
 
     def _row_at(self, y: float) -> int:
         index = int((float(y) - 8) // self.ROW_HEIGHT)
@@ -276,30 +284,27 @@ class TaskProgressChart(QWidget):
                 status,
             )
 
-            track = QRectF(bar_left, top + 10, bar_width, 14)
+            track = QRectF(bar_left, top + 10, bar_width, 18)
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(QColor(theme.SURFACE_SECONDARY))
-            painter.drawRoundedRect(track, 7, 7)
-            if status == "失败":
-                fill_ratio = 1.0
-            elif status in {"等待中", "已暂停"} and progress <= 0:
-                fill_ratio = 0.08
-            else:
-                fill_ratio = progress / 100.0
+            painter.drawRoundedRect(track, 9, 9)
+            # Always render the backend-reported progress. Terminal/error state is
+            # communicated by status colour/text, never by a fabricated full bar.
+            fill_ratio = progress / 100.0
             fill = QRectF(track.left(), track.top(), track.width() * fill_ratio, track.height())
             painter.setBrush(color)
-            painter.drawRoundedRect(fill, 7, 7)
+            painter.drawRoundedRect(fill, 9, 9)
 
             painter.setPen(QColor(theme.TEXT_PRIMARY))
             painter.drawText(
-                QRectF(bar_left + bar_width + 8, top + 4, 48, 26),
+                QRectF(bar_left + bar_width + 8, top + 6, 48, 26),
                 Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
                 f"{progress}%",
             )
             painter.setFont(small_font)
             painter.setPen(QColor(theme.TEXT_MUTED))
             painter.drawText(
-                QRectF(bar_left, top + 31, bar_width + 56, 18),
+                QRectF(bar_left, top + 36, bar_width + 56, 18),
                 Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
                 note,
             )

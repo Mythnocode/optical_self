@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 import hashlib
 import json
 import math
@@ -40,6 +40,21 @@ class TeachingPhysicalScene:
     @property
     def laser(self) -> TeachingPhysicalNode | None:
         return next((node for node in self.nodes if node.kind == "laser" and node.enabled), None)
+
+    def fingerprint_key(self) -> str:
+        """用于结果级缓存的轻量指纹：仅包含影响追迹结果的字段，不含 generation。"""
+        parts: list[tuple[Any, ...]] = []
+        for node in self.nodes:
+            parts.append((
+                node.node_id, node.kind, node.enabled,
+                round(float(node.scene_x), 3), round(float(node.scene_y), 3),
+                round(float(node.height_mm), 3), round(float(node.yaw_deg), 3),
+                round(float(node.pitch_deg), 3), round(float(node.roll_deg), 3),
+                tuple(sorted((key, str(value)) for key, value in node.params.items())),
+            ))
+        return repr((parts, round(float(self.wavelength_nm), 4), round(float(self.input_power_mw), 4),
+                    round(float(self.max_system_length_mm), 3), float(self.scene_width_units),
+                    float(self.scene_height_units)))
 
 
 @dataclass(frozen=True, slots=True)
@@ -168,14 +183,76 @@ def _axis_vector(node: TeachingPhysicalNode, laser_yaw_deg: float) -> tuple[floa
     )
 
 
+def _tilts_from_engine_normal(normal: tuple[float, float, float], roll_deg: float = 0.0) -> tuple[float, float, float]:
+    """Map an engine-frame surface normal onto OpticalSurface Euler tilts (Rx→Ry→Rz)."""
+    nx, ny, nz = (float(v) for v in normal)
+    norm = math.sqrt(nx * nx + ny * ny + nz * nz)
+    if not math.isfinite(norm) or norm <= 1.0e-15:
+        return 0.0, 0.0, float(roll_deg)
+    nx, ny, nz = nx / norm, ny / norm, nz / norm
+    # n = Ry(ty) @ Rx(tx) @ (0,0,1) = (sin(ty)cos(tx), -sin(tx), cos(ty)cos(tx))
+    tilt_x = -math.degrees(math.asin(max(-1.0, min(1.0, ny))))
+    cos_tx = math.cos(math.radians(tilt_x))
+    if abs(cos_tx) < 1.0e-9:
+        tilt_y = 0.0
+    else:
+        tilt_y = math.degrees(math.atan2(nx / cos_tx, nz / cos_tx))
+    return float(tilt_x), float(tilt_y), float(roll_deg)
+
+
+def _mirror_surface_tangent_yaw_deg(node: TeachingPhysicalNode) -> float:
+    """Teaching mirror mount convention: rotation_deg = 45 + 0.5*(in+out).
+
+    The reflective face (surface tangent in the horizontal plane) therefore sits at
+    ``rotation_deg - 45``. Explicit ``surface_angle_deg`` overrides the mount rule.
+    """
+    if node.params.get("surface_angle_deg") is not None:
+        return float(node.params.get("surface_angle_deg") or 0.0)
+    return float(node.yaw_deg) - 45.0
+
+
 def _surface_tilts_from_axis(node: TeachingPhysicalNode, laser_yaw_deg: float, *, mirror: bool = False) -> tuple[float, float, float]:
     if mirror:
-        surface_tangent_yaw = float(node.yaw_deg) - 45.0
-        normal_yaw = surface_tangent_yaw + 90.0
-        relative_yaw = (normal_yaw - float(laser_yaw_deg) + 180.0) % 360.0 - 180.0
-    else:
-        relative_yaw = (float(node.yaw_deg) - float(laser_yaw_deg) + 180.0) % 360.0 - 180.0
-    return -float(node.pitch_deg), float(relative_yaw), float(node.roll_deg)
+        normal_yaw = _mirror_surface_tangent_yaw_deg(node) + 90.0
+        normal_node = TeachingPhysicalNode(
+            node_id=node.node_id, kind=node.kind, label=node.label,
+            scene_x=node.scene_x, scene_y=node.scene_y, height_mm=node.height_mm,
+            yaw_deg=normal_yaw, pitch_deg=node.pitch_deg, roll_deg=node.roll_deg,
+            enabled=node.enabled, params=node.params,
+        )
+        return _tilts_from_engine_normal(_axis_vector(normal_node, laser_yaw_deg), node.roll_deg)
+    return _tilts_from_engine_normal(_axis_vector(node, laser_yaw_deg), node.roll_deg)
+
+
+def _nearest_facing_yaw_deg(node: TeachingPhysicalNode, scene: TeachingPhysicalScene) -> float | None:
+    """Yaw that aims a terminal face toward the nearest upstream-capable optic."""
+    optic_kinds = {
+        "laser", "mirror", "lens", "cylindrical_lens", "splitter", "pbs",
+        "beam_sampler", "aperture", "isolator", "half_wave_plate",
+    }
+    best_optic: tuple[float, float] | None = None
+    best_any: tuple[float, float] | None = None
+    for other in scene.nodes:
+        if other.node_id == node.node_id or not other.enabled:
+            continue
+        if other.kind in {"oscilloscope"}:
+            continue
+        dx = float(other.scene_x) - float(node.scene_x)
+        dy = float(other.scene_y) - float(node.scene_y)
+        dh = float(other.height_mm) - float(node.height_mm)
+        distance = math.sqrt(dx * dx + dy * dy + dh * dh)
+        if distance < 1.0e-6:
+            continue
+        # Face toward the neighbor (normal points against typical incoming beam).
+        yaw = math.degrees(math.atan2(dy, dx)) % 360.0
+        candidate = (distance, yaw)
+        if other.kind in optic_kinds:
+            if best_optic is None or distance < best_optic[0]:
+                best_optic = candidate
+        if best_any is None or distance < best_any[0]:
+            best_any = candidate
+    chosen = best_optic if best_optic is not None else best_any
+    return None if chosen is None else float(chosen[1])
 
 
 def _node_radius_mm(node: TeachingPhysicalNode, default_radius_mm: float) -> float:
@@ -327,9 +404,14 @@ def _append_plane_surface(
     terminal: bool = False,
     block_outside: bool = False,
     split_ratio: float | None = None,
+    hit_shape: str | None = None,
+    facing_node: TeachingPhysicalNode | None = None,
 ) -> None:
     x, y, z = frame.scene_to_engine(node.scene_x, node.scene_y, node.height_mm)
-    tilt_x, tilt_y, tilt_z = _surface_tilts_from_axis(node, frame.laser_yaw_deg, mirror=mirror_orientation)
+    pose_node = facing_node if facing_node is not None else node
+    tilt_x, tilt_y, tilt_z = _surface_tilts_from_axis(
+        pose_node, frame.laser_yaw_deg, mirror=mirror_orientation,
+    )
     metadata: dict[str, Any] = {
         "teaching_node_id": node.node_id,
         "teaching_kind": node.kind,
@@ -339,6 +421,9 @@ def _append_plane_surface(
         "block_outside_aperture": bool(block_outside),
         "pass_if_missed": not bool(block_outside),
     }
+    if hit_shape:
+        metadata["hit_shape"] = str(hit_shape)
+        metadata["hit_radius_mm"] = max(0.02, float(radius_mm))
     if split_ratio is not None:
         metadata["split_ratio"] = float(split_ratio)
     items.append(_SurfaceBuild(
@@ -391,11 +476,31 @@ def _build_surfaces(scene: TeachingPhysicalScene, base_frame: TeachingSceneCoord
                 items, node, base_frame, role="transparent", radius_mm=aperture_radius,
                 block_outside=True,
             )
-        elif node.kind in {"fiber", "power_meter", "beam_analyzer", "imaging_camera", "focus_scan_module", "wavefront_sensor", "photodetector"}:
-            default_radius = 2.0 if node.kind == "fiber" else 5.0
+        elif node.kind in {
+            "fiber", "power_meter", "beam_analyzer", "imaging_camera", "ccd", "camera",
+            "focus_scan_module", "wavefront_sensor", "photodetector",
+        }:
+            default_radius = 2.0 if node.kind == "fiber" else 15.0
+            facing_yaw = _nearest_facing_yaw_deg(node, scene)
+            facing_node = node
+            if facing_yaw is not None:
+                facing_node = TeachingPhysicalNode(
+                    node_id=node.node_id, kind=node.kind, label=node.label,
+                    scene_x=node.scene_x, scene_y=node.scene_y, height_mm=node.height_mm,
+                    yaw_deg=facing_yaw, pitch_deg=node.pitch_deg, roll_deg=node.roll_deg,
+                    enabled=node.enabled, params=node.params,
+                )
+                display_delta = abs(((float(node.yaw_deg) - facing_yaw + 180.0) % 360.0) - 180.0)
+                if display_delta > 35.0:
+                    warnings.append(
+                        f"{node.label}接收面已按最近光学件自动对准入射方向（显示朝向偏差 {display_delta:.0f}°），"
+                        "保证折转后仍可命中；旋转图标主要影响外观。"
+                    )
             _append_plane_surface(
-                items, node, base_frame, role="terminal", radius_mm=_node_radius_mm(node, default_radius),
+                items, node, base_frame, role="terminal",
+                radius_mm=_node_radius_mm(node, default_radius),
                 terminal=True,
+                facing_node=facing_node,
             )
         else:
             _append_plane_surface(
@@ -557,6 +662,26 @@ def _compile_project(scene: TeachingPhysicalScene) -> tuple[ProjectSnapshot, Tea
 class TeachingOpticalEngineBridge:
     def __init__(self, engine: OpticalSimulationEngine | None = None) -> None:
         self.engine = engine or OpticalSimulationEngine(trace_cache_max_bytes=96 * 1024**2)
+        # 结果级 LRU：相同场景指纹 + 质量档直接复用，避免拖动中重复追迹。
+        self._result_cache: dict[tuple[str, str], TeachingEngineTrace] = {}
+        self._result_cache_order: list[tuple[str, str]] = []
+        self._result_cache_max = 16
+
+    def _cache_put(self, key: tuple[str, str], result: TeachingEngineTrace) -> None:
+        if key in self._result_cache:
+            self._result_cache_order.remove(key)
+        self._result_cache[key] = result
+        self._result_cache_order.append(key)
+        if len(self._result_cache_order) > self._result_cache_max:
+            oldest = self._result_cache_order.pop(0)
+            self._result_cache.pop(oldest, None)
+
+    def _cache_get(self, key: tuple[str, str]) -> TeachingEngineTrace | None:
+        result = self._result_cache.get(key)
+        if result is not None:
+            self._result_cache_order.remove(key)
+            self._result_cache_order.append(key)
+        return result
 
     def compile_project(self, scene: TeachingPhysicalScene) -> tuple[ProjectSnapshot, dict[str, Any]]:
         """将教学场景编译为正式 ProjectSnapshot 与引擎选项，供后台正式仿真任务复用。"""
@@ -564,126 +689,172 @@ class TeachingOpticalEngineBridge:
         return project, dict(engine_options)
 
     def trace(self, scene: TeachingPhysicalScene) -> TeachingEngineTrace:
+        """Free-placement scene raytrace via nearest-hit solver (not sequential z-order)."""
         quality = _trace_quality_profile(scene.trace_quality)
+        cache_key = (scene.fingerprint_key(), str(quality["quality"]))
+        cached = self._cache_get(cache_key)
+        if cached is not None:
+            return replace(cached, generation=int(scene.generation), quality=str(quality["quality"]))
         try:
+            import time as _time
+            from optical_core.models.project_mapper import build_optical_system
+            from optical_core.physics.nonsequential.scene_tracer import trace_scene_ray_tree
+
+            t0 = _time.perf_counter()
             project, frame, build_warnings, engine_options = _compile_project(scene)
-            request = SimulationRequest(
-                request_id=f"teaching-scene-{scene.generation}-{project.fingerprint[:16]}",
-                project=project,
-                analyses=["scene_raytrace"],
-                precision=str(quality["precision"]),
-                random_seed=0,
-                engine="headless",
-                options=engine_options,
+            system = build_optical_system(project)
+            geo = dict(engine_options.get("geometric", {}) or {})
+            origin = tuple(float(v) for v in geo.get("scene_source_position_mm", (0.0, 0.0, 0.0)))
+            direction = tuple(float(v) for v in geo.get("scene_source_direction", (0.0, 0.0, 1.0)))
+            radius_x = float(geo.get("scene_bundle_radius_x_mm", 0.72) or 0.72)
+            radius_y = float(geo.get("scene_bundle_radius_y_mm", radius_x) or radius_x)
+            sample_count = max(1, int(geo.get("scene_bundle_sample_count", quality["sample_count"]) or 1))
+            wavelength = float(scene.wavelength_nm)
+            bundle = _scene_source_bundle(
+                origin, direction, radius_x=radius_x, radius_y=radius_y, sample_count=sample_count,
             )
-            result: SimulationResult = self.engine.evaluate(request)
-            sample_count = int((result.metrics or {}).get("scene_source_ray_count", quality["sample_count"]))
-            if result.status != "completed":
-                errors = tuple(error.message if hasattr(error, "message") else str(error) for error in result.errors)
-                return TeachingEngineTrace(
-                    success=False, generation=int(scene.generation), quality=str(quality["quality"]),
-                    sample_count=sample_count, paths=(), rays=(),
-                    warnings=tuple(build_warnings) + tuple(result.warnings),
-                    errors=errors or ("完整光学引擎未能完成教学场景追迹。",),
-                    elapsed_ms=float(result.elapsed_ms), metadata=dict(result.metadata), frame=frame,
-                )
-
-            arrays = dict(result.arrays or {})
-            ids = list(arrays.get("scene_path_ids", []) or [])
-            parents = list(arrays.get("scene_path_parent_ids", []) or [])
-            ray_ids = list(arrays.get("scene_path_ray_ids", []) or [])
-            signatures = list(arrays.get("scene_path_signatures", []) or [])
-            powers = list(arrays.get("scene_path_power_fractions", []) or [])
-            points_data = list(arrays.get("scene_path_points_mm", []) or [])
-            surface_data = list(arrays.get("scene_path_surface_indices", []) or [])
-            node_data = list(arrays.get("scene_path_node_ids", []) or [])
-            direction_data = list(arrays.get("scene_path_directions", []) or [])
-            reasons = list(arrays.get("scene_path_termination_reasons", []) or [])
-
             paths: list[TeachingTracePath] = []
-            for index, engine_points in enumerate(points_data):
-                surface_indices = surface_data[index] if index < len(surface_data) else []
-                node_ids = node_data[index] if index < len(node_data) else []
-                directions = direction_data[index] if index < len(direction_data) else []
-                converted: list[TeachingTracePoint] = []
-                for point_index, raw_point in enumerate(engine_points):
-                    engine_point = tuple(float(v) for v in raw_point)
-                    raw_direction = directions[point_index] if point_index < len(directions) else (0.0, 0.0, 1.0)
-                    engine_direction = tuple(float(v) for v in raw_direction)
-                    sx, sy, height = frame.engine_to_scene(engine_point)
-                    raw_node = node_ids[point_index] if point_index < len(node_ids) else None
-                    if raw_node == "__source__":
-                        raw_node = scene.laser.node_id if scene.laser is not None else None
-                    converted.append(TeachingTracePoint(
-                        scene_x=sx, scene_y=sy, height_mm=height,
-                        engine_point_mm=engine_point, engine_direction=engine_direction,
-                        node_id=None if raw_node in {None, ""} else str(raw_node),
-                        surface_index=int(surface_indices[point_index]) if point_index < len(surface_indices) else -2,
-                    ))
-                ray_id = str(ray_ids[index]) if index < len(ray_ids) else "R00"
-                paths.append(TeachingTracePath(
-                    path_id=str(ids[index]) if index < len(ids) else f"{ray_id}:P{index}",
-                    parent_id=None if index >= len(parents) or parents[index] in {None, ""} else str(parents[index]),
-                    ray_id=ray_id,
-                    signature=str(signatures[index]) if index < len(signatures) else "",
-                    power_fraction=float(powers[index]) if index < len(powers) else 1.0,
-                    points=tuple(converted),
-                    termination_reason=str(reasons[index]) if index < len(reasons) else "",
-                ))
-
-            source_ids = list(arrays.get("scene_source_ray_ids", []) or [])
-            source_positions = list(arrays.get("scene_source_ray_positions_mm", []) or [])
-            source_directions = list(arrays.get("scene_source_ray_directions", []) or [])
-            source_weights = list(arrays.get("scene_source_ray_weights", []) or [])
-            source_offsets = list(arrays.get("scene_source_ray_normalized_offsets", []) or [])
-            grouped: dict[str, list[TeachingTracePath]] = {}
-            for path in paths:
-                grouped.setdefault(path.ray_id, []).append(path)
             rays: list[TeachingTraceRay] = []
-            for index, ray_id_raw in enumerate(source_ids):
-                ray_id = str(ray_id_raw)
-                position = tuple(float(v) for v in (source_positions[index] if index < len(source_positions) else (0.0, 0.0, 0.0)))
-                direction = tuple(float(v) for v in (source_directions[index] if index < len(source_directions) else (0.0, 0.0, 1.0)))
-                offset = tuple(float(v) for v in (source_offsets[index] if index < len(source_offsets) else (0.0, 0.0)))
-                weight = float(source_weights[index]) if index < len(source_weights) else 0.0
-                rays.append(TeachingTraceRay(
-                    ray_id=ray_id, source_position_mm=position, source_direction=direction,
-                    normalized_offset=(offset[0], offset[1]), source_weight=weight,
-                    paths=tuple(grouped.get(ray_id, ())),
-                ))
-            if not rays and paths:
-                grouped = {}
-                for path in paths:
-                    grouped.setdefault(path.ray_id, []).append(path)
-                for ray_id, ray_paths in grouped.items():
-                    first_point = ray_paths[0].points[0] if ray_paths and ray_paths[0].points else None
-                    rays.append(TeachingTraceRay(
+            all_warnings = list(build_warnings)
+            for ray_index, (position, ray_direction, weight, offset) in enumerate(bundle):
+                ray_id = f"R{ray_index:04d}"
+                traced = trace_scene_ray_tree(
+                    system,
+                    source_position_mm=position,
+                    source_direction=ray_direction,
+                    wavelength_nm=wavelength,
+                    max_interactions=int(geo.get("scene_max_interactions", quality["max_interactions"])),
+                    max_branches=int(geo.get("scene_max_branches", quality["max_branches"])),
+                    min_power_fraction=float(geo.get("scene_min_power_fraction", 1.0e-5)),
+                    escape_distance_mm=float(geo.get("scene_escape_distance_mm", 160.0)),
+                    epsilon_mm=float(geo.get("scene_intersection_epsilon_mm", 1.0e-5)),
+                )
+                all_warnings.extend(traced.warnings)
+                ray_paths: list[TeachingTracePath] = []
+                for path_index, raw_path in enumerate(traced.paths):
+                    converted: list[TeachingTracePoint] = []
+                    for point_index, raw_point in enumerate(raw_path.points_mm):
+                        engine_point = tuple(float(v) for v in raw_point)
+                        sx, sy, height = frame.engine_to_scene(engine_point)
+                        raw_node = (
+                            raw_path.node_ids[point_index]
+                            if point_index < len(raw_path.node_ids) else None
+                        )
+                        if raw_node == "__source__":
+                            raw_node = scene.laser.node_id if scene.laser is not None else None
+                        raw_dir = (
+                            raw_path.directions[point_index]
+                            if point_index < len(raw_path.directions)
+                            else ray_direction
+                        )
+                        converted.append(TeachingTracePoint(
+                            scene_x=sx, scene_y=sy, height_mm=height,
+                            engine_point_mm=engine_point,
+                            engine_direction=tuple(float(v) for v in raw_dir),
+                            node_id=None if raw_node in {None, ""} else str(raw_node),
+                            surface_index=(
+                                int(raw_path.surface_indices[point_index])
+                                if point_index < len(raw_path.surface_indices) else -2
+                            ),
+                        ))
+                    path = TeachingTracePath(
+                        path_id=f"{ray_id}:P{path_index}",
+                        parent_id=None,
                         ray_id=ray_id,
-                        source_position_mm=(0.0, 0.0, 0.0) if first_point is None else first_point.engine_point_mm,
-                        source_direction=(0.0, 0.0, 1.0) if first_point is None else first_point.engine_direction,
-                        normalized_offset=(0.0, 0.0), source_weight=1.0 / max(len(grouped), 1),
-                        paths=tuple(ray_paths),
-                    ))
-
-            metadata = dict(result.metadata)
-            metadata.update({
-                "teaching_generation": int(scene.generation),
-                "teaching_trace_quality": str(quality["quality"]),
-                "teaching_sample_count": int(sample_count),
-            })
-            return TeachingEngineTrace(
-                success=True, generation=int(scene.generation), quality=str(quality["quality"]),
-                sample_count=int(sample_count), paths=tuple(paths), rays=tuple(rays),
-                warnings=tuple(build_warnings) + tuple(result.warnings), errors=(),
-                elapsed_ms=float(result.elapsed_ms), metadata=metadata, frame=frame,
+                        signature=str(raw_path.signature or ""),
+                        power_fraction=float(raw_path.power_fraction) * float(weight),
+                        points=tuple(converted),
+                        termination_reason=str(raw_path.termination_reason or ""),
+                    )
+                    paths.append(path)
+                    ray_paths.append(path)
+                rays.append(TeachingTraceRay(
+                    ray_id=ray_id,
+                    source_position_mm=position,
+                    source_direction=ray_direction,
+                    normalized_offset=offset,
+                    source_weight=float(weight),
+                    paths=tuple(ray_paths),
+                ))
+            elapsed_ms = (_time.perf_counter() - t0) * 1000.0
+            traced_out = TeachingEngineTrace(
+                success=True,
+                generation=int(scene.generation),
+                quality=str(quality["quality"]),
+                sample_count=int(sample_count),
+                paths=tuple(paths),
+                rays=tuple(rays),
+                warnings=tuple(all_warnings),
+                errors=(),
+                elapsed_ms=float(elapsed_ms),
+                metadata={
+                    "teaching_generation": int(scene.generation),
+                    "teaching_trace_quality": str(quality["quality"]),
+                    "teaching_sample_count": int(sample_count),
+                    "teaching_solver": "scene_ray_tree",
+                },
+                frame=frame,
             )
+            self._cache_put(cache_key, traced_out)
+            return traced_out
         except Exception as exc:
-            return TeachingEngineTrace(
+            traced_out = TeachingEngineTrace(
                 success=False, generation=int(scene.generation), quality=str(quality["quality"]),
                 sample_count=int(quality["sample_count"]), paths=(), rays=(), warnings=(),
                 errors=(str(exc),), elapsed_ms=0.0, metadata={}, frame=None,
             )
+            self._cache_put(cache_key, traced_out)
+            return traced_out
 
+
+def _scene_source_bundle(
+    origin: tuple[float, float, float],
+    direction: tuple[float, float, float],
+    *,
+    radius_x: float,
+    radius_y: float,
+    sample_count: int,
+) -> list[tuple[tuple[float, float, float], tuple[float, float, float], float, tuple[float, float]]]:
+    """Disk pupil samples in the plane perpendicular to the laser axis."""
+    import numpy as np
+
+    axis = np.asarray(direction, dtype=float)
+    norm = float(np.linalg.norm(axis))
+    if not np.isfinite(norm) or norm <= 1e-15:
+        axis = np.asarray((0.0, 0.0, 1.0), dtype=float)
+    else:
+        axis = axis / norm
+    helper = np.asarray((0.0, 1.0, 0.0), dtype=float) if abs(axis[1]) < 0.9 else np.asarray((1.0, 0.0, 0.0), dtype=float)
+    across = np.cross(axis, helper)
+    across = across / max(float(np.linalg.norm(across)), 1e-15)
+    up = np.cross(axis, across)
+    count = max(1, int(sample_count))
+    offsets: list[tuple[float, float]] = [(0.0, 0.0)]
+    if count > 1:
+        rings = max(1, int(math.ceil((-1.0 + math.sqrt(1.0 + 4.0 * (count - 1) / 3.0)) / 2.0)))
+        for ring in range(1, rings + 1):
+            on_ring = max(4, 6 * ring)
+            for k in range(on_ring):
+                angle = 2.0 * math.pi * k / on_ring
+                frac = ring / rings
+                offsets.append((frac * math.cos(angle), frac * math.sin(angle)))
+                if len(offsets) >= count:
+                    break
+            if len(offsets) >= count:
+                break
+    offsets = offsets[:count]
+    weight = 1.0 / max(len(offsets), 1)
+    origin_v = np.asarray(origin, dtype=float)
+    bundle: list[tuple[tuple[float, float, float], tuple[float, float, float], float, tuple[float, float]]] = []
+    for nx, ny in offsets:
+        point = origin_v + across * (nx * float(radius_x)) + up * (ny * float(radius_y))
+        bundle.append((
+            (float(point[0]), float(point[1]), float(point[2])),
+            (float(axis[0]), float(axis[1]), float(axis[2])),
+            float(weight),
+            (float(nx), float(ny)),
+        ))
+    return bundle
 
 __all__ = [
     "TeachingPhysicalNode",

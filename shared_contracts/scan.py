@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Literal, Optional
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
+
+from shared_contracts.errors import ApplicationError
 
 
 ScanMode = Literal["line_1d", "grid_2d", "lhs", "sobol", "random"]
@@ -13,12 +15,20 @@ ScanMode = Literal["line_1d", "grid_2d", "lhs", "sobol", "random"]
 class ScanParameter(BaseModel):
 
 
-    path: str
+    path: str = Field(min_length=1)
     label: str = ""
     unit: str = ""
     start: float
     stop: float
     points: int = Field(default=41, ge=2, le=501)
+
+    @field_validator("path")
+    @classmethod
+    def validate_path(cls, value: str) -> str:
+        normalized = str(value or "").strip()
+        if not normalized:
+            raise ValueError("scan parameter path must not be empty")
+        return normalized
 
 
 class ScanRequest(BaseModel):
@@ -63,4 +73,5 @@ class ScanResult(BaseModel):
     response_metrics: List[str] = Field(default_factory=list)
     response_values: Dict[str, List[float]] = Field(default_factory=dict)
     warnings: List[str] = Field(default_factory=list)
+    errors: List[ApplicationError] = Field(default_factory=list)
     metadata: Dict[str, Any] = Field(default_factory=dict)

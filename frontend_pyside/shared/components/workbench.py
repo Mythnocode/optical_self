@@ -354,20 +354,26 @@ class ThumbnailStrip(QFrame):
             Qt.ArrowType.DownArrow if expanded else Qt.ArrowType.RightArrow
         )
 
-    def set_items(self, items: Iterable[tuple[str, str, str]]) -> None:
-        records = list(items)
-        keys = [str(key) for key, _, _ in records]
+    def set_items(self, items: Iterable[tuple]) -> None:
+        # 兼容旧的 (key, source, status)，并允许额外提供用户可见名称：
+        # (key, source, status, display_label)。内部 key 始终保持不变。
+        records = []
+        for record in items:
+            values = tuple(record)
+            if len(values) >= 4:
+                key, source, status, display = values[:4]
+            else:
+                key, source, status = values[:3]
+                display = key
+            records.append((str(key), str(source), str(status), str(display)))
+        keys = [key for key, _, _, _ in records]
 
-        
-        
-        
         if keys == list(self._buttons):
-            for key, source, status in records:
-                key = str(key)
+            for key, source, status, display in records:
                 button = self._buttons[key]
-                button.setText(f"{key}\n{source}")
+                button.setText(f"{display}\n{source}")
                 button.setToolTip(
-                    f"{key}｜{source}｜{status}\n单击切换上方大图，双击在独立窗口查看。"
+                    f"{display}｜{source}｜{status}\n单击切换上方大图，双击在独立窗口查看。"
                 )
                 cached = self._cache.get(self._render_keys.get(key, ""))
                 if cached is not None:
@@ -381,9 +387,8 @@ class ThumbnailStrip(QFrame):
                 item.widget().deleteLater()
         self._buttons.clear()
 
-        for key, source, status in records:
-            key = str(key)
-            button = QPushButton(f"{key}\n{source}")
+        for key, source, status, display in records:
+            button = QPushButton(f"{display}\n{source}")
             button.setObjectName("thumbnailButton")
             button.setCheckable(True)
             button.setIconSize(QSize(96, 56))
@@ -391,7 +396,7 @@ class ThumbnailStrip(QFrame):
             if cached is not None:
                 button.setIcon(QIcon(cached))
             button.setToolTip(
-                f"{key}｜{source}｜{status}\n单击切换上方大图，双击在独立窗口查看。"
+                f"{display}｜{source}｜{status}\n单击切换上方大图，双击在独立窗口查看。"
             )
             button.clicked.connect(
                 lambda checked=False, name=key: self.selected.emit(name)

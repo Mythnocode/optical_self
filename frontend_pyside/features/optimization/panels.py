@@ -3,7 +3,6 @@ from __future__ import annotations
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QComboBox,
-    QDoubleSpinBox,
     QFormLayout,
     QHBoxLayout,
     QLabel,
@@ -13,6 +12,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from frontend_pyside.shared.components.unit_spinbox import UnitAwareDoubleSpinBox
 from frontend_pyside.features.simulation.surface_registry import (
     ensure_surface_defaults,
     get_surface_type,
@@ -77,7 +77,15 @@ class OptimizationVariableSelector(QWidget):
         )
         self.table.content_columns(0, 3, 4, 5, 6)
         self.table.stretch_columns(1, 2)
-        self.table.setMinimumHeight(280)
+        # This is a dedicated professional editor, so parameter/object names must
+        # remain readable at the default dialog size instead of collapsing into
+        # ``非球… / L1…`` ellipses.
+        self.table.setColumnWidth(0, 68)
+        self.table.setColumnWidth(3, 112)
+        self.table.setColumnWidth(4, 112)
+        self.table.setColumnWidth(5, 112)
+        self.table.setColumnWidth(6, 78)
+        self.table.setMinimumHeight(320)
         table_card.body.addWidget(self.table, 1)
         root.addWidget(table_card, 1)
 
@@ -87,13 +95,13 @@ class OptimizationVariableSelector(QWidget):
         self.current = QLabel("选择表格中的变量后设置范围")
         self.current.setWordWrap(True)
         self.current_value = QLabel("—")
-        self.lower = QDoubleSpinBox()
+        self.lower = UnitAwareDoubleSpinBox()
         self.lower.setRange(-1e12, 1e12)
         self.lower.setDecimals(9)
-        self.upper = QDoubleSpinBox()
+        self.upper = UnitAwareDoubleSpinBox()
         self.upper.setRange(-1e12, 1e12)
         self.upper.setDecimals(9)
-        self.step = QDoubleSpinBox()
+        self.step = UnitAwareDoubleSpinBox()
         self.step.setRange(1e-12, 1e12)
         self.step.setDecimals(9)
         self.scale = QComboBox()
@@ -343,6 +351,33 @@ class OptimizationVariableSelector(QWidget):
                 continue
         return [item for item in variables if item["path"]]
 
+    def get_parameter_snapshot(self) -> list[dict]:
+        """Freeze every selectable numeric parameter at task submission time."""
+        snapshot: list[dict] = []
+        for row in range(self.table.rowCount()):
+            enabled_item = self.table.item(row, 0)
+            parameter_item = self.table.item(row, 1)
+            value_item = self.table.item(row, 3)
+            unit_item = self.table.item(row, 6)
+            if enabled_item is None or parameter_item is None or value_item is None:
+                continue
+            metadata = parameter_item.data(Qt.ItemDataRole.UserRole) or {}
+            path = str(metadata.get("path", "")).strip()
+            if not path:
+                continue
+            try:
+                value = float(value_item.text())
+            except (TypeError, ValueError):
+                continue
+            snapshot.append({
+                "path": path,
+                "label": str(metadata.get("label", parameter_item.text())),
+                "unit": str(metadata.get("unit", unit_item.text() if unit_item else "")),
+                "value": value,
+                "optimized": enabled_item.checkState() == Qt.CheckState.Checked,
+            })
+        return snapshot
+
     def _selected(self, row, *_):
         if row < 0 or self.table.item(row, 2) is None:
             return
@@ -353,6 +388,9 @@ class OptimizationVariableSelector(QWidget):
         self.current_value.setText(
             f"{self.table.item(row, 3).text()} {self.table.item(row, 6).text()}"
         )
+        unit = self.table.item(row, 6).text() if self.table.item(row, 6) is not None else ""
+        for spin in (self.lower, self.upper, self.step):
+            spin.setTargetUnit(unit)
         self.lower.setValue(float(self.table.item(row, 4).text()))
         self.upper.setValue(float(self.table.item(row, 5).text()))
         self.step.setValue(max(abs(self.upper.value() - self.lower.value()) / 50, 1e-9))

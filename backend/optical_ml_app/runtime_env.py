@@ -21,4 +21,20 @@ def configure_native_thread_limits(default: int | None = None) -> int:
     return limit
 
 
-__all__ = ["configure_native_thread_limits"]
+def configured_batch_worker_count(default: int | None = None) -> int:
+    """Return the bounded thread count used for independent optical samples.
+
+    The optical worker pool already constrains BLAS/native libraries to one
+    thread per optical worker.  Keeping this policy in one place prevents scan,
+    tolerance and dataset services from inventing different parallelism rules.
+    """
+
+    # Keep the verified current-environment default serial.  The thread-pool
+    # path remains available through OPTICAL_BATCH_THREAD_COUNT after running
+    # a target-machine benchmark; on this container 4 optical threads were
+    # slower because wave/FFT work competed for CPU and memory bandwidth.
+    fallback = default if default is not None else 1
+    return max(1, int(os.environ.get("OPTICAL_BATCH_THREAD_COUNT", fallback)))
+
+
+__all__ = ["configure_native_thread_limits", "configured_batch_worker_count"]

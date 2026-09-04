@@ -31,4 +31,9 @@ class SimulationApplicationService:
 
             def _task(context):
                 return engine.evaluate(request, None, context.progress)
-        return self.task_manager.submit("simulation", _task)
+        request_id = str(getattr(request, "request_id", "") or "").strip()
+        return self.task_manager.submit(
+            "simulation",
+            _task,
+            idempotency_key=(f"simulation:{request_id}" if request_id else ""),
+        )

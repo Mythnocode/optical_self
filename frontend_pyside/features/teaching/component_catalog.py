@@ -75,6 +75,10 @@ DRAWING_SCHEMES: dict[str, ComponentDrawingScheme] = {
         "近场/远场相机", "测量仪器", "采集近场或远场光斑", "小型工业相机＋镜头接口",
         ("相机盒", "圆形镜头口", "底座"), ("品牌外形", "线缆", "传感器像素"),
     ),
+    "ccd": ComponentDrawingScheme(
+        "CCD 探测器", "测量仪器", "采集焦面光斑并输出 RMS", "小型面阵相机＋传感面",
+        ("相机盒", "传感面", "底座"), ("品牌外形", "线缆", "像元网格"),
+    ),
     "focus_scan_module": ComponentDrawingScheme(
         "焦面扫描模块", "测量仪器", "沿z方向测量多位置束径", "短直线导轨＋移动相机",
         ("导轨", "滑台", "相机接收口"), ("丝杠", "电机细节", "编码器"),
@@ -105,7 +109,7 @@ SHAPING_COUPLING_KINDS = (
     "lens", "beam_expander", "cylindrical_lens", "fiber",
 )
 MEASUREMENT_KINDS = (
-    "power_meter", "beam_analyzer", "imaging_camera", "focus_scan_module",
+    "power_meter", "beam_analyzer", "imaging_camera", "ccd", "focus_scan_module",
     "wavefront_sensor", "photodetector",
 )
 AUXILIARY_INSTRUMENT_KINDS = ("oscilloscope",)
@@ -113,7 +117,7 @@ AUXILIARY_INSTRUMENT_KINDS = ("oscilloscope",)
 OPTICAL_KINDS = SOURCE_POLARIZATION_KINDS + ROUTING_SAMPLING_KINDS + SHAPING_COUPLING_KINDS
 INSTRUMENT_KINDS = MEASUREMENT_KINDS + AUXILIARY_INSTRUMENT_KINDS
 TERMINAL_KINDS = (
-    "power_meter", "beam_analyzer", "imaging_camera", "focus_scan_module",
+    "power_meter", "beam_analyzer", "imaging_camera", "ccd", "focus_scan_module",
     "wavefront_sensor", "oscilloscope",
 )
 

@@ -77,7 +77,16 @@ class TrainingService:
             if prepared.y_train.shape[1] == 1
             else prepared.y_train
         )
-        model.fit(prepared.X_train, train_target)
+        if request.model_type == "xgboost_physics_residual":
+            validation_target = prepared.y_validation.ravel() if prepared.y_validation.shape[1] == 1 else prepared.y_validation
+            model.fit(
+                prepared.X_train,
+                train_target,
+                X_validation=prepared.X_validation,
+                y_validation=validation_target,
+            )
+        else:
+            model.fit(prepared.X_train, train_target)
         if progress is not None:
             progress.update(0.75, "training.fit")
             progress.update(0.80, "training.evaluating")
@@ -127,6 +136,30 @@ class TrainingService:
         history = getattr(model, "history_", None) or getattr(model, "evals_result_", None)
         if isinstance(history, dict) and history:
             model_manifest["training_history"] = history
+        requested_units = int(request.hyperparameters.get("n_estimators", 0) or 0)
+        best_iteration = getattr(model, "best_iteration_", None)
+        actual_units = requested_units
+        if isinstance(history, dict) and history:
+            lengths: list[int] = []
+            stack = list(history.values())
+            while stack:
+                value = stack.pop()
+                if isinstance(value, dict):
+                    stack.extend(value.values())
+                elif isinstance(value, (list, tuple)):
+                    lengths.append(len(value))
+            if lengths:
+                actual_units = max(lengths)
+        early_stopped = bool(requested_units and actual_units and actual_units < requested_units)
+        training_summary = {
+            "requested_units": requested_units,
+            "actual_units": actual_units,
+            "best_iteration": int(best_iteration) if best_iteration is not None else None,
+            "early_stopped": early_stopped,
+            "early_stopping_rounds": int(request.hyperparameters.get("early_stopping_rounds", 0) or 0),
+            "convergence": ("early_stopped" if early_stopped else ("not_applicable" if request.model_type == "random_forest" else "max_budget_reached")),
+        }
+        model_manifest["training_summary"] = training_summary
         oob_curve = getattr(model, "oob_error_curve_", None)
         if oob_curve is not None:
             model_manifest["oob_error_curve"] = np.asarray(oob_curve, dtype=float).tolist()
@@ -143,5 +176,8 @@ class TrainingService:
             metadata={
                 "training_role": model_manifest["training_role"],
                 "physics_residual": physics_residual,
+                "training_summary": training_summary,
+                "evaluation": model_manifest["evaluation"],
+                "training_history": model_manifest.get("training_history", {}),
             },
         )

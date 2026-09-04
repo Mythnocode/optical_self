@@ -1,26 +1,48 @@
 from __future__ import annotations
 
-from concurrent.futures import Future, ThreadPoolExecutor
+import os
+from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import replace
-from threading import Lock
+from threading import RLock
 from typing import Callable
 
 from .physical_scene import TeachingEngineTrace, TeachingOpticalEngineBridge, TeachingPhysicalScene
+from .trace_worker import trace_scene_in_process
+
+
+def _use_process_mode() -> bool:
+    value = os.environ.get("OPTICAL_TEACHING_TRACE_MODE", "").strip().lower()
+    if value in {"process", "multi", "1"}:
+        return True
+    if value in {"thread", "0"}:
+        return False
+    # Default: threads (stable, no spawn overhead); process mode is opt-in.
+    return False
 
 
 class TeachingTraceScheduler:
+    """Single-flight latest-wins scheduler for interactive teaching traces."""
+
     def __init__(
         self,
         bridge: TeachingOpticalEngineBridge | None = None,
         *,
         max_workers: int = 1,
+        process_mode: bool | None = None,
     ) -> None:
         self._bridge = bridge or TeachingOpticalEngineBridge()
-        self._executor = ThreadPoolExecutor(max_workers=max(1, int(max_workers)), thread_name_prefix="teaching-trace")
-        self._lock = Lock()
+        self._process_mode = bool(process_mode if process_mode is not None else _use_process_mode())
+        if self._process_mode:
+            self._executor = ProcessPoolExecutor(max_workers=max(1, int(max_workers)))
+            self._run = trace_scene_in_process
+        else:
+            self._executor = ThreadPoolExecutor(max_workers=max(1, int(max_workers)), thread_name_prefix="teaching-trace")
+            self._run: Callable[[TeachingPhysicalScene], TeachingEngineTrace] = self._bridge.trace
+        self._lock = RLock()
         self._latest_requested_generation = -1
         self._latest_completed: TeachingEngineTrace | None = None
-        self._pending: Future[TeachingEngineTrace] | None = None
+        self._active: Future[TeachingEngineTrace] | None = None
+        self._queued_scene: TeachingPhysicalScene | None = None
         self._closed = False
 
     @property
@@ -41,27 +63,36 @@ class TeachingTraceScheduler:
             if self._closed:
                 return generation
             self._latest_requested_generation = generation
-            pending = self._pending
-            if pending is not None and not pending.running() and not pending.done():
-                pending.cancel()
-            future = self._executor.submit(self._bridge.trace, prepared)
-            self._pending = future
-        future.add_done_callback(self._on_done)
+            if self._active is not None and not self._active.done():
+                self._queued_scene = prepared
+                return generation
+            self._queued_scene = None
+            self._start_locked(prepared)
         return generation
 
+    def _start_locked(self, scene: TeachingPhysicalScene) -> None:
+        future = self._executor.submit(self._run, scene)
+        self._active = future
+        future.add_done_callback(self._on_done)
+
     def _on_done(self, future: Future[TeachingEngineTrace]) -> None:
-        if future.cancelled():
-            return
+        result: TeachingEngineTrace | None = None
         try:
-            result = future.result()
+            if not future.cancelled():
+                result = future.result()
         except Exception:
-            return
+            result = None
         with self._lock:
+            if self._active is future:
+                self._active = None
             if self._closed:
                 return
-            if int(result.generation) != int(self._latest_requested_generation):
-                return
-            self._latest_completed = result
+            if result is not None and int(result.generation) == int(self._latest_requested_generation):
+                self._latest_completed = result
+            queued = self._queued_scene
+            self._queued_scene = None
+            if queued is not None and not self._closed:
+                self._start_locked(queued)
 
     def poll_latest(self) -> TeachingEngineTrace | None:
         with self._lock:
@@ -72,11 +103,12 @@ class TeachingTraceScheduler:
     def close(self) -> None:
         with self._lock:
             self._closed = True
-            pending = self._pending
-            self._pending = None
+            active = self._active
+            self._active = None
+            self._queued_scene = None
             self._latest_completed = None
-        if pending is not None and not pending.done():
-            pending.cancel()
+        if active is not None and not active.done():
+            active.cancel()
         self._executor.shutdown(wait=False, cancel_futures=True)
 
 
