@@ -103,10 +103,10 @@ def build_main_window_layout(window: QMainWindow, _specs) -> MainWindowWidgets:
 
     command_buttons = {
         "simulation": _command("仿真", icon_name="simulation"),
+        "teaching": _command("教学", icon_name="teaching"),
         "optimization": _command("优化", icon_name="optimization"),
         "surrogate": _command("代理模型", icon_name="machine_learning"),
         "explainability": _command("模型解释", icon_name="explainability"),
-        "teaching": _command("教学", icon_name="teaching"),
     }
     for button in command_buttons.values():
         button.setCheckable(True)
