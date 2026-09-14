@@ -15,6 +15,7 @@ from frontend_pyside.presets.demo_780nm_four_lens import (
     FOUR_LENS_SURFACES,
     PROJECT_NAME,
     REFERENCE_COUPLING_EFFICIENCY,
+    REFERENCE_TOTAL_COUPLING_EFFICIENCY,
     REFERENCE_GRID_SIZE,
 )
 
@@ -28,6 +29,7 @@ def default_project() -> ProjectSnapshot:
         surfaces=surfaces,
         metrics={
             "reference_coupling_efficiency": REFERENCE_COUPLING_EFFICIENCY,
+            "reference_total_coupling_efficiency": REFERENCE_TOTAL_COUPLING_EFFICIENCY,
             "reference_grid_size": REFERENCE_GRID_SIZE,
         },
     )
@@ -193,6 +195,22 @@ class ProjectContext(QObject):
         self._simulation_physical_signature = ""
         self.project_changed.emit(self._project)
 
+    def upsert_custom_material(self, material: dict) -> None:
+        payload = dict(material or {})
+        name = str(payload.get("name") or "").strip()
+        if not name:
+            return
+        payload["name"] = name
+        items = [
+            dict(item)
+            for item in list(getattr(self._project, "custom_materials", ()) or ())
+            if isinstance(item, dict) and str(item.get("name") or "").strip() != name
+        ]
+        items.append(payload)
+        self._project.custom_materials = items
+        self._set_dirty(True)
+        self.project_changed.emit(self._project)
+
     def update_surface(self, surface_id: str, **changes) -> LensSurface | None:
         wanted = str(surface_id or "")
         for index, surface in enumerate(self._project.surfaces):
@@ -211,6 +229,40 @@ class ProjectContext(QObject):
             self.project_changed.emit(self._project)
             return deepcopy(updated)
         return None
+
+    def update_pupil_radius(self, value: float, *, reason: str = "系统入瞳参数已修改") -> bool:
+        """更新画布镜头组使用的系统入瞳半径，并广播统一项目变更。"""
+        try:
+            radius = float(value)
+        except (TypeError, ValueError):
+            return False
+        if radius <= 0.0 or float(self._project.pupil_radius_mm) == radius:
+            return False
+        self._project.pupil_radius_mm = radius
+        self._set_dirty(True)
+        self._bump_design_revision(reason)
+        self._simulation_physical_signature = ""
+        self.project_changed.emit(self._project)
+        return True
+
+    def set_canvas_form_config(self, config: dict | None, *, reason: str = "系统参数已修改") -> bool:
+        """保存画布胶囊的完整仿真表单状态。
+
+        ``ProjectSnapshot`` 仍保持后端兼容的轻量结构；节点化表单中那些不适合
+        塞入快照顶层的源、接收端和数值设置，挂在共享项目对象上供
+        ``engine_bridge``/数据集任务统一序列化。这样画布表格、仿真和数据集
+        不会各自持有一份失真的参数。
+        """
+        snapshot = deepcopy(dict(config or {}))
+        previous = getattr(self._project, "_canvas_form_config", {})
+        if snapshot == previous:
+            return False
+        self._project._canvas_form_config = snapshot
+        self._set_dirty(True)
+        self._bump_design_revision(reason)
+        self._simulation_physical_signature = ""
+        self.project_changed.emit(self._project)
+        return True
 
     def reverse_element(self, element_id: str) -> bool:
         wanted = str(element_id or "")
@@ -249,7 +301,9 @@ class ProjectContext(QObject):
             self.metrics_changed.emit(dict(self._project.metrics))
         self._set_dirty(False)
         self.formal_result_changed.emit(result)
-        self.project_changed.emit(self._project)
+        # A completed calculation adds evidence, not a prescription edit.
+        # Emitting ``project_changed`` here discarded the synchronised teaching
+        # calculation contract after every formal result.
         if isinstance(result, dict) and result:
             result_revision = result.get("design_revision", result.get("project_revision", result.get("revision", self._design_revision)))
             try:
@@ -328,7 +382,7 @@ class ProjectContext(QObject):
         changes = {str(path): float(value) for path, value in dict(changes or {}).items()}
         if not changes:
             return False
-        payload = deepcopy(self._simulation_project_payload)
+        payload = deepcopy(self._simulation_project_payload) or {}
 
         def current_value(path: str):
             if path == "source.wavelength_nm":
@@ -359,8 +413,6 @@ class ProjectContext(QObject):
 
         def set_nested(section: str, key: str, value: float) -> None:
             nonlocal payload_changed
-            if not payload:
-                return
             target = payload.setdefault(section, {})
             if not isinstance(target, dict):
                 target = {}; payload[section] = target

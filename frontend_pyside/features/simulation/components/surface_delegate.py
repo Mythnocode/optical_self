@@ -27,14 +27,49 @@ class SurfaceTypeDelegate(QStyledItemDelegate):
 
 
 class MaterialDelegate(QStyledItemDelegate):
-    """Editable material chooser for the common Surface table column."""
+    """Editable material chooser for the common Surface table column.
+
+    The material library is intentionally a cell menu, not a top-level module:
+    the first group reflects materials already used by this project and the
+    final option keeps a free-form custom entry available.
+    """
 
     COMMON_MATERIALS = ("AIR", "N-BK7", "N-SF11", "F_SILICA", "MIRROR", "自定义")
+
+    def __init__(self, parent=None, *, project_context=None):
+        super().__init__(parent)
+        self.project_context = project_context
 
     def createEditor(self, parent, option, index):
         editor = QComboBox(parent)
         editor.setEditable(True)
-        editor.addItems(self.COMMON_MATERIALS)
+        used: list[str] = []
+        table = self.parent()
+        owner = table
+        context = self.project_context
+        while owner is not None and context is None:
+            context = getattr(owner, "context", None)
+            owner = owner.parent() if hasattr(owner, "parent") else None
+        snapshot = getattr(context, "project", None)
+        if snapshot is None or not hasattr(snapshot, "surfaces"):
+            snapshot = context if hasattr(context, "surfaces") else None
+        for surface in list(getattr(snapshot, "surfaces", []) or []):
+            value = str(getattr(surface, "material", "") or getattr(surface, "material_name", "") or "").strip()
+            if value and value not in used:
+                used.append(value)
+        for item in list(getattr(snapshot, "custom_materials", []) or []):
+            value = str(dict(item or {}).get("name") or "").strip()
+            if value and value not in used:
+                used.append(value)
+        editor.addItem("本工程已用材料")
+        editor.model().item(0).setEnabled(False)
+        for value in used or ["AIR"]:
+            editor.addItem(value)
+        editor.insertSeparator(editor.count())
+        for value in self.COMMON_MATERIALS:
+            if value != "自定义" and value not in used:
+                editor.addItem(value)
+        editor.addItem("自定义")
         return editor
 
     def setEditorData(self, editor, index):
@@ -46,7 +81,10 @@ class MaterialDelegate(QStyledItemDelegate):
             editor.setEditText(value)
 
     def setModelData(self, editor, model, index):
-        model.setData(index, editor.currentText().strip() or "AIR", Qt.ItemDataRole.EditRole)
+        value = editor.currentText().strip() or "AIR"
+        if value == "本工程已用材料":
+            value = str(index.model().data(index, Qt.ItemDataRole.EditRole) or "AIR")
+        model.setData(index, value, Qt.ItemDataRole.EditRole)
 
 
 class SurfaceFloatDelegate(QStyledItemDelegate):

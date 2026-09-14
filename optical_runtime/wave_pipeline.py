@@ -7,7 +7,20 @@ from .analysis_mapper import AnalysisSpec
 from .analysis_registry import AnalysisCategory, DEFAULT_ANALYSIS_REGISTRY
 from .result_merger import EnginePartialResult
 
-from optical_core.physics.wave.solvers.propagation_options import PropagationOptions
+from optical_core.physics.wave.solvers.propagation_options import (
+    SUPPORTED_PROPAGATION_METHODS,
+    PropagationOptions,
+)
+
+_WAVE_METHOD_ALIASES = {
+    "asm": "angular_spectrum",
+}
+_METHODS_REQUIRING_OUTPUT_AXES = {
+    "scaled_fresnel",
+    "scaled_angular_spectrum",
+    "issc",
+    "matrix_fresnel",
+}
 
 
 
@@ -71,13 +84,19 @@ class WavePipeline:
             global_options=global_options,
         )
 
+        method = str(opts.get("method", "fraunhofer") or "fraunhofer").strip().lower().replace("-", "_")
+        method = _WAVE_METHOD_ALIASES.get(method, method)
+        if method in _METHODS_REQUIRING_OUTPUT_AXES:
+            method = "fresnel" if "fresnel" in method else "angular_spectrum"
+        if method not in SUPPORTED_PROPAGATION_METHODS:
+            method = "fresnel" if "fresnel" in method else "angular_spectrum"
         return PropagationOptions(
             wavelength_nm=float(opts.get("wavelength_nm", getattr(system, "wavelength_nm", 550.0))),
             refractive_index=float(opts.get("refractive_index", 1.0)),
             grid_size=int(opts.get("grid_size", 65)),
             extent_mm=float(opts.get("extent_mm", 1.0)),
             propagation_distance_mm=float(opts.get("propagation_distance_mm", opts.get("distance_mm", 50.0))),
-            method=str(opts.get("method", "fraunhofer")),
+            method=method,
             aperture_type=str(opts.get("aperture_type", "circular")),
             aperture_diameter_mm=float(opts.get("aperture_diameter_mm", 0.5)),
             aperture_width_mm=float(opts.get("aperture_width_mm", 0.5)),

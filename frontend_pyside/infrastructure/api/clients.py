@@ -67,11 +67,22 @@ class TrainingClient:
     def submit(self, key: str, payload: dict) -> None:
         self.api.post(key, "/training/jobs", payload)
 
+    def submit_joint(self, key: str, payload: dict) -> None:
+        self.api.post(key, "/training/joint/jobs", payload)
+
+    def submit_bilstm(self, key: str, payload: dict) -> None:
+        self.api.post(key, "/structure-models/bilstm/jobs", payload)
+
     def list_models(self, key: str = "model_list") -> None:
         self.api.get(key, "/models")
 
     def predict(self, key: str, model_id: str, features: dict) -> None:
         self.api.post(key, f"/models/{model_id}/predict", {"model_id": model_id, "features": features})
+
+    def explain_shap(self, key: str, model_id: str, payload: dict | None = None) -> None:
+        body = dict(payload or {})
+        body.setdefault("top_k", 6)
+        self.api.post(key, f"/models/{model_id}/shap/explain", body)
 
 
 class HealthClient:

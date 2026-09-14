@@ -170,9 +170,25 @@ class SurfaceCommandMixin:
         self._insert_after_current(copies)
 
     def _toggle_detail(self, expanded: bool):
-        self.detail_content.setVisible(expanded)
-        self.detail_toggle.setArrowType(Qt.ArrowType.DownArrow if expanded else Qt.ArrowType.RightArrow)
-        self.detail_toggle.setText("收起表面属性" if expanded else "展开表面属性")
+        self.detail_content.setVisible(True)
+        if expanded:
+            self.properties_dialog.show()
+            self.properties_dialog.raise_()
+            self.properties_dialog.activateWindow()
+        else:
+            self.properties_dialog.hide()
+
+    def _open_properties_dialog(self):
+        row = self.table.currentRow()
+        if row < 0 and self.table.rowCount() > 0:
+            self.table.setCurrentCell(0, self.COL_NAME)
+            row = 0
+        self._activate_surface(row)
+
+    def _on_properties_closed(self, _code=0):
+        self.detail_toggle.blockSignals(True)
+        self.detail_toggle.setChecked(False)
+        self.detail_toggle.blockSignals(False)
 
     def _set_column_visible(self, column: int, visible: bool):
         self.table.setColumnHidden(column, not visible)

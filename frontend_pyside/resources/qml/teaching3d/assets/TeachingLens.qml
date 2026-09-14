@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick3D
 Node {
-    // Optical element.  Qt Quick3D's primitive cylinder is 100 units across
-    // (radius 50); scale 0.34 ⇒ clear aperture radius ≈ 17.
+    // Optical element.  Qt Quick3D's primitive cylinder is 100 units across;
+    // after the rotation/scale below the clear optic is about 68 units in Y/Z.
     Model {
         source: "#Cylinder"
         eulerRotation.z: 90
@@ -13,16 +13,20 @@ Node {
         }
     }
 
-    // Continuous lens cell: inner faces sit just outside the glass rim so the
-    // frame visibly grips the optic instead of leaving a hollow floating ring.
-    Model { source:"#Cube"; position:Qt.vector3d(0, 20,  0); scale:Qt.vector3d(0.10,0.08,0.42); materials:frameMaterial }
-    Model { source:"#Cube"; position:Qt.vector3d(0,-20,  0); scale:Qt.vector3d(0.10,0.08,0.42); materials:frameMaterial }
-    Model { source:"#Cube"; position:Qt.vector3d(0,  0, 20); scale:Qt.vector3d(0.10,0.42,0.08); materials:frameMaterial }
-    Model { source:"#Cube"; position:Qt.vector3d(0,  0,-20); scale:Qt.vector3d(0.10,0.42,0.08); materials:frameMaterial }
+    // Continuous lens cell.  Inner faces sit at roughly +/-32 while the glass
+    // radius is ~34, so the frame visibly grips the optic instead of looking
+    // like two detached clips beside a floating lens.
+    Model { source:"#Cube"; position:Qt.vector3d(0, 36,  0); scale:Qt.vector3d(0.10,0.08,0.80); materials:frameMaterial }
+    Model { source:"#Cube"; position:Qt.vector3d(0,-36,  0); scale:Qt.vector3d(0.10,0.08,0.80); materials:frameMaterial }
+    Model { source:"#Cube"; position:Qt.vector3d(0,  0, 36); scale:Qt.vector3d(0.10,0.64,0.08); materials:frameMaterial }
+    Model { source:"#Cube"; position:Qt.vector3d(0,  0,-36); scale:Qt.vector3d(0.10,0.64,0.08); materials:frameMaterial }
 
-    // Mechanical chain: cell → neck → post → base (foot at local y≈-61).
-    Model { source:"#Cube";     position:Qt.vector3d(0,-28,0); scale:Qt.vector3d(0.14,0.12,0.28); materials:frameMaterial }
-    Model { source:"#Cylinder"; position:Qt.vector3d(0,-43,0); scale:Qt.vector3d(0.075,0.18,0.075); materials:postMaterial }
+    // Mechanical chain is intentionally continuous and uses the same table
+    // mounting datum as the other teaching assets.  The base bottom sits on the
+    // optical-table top (world y ~= -9 when the asset root is y=52), so the
+    // lens can no longer read as a floating optic or a stand buried in the table.
+    Model { source:"#Cube";     position:Qt.vector3d(0,-40,0); scale:Qt.vector3d(0.14,0.10,0.28); materials:frameMaterial }
+    Model { source:"#Cylinder"; position:Qt.vector3d(0,-45,0); scale:Qt.vector3d(0.075,0.20,0.075); materials:postMaterial }
     Model { source:"#Cube";     position:Qt.vector3d(0,-57,0); scale:Qt.vector3d(0.40,0.08,0.32); materials:baseMaterial }
 
     PrincipledMaterial { id: frameMaterial; baseColor:"#222C35"; metalness:0.55; roughness:0.38 }

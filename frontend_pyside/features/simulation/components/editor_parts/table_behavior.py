@@ -2,17 +2,27 @@ from __future__ import annotations
 
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QBrush, QColor
 from PySide6.QtWidgets import QTableWidgetItem
 
 from frontend_pyside.features.simulation.surface_registry import (
     apply_type_defaults,
     ensure_surface_defaults,
+    format_parameter_cell,
+    parse_parameter_cell,
     surface_feature_summary,
+    surface_uses_parameter,
 )
 
 
 class SurfaceTableMixin:
     def reload(self):
+        try:
+            from shiboken6 import isValid
+            if not isValid(self.table):
+                return
+        except Exception:
+            pass
         project = self.context.project
         current_row = max(0, self.table.currentRow())
         current_surface_id = ""
@@ -20,6 +30,10 @@ class SurfaceTableMixin:
             current_surface_id = str(getattr(project.surfaces[current_row], "surface_id", ""))
         self._loading_table = True
         try:
+            self._sync_extra_columns()
+            unused = str(getattr(self, "UNUSED_CELL", "未使用"))
+            extra_specs = tuple(getattr(self, "_extra_specs", ()) or ())
+            enabled_col = self._enabled_col()
             self.table.setRowCount(len(project.surfaces))
             for row, surface in enumerate(project.surfaces):
                 ensure_surface_defaults(surface, fallback_group=f"L{row // 2 + 1}")
@@ -32,8 +46,6 @@ class SurfaceTableMixin:
                     f"{surface.thickness_mm:.8g}",
                     surface.material,
                     f"{surface.semi_aperture_mm:.8g}",
-                    surface_feature_summary(surface),
-                    "是" if surface.enabled else "否",
                 ]
                 for column, value in enumerate(values):
                     item = QTableWidgetItem(str(value))
@@ -44,14 +56,28 @@ class SurfaceTableMixin:
                         self.COL_RADIUS,
                         self.COL_THICKNESS,
                         self.COL_APERTURE,
-                        self.COL_ENABLED,
                     ):
                         item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                    if column in (self.COL_NUMBER, self.COL_FEATURE):
+                    if column == self.COL_NUMBER:
                         item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
-                    if column == self.COL_FEATURE:
-                        item.setToolTip(f"{surface.surface_type}专用参数：{surface_feature_summary(surface, max_items=99)}")
                     self.table.setItem(row, column, item)
+                for offset, spec in enumerate(extra_specs):
+                    column = self.COL_COMMON_COUNT + offset
+                    used = surface_uses_parameter(surface, spec.key)
+                    if used:
+                        value = surface.type_parameters.get(spec.key, spec.default)
+                        item = QTableWidgetItem(format_parameter_cell(value, spec))
+                        item.setToolTip(spec.helper or spec.label)
+                    else:
+                        item = QTableWidgetItem(unused)
+                        item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+                        item.setForeground(QBrush(QColor("#98A2B3")))
+                        item.setToolTip(f"{surface.surface_type}不使用此参数")
+                    item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                    self.table.setItem(row, column, item)
+                enabled_item = QTableWidgetItem("是" if surface.enabled else "否")
+                enabled_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(row, enabled_col, enabled_item)
             self.table.resizeRowsToContents()
             self._rebuild_component_filter()
             self._rebuild_summary()
@@ -92,7 +118,7 @@ class SurfaceTableMixin:
             self.selected_badge.set_tone("info")
             feature = surface_feature_summary(surface)
             self.selection_context.setText(
-                f"{surface.surface_type}｜材料 {surface.material}｜半口径 {surface.semi_aperture_mm:.3f} mm｜关键参数 {feature}"
+                f"{surface.surface_type}｜材料 {surface.material}｜半口径 {surface.semi_aperture_mm:.3f} mm｜{feature}"
             )
             self.group_id.setText(surface.group_id)
             self.surface_name.setText(surface.name)
@@ -125,9 +151,10 @@ class SurfaceTableMixin:
         self.surfaceSelected.emit(int(row))
 
     def _inline_edit_columns(self) -> tuple[int, ...]:
+        extras = tuple(range(self.COL_COMMON_COUNT, self._enabled_col()))
         return (
             self.COL_GROUP, self.COL_NAME, self.COL_TYPE, self.COL_RADIUS,
-            self.COL_THICKNESS, self.COL_MATERIAL, self.COL_APERTURE, self.COL_ENABLED,
+            self.COL_THICKNESS, self.COL_MATERIAL, self.COL_APERTURE, *extras, self._enabled_col(),
         )
 
     def _table_double_clicked(self, row: int, column: int) -> None:
@@ -141,7 +168,7 @@ class SurfaceTableMixin:
             return
         if column in self._inline_edit_columns():
             item = self.table.item(row, column)
-            if item is not None:
+            if item is not None and bool(item.flags() & Qt.ItemFlag.ItemIsEditable):
                 self.table.editItem(item)
             return
         self._activate_surface(row, column)
@@ -176,6 +203,8 @@ class SurfaceTableMixin:
         surface = self.context.project.surfaces[row]
         ensure_surface_defaults(surface, fallback_group=f"L{row // 2 + 1}")
         text = item.text().strip()
+        extra_specs = tuple(getattr(self, "_extra_specs", ()) or ())
+        enabled_col = self._enabled_col()
         try:
             if column == self.COL_GROUP:
                 surface.group_id = text or f"S{row + 1}"
@@ -197,11 +226,16 @@ class SurfaceTableMixin:
                 if value <= 0:
                     raise ValueError("aperture must be positive")
                 surface.semi_aperture_mm = value
-            elif column == self.COL_ENABLED:
+            elif column == enabled_col:
                 surface.enabled = text.lower() not in {"否", "no", "false", "0", "禁用"}
+            elif self.COL_COMMON_COUNT <= column < enabled_col:
+                spec = extra_specs[column - self.COL_COMMON_COUNT]
+                if not surface_uses_parameter(surface, spec.key):
+                    return
+                surface.type_parameters[spec.key] = parse_parameter_cell(text, spec)
             else:
                 return
-        except ValueError:
+        except (ValueError, IndexError):
             self.reload()
             return
         self.operationCommitted.emit(f"修改 S{row + 1} {self.table.horizontalHeaderItem(column).text()}")

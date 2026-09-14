@@ -37,6 +37,7 @@ class OpticalSurface:
     tilt_x_deg: float = 0.0
     tilt_y_deg: float = 0.0
     tilt_z_deg: float = 0.0
+    cylinder_axis_deg: float = 0.0
     metadata: Mapping[str, Any] = ()
 
     def __post_init__(self) -> None:
@@ -54,7 +55,10 @@ class OpticalSurface:
             raise ValueError("grating efficiencies must sum to at most one")
         if self.mechanical_diameter_mm is not None and float(self.mechanical_diameter_mm) <= 0.0:
             raise ValueError("mechanical_diameter_mm must be positive")
-        for name in ("decenter_x_mm", "decenter_y_mm", "tilt_x_deg", "tilt_y_deg", "tilt_z_deg"):
+        for name in (
+            "decenter_x_mm", "decenter_y_mm", "tilt_x_deg", "tilt_y_deg",
+            "tilt_z_deg", "cylinder_axis_deg",
+        ):
             if not math.isfinite(float(getattr(self, name))):
                 raise ValueError(f"{name} must be finite")
         object.__setattr__(self, "enabled", bool(self.enabled))
@@ -83,3 +87,9 @@ class OpticalSurface:
     @property
     def curvature(self) -> float:
         return 0.0 if self.is_plane else 1.0 / float(self.radius_mm)
+
+    @property
+    def is_cylindrical(self) -> bool:
+        return str(self.surface_type).strip().lower() in {
+            "cylindrical", "cylinder", "cylindrical_surface", "柱面", "柱面镜",
+        }

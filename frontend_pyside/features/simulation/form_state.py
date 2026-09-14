@@ -155,7 +155,9 @@ class SimulationFormState:
         if analyses & {"psf", "mtf", "diffraction"}:
             options["wave"] = {
                 "grid_size": calculation.output_grid_size,
-                "method": calculation.propagation_model,
+                "method": WAVE_PROPAGATION_METHOD_MAP.get(
+                    calculation.propagation_model, calculation.propagation_model
+                ),
                 "extent_mm": calculation.output_extent_mm,
                 "zero_padding_factor": calculation.zero_padding_factor,
             }
@@ -244,6 +246,12 @@ RECEIVER_TYPE_MAP = {
     "用户模式": "user_mode",
 }
 PRECISION_MAP = {"129×129": "preview", "257×257": "standard", "513×513": "high", "1025×1025": "high", "预览": "preview", "标准": "standard", "高精度": "high", "研究级": "high"}
+WAVE_PROPAGATION_METHOD_MAP = {
+    "scaled_fresnel": "fresnel",
+    "scaled_angular_spectrum": "angular_spectrum",
+    "issc": "angular_spectrum",
+    "matrix_fresnel": "fresnel",
+}
 PROPAGATION_MAP = {
     "普通角谱": "angular_spectrum",
     "带限角谱": "band_limited_angular_spectrum",
@@ -266,6 +274,7 @@ __all__ = [
     "CalculationFormState",
     "PRECISION_MAP",
     "PROPAGATION_MAP",
+    "WAVE_PROPAGATION_METHOD_MAP",
     "RECEIVER_TYPE_MAP",
     "ReceiverFormState",
     "SOURCE_TYPE_MAP",

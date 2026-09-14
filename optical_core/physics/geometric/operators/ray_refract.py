@@ -25,6 +25,8 @@ def refract_ray_at_surface(ray: Ray, surface: OpticalSurface, *, hit_point_mm: n
         conic=surface.conic,
         asphere_a2=surface.asphere_a2,
         asphere_coefficients=surface.asphere_coefficients,
+        surface_type=surface.surface_type,
+        cylinder_axis_deg=surface.cylinder_axis_deg,
     )
     new_direction, ok = refract_direction(np.asarray(ray.direction, dtype=float), normal, n1, n2)
     if not ok:

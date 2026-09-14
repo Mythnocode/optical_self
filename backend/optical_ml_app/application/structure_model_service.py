@@ -5,14 +5,18 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from machine_learning.neural_networks import (
-    BiLSTMConfig,
-    load_bilstm,
-    load_long_format_sequences,
-    predict_bilstm,
-    save_bilstm,
-    train_bilstm,
-)
+
+def _bilstm():
+    from machine_learning.neural_networks import (
+        BiLSTMConfig,
+        load_bilstm,
+        load_long_format_sequences,
+        predict_bilstm,
+        save_bilstm,
+        train_bilstm,
+    )
+
+    return BiLSTMConfig, load_bilstm, load_long_format_sequences, predict_bilstm, save_bilstm, train_bilstm
 
 
 def _run_bilstm_training_task(
@@ -20,6 +24,7 @@ def _run_bilstm_training_task(
     request_data: dict[str, Any],
     model_root: str,
 ) -> dict[str, Any]:
+    BiLSTMConfig, _load_bilstm, load_long_format_sequences, _predict_bilstm, save_bilstm, train_bilstm = _bilstm()
     samples = load_long_format_sequences(
         request_data["dataset_path"],
         system_id_column=request_data["system_id_column"],
@@ -69,6 +74,7 @@ class StructureModelApplicationService:
         )
 
     def predict(self, model_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        _BiLSTMConfig, load_bilstm, _load_sequences, predict_bilstm, _save_bilstm, _train_bilstm = _bilstm()
         model_dir = self.model_root / model_id
         artifact = load_bilstm(model_dir)
         result = predict_bilstm(
@@ -142,6 +148,8 @@ def generate_bilstm_candidates(
     """
     from itertools import product
     import numpy as np
+
+    _BiLSTMConfig, _load_bilstm, _load_sequences, predict_bilstm, _save_bilstm, _train_bilstm = _bilstm()
 
     vocabulary = sorted(str(name) for name in dict(artifact.get("vocabulary", {})).keys())
     allowed = [str(name) for name in (allowed_element_types or vocabulary) if str(name) in vocabulary]
@@ -257,6 +265,7 @@ def generate_bilstm_candidates(
 
 # Attach as a method without changing existing callers.
 def _generate_candidates_method(self, model_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    _BiLSTMConfig, load_bilstm, _load_sequences, _predict_bilstm, _save_bilstm, _train_bilstm = _bilstm()
     artifact = load_bilstm(self.model_root / model_id)
     result = generate_bilstm_candidates(artifact, **payload)
     result["model_id"] = model_id

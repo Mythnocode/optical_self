@@ -712,8 +712,22 @@ class PersistentTaskPool:
     def _check_worker_health(self) -> None:
         failed: list[tuple[str, str]] = []
         with self._lock:
+            # ``shutdown()`` closes multiprocessing Process handles outside the
+            # pool lock.  The monitor can already be between queue polling and
+            # this health check; stop immediately once closure has started so a
+            # late ``is_alive()`` cannot turn into a ValueError traceback.
+            if self._closed:
+                return
             for slot in tuple(self._slots.values()):
-                if slot.process.is_alive():
+                try:
+                    alive = slot.process.is_alive()
+                except (OSError, ValueError, AssertionError):
+                    # A worker handle may have been closed by an external
+                    # shutdown/parent-death path.  Treat it as exited and let
+                    # the normal replacement path decide whether recovery is
+                    # still allowed.
+                    alive = False
+                if alive:
                     continue
                 job_id = slot.current_job_id
                 failed.append((slot.worker_id, job_id))

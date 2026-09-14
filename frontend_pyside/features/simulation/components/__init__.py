@@ -6,7 +6,6 @@ from importlib import import_module
 _EXPORTS = {
     "SurfaceTypeDelegate": (".surface_delegate", "SurfaceTypeDelegate"),
     "OpticalSystemEditor": (".optical_system_editor", "OpticalSystemEditor"),
-    "SimpleParameterTabs": (".parameter_tabs", "SimpleParameterTabs"),
 }
 
 

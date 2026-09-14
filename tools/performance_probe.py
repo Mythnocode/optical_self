@@ -59,7 +59,7 @@ def main() -> int:
     scan={
         'request_id':'performance-probe-scan', 'project':project, 'analyses':['coupling'], 'precision':'preview', 'engine':'headless',
         'scan_mode':'line_1d',
-        'scan_parameters':[{'path':'surfaces[1].distance_to_next_mm','label':'L1-L2 空气间隔','unit':'mm','start':14.70,'stop':15.00,'points':5}],
+        'scan_parameters':[{'path':'surfaces[1].distance_to_next_mm','label':'L1-L2 厚度','unit':'mm','start':14.70,'stop':15.00,'points':5}],
         'scan_response_metrics':['coupling_efficiency'],
     }
     jid=unwrap(requests.post(b+'/scan/jobs',json=scan,timeout=20))['job_id']

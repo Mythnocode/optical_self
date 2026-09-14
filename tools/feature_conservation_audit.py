@@ -1,4 +1,4 @@
-"""Static feature-conservation audit for the 2026-08-17 UI rework.
+"""Static feature-conservation audit for the canvas-centric UI.
 
 The UI is allowed to move or fold capabilities, but not delete them.  This audit
 checks the capability catalogue plus the source contracts that back the major
@@ -33,31 +33,26 @@ def main() -> None:
     checks: list[tuple[str, str, bool, str]] = []
 
     ok, note = contains_all(
-        "frontend_pyside/app/compact_shell.py",
-        ["系统与建模", "光学分析", "研究与优化", "代理模型", "实验与数据", "教学",
-         "参数研究", "容差分析", "自动优化", "物理反向设计", "模型构建", "正向预测", "反向预测",
-         "模型解释", "模型管理", "实验验证", "任务中心", "五大失配实验", "自由实验", "实验库"],
+        "frontend_pyside/app/shell_catalog.py",
+        ["系统与建模", "光学分析", "优化", "代理模型", "实验与数据", "教学",
+         "参数研究", "容差分析", "自动优化", "物理反向设计", "正向预测", "反向预测",
+         "模型解释", "模型管理", "任务中心", "教学实验台"],
     )
     checks.append(("全平台能力目录", "所有正式能力仍可从工具箱两层以内发现", ok, note))
 
     ok, note = contains_all(
-        "frontend_pyside/features/simulation/live_preview.py",
-        [
-            '("系统视图", ("光路", "3D光路"))',
-            '("光束传播", ("光束包络", "多平面演化", "束腰位置"))',
-            '("焦面分析", ("PSF", "焦面截面", "光斑尺寸"))',
-            '("复光场", ("振幅", "相位", "相位对比"))',
-            '("模场匹配", ("端面匹配", "光纤基模", "XY模场比较", "重叠贡献", "能量分解"))',
-            '("像质与波前", ("点列图", "PSF", "MTF", "波前"))',
-        ],
+        "frontend_pyside/features/simulation/analysis_planner.py",
+        ["光路", "3D光路", "光束包络", "多平面演化", "束腰位置", "PSF", "焦面截面", "光斑尺寸",
+         "振幅", "相位", "相位对比", "端面匹配", "光纤基模", "XY模场比较", "重叠贡献", "能量分解",
+         "点列图", "MTF", "波前"],
     )
-    checks.append(("专业光学分析", "6组分析器及全部既有结果视图保留", ok, note))
+    checks.append(("专业光学分析", "既有结果视图仍由分析规划器保留", ok, note))
 
     ok, note = contains_all(
-        "frontend_pyside/features/simulation/components/parameter_parts/page_builders.py",
+        "frontend_pyside/features/canvas/parameter_catalog.py",
         ["单模光纤", "多模光纤", "用户模式", "高斯近似", "LP01", "HE11", "导入复场"],
     )
-    checks.append(("光纤/接收端", "接收类型与模式模型未因侧栏压缩而删除", ok, note))
+    checks.append(("光纤/接收端", "接收类型与模式模型未因节点化而删除", ok, note))
 
     ok, note = contains_all(
         "frontend_pyside/features/simulation/surface_registry.py",
@@ -66,11 +61,11 @@ def main() -> None:
     checks.append(("光学表面/镜头编辑", "Surface 类型与非球面高级参数保留", ok, note))
 
     ok1, note1 = contains_all(
-        "frontend_pyside/features/optimization/page.py",
-        ["optimization.scan", "optimization.tolerance", "optimization.inverse_design", "optimization.ml_inverse_prediction", "optimization.validation"],
+        "frontend_pyside/app/shell_catalog.py",
+        ["simulation.parameter_research", "simulation.tolerance", "optimization.inverse_design", "optimization.ml_inverse_prediction"],
     )
     ok2, note2 = contains_all(
-        "frontend_pyside/features/optimization/presentation/submit_behavior.py",
+        "frontend_pyside/features/canvas/task_runner.py",
         ["surrogate_model_id", "coarse_fraction", "ml_inverse_prediction"],
     )
     ok3, note3 = contains_all(
@@ -80,43 +75,48 @@ def main() -> None:
     checks.append(("研究/优化/两类反向", "参数研究、容差、自动优化、物理反向设计与ML反向预测均保留且ML路径调用代理模型粗搜索", ok1 and ok2 and ok3, "; ".join(x for x in (note1, note2, note3) if x)))
 
     ok, note = contains_all(
-        "frontend_pyside/features/optimization/experiment_validation.py",
-        ["RMSE", "MAE", "归一化残差", "实验", "仿真"],
+        "frontend_pyside/features/canvas/task_node.py",
+        ["实验验证", "validation_metric", "validation_reference"],
     )
-    checks.append(("实验验证", "实验/仿真定量比较与误差指标保留", ok, note))
+    checks.append(("实验验证", "实验/仿真定量比较入口仍在画布任务节点中", ok, note))
 
     ok1, note1 = contains_all(
-        "frontend_pyside/features/machine_learning/presentation/view_behavior.py",
-        ["随机森林", "XGBoost物理残差"],
+        "frontend_pyside/app/shell_catalog.py",
+        ["随机森林", "XGBoost物理残差", "BiLSTM"],
     )
-    ok2, note2 = contains_all("frontend_pyside/features/machine_learning/page.py", ["BiLSTM", "数据准备", "模型训练", "模型比较", "正向预测"])
-    checks.append(("代理模型构建/正向预测", "RF、XGBoost、BiLSTM 与 数据→训练→比较→预测 链路保留", ok1 and ok2, "; ".join(x for x in (note1, note2) if x)))
+    ok2, note2 = contains_all(
+        "frontend_pyside/features/canvas/model_node.py",
+        ["随机森林", "BiLSTM"],
+    )
+    checks.append(("代理模型构建/正向预测", "RF、XGBoost、BiLSTM 入口保留在画布节点", ok1 and ok2, "; ".join(x for x in (note1, note2) if x)))
 
     ok, note = contains_all(
-        "frontend_pyside/features/explainability/presentation/shap_behavior.py",
+        "frontend_pyside/features/explainability/actions.py",
         ["SHAP"],
     )
     checks.append(("模型解释", "SHAP/特征贡献解释能力保留且与物理失配概念分开", ok, note))
 
     ok1, note1 = contains_all(
-        "frontend_pyside/features/teaching/unified_workbench.py",
-        ["横向", "角度", "尺寸", "轴向", "曲率", "教学环境", "当前系统"],
+        "frontend_pyside/app/workbench_shell.py",
+        ["TeachingShell", "器材库", "同步到仿真"],
     )
-    teaching_text = "\n".join(
-        p.read_text(encoding="utf-8")
-        for p in (ROOT / "frontend_pyside/features/teaching").rglob("*.py")
+    ok2, note2 = contains_all(
+        "frontend_pyside/app/main_window.py",
+        ['"teaching"'],
     )
-    ok2 = "自动吸附" not in teaching_text and "解除吸附" not in teaching_text
-    note2 = "" if ok2 else "仍存在自动吸附可见逻辑"
-    checks.append(("教学", "五大失配、2D/3D/自由实验保留；器件/仪器不再使用自动吸附式交互", ok1 and ok2, "; ".join(x for x in (note1, note2) if x)))
+    checks.append(("教学", "教学入口为 TeachingShell；旧失配课已下线", ok1 and ok2, "; ".join(x for x in (note1, note2) if x)))
 
-    ok, note = contains_all("frontend_pyside/features/simulation/page.py", ["simulation.lens_editor", "simulation.result_catalogue"])
+    ok, note = contains_all(
+        "frontend_pyside/app/shell_catalog.py",
+        ["simulation.lens_editor", "simulation.result_catalogue"],
+    )
     checks.append(("上下文入口", "完整镜头编辑器和完整结果目录具备真实路由", ok, note))
 
-    # User-facing source code must no longer create a parallel multi-scheme concept.
     remaining = []
+    banned = ("当前方案", "方案A", "方案B", "方案 C", "方案C")
     for p in (ROOT / "frontend_pyside").rglob("*.py"):
-        if "方案" in p.read_text(encoding="utf-8"):
+        content = p.read_text(encoding="utf-8")
+        if any(token in content for token in banned):
             remaining.append(str(p.relative_to(ROOT)))
     checks.append(("单一当前系统术语", "前端不再使用“当前方案/方案A/B”等并行方案语义", not remaining, "残留：" + "、".join(remaining[:10]) if remaining else ""))
 

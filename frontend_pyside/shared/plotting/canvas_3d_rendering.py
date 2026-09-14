@@ -49,6 +49,8 @@ def render_dynamic_scene(
             _render_fiber(ax, item, artists, interactive=interactive)
         elif kind == "aperture":
             _render_aperture(ax, item, artists, interactive=interactive)
+        elif kind in {"detector", "image"}:
+            _render_detector(ax, item, artists, interactive=interactive)
     if bool(data.get("show_section_plane", False)):
         _render_section_plane(
             ax, data.get("section_plane", {}), artists, interactive=interactive
@@ -230,6 +232,32 @@ def _render_rays(
         artists.ray_collections.append(collection)
         artists.ray_group_keys.append(key)
 
+
+
+def _render_detector(
+    ax, item: dict, artists: DynamicSceneArtists, *, interactive: bool
+) -> None:
+    del interactive
+    z = float(item.get("z", 0.0) or 0.0)
+    cx = float(item.get("center_x", 0.0) or 0.0)
+    cy = float(item.get("center_y", 0.0) or 0.0)
+    width = max(float(item.get("width", 0.0) or 0.0), float(item.get("radius", 0.0) or 0.0) * 2.0, 0.05)
+    height = max(float(item.get("height", 0.0) or 0.0), float(item.get("radius", 0.0) or 0.0) * 2.0, 0.05)
+    half_w = 0.5 * width
+    half_h = 0.5 * height
+    xs = [cx - half_w, cx + half_w, cx + half_w, cx - half_w, cx - half_w]
+    ys = [cy - half_h, cy - half_h, cy + half_h, cy + half_h, cy - half_h]
+    zs = [z] * 5
+    outline, = ax.plot(zs, xs, ys, color=theme.DETECTOR_EDGE, linewidth=1.45, alpha=0.95, zorder=11)
+    artists.persistent.append(outline)
+    verts = [[(z, cx - half_w, cy - half_h), (z, cx + half_w, cy - half_h), (z, cx + half_w, cy + half_h), (z, cx - half_w, cy + half_h)]]
+    plane = Poly3DCollection(verts, facecolors=to_rgba(theme.DETECTOR_FILL, 0.18), edgecolors=theme.DETECTOR_EDGE, linewidths=0.6, zorder=6)
+    ax.add_collection3d(plane)
+    artists.persistent.append(plane)
+    name = str(item.get("name", "") or "")
+    if name:
+        label = ax.text(z, cx + half_w, cy + half_h, name, color=theme.DETECTOR_EDGE, fontsize=8, ha="left")
+        artists.persistent.append(label)
 
 
 def _render_aperture(

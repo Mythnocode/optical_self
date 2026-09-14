@@ -187,7 +187,7 @@ class ResultPane(QFrame):
             points = min(len(data.get("x", [])), len(data.get("y", [])))
             return (
                 f"数据点：{points}　｜　横轴：{data.get('x_label', '—')}　｜　"
-                f"纵轴：{data.get('y_label', '—')}"
+                f"纵轴：{data.get('y_label', '—')}　｜　数据来源：{data.get('source', '预览')}"
             )
         if kind == "line_multi":
             return f"曲线：{len(data.get('series', []))} 条　｜　数据来源：{data.get('source', '预览')}"

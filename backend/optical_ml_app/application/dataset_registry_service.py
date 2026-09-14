@@ -5,10 +5,15 @@ from typing import Any, Dict, List, Optional
 
 import csv
 import io
+import json
 import logging
+from datetime import datetime, timezone
+from uuid import uuid4
 
 from shared_contracts.datasets import DatasetManifest
+from shared_contracts.metrics import canonical_metric_name, metric_definition
 from machine_learning.datasets.storage import FileDatasetStore
+from machine_learning.datasets.splitter import split_ids
 
 from backend.optical_ml_app.domain.error_codes import (
     DATASET_NOT_FOUND,
@@ -55,6 +60,7 @@ class DatasetRegistryEntry:
     def to_dict(self) -> Dict[str, Any]:
         return {
             "dataset_id": self.dataset_id,
+            "dataset_name": str((self.metadata or {}).get("dataset_name", self.dataset_id)),
             "dataset_type": self.dataset_type,
             "target_column": self.target_column,
             "max_surfaces": self.max_surfaces,
@@ -133,6 +139,7 @@ class DatasetRegistryService:
             samples_jsonl_path=str(dataset_dir / "samples.jsonl"),
             samples_flat_csv_path=str(dataset_dir / "samples_flat.csv"),
             created_at=manifest.created_at,
+            metadata={**dict(manifest.metadata or {}), "dataset_name": manifest.dataset_name},
         )
 
     def register(self, manifest: DatasetManifest) -> DatasetRegistryEntry:
@@ -141,7 +148,143 @@ class DatasetRegistryService:
         self._export_flat_csv(manifest.dataset_id)
         return entry
 
+    def import_tabular_file(
+        self,
+        source_path: str,
+        *,
+        dataset_name: str = "",
+        target_name: str = "coupling_efficiency",
+        random_seed: int = 42,
+    ) -> DatasetRegistryEntry:
+        """Import a local CSV/JSON/JSONL table into the native training store.
+
+        The desktop client deliberately sends a path rather than pretending that a
+        selected file has been uploaded.  This endpoint is therefore for the
+        normal same-machine desktop deployment; a remote backend rejects an
+        unavailable path instead of silently training another dataset.
+        """
+        path = Path(str(source_path or "")).expanduser()
+        if not path.is_file():
+            raise DatasetRegistryError(
+                code=DATASET_FILE_NOT_FOUND,
+                stage="dataset.import",
+                message="Selected dataset file is not available to the backend",
+                context={"source_path": str(path)},
+            )
+        suffix = path.suffix.lower()
+        if suffix not in {".csv", ".json", ".jsonl", ".ndjson"}:
+            raise DatasetRegistryError(
+                code="DATASET_IMPORT_FORMAT_UNSUPPORTED",
+                stage="dataset.import",
+                message="Only CSV, JSON and JSONL tabular files can be imported",
+                context={"source_path": str(path)},
+            )
+        try:
+            if suffix == ".csv":
+                with path.open("r", encoding="utf-8-sig", newline="") as handle:
+                    raw_rows = [dict(row) for row in csv.DictReader(handle)]
+            elif suffix in {".jsonl", ".ndjson"}:
+                with path.open("r", encoding="utf-8") as handle:
+                    raw_rows = [json.loads(line) for line in handle if line.strip()]
+            else:
+                value = json.loads(path.read_text(encoding="utf-8"))
+                raw_rows = value.get("rows", value.get("items", value.get("data", []))) if isinstance(value, dict) else value
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, csv.Error) as exc:
+            raise DatasetRegistryError(
+                code="DATASET_IMPORT_READ_FAILED",
+                stage="dataset.import",
+                message=f"Could not read the selected dataset: {exc}",
+                context={"source_path": str(path)},
+            ) from exc
+        if not isinstance(raw_rows, list) or not raw_rows:
+            raise DatasetRegistryError(
+                code="DATASET_IMPORT_EMPTY",
+                stage="dataset.import",
+                message="The selected file contains no tabular rows",
+                context={"source_path": str(path)},
+            )
+
+        desired_target = canonical_metric_name(target_name)
+        all_keys = {str(key).strip() for row in raw_rows if isinstance(row, dict) for key in row if str(key).strip()}
+        canonical_columns = {canonical_metric_name(key): key for key in all_keys}
+        if desired_target not in canonical_columns:
+            raise DatasetRegistryError(
+                code=DATASET_TARGET_COLUMN_MISMATCH,
+                stage="dataset.import",
+                message=f"Selected target column {desired_target!r} was not found in the file",
+                context={"target": desired_target, "columns": sorted(all_keys)},
+            )
+        target_columns = {
+            canonical: source for canonical, source in canonical_columns.items()
+            if metric_definition(canonical) is not None
+        }
+        if desired_target not in target_columns:
+            target_columns[desired_target] = canonical_columns[desired_target]
+
+        records: list[dict[str, Any]] = []
+        feature_paths: set[str] = set()
+        for index, row in enumerate(raw_rows):
+            if not isinstance(row, dict):
+                continue
+            targets: dict[str, float] = {}
+            for canonical, source in target_columns.items():
+                try:
+                    targets[canonical] = float(row.get(source))
+                except (TypeError, ValueError):
+                    pass
+            if desired_target not in targets:
+                continue
+            features: dict[str, float] = {}
+            for key, value in row.items():
+                text = str(key).strip()
+                if not text or text in target_columns.values() or text in {"sample_id", "id", "valid", "failure_code"}:
+                    continue
+                try:
+                    features[text] = float(value)
+                except (TypeError, ValueError):
+                    continue
+            if not features:
+                continue
+            feature_paths.update(features)
+            records.append({
+                "sample_id": str(row.get("sample_id") or row.get("id") or f"import-{index:06d}"),
+                "feature_values": features,
+                "target_values": targets,
+                "valid": True,
+                "failure_code": "",
+            })
+        if not records or not feature_paths:
+            raise DatasetRegistryError(
+                code="DATASET_IMPORT_NO_NUMERIC_SAMPLES",
+                stage="dataset.import",
+                message="No rows contain both the selected numeric target and numeric feature columns",
+                context={"target": desired_target},
+            )
+
+        dataset_id = "external-" + uuid4().hex[:12]
+        ids = [str(record["sample_id"]) for record in records]
+        train_ids, validation_ids, test_ids = split_ids(ids, 0.70, 0.15, int(random_seed))
+        feature_list = sorted(feature_paths)
+        manifest = DatasetManifest(
+            dataset_id=dataset_id,
+            dataset_name=str(dataset_name or path.stem),
+            engine_name="external_tabular_file",
+            engine_version="1",
+            feature_schema_version="external-tabular-v1",
+            created_at=datetime.now(timezone.utc).isoformat(),
+            sample_count=len(records), valid_sample_count=len(records), failed_sample_count=max(0, len(raw_rows) - len(records)),
+            feature_names=feature_list, feature_paths=feature_list, feature_units=["" for _ in feature_list],
+            target_names=sorted(target_columns), train_ids=train_ids, validation_ids=validation_ids, test_ids=test_ids,
+            random_seed=int(random_seed), source_project_fingerprint=f"external-file:{path.name}",
+            metadata={"source_kind": "external_tabular_file", "source_path": str(path), "selected_target": desired_target},
+        )
+        self._dataset_store.save_manifest(manifest)
+        for record in records:
+            self._dataset_store.append_sample(dataset_id, record)
+        return self.register(manifest)
+
     def get(self, dataset_id: str) -> DatasetRegistryEntry:
+        self.rehydrate()
         entry = self._store.get(dataset_id)
         if entry is None:
             raise DatasetRegistryError(
@@ -158,6 +301,7 @@ class DatasetRegistryService:
         limit: int = 20,
         offset: int = 0,
     ) -> Dict[str, Any]:
+        self.rehydrate()
         items = list(self._store.values())
         if dataset_type:
             items = [e for e in items if e.dataset_type == dataset_type]

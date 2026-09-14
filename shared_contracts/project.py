@@ -41,6 +41,9 @@ class SurfaceSnapshot(BaseModel):
     tilt_x_deg: float = 0.0
     tilt_y_deg: float = 0.0
     tilt_z_deg: float = 0.0
+    # Cylinder/zero-power axis azimuth in the local transverse x-y plane.
+    # 0 deg means axis +x (power in y); 90 deg means axis +y (power in x).
+    cylinder_axis_deg: float = Field(default=0.0, allow_inf_nan=False)
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
 

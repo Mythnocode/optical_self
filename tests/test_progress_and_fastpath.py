@@ -36,11 +36,20 @@ from shared_contracts.simulation import SimulationRequest
 
 
 def _project() -> ProjectSnapshot:
+    # Fast-path tests exercise the uncoated geometric kernel explicitly.  The
+    # shipped high-coupling demo carries a real multilayer coating and is
+    # correctly routed through the full coating-aware tracer.
+    surface_specs = []
+    for item in FOUR_LENS_SURFACES:
+        spec = dict(item)
+        spec["coating"] = "无"
+        spec["type_parameters"] = {}
+        surface_specs.append(spec)
     return ProjectSnapshot(
         name=PROJECT_NAME,
         wavelength_nm=DEFAULT_WAVELENGTH_NM,
         receiver_mfd_um=DEFAULT_RECEIVER_MFD_UM,
-        surfaces=[LensSurface(**dict(item)) for item in FOUR_LENS_SURFACES],
+        surfaces=[LensSurface(**item) for item in surface_specs],
     )
 
 

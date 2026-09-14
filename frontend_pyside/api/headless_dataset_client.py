@@ -13,6 +13,9 @@ class HeadlessDatasetClient:
     def submit_coupling(self, key: str, payload: dict) -> None:
         self.api_client.post(key, "/headless-datasets/coupling/jobs", payload)
 
+    def import_file(self, key: str, payload: dict) -> None:
+        self.api_client.post(key, "/headless-datasets/import-file", payload)
+
     def download_manifest(self, key: str, dataset_id: str) -> None:
         self.api_client.get_binary(key, f"/headless-datasets/{dataset_id}/files/manifest")
 

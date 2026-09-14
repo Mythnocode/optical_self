@@ -283,7 +283,7 @@ class ResearchAdvisor:
             return [{"label": "查看容差设置", "target": "optimization.tolerance", "level": "navigate"}]
         page_key = str(page_id or "")
         if page_key == "teaching":
-            return [{"label": "继续可视化探索", "target": "teaching.explore", "level": "navigate"}]
+            return [{"label": "打开教学实验台", "target": "teaching", "level": "navigate"}]
         if page_key == "tasks":
             return [{"label": "查看当前任务", "target": "tasks.current", "level": "navigate"}]
         if page_key == "home":
@@ -516,7 +516,7 @@ class ResearchAdvisor:
             findings = [
                 {"title": "第一步：先检查光路参数", "explanation": "确认光源、镜片和光纤参数是不是你准备研究的当前系统。先不用急着训练模型。"},
                 {"title": "第二步：做一次完整仿真", "explanation": "完整仿真会告诉你当前系统的耦合效率和光路结果，后面的扫描和优化都要拿它作参照。"},
-                {"title": "第三步：再研究关键参数", "explanation": "有了完整仿真以后，再选一个透镜间距或光纤位置做扫描，先看清变化规律。"},
+                {"title": "第三步：再研究关键参数", "explanation": "有了完整仿真以后，再选一个透镜厚度或光纤位置做扫描，先看清变化规律。"},
             ]
             action = {"label": "从仿真系统开始", "target": "simulation.current", "level": "navigate"}
             summary = "第一次使用时不用把所有功能都打开。先把当前光路算清楚，再一步一步增加参数研究和模型分析。"
@@ -694,7 +694,7 @@ class ResearchAdvisor:
                         "当前系统已经有可用的完整仿真结果。",
                         "这说明现在可以开始研究“哪个参数最影响结果”，而不必重复做同一套正式仿真。",
                         "选择一个参数做扫描",
-                        "先从最关心的透镜间距或光纤位置开始，能比较直观看到参数改变后耦合效率怎么变。",
+                        "先从最关心的透镜厚度或光纤位置开始，能比较直观看到参数改变后耦合效率怎么变。",
                     )
                     actions = [{"label": "去参数研究", "target": "optimization.scan", "level": "prepare"}]
                 else:
@@ -723,12 +723,12 @@ class ResearchAdvisor:
                 actions = [{"label": "查看主要因素", "target": "explainability.current", "level": "navigate"}]
             elif str(page_id or "") == "teaching":
                 add_step(
-                    "你现在在教学中心的自由实验台。",
-                    "这里用于把光束、相位、扫描曲线和失配线索可视化；教学环境不会影响当前系统。",
-                    "继续一个可视化探索",
-                    "从可操作的失配场景开始，比只读文字更容易建立物理直觉。",
+                    "你现在在教学实验台。",
+                    "拖动器件看光路示意；光斑和耦合需要点光学计算。示意不会冒充耦合效率。",
+                    "继续搭建或计算",
+                    "把器件移出光轴会显示位置失配，这是实验现象而不是程序错误。",
                 )
-                actions = [{"label": "继续可视化探索", "target": "teaching.explore", "level": "navigate"}]
+                actions = [{"label": "打开教学实验台", "target": "teaching", "level": "navigate"}]
             elif str(page_id or "") == "tasks":
                 add_step(
                     "你现在在任务中心。",
@@ -840,11 +840,9 @@ class ResearchAdvisor:
                 if diagnostic:
                     items.append({"title": "从曲线先得到什么线索", "explanation": diagnostic})
                     actions = [{
-                        "label": "看这个现象为什么",
-                        "target": "teaching.phenomenon",
-                        "level": "navigate",
-                        "phenomenon": phenomenon or "curve_features",
-                        "return_target": "optimization.scan",
+                        "label": "回到参数扫描看这个现象",
+                        "target": "optimization.scan",
+                        "level": "prepare",
                     }]
         for row in active[:3]:
             source = str(row.get("source") or "分析")

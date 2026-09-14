@@ -71,7 +71,7 @@ _FIELD_NAMES = {
     "radius_mm": "曲率半径（mm）",
     "curvature": "曲率",
     "thickness_mm": "厚度（mm）",
-    "distance_to_next_mm": "后间距（mm）",
+    "distance_to_next_mm": "厚度（mm）",
     "semi_diameter_mm": "半口径（mm）",
     "conic": "圆锥系数",
     "material": "材料",
@@ -102,11 +102,11 @@ def display_feature_name(name: object, *, fallback_index: int | None = None) -> 
 
     gap = re.fullmatch(r"(?:gap|air_gap|distance)[_\-]?(\d+)(?:_mm)?", low)
     if gap:
-        return f"第{int(gap.group(1))}段镜间距（mm）"
+        return f"第{int(gap.group(1))}段厚度（mm）"
 
     lens_gap = re.fullmatch(r"lens[_\-]?(\d+)[_\-]?(?:to|_)[_\-]?lens[_\-]?(\d+).*", low)
     if lens_gap:
-        return f"透镜{int(lens_gap.group(1))}—透镜{int(lens_gap.group(2))}间距（mm）"
+        return f"透镜{int(lens_gap.group(1))}—透镜{int(lens_gap.group(2))}厚度（mm）"
 
     
     if re.search(r"[\u4e00-\u9fff]", text):

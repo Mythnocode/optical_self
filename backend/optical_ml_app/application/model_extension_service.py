@@ -7,7 +7,7 @@ import threading
 import hashlib
 import json
 from collections import OrderedDict
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +24,70 @@ from machine_learning.explainability.linkage_metadata import (
 from machine_learning.explainability.physics_features import PHYSICS_FEATURES
 
 _logger = logging.getLogger(__name__)
-_SHAP_CACHE_SCHEMA_VERSION = 3
+_SHAP_CACHE_SCHEMA_VERSION = 5
+
+
+def _default_display_feature_paths(
+    feature_paths: Sequence[str],
+    manifest: Mapping[str, Any],
+) -> list[str]:
+    """Return truthful, user-facing design features in model order.
+
+    Derived physics features remain available to the estimator, but the main
+    explanation ranks the radius/thickness/conic variables selected when the
+    dataset was created.  Older manifests are supported by a conservative path
+    inference; if no design feature can be identified we retain all inputs.
+    """
+    available = [str(path) for path in feature_paths]
+    declared = [
+        str(path)
+        for path in list(manifest.get("design_variable_paths") or [])
+        if str(path) in available
+    ]
+    if declared:
+        return declared
+    inferred = [
+        path
+        for path in available
+        if path.endswith((".radius_mm", ".thickness_mm", ".distance_to_next_mm", ".conic"))
+    ]
+    return inferred or available
+
+
+def _resolve_display_feature_paths(
+    feature_paths: Sequence[str],
+    manifest: Mapping[str, Any],
+    requested: Sequence[str] | None,
+    *,
+    model_id: str,
+) -> list[str]:
+    available = [str(path) for path in feature_paths]
+    defaults = _default_display_feature_paths(available, manifest)
+    values = [str(path) for path in list(requested or [])]
+    if not values:
+        return defaults
+    unknown = [path for path in values if path not in available]
+    if unknown:
+        raise BackendApplicationError(
+            code="SHAP_DISPLAY_FEATURE_SCHEMA_MISMATCH",
+            stage="model.shap",
+            message="One or more requested explanation features were not used to train the model",
+            context={
+                "model_id": model_id,
+                "unknown_feature_paths": unknown,
+                "model_feature_paths": available,
+            },
+        )
+    requested_set = set(values)
+    ordered = [path for path in available if path in requested_set]
+    if not ordered:
+        raise BackendApplicationError(
+            code="SHAP_DISPLAY_FEATURES_EMPTY",
+            stage="model.shap",
+            message="No valid design variables were selected for explanation",
+            context={"model_id": model_id},
+        )
+    return ordered
 
 
 def _to_dict(payload: Any) -> dict[str, Any]:
@@ -34,6 +97,84 @@ def _to_dict(payload: Any) -> dict[str, Any]:
     if isinstance(payload, dict):
         return dict(payload)
     return {}
+
+
+def _request_feature_array(
+    features: Any,
+    feature_paths: Sequence[str],
+    *,
+    model_id: str,
+) -> Any:
+    """Build a SHAP request row without inventing missing feature values."""
+    import numpy as np
+
+    if not isinstance(features, Mapping):
+        raise BackendApplicationError(
+            code="SHAP_FEATURE_SCHEMA_MISMATCH",
+            stage="model.shap",
+            message="SHAP request must provide a mapping for every model feature",
+            context={"model_id": model_id, "feature_paths": list(feature_paths)},
+        )
+    missing = [path for path in feature_paths if path not in features]
+    if missing:
+        raise BackendApplicationError(
+            code="SHAP_FEATURE_SCHEMA_MISMATCH",
+            stage="model.shap",
+            message="SHAP request is missing one or more trained features",
+            context={
+                "model_id": model_id,
+                "missing_feature_paths": missing,
+                "feature_paths": list(feature_paths),
+            },
+        )
+    try:
+        array = np.asarray(
+            [[float(features[path]) for path in feature_paths]],
+            dtype=float,
+        )
+    except (TypeError, ValueError) as exc:
+        raise BackendApplicationError(
+            code="SHAP_FEATURE_VALUES_INVALID",
+            stage="model.shap",
+            message="Request feature values must be finite numbers",
+            context={"model_id": model_id},
+        ) from exc
+    if not np.all(np.isfinite(array)):
+        raise BackendApplicationError(
+            code="SHAP_FEATURE_VALUES_INVALID",
+            stage="model.shap",
+            message="Request feature values must be finite numbers",
+            context={"model_id": model_id},
+        )
+    return array
+
+
+def shap_dependence_map(
+    feature_paths: Sequence[str],
+    feature_values: Any,
+    shap_matrix: Any,
+) -> dict[str, dict[str, Any]]:
+    """Pair each feature's raw values with its SHAP contributions."""
+    import numpy as np
+
+    values = np.asarray(feature_values, dtype=float)
+    matrix = np.asarray(shap_matrix, dtype=float)
+    dependence: dict[str, dict[str, Any]] = {}
+    if values.ndim != 2 or matrix.ndim != 2:
+        return dependence
+    count = min(len(feature_paths), values.shape[1], matrix.shape[1])
+    for feature_index in range(count):
+        feature = str(feature_paths[feature_index])
+        xs = values[:, feature_index].tolist()
+        ys = matrix[:, feature_index].tolist()
+        dependence[feature] = {
+            "feature": feature,
+            "x": xs,
+            "feature_value": xs,
+            "y": ys,
+            "shap_value": ys,
+        }
+    return dependence
 
 
 def _load_shap_module():
@@ -407,15 +548,41 @@ class ModelExtensionService:
                 message="The model manifest does not define feature paths",
                 context={"model_id": model_id},
             )
+        display_feature_paths = _resolve_display_feature_paths(
+            feature_paths,
+            manifest,
+            body.get("display_feature_paths"),
+            model_id=model_id,
+        )
+        display_feature_set = set(display_feature_paths)
+        display_feature_indices = [
+            index for index, path in enumerate(feature_paths) if path in display_feature_set
+        ]
 
         requested_dataset_id = body.get("dataset_id")
         model_dataset_id = manifest.get("dataset_id")
         dataset_id = str(requested_dataset_id or model_dataset_id or "") or None
         features = body.get("features")
-        top_k = min(int(body.get("top_k", 10)), len(feature_paths))
-        max_samples = int(body.get("max_samples", 100))
-        background_sample_count = int(body.get("background_sample_count", 100))
-        random_seed = int(body.get("random_seed", 42))
+        try:
+            requested_top_k = int(body.get("top_k", 10))
+            max_samples = int(body.get("max_samples", 100))
+            background_sample_count = int(body.get("background_sample_count", 100))
+            random_seed = int(body.get("random_seed", 42))
+        except (TypeError, ValueError) as exc:
+            raise BackendApplicationError(
+                code="SHAP_REQUEST_INVALID",
+                stage="model.shap",
+                message="SHAP request limits must be integers",
+                context={"model_id": model_id},
+            ) from exc
+        if requested_top_k < 1 or max_samples < 1 or background_sample_count < 1:
+            raise BackendApplicationError(
+                code="SHAP_REQUEST_INVALID",
+                stage="model.shap",
+                message="SHAP request limits must be positive",
+                context={"model_id": model_id},
+            )
+        top_k = min(requested_top_k, len(display_feature_paths))
         requested_sample_ids = [str(item) for item in body.get("sample_ids", [])]
 
         if requested_dataset_id and model_dataset_id and str(requested_dataset_id) != str(model_dataset_id):
@@ -438,25 +605,7 @@ class ModelExtensionService:
         synthetic_samples = False
         data_source = "registered_dataset"
         if features is not None:
-            try:
-                X_raw = np.asarray(
-                    [[float(features.get(path, 0.0)) for path in feature_paths]],
-                    dtype=float,
-                )
-            except (TypeError, ValueError) as exc:
-                raise BackendApplicationError(
-                    code="SHAP_FEATURE_VALUES_INVALID",
-                    stage="model.shap",
-                    message="Request feature values must be finite numbers",
-                    context={"model_id": model_id},
-                ) from exc
-            if not np.all(np.isfinite(X_raw)):
-                raise BackendApplicationError(
-                    code="SHAP_FEATURE_VALUES_INVALID",
-                    stage="model.shap",
-                    message="Request feature values must be finite numbers",
-                    context={"model_id": model_id},
-                )
+            X_raw = _request_feature_array(features, feature_paths, model_id=model_id)
             sample_ids = ["request-sample-0"]
             background_raw = X_raw.copy()
             background_ids = list(sample_ids)
@@ -471,16 +620,12 @@ class ModelExtensionService:
                 random_seed=random_seed,
             )
         else:
-            
-            
-            rng = np.random.default_rng(random_seed)
-            count = max(2, min(max_samples, max(background_sample_count, top_k)))
-            X_raw = rng.normal(0.0, 1.0, (count, len(feature_paths)))
-            background_raw = X_raw[: min(background_sample_count, count)]
-            sample_ids = [f"synthetic-{index}" for index in range(count)]
-            background_ids = sample_ids[: len(background_raw)]
-            synthetic_samples = True
-            data_source = "synthetic_fallback"
+            raise BackendApplicationError(
+                code="SHAP_DATASET_REQUIRED",
+                stage="model.shap",
+                message="SHAP needs the training dataset or explicit current-system features; synthetic samples are disabled",
+                context={"model_id": model_id},
+            )
 
         try:
             X = np.asarray(preprocessing.transform_features(X_raw), dtype=float)
@@ -571,6 +716,7 @@ class ModelExtensionService:
         primary_contributions: list[dict[str, Any]] = []
         primary_formula_consistency: list[dict[str, Any]] = []
         formula_dependence: dict[str, dict[str, Any]] = {}
+        shap_dependence: dict[str, dict[str, Any]] = {}
         formula_warnings: list[str] = []
         primary_target_name = ""
         primary_target_unit = ""
@@ -594,8 +740,15 @@ class ModelExtensionService:
 
             mean_shap = np.mean(matrix_original, axis=0)
             mean_abs_shap = np.mean(np.abs(matrix_original), axis=0)
-            ranking = np.argsort(mean_abs_shap)[::-1][:top_k]
+            ranking = sorted(
+                display_feature_indices,
+                key=lambda feature_index: float(mean_abs_shap[feature_index]),
+                reverse=True,
+            )[:top_k]
             top_features: list[dict[str, Any]] = []
+            displayed_total = float(
+                sum(float(mean_abs_shap[index]) for index in display_feature_indices)
+            )
             for index in ranking:
                 feature_index = int(index)
                 feature = feature_paths[feature_index]
@@ -605,6 +758,13 @@ class ModelExtensionService:
                     "feature": feature,
                     "mean_shap": float(mean_shap[feature_index]),
                     "mean_abs_shap": float(mean_abs_shap[feature_index]),
+                    "std_shap": float(np.std(matrix_original[:, feature_index])),
+                    "relative_importance": (
+                        float(mean_abs_shap[feature_index]) / displayed_total
+                        if displayed_total > 0.0
+                        else 0.0
+                    ),
+                    "sample_count": int(len(X)),
                 }
                 item.update(linkage.to_dict())
                 top_features.append(item)
@@ -614,6 +774,12 @@ class ModelExtensionService:
                 primary_target_unit = target_unit
                 formula_comparison_enabled = target_formula_comparison
                 global_top_features = top_features
+                all_dependence = shap_dependence_map(feature_paths, X_raw, matrix_original)
+                shap_dependence = {
+                    feature: all_dependence[feature]
+                    for feature in display_feature_paths
+                    if feature in all_dependence
+                }
                 primary_contributions = []
                 for index in ranking:
                     feature_index = int(index)
@@ -695,18 +861,39 @@ class ModelExtensionService:
 
             sample_shap_values = []
             for sample_index, sample_id in enumerate(sample_ids):
+                visible_feature_values = {
+                    feature: float(X_raw[sample_index, feature_index])
+                    for feature_index, feature in enumerate(feature_paths)
+                    if feature in display_feature_set
+                }
+                visible_shap_values = {
+                    feature: float(matrix_original[sample_index, feature_index])
+                    for feature_index, feature in enumerate(feature_paths)
+                    if feature in display_feature_set
+                }
+                hidden_feature_contribution = float(
+                    sum(
+                        float(matrix_original[sample_index, feature_index])
+                        for feature_index, feature in enumerate(feature_paths)
+                        if feature not in display_feature_set
+                    )
+                )
+                if len(display_feature_paths) < len(feature_paths):
+                    # Keep the local waterfall additive without exposing every
+                    # derived physics input as if it were an adjustable variable.
+                    visible_shap_values["__other_model_features__"] = hidden_feature_contribution
                 sample_shap_values.append(
                     {
                         "sample_id": sample_id,
                         "prediction": float(predictions[sample_index, target_index]),
-                        "feature_values": {
-                            feature: float(X_raw[sample_index, feature_index])
-                            for feature_index, feature in enumerate(feature_paths)
-                        },
-                        "shap_values": {
-                            feature: float(matrix_original[sample_index, feature_index])
-                            for feature_index, feature in enumerate(feature_paths)
-                        },
+                        "feature_values": visible_feature_values,
+                        "shap_values": visible_shap_values,
+                        "hidden_feature_contribution": hidden_feature_contribution,
+                        "additivity_error": float(
+                            base_value
+                            + sum(visible_shap_values.values())
+                            - float(predictions[sample_index, target_index])
+                        ),
                     }
                 )
 
@@ -723,6 +910,7 @@ class ModelExtensionService:
 
         elapsed_ms = (time.perf_counter() - started) * 1000.0
         response = {
+            "explanation_run_id": f"shap-{cache_key[:12]}",
             "model_id": model_id,
             "dataset_id": dataset_id,
             "data_source": data_source,
@@ -731,11 +919,15 @@ class ModelExtensionService:
             "target_name": primary_target_name,
             "target_unit": primary_target_unit,
             "target_names": explained_target_names,
+            "model_feature_paths": feature_paths,
+            "display_feature_paths": display_feature_paths,
+            "hidden_feature_count": len(feature_paths) - len(display_feature_paths),
             "base_values": base_values,
             "feature_contributions": primary_contributions,
             "top_features": global_top_features,
             "formula_consistency": primary_formula_consistency,
             "formula_dependence": formula_dependence,
+            "shap_dependence": shap_dependence,
             "formula_comparison_enabled": formula_comparison_enabled,
             "formula_comparison_domain": "dB损失" if formula_comparison_enabled else "仅展示公式",
             "additivity_error": primary_additivity_error,

@@ -438,7 +438,8 @@ class TaskManager:
         original = self.get_status(job_id)
         if original.status not in {"failed", "cancelled"}:
             raise ValueError("job is not in a retryable terminal state")
-        if original.status == "failed" and original.error is not None and not original.error.retryable:
+        is_timeout = bool(original.error is not None and original.error.code == "TIMEOUT")
+        if original.status == "failed" and original.error is not None and not original.error.retryable and not is_timeout:
             raise PermissionError("job failure is marked as not retryable")
         loader = getattr(self.repository, "load_retry_payload", None)
         if not original.retry_available or not callable(loader):
@@ -447,12 +448,30 @@ class TaskManager:
         function = _function_pickle.loads(payload["func_data"])
         callback_data = payload.get("on_result_data")
         on_result = _function_pickle.loads(callback_data) if callback_data else None
+        job_type = str(payload.get("job_type") or original.job_type)
+        timeout_seconds = payload.get("timeout_seconds")
+        stall_timeout_seconds = payload.get("stall_timeout_seconds")
+        # Dataset jobs created by older releases persisted the obsolete
+        # 1.8-seconds/sample timeout.  Recalculate their budget during retry so
+        # a valid retry does not deterministically hit the same timeout again.
+        if job_type == "dataset":
+            from backend.optical_ml_app.application.dataset_service import (
+                dataset_timeout_seconds,
+            )
+
+            retry_args = tuple(payload.get("args") or ())
+            request = retry_args[0] if retry_args else None
+            sample_count = int(getattr(request, "sample_count", 1) or 1)
+            timeout_seconds = max(
+                float(timeout_seconds or 0.0), dataset_timeout_seconds(sample_count)
+            )
+            stall_timeout_seconds = max(float(stall_timeout_seconds or 0.0), 300.0)
         new_job_id = self.submit(
-            str(payload.get("job_type") or original.job_type), function,
+            job_type, function,
             *tuple(payload.get("args") or ()), on_result=on_result,
-            timeout_seconds=payload.get("timeout_seconds"),
+            timeout_seconds=timeout_seconds,
             queue_timeout_seconds=payload.get("queue_timeout_seconds"),
-            stall_timeout_seconds=payload.get("stall_timeout_seconds"),
+            stall_timeout_seconds=stall_timeout_seconds,
             retry_of=str(job_id), **dict(payload.get("kwargs") or {}),
         )
         return self.get_status(new_job_id)
@@ -972,7 +991,7 @@ class TaskManager:
                     code="TIMEOUT",
                     stage=record.status.stage or "persistent_worker",
                     message=f"job timed out after {record.timeout_seconds} s",
-                    retryable=False,
+                    retryable=True,
                 )
             else:
                 raw = payload[0] if kind == "error" and isinstance(payload, tuple) else payload
@@ -1431,7 +1450,7 @@ class TaskManager:
                                 code="TIMEOUT",
                                 stage=record.status.stage or "monitor",
                                 message=f"job timed out after {record.timeout_seconds} s",
-                                retryable=False,
+                                retryable=True,
                             )
                             self.repository.save_status(record.status)
                         self._publish_event(

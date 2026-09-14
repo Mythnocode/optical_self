@@ -92,6 +92,21 @@ def serialize_project(project: Any, form_state: SimulationFormState | None = Non
             "note": str(getattr(surface, "note", "") or ""),
             "type_parameters": type_parameters,
         }
+        cylinder_axis_deg = float(
+            type_parameters.get(
+                "cylinder_axis_deg", type_parameters.get("axis_angle_deg", 0.0)
+            )
+            or 0.0
+        ) % 180.0
+        if surface_type == "cylindrical":
+            metadata.update(
+                {
+                    "surface_geometry": "cylindrical",
+                    "cylinder_axis_deg": cylinder_axis_deg,
+                    "cylinder_power_axis_deg": (cylinder_axis_deg + 90.0) % 180.0,
+                    "cylinder_axis_definition": "zero_power_axis",
+                }
+            )
         if surface_type == "mirror":
             metadata["reflectivity"] = float(type_parameters.get("reflectivity", 1.0) or 1.0)
             metadata["mirror_mode"] = str(type_parameters.get("mirror_mode", "理想反射"))
@@ -136,6 +151,7 @@ def serialize_project(project: Any, form_state: SimulationFormState | None = Non
                 ),
                 "mechanical_diameter_mm": mechanical,
                 "enabled": enabled,
+                "cylinder_axis_deg": cylinder_axis_deg,
                 **effective_transform,
                 "metadata": metadata,
             }
@@ -178,10 +194,12 @@ def _form_payloads(project: Any, form_state: SimulationFormState | None):
             float(getattr(project_surfaces[-1], "thickness_mm", 0.0)) if project_surfaces else 0.0,
             1e-6,
         )
-        pupil_radius_mm = max(
+        project_pupil = _number(getattr(project, "pupil_radius_mm", None))
+        fallback_pupil = max(
             (_number(getattr(surface, "semi_aperture_mm", None)) or 1.0 for surface in project_surfaces),
             default=1.0,
         )
+        pupil_radius_mm = project_pupil if project_pupil and project_pupil > 0.0 else fallback_pupil
         return (
             {"wavelength_nm": wavelength_nm},
             {
@@ -199,6 +217,7 @@ def _form_payloads(project: Any, form_state: SimulationFormState | None):
     source = form_state.source
     receiver = form_state.receiver
     system = form_state.system
+    calculation = form_state.calculation
     wavelengths = [float(source.wavelength_nm), *map(float, source.auxiliary_wavelengths_nm)]
     
     wavelengths = list(dict.fromkeys(value for value in wavelengths if value > 0.0))
@@ -257,7 +276,27 @@ def _form_payloads(project: Any, form_state: SimulationFormState | None):
         "system_field_y_deg": float(system.field_y_deg),
         "auto_best_focus": bool(system.auto_best_focus),
         "thermal_compensation": bool(system.thermal_compensation),
-        "requested_analyses": list(form_state.calculation.analyses),
+        "requested_analyses": list(calculation.analyses),
+        "calc_precision": calculation.precision,
+        "calc_grid_size": int(calculation.output_grid_size),
+        "calc_layout_pupil": int(calculation.layout_pupil_sample_count),
+        "calc_pupil": int(calculation.pupil_sample_count),
+        "calc_propagation": calculation.propagation_model,
+        "calc_zero_padding": float(calculation.zero_padding_factor),
+        "calc_output_extent_mm": float(calculation.output_extent_mm),
+        "calc_auto_expand_output": bool(calculation.auto_expand_output),
+        "calc_only_visible_results": bool(calculation.only_visible_results),
+        "calc_sampling_convergence": bool(calculation.sampling_convergence_enabled),
+        "calc_save_large_arrays": bool(calculation.save_large_arrays),
+        "calc_high_precision_coupling": bool(calculation.high_precision_coupling_enabled),
+        "alignment_enabled": bool(form_state.alignment.enabled),
+        "alignment_include_dz": bool(form_state.alignment.include_dz),
+        "alignment_max_offset_um": float(form_state.alignment.max_offset_um),
+        "alignment_max_axial_offset_um": float(form_state.alignment.max_axial_offset_um),
+        "alignment_max_tilt_urad": float(form_state.alignment.max_tilt_urad),
+        "alignment_max_iterations": int(form_state.alignment.max_iterations),
+        "alignment_max_function_evaluations": int(form_state.alignment.max_function_evaluations),
+        "alignment_timeout_seconds": float(form_state.alignment.timeout_seconds),
     }
     return source_payload, receiver_payload, system_payload, analysis_settings
 
@@ -266,6 +305,8 @@ def _surface_type(value: Any) -> str:
     mapping = {
         "球面": "spherical",
         "非球面": "aspheric",
+        "柱面": "cylindrical",
+        "柱面镜": "cylindrical",
         "平面": "plane",
         "光阑": "stop",
         "反射镜": "mirror",

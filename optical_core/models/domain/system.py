@@ -2,6 +2,8 @@
 # 将多个光学表面、材料、物距、像距、入瞳半径和波长组合起来，并提供材料折射率查询和表面顶点位置计算。
 from __future__ import annotations
 
+import warnings
+
 from dataclasses import dataclass, field
 from typing import Mapping, Tuple
 from optical_core.models.domain.material import OpticalMaterial

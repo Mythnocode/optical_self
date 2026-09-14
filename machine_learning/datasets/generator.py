@@ -17,6 +17,7 @@ from machine_learning.features.coupling_physics import (
     PHYSICS_RESIDUAL_FEATURE_UNITS,
     coupling_loss_db,
     derive_coupling_physics_features,
+    paired_coupling_targets,
 )
 from shared_contracts.versions import FEATURE_SCHEMA_VERSION
 from shared_ports.simulation import SimulationPort
@@ -36,7 +37,7 @@ class DatasetGenerator:
             request.sampling_method,
             request.random_seed,
         )
-        canonical_targets = [canonical_metric_name(target) for target in request.targets]
+        canonical_targets = paired_coupling_targets(request.targets)
         include_coupling_physics = (
             bool(getattr(request, "include_derived_physics_features", True))
             and request.base_project.receiver is not None
@@ -289,6 +290,10 @@ class DatasetGenerator:
             random_seed=request.random_seed,
             source_project_fingerprint=request.base_project.fingerprint,
             status=status,
+            variable_scheme_id=request.variable_scheme_id,
+            lens_count=request.lens_count,
+            design_variable_paths=list(request.design_variable_paths or requested_feature_paths[:len(request.parameters)]),
+            physics_feature_paths=list(PHYSICS_RESIDUAL_FEATURE_PATHS) if include_coupling_physics else [],
             metadata={
                 "sampling_method": request.sampling_method,
                 "coupling_physics_features": list(PHYSICS_RESIDUAL_FEATURE_PATHS)
@@ -297,6 +302,10 @@ class DatasetGenerator:
                 "analytic_coupling_baseline": bool(include_coupling_physics),
                 "source_project": request.base_project.model_dump(),
                 "batch_workers": max(1, int(max_workers)),
+                "variable_scheme_id": request.variable_scheme_id,
+                "lens_count": request.lens_count,
+                "design_variable_paths": list(request.design_variable_paths or requested_feature_paths[:len(request.parameters)]),
+                "physics_feature_paths": list(PHYSICS_RESIDUAL_FEATURE_PATHS) if include_coupling_physics else [],
             },
         )
         self.store.save_manifest(manifest)
@@ -313,7 +322,7 @@ def target_to_analyses(targets) -> list[str]:
 
 def extract_target_values(metrics: dict, targets) -> dict[str, float]:
     values: dict[str, float] = {}
-    for target in targets:
+    for target in paired_coupling_targets(targets):
         canonical = canonical_metric_name(target)
         value = (
             coupling_loss_db(metrics)
@@ -358,8 +367,12 @@ def dataset_simulation_options(project: ProjectSnapshot) -> dict:
             "convergence_enabled": True,
             "sampling_convergence_enabled": True,
             "auto_expand_output": True,
-            "include_diagnostic_arrays": True,
-            "result_array_policy": "field_only",
+            # Training consumes scalar metrics and derived physics features,
+            # not the large propagated-field arrays used by result viewers.
+            # The solver still performs the same high-precision coupling
+            # calculation; only its returned diagnostic payload is reduced.
+            "include_diagnostic_arrays": False,
+            "result_array_policy": "none",
             "high_precision_coupling_enabled": True,
             "mode_field_diameter_x_um": project.receiver.mode_field_diameter_x_um,
             "mode_field_diameter_y_um": project.receiver.mode_field_diameter_y_um,

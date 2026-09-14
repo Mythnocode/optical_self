@@ -19,6 +19,7 @@ class ShapExplainRequest(BaseModel):
     target_name: str | None = None
     target_names: list[str] = Field(default_factory=list)
     sample_ids: list[str] = Field(default_factory=list)
+    display_feature_paths: list[str] = Field(default_factory=list)
     top_k: int = Field(default=10, ge=1, le=100)
     max_samples: int = Field(default=100, ge=1, le=1000)
     background_sample_count: int = Field(default=100, ge=1, le=2000)

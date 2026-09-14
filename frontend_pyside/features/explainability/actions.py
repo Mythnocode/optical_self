@@ -53,6 +53,11 @@ FORMULA_CATALOG: dict[str, dict[str, str]] = {
         "MTF": r"\mathrm{MTF}=|\mathcal{F}\{\mathrm{PSF}\}|",
         "Airy 半径": r"r_{\mathrm{Airy}}=1.22\lambda f/ D",
     },
+    "结构参数": {
+        "曲率半径": r"\Phi_s\approx\frac{n_2-n_1}{R}",
+        "厚度与间隔": r"M_t=\begin{pmatrix}1&t/n\\0&1\end{pmatrix}",
+        "圆锥系数": r"z(r)=\frac{cr^2}{1+\sqrt{1-(1+k)c^2r^2}}",
+    },
 }
 
 
@@ -144,8 +149,6 @@ def diagnosis_confidence(shap_data: dict[str, Any] | None) -> tuple[str, str]:
     targets = list(data.get("targets", []) or [])
     target = targets[0] if targets and isinstance(targets[0], dict) else {}
     sample_count = int(data.get("sample_count", target.get("sample_count", 0)) or 0)
-    test_r2 = data.get("model_test_r2", data.get("test_r2"))
-    additivity_error = data.get("additivity_error", target.get("additivity_error"))
     in_domain = data.get("within_training_domain", data.get("in_training_domain"))
     if in_domain is None:
         in_domain = target.get("within_training_domain", target.get("in_training_domain"))
@@ -157,17 +160,13 @@ def diagnosis_confidence(shap_data: dict[str, Any] | None) -> tuple[str, str]:
     )
     if in_domain is False:
         return "较低", "当前系统超出训练范围；失配方向仅供参考，建议运行正式扫描。"
-    if isinstance(test_r2, (int, float)) and float(test_r2) < 0.60:
-        return "仅探索", f"独立测试 R²={float(test_r2):.3f}，模型尚不足以支持物理结论。"
-    if isinstance(additivity_error, (int, float)) and abs(float(additivity_error)) > 0.01:
-        return "较低", f"SHAP 加和误差为 {float(additivity_error):.4g}，解释一致性未通过门槛。"
-    if sample_count < 20:
-        return "仅探索", "有效解释样本不足20个；少量轴向测点应优先使用拟合、残差和正式参数扫描。"
-    if isinstance(test_r2, (int, float)) and float(test_r2) >= 0.80 and in_domain is True and formal_reviewed:
+    if sample_count < 10:
+        return "暂不可判断", "有效解释样本不足10个，暂不评价诊断稳定性。"
+    if in_domain is True and formal_reviewed:
         return "较高", "当前系统位于训练范围内，并有正式仿真值可用于复核。"
-    if isinstance(test_r2, (int, float)) and float(test_r2) >= 0.60 and (in_domain is True or sample_count >= 20):
+    if in_domain is True or sample_count >= 20:
         return "中等", "模型可用于判断失配方向，最终效率仍应以正式仿真为准。"
-    return "暂不可判断", "缺少独立测试 R²、训练域或完整仿真信息，不能把 SHAP 贡献解释为物理原因。"
+    return "较低", "训练域或完整仿真信息不足，建议补充正式仿真。"
 
 
 def formula_binding_for_feature(feature_name: str) -> tuple[str, str, str, str]:
@@ -183,8 +182,14 @@ def formula_binding_for_feature(feature_name: str) -> tuple[str, str, str, str]:
         return "模式失配", "尺寸失配", "直接", "参数直接决定光斑与模场尺寸比"
     if "curvature_mismatch" in text or "wavefront_curvature" in text:
         return "模式失配", "曲率失配", "直接", "参数直接描述二次相位曲率失配"
-    if any(token in text for token in ("surfaces[", ".radius", "radius_mm", "curvature", "thickness", "material", "glass", "conic")):
-        return "总耦合效率", "复场重叠", "间接", "镜头结构参数通过焦面振幅与相位间接影响耦合"
+    if any(token in text for token in ("conic", "圆锥系数")):
+        return "结构参数", "圆锥系数", "间接", "圆锥系数改变非球面面形和高阶像差"
+    if any(token in text for token in ("thickness", "厚度", "air_gap", "spacing", "间隔")):
+        return "结构参数", "厚度与间隔", "间接", "厚度和间隔改变群组传播距离与焦面位置"
+    if any(token in text for token in ("surfaces[", ".radius", "radius_mm", "curvature", "曲率半径")):
+        return "结构参数", "曲率半径", "间接", "曲率半径改变表面光焦度并影响后续焦面复场"
+    if any(token in text for token in ("material", "glass")):
+        return "总耦合效率", "复场重叠", "间接", "材料色散和折射率通过焦面振幅与相位间接影响耦合"
     if any(token in text for token in ("strehl", "wavefront", "opd", "zernike")):
         return "波前质量", "Strehl", "直接", "参数属于波前质量指标"
     if any(token in text for token in ("psf", "spot")):
@@ -210,6 +215,9 @@ def physical_mechanism_for_feature(feature_name: str) -> str:
         ("波前质量", "Strehl"): "波前均方误差增大使焦面能量从主峰扩散。",
         ("成像质量", "PSF"): "焦面点扩散函数变化反映孔径和像差对聚焦场的共同影响。",
         ("成像质量", "MTF"): "空间频率响应下降表示成像对细节调制的传递能力减弱。",
+        ("结构参数", "曲率半径"): "曲率半径改变折射面光焦度，进而改变焦点位置、光斑尺寸和焦面波前。",
+        ("结构参数", "厚度与间隔"): "厚度与空气间隔改变透镜组内传播距离，主要影响焦面位置和累计像差。",
+        ("结构参数", "圆锥系数"): "圆锥系数改变非球面偏离基准球面的程度，主要用于校正高阶球差并改善焦面复场。",
     }
     if (category, item) in direct:
         return direct[(category, item)]
@@ -229,6 +237,9 @@ def suggested_action_for_feature(feature_name: str) -> str:
         ("波前质量", "Strehl"): "检查像差、波前RMS和光瞳采样",
         ("成像质量", "PSF"): "打开PSF及焦面光场诊断",
         ("成像质量", "MTF"): "打开MTF曲线并检查空间频率范围",
+        ("结构参数", "曲率半径"): "对该曲率半径做正式单变量扫描，并检查接收面光斑和模式重叠",
+        ("结构参数", "厚度与间隔"): "对该厚度或间隔做正式焦面扫描，再比较模式重叠",
+        ("结构参数", "圆锥系数"): "对该圆锥系数做小范围正式扫描，并检查波前 RMS 和耦合效率",
     }
     if (category, item) in actions:
         return actions[(category, item)]
@@ -368,7 +379,7 @@ def build_markdown_report(
         local_rows = anomaly_rows(data, limit=10)
         if local_rows:
             lines.extend([
-                "| 样本 | 总 |SHAP| | 候选主导特征 | 候选贡献 | 输出 |",
+                "| 样本 | 总 |SHAP| | 主导特征 | 主导贡献 | 输出 |",
                 "|---|---:|---|---:|---|",
             ])
             for sample_id, total, feature, contribution, output in local_rows:
@@ -517,7 +528,7 @@ def build_structured_report_html(
         parts.append("<div class='card'><h2>局部样本解释</h2>")
         local = anomaly_rows(data, limit=8)
         if local:
-            parts.append("<table class='grid'><tr><th>样本</th><th>总绝对贡献</th><th>候选主导特征</th><th>候选贡献</th></tr>")
+            parts.append("<table class='grid'><tr><th>样本</th><th>总绝对贡献</th><th>主导特征</th><th>主导贡献</th></tr>")
             for sample_id, total, feature, contribution, _output in local:
                 parts.append(
                     f"<tr><td>{escape(str(sample_id))}</td><td>{float(total):.6g}</td>"
@@ -539,7 +550,7 @@ def build_structured_report_html(
             )
         else:
             parts.append(
-                "<tr><td>当前候选特征尚无可直接使用的解析公式，应通过参数扫描和正式仿真复核。</td></tr>"
+                "<tr><td>当前主导特征尚无可直接使用的解析公式，应通过参数扫描和正式仿真复核。</td></tr>"
             )
         parts.append("</table></div>")
 

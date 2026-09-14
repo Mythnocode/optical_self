@@ -19,6 +19,10 @@ _MESSAGES = {
     "RESULT_PERSIST_FAILED": "计算已结束，但结果保存失败。请检查磁盘空间和用户数据目录权限后重试。",
     "NETWORK_ERROR": "无法连接后端服务，请确认后端正在运行。",
     "INVALID_RESPONSE": "后端返回了无法解析的响应，请查看后端日志。",
+    "MODEL_NOT_FOUND": "找不到这个模型，可能已被删除或模型目录不完整。请刷新模型列表或重新训练。",
+    "MODEL_FEATURE_MISSING": "当前镜头组缺少该模型需要的特征，已停止预测；请使用匹配的镜头组或重新训练。",
+    "MODEL_QUALITY_REJECTED": "该模型测试质量未达标，不能用于预测；请重新训练或更换模型。",
+    "MODEL_PREDICTION_FAILED": "模型预测失败，请检查模型与当前镜头组是否匹配。",
 }
 
 @dataclass(frozen=True)

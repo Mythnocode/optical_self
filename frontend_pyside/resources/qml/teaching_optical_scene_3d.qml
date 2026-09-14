@@ -81,35 +81,17 @@ Rectangle {
             }
         }
 
-        // Gaussian envelope. Cyan transparent solid makes focusing/defocusing readable from any camera angle.
+        // Abstract Gaussian envelope removed — only formal chief rays are drawn.
         Model {
-            visible: teachingBridge.showEnvelope
+            visible: false
             source: "#Cylinder"
             position: Qt.vector3d(-200, 60, 0)
-            eulerRotation.z: 90
-            scale: Qt.vector3d(teachingBridge.inputRadius/50, 5.0, teachingBridge.inputRadius/50)
-            materials: PrincipledMaterial {
-                baseColor: "#1597A8"; opacity: 0.17; alphaMode: PrincipledMaterial.Blend
-                roughness: 0.2; cullMode: Material.NoCulling
-            }
+            scale: Qt.vector3d(0.001, 0.001, 0.001)
+            materials: PrincipledMaterial { baseColor: "#1597A8"; opacity: 0.0; alphaMode: PrincipledMaterial.Blend }
         }
         Node {
-            visible: teachingBridge.showEnvelope
+            visible: false
             position: Qt.vector3d(50, 60, 0)
-            eulerRotation.z: root.beamZRotation()
-            eulerRotation.y: root.beamYRotation()
-            Model {
-                source: "#Cone"
-                position.x: root.beamLength()/2
-                eulerRotation.z: -90
-                scale: Qt.vector3d(Math.max(teachingBridge.inputRadius, teachingBridge.endRadius)/38,
-                                   root.beamLength()/100,
-                                   Math.max(teachingBridge.inputRadius, teachingBridge.endRadius)/38)
-                materials: PrincipledMaterial {
-                    baseColor: "#1597A8"; opacity: 0.20; alphaMode: PrincipledMaterial.Blend
-                    roughness: 0.15; cullMode: Material.NoCulling
-                }
-            }
         }
 
         // Laser
@@ -196,6 +178,6 @@ Rectangle {
         radius: 7; color: "#EFFFFFFF"; border.color: "#94A3B8"
         width: infoText.implicitWidth+24; height: 58
         Text { id: infoText; anchors.centerIn: parent; color:"#1F2937"; font.pixelSize:15
-            text: "真实 3D 光路\n橙色：主光线　青色：Gaussian 包络" }
+            text: "真实 3D 光路\n橙色：正式追迹主光线" }
     }
 }

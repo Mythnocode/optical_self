@@ -103,6 +103,47 @@ def _apply_collimation_constraint(
     return enriched, assessment.penalty, assessment.feasible, list(assessment.warnings)
 
 
+def _apply_engineering_constraints(project, metrics: dict[str, Any], options: dict[str, Any]) -> tuple[dict[str, Any], float, bool, list[str]]:
+    """Evaluate the geometry constraints exposed by the workbench optimiser."""
+    cfg = dict(options or {})
+    if not cfg:
+        return metrics, 0.0, True, []
+    surfaces = list(getattr(project, "surfaces", ()) or ())
+    violations: dict[str, float] = {}
+    length = sum(max(0.0, float(getattr(item, "thickness_mm", getattr(item, "distance_to_next_mm", 0.0)) or 0.0)) for item in surfaces)
+    maximum = cfg.get("max_system_length_mm")
+    if maximum is not None and length > float(maximum):
+        violations["max_system_length_mm"] = length - float(maximum)
+    min_center = cfg.get("min_center_thickness_mm")
+    if min_center is not None:
+        values = [float(getattr(item, "thickness_mm", 0.0) or 0.0) for item in surfaces if str(getattr(item, "material", "")).upper() not in {"", "AIR"}]
+        if values and min(values) < float(min_center):
+            violations["min_center_thickness_mm"] = float(min_center) - min(values)
+    min_air = cfg.get("min_air_gap_mm")
+    if min_air is not None:
+        values = [float(getattr(item, "thickness_mm", 0.0) or 0.0) for item in surfaces if str(getattr(item, "material", "")).upper() in {"", "AIR"}]
+        if values and min(values) < float(min_air):
+            violations["min_air_gap_mm"] = float(min_air) - min(values)
+    if bool(cfg.get("aperture_within_mechanical", False)):
+        for index, item in enumerate(surfaces):
+            mechanical = getattr(item, "mechanical_diameter_mm", None)
+            aperture = float(getattr(item, "semi_aperture_mm", 0.0) or 0.0)
+            if mechanical is not None and aperture > float(mechanical) * 0.5:
+                violations[f"aperture_surface_{index + 1}"] = aperture - float(mechanical) * 0.5
+    enriched = dict(metrics)
+    enriched["engineering_system_length_mm"] = length
+    if not violations:
+        enriched["engineering_feasible"] = 1.0
+        return enriched, 0.0, True, []
+    # Edge thickness needs a full surface-sag model.  The current project
+    # contract has no reliable lens-pair ownership, so do not fake that check.
+    if cfg.get("min_edge_thickness_mm") is not None:
+        enriched["engineering_edge_thickness_status"] = "requires_lens_pair_model"
+    enriched["engineering_feasible"] = 0.0
+    enriched["engineering_violations"] = violations
+    return enriched, 1.0e6, False, ["工程约束未满足：" + "、".join(violations)]
+
+
 def _evaluate_candidate(
     candidate: np.ndarray,
     variables: list[dict],
@@ -112,6 +153,7 @@ def _evaluate_candidate(
     engine: Any,
     objectives: list[dict],
     collimation_constraint: CollimationConstraint | None = None,
+    engineering_constraints: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], float, bool, list[str]]:
     changes = [*base_request.parameter_changes, *_candidate_changes(candidate, variables)]
     simulation_request = base_request.model_copy(
@@ -128,14 +170,17 @@ def _evaluate_candidate(
         if loss is not None:
             metrics["coupling_loss_db"] = loss
     candidate_project = _candidate_project(candidate, variables, base_request)
+    metrics, engineering_penalty, engineering_feasible, engineering_warnings = _apply_engineering_constraints(
+        candidate_project, metrics, dict(engineering_constraints or {})
+    )
     metrics, constraint_penalty, feasible, warnings = _apply_collimation_constraint(
         candidate_project, metrics, collimation_constraint
     )
     return (
         metrics,
-        float(_compute_merit(metrics, objectives) + constraint_penalty),
-        feasible,
-        warnings,
+        float(_compute_merit(metrics, objectives) + constraint_penalty + engineering_penalty),
+        feasible and engineering_feasible,
+        [*engineering_warnings, *warnings],
     )
 
 
@@ -230,6 +275,16 @@ def _select_surrogate_model(
             available.add("coupling_efficiency")
         if "coupling_efficiency" in available:
             available.add("coupling_loss_db")
+        quality = record.get("model_quality")
+        if isinstance(quality, dict) and quality.get("prediction_usable") is False:
+            return False
+        test_metrics = record.get("test_metrics")
+        if isinstance(test_metrics, dict) and test_metrics.get("r2") is not None:
+            try:
+                if not np.isfinite(float(test_metrics["r2"])) or float(test_metrics["r2"]) <= 0.0:
+                    return False
+            except (TypeError, ValueError):
+                return False
         return (
             record.get("status") == "available"
             and record.get("model_type")
@@ -367,6 +422,7 @@ def _run_optimization_task(
     formal_counter = 0
     surrogate_counter = 0
     collimation_constraint = active_collimation_constraint(opt_request.constraints)
+    engineering_constraints = dict(opt_request.options.get("engineering_constraints") or {})
     constraint_warnings: set[str] = set()
 
     requested_model_id = str(
@@ -377,10 +433,30 @@ def _run_optimization_task(
     )
     surrogate_predict = None
     surrogate_manifest: dict[str, Any] = {}
+    surrogate_warning = ""
     if surrogate_model_id:
-        surrogate_predict, surrogate_manifest = _build_surrogate_predictor(
-            model_registry, surrogate_model_id
-        )
+        try:
+            surrogate_predict, surrogate_manifest = _build_surrogate_predictor(
+                model_registry, surrogate_model_id
+            )
+            # Validate the persisted artifact against the current project's
+            # feature schema before entering the search.  Older XGBoost
+            # artifacts can deserialize successfully but reject the DataFrame
+            # column names on the first candidate, which used to turn an
+            # otherwise valid optimization into an opaque task failure.
+            surrogate_predict(_candidate_project(initial_x, active_variables, base_request))
+        except Exception as exc:
+            if requested_model_id:
+                raise ValueError(
+                    f"指定代理模型无法用于当前项目：{type(exc).__name__}: {exc}"
+                ) from exc
+            surrogate_predict = None
+            surrogate_model_id = ""
+            surrogate_manifest = {}
+            surrogate_warning = (
+                "自动代理模型与当前特征结构不兼容，已回退到正式仿真："
+                f"{type(exc).__name__}: {exc}"
+            )
 
     total_progress_items = max_evaluations
     coarse_fraction = float(opt_request.options.get("coarse_fraction", 0.7))
@@ -405,6 +481,7 @@ def _run_optimization_task(
             engine,
             objectives,
             collimation_constraint,
+            engineering_constraints,
         )
         constraint_warnings.update(warnings)
         formal_counter += 1
@@ -530,6 +607,7 @@ def _run_optimization_task(
             engine,
             objectives,
             collimation_constraint,
+            engineering_constraints,
         )
         constraint_warnings.update(warnings)
         history.append(
@@ -589,11 +667,11 @@ def _run_optimization_task(
     success = np.isfinite(best_merit) and (
         not hard_collimation_required or collimation_feasible
     )
-    fallback_warning = (
-        []
-        if surrogate_model_id
-        else ["No compatible surrogate model; coarse search used formal simulation"]
-    )
+    fallback_warning = []
+    if surrogate_warning:
+        fallback_warning.append(surrogate_warning)
+    elif not surrogate_model_id:
+        fallback_warning.append("No compatible surrogate model; coarse search used formal simulation")
     if collimation_constraint and not collimation_feasible:
         constraint_warnings.add(
             "最终候选未满足准直硬约束"
@@ -657,9 +735,6 @@ def _run_optimization_task(
             "coarse_evaluations": search.coarse_evaluations,
             "powell_evaluations": search.refinement_evaluations,
             "active_variables": [item["path"] for item in active_variables],
-            "parameter_snapshot": list(
-                opt_request.options.get("parameter_snapshot", []) or []
-            ),
             "objectives": [item["metric"] for item in objectives],
             "constraints": list(opt_request.constraints),
             "collimation_constraint_enabled": bool(collimation_constraint),

@@ -1,29 +1,29 @@
 [
   {
     "index": 0,
-    "id": "diagnostics.coupling.angular_tilt",
-    "title": "角度倾斜失配",
-    "module": "仿真系统",
+    "id": "diagnostics.numerical.window_too_small",
+    "title": "计算窗口可能不足",
+    "module": "参数研究与优化",
     "entry_type": "diagnostic"
   },
   {
     "index": 1,
-    "id": "diagnostics.coupling.axial_defocus",
-    "title": "轴向离焦与最佳耦合面",
+    "id": "diagnostics.numerical.sampling_convergence",
+    "title": "网格与光瞳采样收敛",
     "module": "参数研究与优化",
     "entry_type": "diagnostic"
   },
   {
     "index": 2,
-    "id": "diagnostics.coupling.curvature_mismatch",
-    "title": "波前曲率与像差失配",
+    "id": "diagnostics.coupling.low_efficiency",
+    "title": "耦合效率偏低的检查顺序",
     "module": "仿真系统",
     "entry_type": "diagnostic"
   },
   {
     "index": 3,
-    "id": "diagnostics.coupling.interaction",
-    "title": "单因素失配不能简单相乘",
+    "id": "diagnostics.coupling.size_mismatch",
+    "title": "模场尺寸失配",
     "module": "仿真系统",
     "entry_type": "diagnostic"
   },
@@ -36,58 +36,58 @@
   },
   {
     "index": 5,
-    "id": "diagnostics.coupling.low_efficiency",
-    "title": "耦合效率偏低的检查顺序",
+    "id": "diagnostics.coupling.angular_tilt",
+    "title": "角度倾斜失配",
     "module": "仿真系统",
     "entry_type": "diagnostic"
   },
   {
     "index": 6,
-    "id": "diagnostics.coupling.size_mismatch",
-    "title": "模场尺寸失配",
-    "module": "仿真系统",
+    "id": "diagnostics.coupling.axial_defocus",
+    "title": "轴向离焦与最佳耦合面",
+    "module": "参数研究与优化",
     "entry_type": "diagnostic"
   },
   {
     "index": 7,
-    "id": "diagnostics.explainability.shap_additivity",
-    "title": "SHAP 加性误差",
-    "module": "模型解释",
+    "id": "diagnostics.coupling.curvature_mismatch",
+    "title": "波前曲率与像差失配",
+    "module": "仿真系统",
     "entry_type": "diagnostic"
   },
   {
     "index": 8,
+    "id": "diagnostics.coupling.interaction",
+    "title": "单因素失配不能简单相乘",
+    "module": "仿真系统",
+    "entry_type": "diagnostic"
+  },
+  {
+    "index": 9,
     "id": "diagnostics.machine_learning.feature_contract",
     "title": "模型特征契约不一致",
     "module": "机器学习",
     "entry_type": "diagnostic"
   },
   {
-    "index": 9,
+    "index": 10,
     "id": "diagnostics.machine_learning.out_of_domain",
     "title": "预测样本超出训练域",
     "module": "机器学习",
     "entry_type": "diagnostic"
   },
   {
-    "index": 10,
-    "id": "diagnostics.numerical.sampling_convergence",
-    "title": "网格与光瞳采样收敛",
-    "module": "参数研究与优化",
-    "entry_type": "diagnostic"
-  },
-  {
     "index": 11,
-    "id": "diagnostics.numerical.window_too_small",
-    "title": "计算窗口可能不足",
-    "module": "参数研究与优化",
+    "id": "diagnostics.explainability.shap_additivity",
+    "title": "SHAP 加性误差",
+    "module": "模型解释",
     "entry_type": "diagnostic"
   },
   {
     "index": 12,
-    "id": "faq.metrics.coupling_vs_system",
-    "title": "耦合效率与系统效率的区别",
-    "module": "仿真系统",
+    "id": "faq.results.preview_vs_formal",
+    "title": "实时预览、教学近似与正式结果的区别",
+    "module": "使用指南",
     "entry_type": "faq"
   },
   {
@@ -99,169 +99,120 @@
   },
   {
     "index": 14,
-    "id": "faq.results.preview_vs_formal",
-    "title": "实时预览、教学近似与正式结果的区别",
-    "module": "使用指南",
-    "entry_type": "faq"
-  },
-  {
-    "index": 15,
-    "id": "guides.alignment.five_axis",
-    "title": "五轴自动对准流程",
-    "module": "参数研究与优化",
-    "entry_type": "guide"
-  },
-  {
-    "index": 16,
-    "id": "guides.assistant.coupling_questions",
-    "title": "如何向 AI 助手提问激光耦合问题",
-    "module": "使用指南",
-    "entry_type": "guide"
-  },
-  {
-    "index": 17,
-    "id": "guides.focus.best_coupling_plane",
-    "title": "寻找最佳耦合面",
-    "module": "参数研究与优化",
-    "entry_type": "guide"
-  },
-  {
-    "index": 18,
-    "id": "guides.optimization.auto_vs_inverse",
-    "title": "自动优化与物理反向设计的区别",
-    "module": "参数研究与优化",
-    "entry_type": "guide"
-  },
-  {
-    "index": 19,
-    "id": "guides.optimization.ml_inverse_prediction",
-    "title": "代理模型反向预测怎么用",
-    "module": "参数研究与优化",
-    "entry_type": "guide"
-  },
-  {
-    "index": 20,
-    "id": "guides.teaching.import_to_simulation",
-    "title": "教学参数如何带入正式仿真",
-    "module": "使用指南",
-    "entry_type": "guide"
-  },
-  {
-    "index": 21,
-    "id": "guides.teaching.workbench_overview",
-    "title": "教学中心能做什么",
-    "module": "使用指南",
-    "entry_type": "guide"
-  },
-  {
-    "index": 22,
-    "id": "guides.tolerance.monte_carlo",
-    "title": "Monte Carlo 良率的正确解释",
-    "module": "参数研究与优化",
-    "entry_type": "guide"
-  },
-  {
-    "index": 23,
-    "id": "guides.tolerance.workflow",
-    "title": "容差与稳定性分析流程",
-    "module": "参数研究与优化",
-    "entry_type": "guide"
-  },
-  {
-    "index": 24,
-    "id": "guides.workflow.fiber_coupling_780nm",
-    "title": "780 nm 多透镜光纤耦合典型流程",
-    "module": "使用指南",
-    "entry_type": "guide"
-  },
-  {
-    "index": 25,
-    "id": "parameters.numerical.edge_power",
-    "title": "边缘功率",
-    "module": "参数研究与优化",
-    "entry_type": "parameter"
-  },
-  {
-    "index": 26,
-    "id": "parameters.numerical.energy_closure",
-    "title": "能量闭合误差",
-    "module": "参数研究与优化",
-    "entry_type": "parameter"
-  },
-  {
-    "index": 27,
-    "id": "parameters.numerical.nyquist_margin",
-    "title": "Nyquist 采样余量",
-    "module": "参数研究与优化",
-    "entry_type": "parameter"
-  },
-  {
-    "index": 28,
-    "id": "parameters.receiver.fiber_mode",
-    "title": "光纤目标模式模型",
-    "module": "仿真系统",
-    "entry_type": "parameter"
-  },
-  {
-    "index": 29,
-    "id": "parameters.receiver.five_axis",
-    "title": "光纤接收器五轴位姿参数",
-    "module": "仿真系统",
-    "entry_type": "parameter"
-  },
-  {
-    "index": 30,
-    "id": "parameters.receiver.mode_field_diameter",
-    "title": "模场直径 MFD 与模式半径",
-    "module": "仿真系统",
-    "entry_type": "parameter"
-  },
-  {
-    "index": 31,
-    "id": "parameters.source.gaussian_beam",
-    "title": "Gaussian 光束参数与适用范围",
-    "module": "仿真系统",
-    "entry_type": "parameter"
-  },
-  {
-    "index": 32,
-    "id": "principles.coupling.mode_projection",
-    "title": "耦合效率是归一化复场模式投影",
-    "module": "仿真系统",
-    "entry_type": "principle"
-  },
-  {
-    "index": 33,
-    "id": "principles.field.common_cartesian",
-    "title": "公共 Cartesian 复场重建",
-    "module": "仿真系统",
-    "entry_type": "principle"
-  },
-  {
-    "index": 34,
-    "id": "principles.geometric.sequential_trace",
-    "title": "顺序几何光线追迹的作用",
-    "module": "仿真系统",
-    "entry_type": "principle"
-  },
-  {
-    "index": 35,
-    "id": "principles.optical.complete_chain",
-    "title": "光纤耦合仿真的完整计算链路",
-    "module": "仿真系统",
-    "entry_type": "principle"
-  },
-  {
-    "index": 36,
     "id": "principles.propagation.method_selection",
     "title": "波动传播方法选择",
     "module": "仿真系统",
     "entry_type": "guide"
   },
   {
-    "index": 37,
+    "index": 15,
+    "id": "guides.focus.best_coupling_plane",
+    "title": "寻找最佳耦合面",
+    "module": "参数研究与优化",
+    "entry_type": "guide"
+  },
+  {
+    "index": 16,
+    "id": "guides.alignment.five_axis",
+    "title": "五轴自动对准流程",
+    "module": "参数研究与优化",
+    "entry_type": "guide"
+  },
+  {
+    "index": 17,
+    "id": "guides.tolerance.workflow",
+    "title": "容差与稳定性分析流程",
+    "module": "参数研究与优化",
+    "entry_type": "guide"
+  },
+  {
+    "index": 18,
+    "id": "guides.tolerance.monte_carlo",
+    "title": "Monte Carlo 良率的正确解释",
+    "module": "参数研究与优化",
+    "entry_type": "guide"
+  },
+  {
+    "index": 19,
+    "id": "parameters.source.gaussian_beam",
+    "title": "Gaussian 光束参数与适用范围",
+    "module": "仿真系统",
+    "entry_type": "parameter"
+  },
+  {
+    "index": 20,
+    "id": "parameters.numerical.edge_power",
+    "title": "边缘功率",
+    "module": "参数研究与优化",
+    "entry_type": "parameter"
+  },
+  {
+    "index": 21,
+    "id": "parameters.numerical.energy_closure",
+    "title": "能量闭合误差",
+    "module": "参数研究与优化",
+    "entry_type": "parameter"
+  },
+  {
+    "index": 22,
+    "id": "parameters.numerical.nyquist_margin",
+    "title": "Nyquist 采样余量",
+    "module": "参数研究与优化",
+    "entry_type": "parameter"
+  },
+  {
+    "index": 23,
+    "id": "parameters.receiver.fiber_mode",
+    "title": "光纤目标模式模型",
+    "module": "仿真系统",
+    "entry_type": "parameter"
+  },
+  {
+    "index": 24,
+    "id": "parameters.receiver.mode_field_diameter",
+    "title": "模场直径 MFD 与模式半径",
+    "module": "仿真系统",
+    "entry_type": "parameter"
+  },
+  {
+    "index": 25,
+    "id": "parameters.receiver.five_axis",
+    "title": "光纤接收器五轴位姿参数",
+    "module": "仿真系统",
+    "entry_type": "parameter"
+  },
+  {
+    "index": 26,
+    "id": "principles.optical.complete_chain",
+    "title": "光纤耦合仿真的完整计算链路",
+    "module": "仿真系统",
+    "entry_type": "principle"
+  },
+  {
+    "index": 27,
     "id": "principles.sampling.pupil_quadrature",
     "title": "入瞳光线是功率求积节点",
+    "module": "仿真系统",
+    "entry_type": "principle"
+  },
+  {
+    "index": 28,
+    "id": "principles.geometric.sequential_trace",
+    "title": "顺序几何光线追迹的作用",
+    "module": "仿真系统",
+    "entry_type": "principle"
+  },
+  {
+    "index": 29,
+    "id": "principles.field.common_cartesian",
+    "title": "公共 Cartesian 复场重建",
+    "module": "仿真系统",
+    "entry_type": "principle"
+  },
+  {
+    "index": 30,
+    "id": "principles.coupling.mode_projection",
+    "title": "耦合效率是归一化复场模式投影",
     "module": "仿真系统",
     "entry_type": "principle"
   }

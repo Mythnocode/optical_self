@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
+from pathlib import Path
 
 from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtWidgets import QApplication
@@ -23,8 +24,22 @@ _CJK_CANDIDATES = (
     "WenQuanYi Micro Hei",
     "Noto Sans CJK JP",
     "Noto Sans",
+    "Droid Sans Fallback",
     "DejaVu Sans",
 )
+
+
+def register_embedded_fonts() -> tuple[int, ...]:
+    """Register the bundled fallback font before choosing the application font."""
+    font_path = Path(__file__).resolve().parents[1] / "resources" / "fonts" / "DroidSansFallback.ttf"
+    if not font_path.exists():
+        return ()
+    try:
+        font_id = int(QFontDatabase.addApplicationFont(str(font_path)))
+    except Exception:
+        return ()
+    available_families.cache_clear()
+    return (font_id,) if font_id >= 0 else ()
 
 
 @lru_cache(maxsize=1)
@@ -57,8 +72,7 @@ def qt_font_families() -> list[str]:
 
 
 def configure_qt_font(app: QApplication, *, point_size: float | None = None) -> QFont:
-
-
+    register_embedded_fonts()
     font = QFont(app.font())
     families = qt_font_families()
     if hasattr(font, "setFamilies"):
@@ -116,5 +130,6 @@ __all__ = [
     "matplotlib_font_config",
     "preferred_cjk_family",
     "preferred_latin_family",
+    "register_embedded_fonts",
     "qt_font_families",
 ]

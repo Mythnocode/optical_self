@@ -19,11 +19,6 @@ _TARGET_CONTROLS = {
     "machine_learning.current": "model_quality",
     "machine_learning.current_model": "model_quality",
     "explainability.current": "shap_result",
-    "teaching.explore": "teaching_explorer",
-    "teaching.mismatch": "teaching_mismatch",
-    "teaching.diagnosis": "teaching_diagnosis",
-    "teaching.concept": "teaching_concept",
-    "teaching.phenomenon": "teaching_diagnosis",
     "tasks.current": "task_list",
 }
 
@@ -93,7 +88,7 @@ def _default_effect(target: str, level: str) -> str:
     if level == "prepare":
         return "打开目标页面并准备相关设置；不会自动开始耗时计算。"
     if target.startswith("teaching."):
-        return "打开对应的可视化教学场景，不会修改正式项目。"
+        return "打开教学实验台，不会修改正式项目。"
     return "打开目标页面并定位到相关内容。"
 
 
@@ -101,7 +96,7 @@ def _default_next(target: str, level: str) -> str:
     if level == "prepare":
         return "检查预填设置后，由你决定是否执行。"
     if target.startswith("teaching."):
-        return "你可以自由改变参数、观察现象，再返回正式研究验证。"
+        return "到达教学实验台后可拖动器件并做光学计算。"
     return "到达目标位置后继续查看当前状态。"
 
 

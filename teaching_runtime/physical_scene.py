@@ -172,7 +172,45 @@ class _SurfaceBuild:
     asphere_coefficients: tuple[float, ...] = ()
 
 
+def _explicit_engine_tilts(node: TeachingPhysicalNode) -> tuple[float, float, float] | None:
+    params = dict(node.params or {})
+    if str(params.get("orientation_source") or "") != "teaching_engine_so3":
+        return None
+    try:
+        return (
+            float(params["tilt_x_deg"]),
+            float(params["tilt_y_deg"]),
+            float(params["tilt_z_deg"]),
+        )
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def _explicit_engine_axis(node: TeachingPhysicalNode) -> tuple[float, float, float] | None:
+    return _unit_direction_from_params(node.params, "axis_engine", "source_direction_engine")
+
+
+def _unit_direction_from_params(params: dict[str, Any] | None, *keys: str) -> tuple[float, float, float] | None:
+    payload = dict(params or {})
+    for key in keys:
+        raw = payload.get(key)
+        if raw is None:
+            continue
+        try:
+            values = (float(raw[0]), float(raw[1]), float(raw[2]))
+        except (TypeError, ValueError, IndexError, KeyError):
+            continue
+        length = math.sqrt(sum(value * value for value in values))
+        if length < 1.0e-12:
+            continue
+        return (values[0] / length, values[1] / length, values[2] / length)
+    return None
+
+
 def _axis_vector(node: TeachingPhysicalNode, laser_yaw_deg: float) -> tuple[float, float, float]:
+    explicit = _explicit_engine_axis(node)
+    if explicit is not None:
+        return explicit
     relative_yaw = math.radians((float(node.yaw_deg) - float(laser_yaw_deg) + 180.0) % 360.0 - 180.0)
     pitch = math.radians(float(node.pitch_deg))
     cp = math.cos(pitch)
@@ -183,76 +221,17 @@ def _axis_vector(node: TeachingPhysicalNode, laser_yaw_deg: float) -> tuple[floa
     )
 
 
-def _tilts_from_engine_normal(normal: tuple[float, float, float], roll_deg: float = 0.0) -> tuple[float, float, float]:
-    """Map an engine-frame surface normal onto OpticalSurface Euler tilts (Rx→Ry→Rz)."""
-    nx, ny, nz = (float(v) for v in normal)
-    norm = math.sqrt(nx * nx + ny * ny + nz * nz)
-    if not math.isfinite(norm) or norm <= 1.0e-15:
-        return 0.0, 0.0, float(roll_deg)
-    nx, ny, nz = nx / norm, ny / norm, nz / norm
-    # n = Ry(ty) @ Rx(tx) @ (0,0,1) = (sin(ty)cos(tx), -sin(tx), cos(ty)cos(tx))
-    tilt_x = -math.degrees(math.asin(max(-1.0, min(1.0, ny))))
-    cos_tx = math.cos(math.radians(tilt_x))
-    if abs(cos_tx) < 1.0e-9:
-        tilt_y = 0.0
-    else:
-        tilt_y = math.degrees(math.atan2(nx / cos_tx, nz / cos_tx))
-    return float(tilt_x), float(tilt_y), float(roll_deg)
-
-
-def _mirror_surface_tangent_yaw_deg(node: TeachingPhysicalNode) -> float:
-    """Teaching mirror mount convention: rotation_deg = 45 + 0.5*(in+out).
-
-    The reflective face (surface tangent in the horizontal plane) therefore sits at
-    ``rotation_deg - 45``. Explicit ``surface_angle_deg`` overrides the mount rule.
-    """
-    if node.params.get("surface_angle_deg") is not None:
-        return float(node.params.get("surface_angle_deg") or 0.0)
-    return float(node.yaw_deg) - 45.0
-
-
 def _surface_tilts_from_axis(node: TeachingPhysicalNode, laser_yaw_deg: float, *, mirror: bool = False) -> tuple[float, float, float]:
+    explicit = _explicit_engine_tilts(node)
+    if explicit is not None:
+        return explicit
     if mirror:
-        normal_yaw = _mirror_surface_tangent_yaw_deg(node) + 90.0
-        normal_node = TeachingPhysicalNode(
-            node_id=node.node_id, kind=node.kind, label=node.label,
-            scene_x=node.scene_x, scene_y=node.scene_y, height_mm=node.height_mm,
-            yaw_deg=normal_yaw, pitch_deg=node.pitch_deg, roll_deg=node.roll_deg,
-            enabled=node.enabled, params=node.params,
-        )
-        return _tilts_from_engine_normal(_axis_vector(normal_node, laser_yaw_deg), node.roll_deg)
-    return _tilts_from_engine_normal(_axis_vector(node, laser_yaw_deg), node.roll_deg)
-
-
-def _nearest_facing_yaw_deg(node: TeachingPhysicalNode, scene: TeachingPhysicalScene) -> float | None:
-    """Yaw that aims a terminal face toward the nearest upstream-capable optic."""
-    optic_kinds = {
-        "laser", "mirror", "lens", "cylindrical_lens", "splitter", "pbs",
-        "beam_sampler", "aperture", "isolator", "half_wave_plate",
-    }
-    best_optic: tuple[float, float] | None = None
-    best_any: tuple[float, float] | None = None
-    for other in scene.nodes:
-        if other.node_id == node.node_id or not other.enabled:
-            continue
-        if other.kind in {"oscilloscope"}:
-            continue
-        dx = float(other.scene_x) - float(node.scene_x)
-        dy = float(other.scene_y) - float(node.scene_y)
-        dh = float(other.height_mm) - float(node.height_mm)
-        distance = math.sqrt(dx * dx + dy * dy + dh * dh)
-        if distance < 1.0e-6:
-            continue
-        # Face toward the neighbor (normal points against typical incoming beam).
-        yaw = math.degrees(math.atan2(dy, dx)) % 360.0
-        candidate = (distance, yaw)
-        if other.kind in optic_kinds:
-            if best_optic is None or distance < best_optic[0]:
-                best_optic = candidate
-        if best_any is None or distance < best_any[0]:
-            best_any = candidate
-    chosen = best_optic if best_optic is not None else best_any
-    return None if chosen is None else float(chosen[1])
+        surface_tangent_yaw = float(node.yaw_deg) - 45.0
+        normal_yaw = surface_tangent_yaw + 90.0
+        relative_yaw = (normal_yaw - float(laser_yaw_deg) + 180.0) % 360.0 - 180.0
+    else:
+        relative_yaw = (float(node.yaw_deg) - float(laser_yaw_deg) + 180.0) % 360.0 - 180.0
+    return -float(node.pitch_deg), float(relative_yaw), float(node.roll_deg)
 
 
 def _node_radius_mm(node: TeachingPhysicalNode, default_radius_mm: float) -> float:
@@ -404,14 +383,9 @@ def _append_plane_surface(
     terminal: bool = False,
     block_outside: bool = False,
     split_ratio: float | None = None,
-    hit_shape: str | None = None,
-    facing_node: TeachingPhysicalNode | None = None,
 ) -> None:
     x, y, z = frame.scene_to_engine(node.scene_x, node.scene_y, node.height_mm)
-    pose_node = facing_node if facing_node is not None else node
-    tilt_x, tilt_y, tilt_z = _surface_tilts_from_axis(
-        pose_node, frame.laser_yaw_deg, mirror=mirror_orientation,
-    )
+    tilt_x, tilt_y, tilt_z = _surface_tilts_from_axis(node, frame.laser_yaw_deg, mirror=mirror_orientation)
     metadata: dict[str, Any] = {
         "teaching_node_id": node.node_id,
         "teaching_kind": node.kind,
@@ -421,9 +395,6 @@ def _append_plane_surface(
         "block_outside_aperture": bool(block_outside),
         "pass_if_missed": not bool(block_outside),
     }
-    if hit_shape:
-        metadata["hit_shape"] = str(hit_shape)
-        metadata["hit_radius_mm"] = max(0.02, float(radius_mm))
     if split_ratio is not None:
         metadata["split_ratio"] = float(split_ratio)
     items.append(_SurfaceBuild(
@@ -470,37 +441,39 @@ def _build_surfaces(scene: TeachingPhysicalScene, base_frame: TeachingSceneCoord
                 items, node, base_frame, role="splitter", radius_mm=_node_radius_mm(node, 10.0),
                 surface_type="spherical", mirror_orientation=True, split_ratio=ratio,
             )
+        elif node.kind == "isolator":
+            isolator_radius = _node_radius_mm(node, 1.8)
+            _append_plane_surface(
+                items, node, base_frame, role="transparent", radius_mm=isolator_radius,
+                block_outside=True,
+            )
+            insertion = float(node.params.get("insertion_loss_db", 0.4) or 0.4)
+            isolation = float(node.params.get("isolation_db", 38.0) or 38.0)
+            warnings.append(
+                f"{node.label}按法拉第隔离器放在激光后；正向只计插损 {insertion:g} dB，"
+                f"反向隔离 {isolation:g} dB 这一版不追回光。"
+            )
+        elif node.kind in {"waveplate", "beam_expander", "grating"}:
+            _append_plane_surface(
+                items, node, base_frame, role="transparent", radius_mm=_node_radius_mm(node, 6.35),
+            )
+            if node.kind == "waveplate":
+                warnings.append(f"{node.label}偏振片位已占；Jones 未进教学追迹。")
+            elif node.kind == "beam_expander":
+                warnings.append(f"{node.label}扩束器按通光窗占位，倍率不改变束腰。")
+            else:
+                warnings.append(f"{node.label}光栅按通光窗占位，不追衍射级次。")
         elif node.kind == "aperture":
             aperture_radius = max(0.02, float(node.params.get("diameter_mm", 5.0)) * 0.5)
             _append_plane_surface(
                 items, node, base_frame, role="transparent", radius_mm=aperture_radius,
                 block_outside=True,
             )
-        elif node.kind in {
-            "fiber", "power_meter", "beam_analyzer", "imaging_camera", "ccd", "camera",
-            "focus_scan_module", "wavefront_sensor", "photodetector",
-        }:
-            default_radius = 2.0 if node.kind == "fiber" else 15.0
-            facing_yaw = _nearest_facing_yaw_deg(node, scene)
-            facing_node = node
-            if facing_yaw is not None:
-                facing_node = TeachingPhysicalNode(
-                    node_id=node.node_id, kind=node.kind, label=node.label,
-                    scene_x=node.scene_x, scene_y=node.scene_y, height_mm=node.height_mm,
-                    yaw_deg=facing_yaw, pitch_deg=node.pitch_deg, roll_deg=node.roll_deg,
-                    enabled=node.enabled, params=node.params,
-                )
-                display_delta = abs(((float(node.yaw_deg) - facing_yaw + 180.0) % 360.0) - 180.0)
-                if display_delta > 35.0:
-                    warnings.append(
-                        f"{node.label}接收面已按最近光学件自动对准入射方向（显示朝向偏差 {display_delta:.0f}°），"
-                        "保证折转后仍可命中；旋转图标主要影响外观。"
-                    )
+        elif node.kind in {"fiber", "power_meter", "beam_analyzer", "imaging_camera", "focus_scan_module", "wavefront_sensor", "photodetector"}:
+            default_radius = 2.0 if node.kind == "fiber" else 5.0
             _append_plane_surface(
-                items, node, base_frame, role="terminal",
-                radius_mm=_node_radius_mm(node, default_radius),
+                items, node, base_frame, role="terminal", radius_mm=_node_radius_mm(node, default_radius),
                 terminal=True,
-                facing_node=facing_node,
             )
         else:
             _append_plane_surface(
@@ -586,12 +559,17 @@ def _compile_project(scene: TeachingPhysicalScene) -> tuple[ProjectSnapshot, Tea
             tilt_x_deg=float(item.tilt_x_deg),
             tilt_y_deg=float(item.tilt_y_deg),
             tilt_z_deg=float(item.tilt_z_deg),
+            cylinder_axis_deg=float(item.metadata.get("cylinder_axis_deg", 0.0)),
             metadata=dict(item.metadata),
         ))
 
     source_position = frame.scene_to_engine(laser.scene_x, laser.scene_y, laser.height_mm)
-    pitch = math.radians(float(laser.pitch_deg))
-    source_direction = (0.0, math.sin(pitch), math.cos(pitch))
+    source_direction = _unit_direction_from_params(
+        laser.params, "source_direction_engine", "axis_engine"
+    )
+    if source_direction is None:
+        pitch = math.radians(float(laser.pitch_deg))
+        source_direction = (0.0, math.sin(pitch), math.cos(pitch))
     beam_radius = max(0.02, float(laser.params.get("beam_radius_mm", 0.72) or 0.72))
     payload = {
         "nodes": [
@@ -689,172 +667,198 @@ class TeachingOpticalEngineBridge:
         return project, dict(engine_options)
 
     def trace(self, scene: TeachingPhysicalScene) -> TeachingEngineTrace:
-        """Free-placement scene raytrace via nearest-hit solver (not sequential z-order)."""
         quality = _trace_quality_profile(scene.trace_quality)
         cache_key = (scene.fingerprint_key(), str(quality["quality"]))
         cached = self._cache_get(cache_key)
         if cached is not None:
             return replace(cached, generation=int(scene.generation), quality=str(quality["quality"]))
         try:
-            import time as _time
-            from optical_core.models.project_mapper import build_optical_system
-            from optical_core.physics.nonsequential.scene_tracer import trace_scene_ray_tree
-
-            t0 = _time.perf_counter()
             project, frame, build_warnings, engine_options = _compile_project(scene)
-            system = build_optical_system(project)
-            geo = dict(engine_options.get("geometric", {}) or {})
-            origin = tuple(float(v) for v in geo.get("scene_source_position_mm", (0.0, 0.0, 0.0)))
-            direction = tuple(float(v) for v in geo.get("scene_source_direction", (0.0, 0.0, 1.0)))
-            radius_x = float(geo.get("scene_bundle_radius_x_mm", 0.72) or 0.72)
-            radius_y = float(geo.get("scene_bundle_radius_y_mm", radius_x) or radius_x)
-            sample_count = max(1, int(geo.get("scene_bundle_sample_count", quality["sample_count"]) or 1))
-            wavelength = float(scene.wavelength_nm)
-            bundle = _scene_source_bundle(
-                origin, direction, radius_x=radius_x, radius_y=radius_y, sample_count=sample_count,
+            request = SimulationRequest(
+                request_id=f"teaching-scene-{scene.generation}-{project.fingerprint[:16]}",
+                project=project,
+                analyses=["raytrace"],
+                precision=str(quality["precision"]),
+                random_seed=0,
+                engine="headless",
+                options=engine_options,
             )
-            paths: list[TeachingTracePath] = []
-            rays: list[TeachingTraceRay] = []
-            all_warnings = list(build_warnings)
-            for ray_index, (position, ray_direction, weight, offset) in enumerate(bundle):
-                ray_id = f"R{ray_index:04d}"
-                traced = trace_scene_ray_tree(
-                    system,
-                    source_position_mm=position,
-                    source_direction=ray_direction,
-                    wavelength_nm=wavelength,
-                    max_interactions=int(geo.get("scene_max_interactions", quality["max_interactions"])),
-                    max_branches=int(geo.get("scene_max_branches", quality["max_branches"])),
-                    min_power_fraction=float(geo.get("scene_min_power_fraction", 1.0e-5)),
-                    escape_distance_mm=float(geo.get("scene_escape_distance_mm", 160.0)),
-                    epsilon_mm=float(geo.get("scene_intersection_epsilon_mm", 1.0e-5)),
+            result: SimulationResult = self.engine.evaluate(request)
+            sample_count = int((result.metrics or {}).get("scene_source_ray_count", quality["sample_count"]))
+            if result.status != "completed":
+                errors = tuple(error.message if hasattr(error, "message") else str(error) for error in result.errors)
+                return TeachingEngineTrace(
+                    success=False, generation=int(scene.generation), quality=str(quality["quality"]),
+                    sample_count=sample_count, paths=(), rays=(),
+                    warnings=tuple(build_warnings) + tuple(result.warnings),
+                    errors=errors or ("完整光学引擎未能完成教学场景追迹。",),
+                    elapsed_ms=float(result.elapsed_ms), metadata=dict(result.metadata), frame=frame,
                 )
-                all_warnings.extend(traced.warnings)
-                ray_paths: list[TeachingTracePath] = []
-                for path_index, raw_path in enumerate(traced.paths):
-                    converted: list[TeachingTracePoint] = []
-                    for point_index, raw_point in enumerate(raw_path.points_mm):
-                        engine_point = tuple(float(v) for v in raw_point)
-                        sx, sy, height = frame.engine_to_scene(engine_point)
-                        raw_node = (
-                            raw_path.node_ids[point_index]
-                            if point_index < len(raw_path.node_ids) else None
-                        )
-                        if raw_node == "__source__":
-                            raw_node = scene.laser.node_id if scene.laser is not None else None
-                        raw_dir = (
-                            raw_path.directions[point_index]
-                            if point_index < len(raw_path.directions)
-                            else ray_direction
-                        )
-                        converted.append(TeachingTracePoint(
-                            scene_x=sx, scene_y=sy, height_mm=height,
-                            engine_point_mm=engine_point,
-                            engine_direction=tuple(float(v) for v in raw_dir),
-                            node_id=None if raw_node in {None, ""} else str(raw_node),
-                            surface_index=(
-                                int(raw_path.surface_indices[point_index])
-                                if point_index < len(raw_path.surface_indices) else -2
-                            ),
-                        ))
-                    path = TeachingTracePath(
-                        path_id=f"{ray_id}:P{path_index}",
-                        parent_id=None,
-                        ray_id=ray_id,
-                        signature=str(raw_path.signature or ""),
-                        power_fraction=float(raw_path.power_fraction) * float(weight),
-                        points=tuple(converted),
-                        termination_reason=str(raw_path.termination_reason or ""),
-                    )
-                    paths.append(path)
-                    ray_paths.append(path)
-                rays.append(TeachingTraceRay(
+
+            arrays = dict(result.arrays or {})
+            ids = list(arrays.get("scene_path_ids", []) or [])
+            parents = list(arrays.get("scene_path_parent_ids", []) or [])
+            ray_ids = list(arrays.get("scene_path_ray_ids", []) or [])
+            signatures = list(arrays.get("scene_path_signatures", []) or [])
+            powers = list(arrays.get("scene_path_power_fractions", []) or [])
+            points_data = list(arrays.get("scene_path_points_mm", []) or [])
+            surface_data = list(arrays.get("scene_path_surface_indices", []) or [])
+            node_data = list(arrays.get("scene_path_node_ids", []) or [])
+            direction_data = list(arrays.get("scene_path_directions", []) or [])
+            reasons = list(arrays.get("scene_path_termination_reasons", []) or [])
+            source_ids = list(arrays.get("scene_source_ray_ids", []) or [])
+            source_positions = list(arrays.get("scene_source_ray_positions_mm", []) or [])
+            source_directions = list(arrays.get("scene_source_ray_directions", []) or [])
+            source_weights = list(arrays.get("scene_source_ray_weights", []) or [])
+            source_offsets = list(arrays.get("scene_source_ray_normalized_offsets", []) or [])
+
+            # The production engine exposes one canonical sequential-raytrace
+            # contract.  Older teaching code expected a private
+            # ``scene_raytrace`` array schema that was never registered.  Adapt
+            # the formal raytrace arrays here so process/thread modes share the
+            # same supported engine analysis and the UI does not maintain a
+            # second physical solver.
+            if not points_data and arrays.get("raytrace_path_points_mm"):
+                flat_points = list(arrays.get("raytrace_path_points_mm", []) or [])
+                flat_surfaces = list(arrays.get("raytrace_path_surface_indices", []) or [])
+                offsets = list(arrays.get("raytrace_path_offsets", []) or [])
+                canonical_ray_ids = list(arrays.get("raytrace_ray_ids", []) or [])
+                valid_mask = list(arrays.get("raytrace_valid_mask", []) or [])
+                weights = list(arrays.get("raytrace_power_weights", []) or [])
+                pupil = list(arrays.get("raytrace_pupil_coordinates_normalized", []) or [])
+                status_codes = list(arrays.get("raytrace_status_codes", []) or [])
+                canonical_reasons = list(arrays.get("raytrace_termination_reasons", []) or [])
+                surface_nodes = {
+                    int(index): str(dict(surface.metadata or {}).get("teaching_node_id", "") or "")
+                    for index, surface in enumerate(project.surfaces)
+                }
+                ids, parents, ray_ids, signatures, powers = [], [], [], [], []
+                points_data, surface_data, node_data, direction_data, reasons = [], [], [], [], []
+                source_ids, source_positions, source_directions, source_weights, source_offsets = [], [], [], [], []
+                source_origin = tuple(float(v) for v in engine_options.get("geometric", {}).get("scene_source_position_mm", (0.0, 0.0, -1.0)))
+                for index in range(max(0, len(offsets) - 1)):
+                    if index < len(valid_mask) and not bool(valid_mask[index]):
+                        continue
+                    start, stop = int(offsets[index]), int(offsets[index + 1])
+                    ray_points = [tuple(float(v) for v in point) for point in flat_points[start:stop]]
+                    ray_surfaces = [int(value) for value in flat_surfaces[start:stop]]
+                    if len(ray_points) < 2:
+                        continue
+                    first = ray_points[0]
+                    initial = (first[0] - source_origin[0], first[1] - source_origin[1], first[2] - source_origin[2])
+                    norm = math.sqrt(sum(value * value for value in initial)) or 1.0
+                    initial_direction = tuple(value / norm for value in initial)
+                    ray_points.insert(0, source_origin)
+                    ray_surfaces.insert(0, -1)
+                    point_directions: list[tuple[float, float, float]] = []
+                    for point_index, point in enumerate(ray_points):
+                        other = ray_points[min(point_index + 1, len(ray_points) - 1)] if point_index + 1 < len(ray_points) else ray_points[point_index - 1]
+                        vector = tuple(other[axis] - point[axis] for axis in range(3))
+                        if point_index + 1 >= len(ray_points):
+                            vector = tuple(point[axis] - ray_points[point_index - 1][axis] for axis in range(3))
+                        magnitude = math.sqrt(sum(value * value for value in vector)) or 1.0
+                        point_directions.append(tuple(value / magnitude for value in vector))
+                    ray_id = str(canonical_ray_ids[index]) if index < len(canonical_ray_ids) else f"R{index:06d}"
+                    ids.append(f"{ray_id}:P0")
+                    parents.append("")
+                    ray_ids.append(ray_id)
+                    signatures.append(str(status_codes[index]) if index < len(status_codes) else "")
+                    powers.append(float(weights[index]) if index < len(weights) else 1.0)
+                    points_data.append(ray_points)
+                    surface_data.append(ray_surfaces)
+                    node_data.append(["__source__" if value < 0 else surface_nodes.get(value, "") for value in ray_surfaces])
+                    direction_data.append(point_directions)
+                    reasons.append(str(canonical_reasons[index]) if index < len(canonical_reasons) else "")
+                    source_ids.append(ray_id)
+                    source_positions.append(source_origin)
+                    source_directions.append(initial_direction)
+                    source_weights.append(float(weights[index]) if index < len(weights) else 1.0)
+                    raw_offset = pupil[index] if index < len(pupil) else (0.0, 0.0)
+                    source_offsets.append(tuple(float(v) for v in raw_offset[:2]))
+
+            paths: list[TeachingTracePath] = []
+            for index, engine_points in enumerate(points_data):
+                surface_indices = surface_data[index] if index < len(surface_data) else []
+                node_ids = node_data[index] if index < len(node_data) else []
+                directions = direction_data[index] if index < len(direction_data) else []
+                converted: list[TeachingTracePoint] = []
+                for point_index, raw_point in enumerate(engine_points):
+                    engine_point = tuple(float(v) for v in raw_point)
+                    raw_direction = directions[point_index] if point_index < len(directions) else (0.0, 0.0, 1.0)
+                    engine_direction = tuple(float(v) for v in raw_direction)
+                    sx, sy, height = frame.engine_to_scene(engine_point)
+                    raw_node = node_ids[point_index] if point_index < len(node_ids) else None
+                    if raw_node == "__source__":
+                        raw_node = scene.laser.node_id if scene.laser is not None else None
+                    converted.append(TeachingTracePoint(
+                        scene_x=sx, scene_y=sy, height_mm=height,
+                        engine_point_mm=engine_point, engine_direction=engine_direction,
+                        node_id=None if raw_node in {None, ""} else str(raw_node),
+                        surface_index=int(surface_indices[point_index]) if point_index < len(surface_indices) else -2,
+                    ))
+                ray_id = str(ray_ids[index]) if index < len(ray_ids) else "R00"
+                paths.append(TeachingTracePath(
+                    path_id=str(ids[index]) if index < len(ids) else f"{ray_id}:P{index}",
+                    parent_id=None if index >= len(parents) or parents[index] in {None, ""} else str(parents[index]),
                     ray_id=ray_id,
-                    source_position_mm=position,
-                    source_direction=ray_direction,
-                    normalized_offset=offset,
-                    source_weight=float(weight),
-                    paths=tuple(ray_paths),
+                    signature=str(signatures[index]) if index < len(signatures) else "",
+                    power_fraction=float(powers[index]) if index < len(powers) else 1.0,
+                    points=tuple(converted),
+                    termination_reason=str(reasons[index]) if index < len(reasons) else "",
                 ))
-            elapsed_ms = (_time.perf_counter() - t0) * 1000.0
-            traced_out = TeachingEngineTrace(
-                success=True,
-                generation=int(scene.generation),
-                quality=str(quality["quality"]),
-                sample_count=int(sample_count),
-                paths=tuple(paths),
-                rays=tuple(rays),
-                warnings=tuple(all_warnings),
-                errors=(),
-                elapsed_ms=float(elapsed_ms),
-                metadata={
-                    "teaching_generation": int(scene.generation),
-                    "teaching_trace_quality": str(quality["quality"]),
-                    "teaching_sample_count": int(sample_count),
-                    "teaching_solver": "scene_ray_tree",
-                },
-                frame=frame,
+
+            grouped: dict[str, list[TeachingTracePath]] = {}
+            for path in paths:
+                grouped.setdefault(path.ray_id, []).append(path)
+            rays: list[TeachingTraceRay] = []
+            for index, ray_id_raw in enumerate(source_ids):
+                ray_id = str(ray_id_raw)
+                position = tuple(float(v) for v in (source_positions[index] if index < len(source_positions) else (0.0, 0.0, 0.0)))
+                direction = tuple(float(v) for v in (source_directions[index] if index < len(source_directions) else (0.0, 0.0, 1.0)))
+                offset = tuple(float(v) for v in (source_offsets[index] if index < len(source_offsets) else (0.0, 0.0)))
+                weight = float(source_weights[index]) if index < len(source_weights) else 0.0
+                rays.append(TeachingTraceRay(
+                    ray_id=ray_id, source_position_mm=position, source_direction=direction,
+                    normalized_offset=(offset[0], offset[1]), source_weight=weight,
+                    paths=tuple(grouped.get(ray_id, ())),
+                ))
+            if not rays and paths:
+                grouped = {}
+                for path in paths:
+                    grouped.setdefault(path.ray_id, []).append(path)
+                for ray_id, ray_paths in grouped.items():
+                    first_point = ray_paths[0].points[0] if ray_paths and ray_paths[0].points else None
+                    rays.append(TeachingTraceRay(
+                        ray_id=ray_id,
+                        source_position_mm=(0.0, 0.0, 0.0) if first_point is None else first_point.engine_point_mm,
+                        source_direction=(0.0, 0.0, 1.0) if first_point is None else first_point.engine_direction,
+                        normalized_offset=(0.0, 0.0), source_weight=1.0 / max(len(grouped), 1),
+                        paths=tuple(ray_paths),
+                    ))
+
+            metadata = dict(result.metadata)
+            metadata.update({
+                "teaching_generation": int(scene.generation),
+                "teaching_trace_quality": str(quality["quality"]),
+                "teaching_sample_count": int(sample_count),
+            })
+            traced = TeachingEngineTrace(
+                success=True, generation=int(scene.generation), quality=str(quality["quality"]),
+                sample_count=int(sample_count), paths=tuple(paths), rays=tuple(rays),
+                warnings=tuple(build_warnings) + tuple(result.warnings), errors=(),
+                elapsed_ms=float(result.elapsed_ms), metadata=metadata, frame=frame,
             )
-            self._cache_put(cache_key, traced_out)
-            return traced_out
+            self._cache_put(cache_key, traced)
+            return traced
         except Exception as exc:
-            traced_out = TeachingEngineTrace(
+            traced = TeachingEngineTrace(
                 success=False, generation=int(scene.generation), quality=str(quality["quality"]),
                 sample_count=int(quality["sample_count"]), paths=(), rays=(), warnings=(),
                 errors=(str(exc),), elapsed_ms=0.0, metadata={}, frame=None,
             )
-            self._cache_put(cache_key, traced_out)
-            return traced_out
+            self._cache_put(cache_key, traced)
+            return traced
 
-
-def _scene_source_bundle(
-    origin: tuple[float, float, float],
-    direction: tuple[float, float, float],
-    *,
-    radius_x: float,
-    radius_y: float,
-    sample_count: int,
-) -> list[tuple[tuple[float, float, float], tuple[float, float, float], float, tuple[float, float]]]:
-    """Disk pupil samples in the plane perpendicular to the laser axis."""
-    import numpy as np
-
-    axis = np.asarray(direction, dtype=float)
-    norm = float(np.linalg.norm(axis))
-    if not np.isfinite(norm) or norm <= 1e-15:
-        axis = np.asarray((0.0, 0.0, 1.0), dtype=float)
-    else:
-        axis = axis / norm
-    helper = np.asarray((0.0, 1.0, 0.0), dtype=float) if abs(axis[1]) < 0.9 else np.asarray((1.0, 0.0, 0.0), dtype=float)
-    across = np.cross(axis, helper)
-    across = across / max(float(np.linalg.norm(across)), 1e-15)
-    up = np.cross(axis, across)
-    count = max(1, int(sample_count))
-    offsets: list[tuple[float, float]] = [(0.0, 0.0)]
-    if count > 1:
-        rings = max(1, int(math.ceil((-1.0 + math.sqrt(1.0 + 4.0 * (count - 1) / 3.0)) / 2.0)))
-        for ring in range(1, rings + 1):
-            on_ring = max(4, 6 * ring)
-            for k in range(on_ring):
-                angle = 2.0 * math.pi * k / on_ring
-                frac = ring / rings
-                offsets.append((frac * math.cos(angle), frac * math.sin(angle)))
-                if len(offsets) >= count:
-                    break
-            if len(offsets) >= count:
-                break
-    offsets = offsets[:count]
-    weight = 1.0 / max(len(offsets), 1)
-    origin_v = np.asarray(origin, dtype=float)
-    bundle: list[tuple[tuple[float, float, float], tuple[float, float, float], float, tuple[float, float]]] = []
-    for nx, ny in offsets:
-        point = origin_v + across * (nx * float(radius_x)) + up * (ny * float(radius_y))
-        bundle.append((
-            (float(point[0]), float(point[1]), float(point[2])),
-            (float(axis[0]), float(axis[1]), float(axis[2])),
-            float(weight),
-            (float(nx), float(ny)),
-        ))
-    return bundle
 
 __all__ = [
     "TeachingPhysicalNode",

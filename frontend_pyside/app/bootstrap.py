@@ -4,6 +4,11 @@ from types import SimpleNamespace
 
 from PySide6.QtCore import QSettings
 
+from frontend_pyside.core.shiboken_guard import harden_shiboken_signature_hook
+
+# 必须先于 main_window（其 assistant 链会拉起 sklearn→pandas→dateutil→six）
+harden_shiboken_signature_hook()
+
 from frontend_pyside.app.main_window import MainWindow
 from frontend_pyside.infrastructure.api.client import ApiClient
 from frontend_pyside.infrastructure.api.clients import (

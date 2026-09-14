@@ -40,6 +40,27 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
         group_prefix="S",
     ),
     SurfaceTypeSpec(
+        name="柱面",
+        category="折射面",
+        description=(
+            "柱面在柱轴方向曲率为零，只在垂直柱轴的方向具有公共列所给曲率。"
+            "角度遵循局部 x-y 面内的 Zemax 式方位角定义。"
+        ),
+        group_prefix="CYL",
+        parameters=(
+            SurfaceParameterSpec(
+                "cylinder_axis_deg",
+                "柱轴方位角（零光焦度轴）",
+                default=0.0,
+                unit="°",
+                minimum=-360.0,
+                maximum=360.0,
+                decimals=6,
+                helper="0°：柱轴沿局部 X、光焦度作用于 Y；90°：柱轴沿局部 Y、光焦度作用于 X。",
+            ),
+        ),
+    ),
+    SurfaceTypeSpec(
         name="非球面",
         category="折射面",
         description="圆锥基底叠加偶次非球面系数；系数在本页单独管理。",
@@ -214,6 +235,7 @@ def surface_feature_summary(surface: Any, max_items: int = 3) -> str:
             return f"k={surface.conic:.4g}"
         return "—"
     preferred_keys: dict[str, tuple[str, ...]] = {
+        "柱面": ("cylinder_axis_deg",),
         "衍射光栅": ("groove_density_lpm", "diffraction_order", "grating_mode"),
         "坐标断点": ("decenter_x_mm", "tilt_x_deg", "tilt_y_deg"),
         "反射镜": ("mirror_mode", "reflectivity", "design_incidence_deg"),
@@ -246,6 +268,64 @@ def surface_feature_summary(surface: Any, max_items: int = 3) -> str:
         if len(parts) >= max_items:
             break
     return " · ".join(parts) if parts else "—"
+
+
+def extra_parameter_columns(surfaces: Iterable[Any]) -> tuple[SurfaceParameterSpec, ...]:
+    ordered: list[SurfaceParameterSpec] = []
+    seen: set[str] = set()
+    for surface in surfaces:
+        spec = get_surface_type(getattr(surface, "surface_type", "球面"))
+        for parameter in spec.parameters:
+            if parameter.key in seen:
+                continue
+            seen.add(parameter.key)
+            ordered.append(parameter)
+    return tuple(ordered)
+
+
+def extra_header_label(parameter: SurfaceParameterSpec) -> str:
+    label = str(parameter.label or parameter.key)
+    if parameter.unit and parameter.unit not in label:
+        return f"{label} / {parameter.unit}"
+    return label
+
+
+def surface_uses_parameter(surface: Any, key: str) -> bool:
+    spec = get_surface_type(getattr(surface, "surface_type", "球面"))
+    return any(parameter.key == key for parameter in spec.parameters)
+
+
+def format_parameter_cell(value: Any, parameter: SurfaceParameterSpec) -> str:
+    if parameter.kind == "bool":
+        return "是" if bool(value) else "否"
+    if parameter.kind == "float":
+        try:
+            return f"{float(value):.8g}"
+        except (TypeError, ValueError):
+            return str(value)
+    if parameter.kind == "int":
+        try:
+            return str(int(value))
+        except (TypeError, ValueError):
+            return str(value)
+    if value is None:
+        return str(parameter.default)
+    return str(value)
+
+
+def parse_parameter_cell(text: str, parameter: SurfaceParameterSpec) -> Any:
+    raw = str(text).strip()
+    if parameter.kind == "bool":
+        return raw.lower() not in {"否", "no", "false", "0", "禁用"}
+    if parameter.kind == "int":
+        value = int(float(raw))
+        return int(max(parameter.minimum, min(parameter.maximum, value)))
+    if parameter.kind == "float":
+        value = float(raw)
+        return max(parameter.minimum, min(parameter.maximum, value))
+    if parameter.kind == "choice" and parameter.choices and raw not in parameter.choices:
+        raise ValueError("invalid choice")
+    return raw
 
 
 def next_group_id(existing: Iterable[str], prefix: str) -> str:

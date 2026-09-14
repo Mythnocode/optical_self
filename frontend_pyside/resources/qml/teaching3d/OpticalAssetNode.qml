@@ -14,12 +14,9 @@ Node {
     position: locallyDragging ? localDragPosition : Qt.vector3d(deviceData.x, deviceData.y, deviceData.z)
     eulerRotation.y: deviceData.rotation
 
-    onDeviceDataChanged: root.assetLoadFailed = false
-
     Loader3D {
         id: visualLoader
         objectName: "visualLoader:" + deviceData.id
-        active: root.useDetailed && deviceData.assetQml !== "" && !root.assetLoadFailed
         source: root.useDetailed ? deviceData.assetQml : ""
         asynchronous: true
         onStatusChanged: {
@@ -30,8 +27,7 @@ Node {
 
     // Primitive fallback remains available if an asset is missing or fails to load.
     Model {
-        visible: deviceData.assetQml === "" || !root.useDetailed || root.assetLoadFailed
-                || visualLoader.status !== Loader3D.Ready
+        visible: !root.useDetailed || deviceData.assetQml === "" || root.assetLoadFailed
         source: deviceData.fallbackSource
         eulerRotation.z: deviceData.fallbackRotateZ
         scale: Qt.vector3d(deviceData.fallbackX, deviceData.fallbackY, deviceData.fallbackZ)

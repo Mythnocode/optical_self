@@ -8,6 +8,7 @@ from frontend_pyside.presets.demo_780nm_four_lens import (
     DEFAULT_RECEIVER_MFD_UM,
     DEFAULT_WAVELENGTH_NM,
     PROJECT_NAME,
+    DEFAULT_PUPIL_RADIUS_MM,
 )
 
 
@@ -50,7 +51,11 @@ class ProjectSnapshot:
     wavelength_nm: float = DEFAULT_WAVELENGTH_NM
     surfaces: list[LensSurface] = field(default_factory=list)
     receiver_mfd_um: float = DEFAULT_RECEIVER_MFD_UM
+    # 系统入瞳半径原先只存在 SimulationFormState，画布镜头组也需要持久化
+    # 这一项，否则“光阑与孔径”修改后表格、仿真和数据集会各自使用不同值。
+    pupil_radius_mm: float = DEFAULT_PUPIL_RADIUS_MM
     metrics: dict[str, Any] = field(default_factory=dict)
+    custom_materials: list[dict[str, Any]] = field(default_factory=list)
     project_id: str = field(default_factory=lambda: _stable_id("project"))
 
     def ensure_stable_ids(self) -> None:

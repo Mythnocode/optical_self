@@ -38,6 +38,9 @@ _FORMULA_LINES: dict[tuple[str, str], str] = {
     ("成像质量", "PSF"): "PSF = |ℱ{P · exp(i2πW/λ)}|<sup>2</sup>",
     ("成像质量", "MTF"): "MTF = |ℱ{PSF}|",
     ("成像质量", "Airy 半径"): "r<sub>Airy</sub> = 1.22λf / D",
+    ("结构参数", "曲率半径"): "Φ<sub>s</sub> ≈ (n<sub>2</sub> − n<sub>1</sub>) / R",
+    ("结构参数", "厚度与间隔"): "M<sub>t</sub> = [ 1　t/n ; 0　1 ]",
+    ("结构参数", "圆锥系数"): "z(r) = cr<sup>2</sup> / [1 + √(1 − (1 + k)c<sup>2</sup>r<sup>2</sup>)]",
 }
 
 

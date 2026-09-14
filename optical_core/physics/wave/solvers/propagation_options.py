@@ -9,9 +9,24 @@ from optical_core.models.representations.scalar_field import ScalarField2D
 PropagationMethod = Literal[
     "angular_spectrum",
     "band_limited_angular_spectrum",
+    "scaled_angular_spectrum",
+    "scaled_fresnel",
+    "issc",
     "fresnel",
     "fraunhofer",
+    "matrix_fresnel",
 ]
+
+SUPPORTED_PROPAGATION_METHODS = (
+    "angular_spectrum",
+    "band_limited_angular_spectrum",
+    "scaled_angular_spectrum",
+    "scaled_fresnel",
+    "issc",
+    "fresnel",
+    "fraunhofer",
+    "matrix_fresnel",
+)
 
 ApertureType = Literal[
     "circular",
@@ -73,13 +88,8 @@ class PropagationOptions:
         if self.propagation_distance_mm < 0:
             raise ValueError("propagation_distance_mm ??????")
 
-        if self.method not in {
-            "angular_spectrum",
-            "band_limited_angular_spectrum",
-            "fresnel",
-            "fraunhofer",
-        }:
-            raise ValueError(f"??????: {self.method!r}")
+        if self.method not in SUPPORTED_PROPAGATION_METHODS:
+            raise ValueError(f"unsupported propagation method: {self.method!r}")
 
         if self.aperture_type not in {
             "circular",

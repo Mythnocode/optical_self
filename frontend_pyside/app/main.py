@@ -13,6 +13,10 @@ for _name in (
 from PySide6.QtCore import QCoreApplication, QElapsedTimer, QThreadPool, QTimer
 from PySide6.QtWidgets import QApplication
 
+from frontend_pyside.core.shiboken_guard import harden_shiboken_signature_hook
+
+harden_shiboken_signature_hook()
+
 from frontend_pyside.app.bootstrap import create_main_window
 from frontend_pyside.app.startup import (
     install_exception_hook,

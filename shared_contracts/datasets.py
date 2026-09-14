@@ -29,6 +29,9 @@ class DatasetGenerationRequest(BaseModel):
     # user-controlled variables.  Keeping the default True preserves the richer
     # physics-residual feature set for normal research datasets.
     include_derived_physics_features: bool = True
+    variable_scheme_id: Optional[str] = None
+    lens_count: Optional[int] = None
+    design_variable_paths: List[str] = Field(default_factory=list)
 
 
 class DatasetManifest(BaseModel):
@@ -52,4 +55,8 @@ class DatasetManifest(BaseModel):
     random_seed: int
     source_project_fingerprint: str
     status: Literal["completed", "partial", "cancelled"] = "completed"
+    variable_scheme_id: Optional[str] = None
+    lens_count: Optional[int] = None
+    design_variable_paths: List[str] = Field(default_factory=list)
+    physics_feature_paths: List[str] = Field(default_factory=list)
     metadata: Dict[str, Any] = Field(default_factory=dict)

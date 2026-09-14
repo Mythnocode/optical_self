@@ -5,6 +5,7 @@ from __future__ import annotations
 import uuid
 import csv
 import json
+import math
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -69,16 +70,33 @@ def _normalize_material_name(name: Any) -> str:
     return normalized
 
 
+def _canonical_wavelength(project_data: dict[str, Any], source_data: dict[str, Any]) -> float:
+    """Return the single wavelength used by both project and source snapshots."""
+    raw = source_data.get("wavelength_nm")
+    if raw is None:
+        raw = project_data.get("wavelength_nm")
+    if raw is None:
+        raise ValueError("project.source.wavelength_nm is required for dataset generation")
+    try:
+        wavelength = float(raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("project.source.wavelength_nm must be a finite positive number") from exc
+    if not math.isfinite(wavelength) or wavelength <= 0:
+        raise ValueError("project.source.wavelength_nm must be a finite positive number")
+    return wavelength
+
+
 def _project_from_sample(sample: dict[str, Any]) -> SimpleNamespace:
     project_data = sample.get("project", sample)
 
     surfaces_data = project_data.get("surfaces", [])
     surfaces = tuple(_surface_from_dict(item) for item in surfaces_data)
 
-    source_data = project_data.get("source", {})
+    source_data = dict(project_data.get("source", {}) or {})
     receiver_data = project_data.get("receiver", source_data)
     stop_data = project_data.get("stop", {})
     fibre_mfd_mm = float(project_data.get("fibre_mfd_mm", 0.01))
+    wavelength_nm = _canonical_wavelength(project_data, source_data)
 
     return SimpleNamespace(
         fingerprint=project_data.get(
@@ -91,7 +109,7 @@ def _project_from_sample(sample: dict[str, Any]) -> SimpleNamespace:
         # ProjectSnapshot stores the active wavelength under source.wavelength_nm.
         # Falling back directly to 1550 nm here silently generated a dataset with a
         # different physical wavelength from the simulation page.
-        wavelength_nm=float(project_data.get("wavelength_nm", source_data.get("wavelength_nm", 1550.0))),
+        wavelength_nm=wavelength_nm,
         wavelength_f_nm=float(project_data.get("wavelength_f_nm", 486.1)),
         wavelength_c_nm=float(project_data.get("wavelength_c_nm", 656.3)),
         pupil_radius_mm=float(project_data.get("pupil_radius_mm", 2.0)),
@@ -107,7 +125,7 @@ def _project_from_sample(sample: dict[str, Any]) -> SimpleNamespace:
             project_data.get("include_internal_absorption", True)
         ),
         source=SimpleNamespace(
-            wavelength_nm=float(source_data.get("wavelength_nm", project_data.get("wavelength_nm", 1550.0))),
+            wavelength_nm=wavelength_nm,
             source_type=str(source_data.get("source_type", "gaussian")),
             object_na=float(source_data.get("object_na", 0.10)),
             object_na_x=float(source_data.get("object_na_x", source_data.get("object_na_y", source_data.get("object_na", 0.10)))),
@@ -124,10 +142,20 @@ def _project_from_sample(sample: dict[str, Any]) -> SimpleNamespace:
             offset_y_mm=float(source_data.get("offset_y_mm", source_data.get("offset_z_mm", 0.0))),
         ),
         receiver=SimpleNamespace(
+            receiver_type=str(receiver_data.get("receiver_type", "single_mode_fiber")),
+            mode_model=str(receiver_data.get("mode_model", "gaussian")),
             na_x=float(receiver_data.get("na_x", receiver_data.get("na_y", receiver_data.get("receiver_na_x", receiver_data.get("receiver_na_y", receiver_data.get("receiver_na", 0.12)))))),
             na_y=float(receiver_data.get("na_y", receiver_data.get("na_z", receiver_data.get("receiver_na_y", receiver_data.get("receiver_na_z", receiver_data.get("receiver_na", 0.12)))))),
             mode_field_diameter_x_um=float(receiver_data.get("mode_field_diameter_x_um", receiver_data.get("mode_field_diameter_y_um", receiver_data.get("mode_field_diameter_um", fibre_mfd_mm * 1000.0)))),
             mode_field_diameter_y_um=float(receiver_data.get("mode_field_diameter_y_um", receiver_data.get("mode_field_diameter_z_um", receiver_data.get("mode_field_diameter_um", fibre_mfd_mm * 1000.0)))),
+            core_diameter_um=float(receiver_data.get("core_diameter_um", 5.0) or 5.0),
+            core_refractive_index=float(receiver_data.get("core_refractive_index", 1.45) or 1.45),
+            cladding_refractive_index=float(receiver_data.get("cladding_refractive_index", 1.44) or 1.44),
+            outside_refractive_index=float(receiver_data.get("outside_refractive_index", 1.0) or 1.0),
+            endface_transmission=float(receiver_data.get("endface_transmission", 1.0) or 1.0),
+            fiber_length_m=float(receiver_data.get("fiber_length_m", 0.0) or 0.0),
+            attenuation_db_per_km=float(receiver_data.get("attenuation_db_per_km", 0.0) or 0.0),
+            connector_loss_db=float(receiver_data.get("connector_loss_db", 0.0) or 0.0),
             offset_x_mm=float(receiver_data.get("offset_x_mm", receiver_data.get("offset_y_mm", source_data.get("offset_x_mm", source_data.get("offset_y_mm", 0.0))))),
             offset_y_mm=float(receiver_data.get("offset_y_mm", receiver_data.get("offset_z_mm", source_data.get("offset_y_mm", source_data.get("offset_z_mm", 0.0))))),
             axial_offset_z_mm=float(receiver_data.get("axial_offset_z_mm", receiver_data.get("axial_offset_mm", source_data.get("axial_offset_z_mm", source_data.get("axial_offset_mm", 0.0))))),
@@ -142,17 +170,46 @@ def _options_from_sample(sample: dict[str, Any], project: Any) -> dict[str, Any]
     options = dict(sample.get("options", {}) or {})
     hybrid_options = dict(options.get("hybrid", {}) or {})
     receiver = getattr(project, "receiver", SimpleNamespace())
+    analysis_settings = dict(getattr(project, "analysis_settings", {}) or {})
 
-    hybrid_options.setdefault("wavelength_nm", getattr(project, "wavelength_nm", 1550.0))
+    # Project snapshot is canonical; stale per-sample options must not change it.
+    hybrid_options["wavelength_nm"] = float(project.wavelength_nm)
     hybrid_options.setdefault("pupil_radius_mm", getattr(project, "pupil_radius_mm", 2.0))
+    hybrid_options.setdefault("mode_model", getattr(receiver, "mode_model", "gaussian"))
     hybrid_options.setdefault("mode_field_diameter_x_um", getattr(receiver, "mode_field_diameter_x_um", 10.0))
     hybrid_options.setdefault("mode_field_diameter_y_um", getattr(receiver, "mode_field_diameter_y_um", 10.0))
+    hybrid_options.setdefault("na_x", getattr(receiver, "na_x", 0.12))
+    hybrid_options.setdefault("na_y", getattr(receiver, "na_y", 0.12))
+    hybrid_options.setdefault("fiber_core_radius_um", (getattr(receiver, "core_diameter_um", 5.0) or 5.0) / 2.0)
+    hybrid_options.setdefault("fiber_n_core", getattr(receiver, "core_refractive_index", 1.45))
+    hybrid_options.setdefault("fiber_n_clad", getattr(receiver, "cladding_refractive_index", 1.44))
+    hybrid_options.setdefault("receiver_medium_refractive_index", getattr(receiver, "outside_refractive_index", 1.0))
+    hybrid_options.setdefault("fiber_length_m", getattr(receiver, "fiber_length_m", 0.0))
+    hybrid_options.setdefault("fiber_attenuation_db_per_km", getattr(receiver, "attenuation_db_per_km", 0.0))
+    hybrid_options.setdefault("fiber_connector_loss_db", getattr(receiver, "connector_loss_db", 0.0))
+    hybrid_options.setdefault("fiber_facet_transmission_override", getattr(receiver, "endface_transmission", 1.0))
     hybrid_options.setdefault("offset_x_mm", getattr(receiver, "offset_x_mm", 0.0))
     hybrid_options.setdefault("offset_y_mm", getattr(receiver, "offset_y_mm", 0.0))
     hybrid_options.setdefault("axial_offset_z_mm", getattr(receiver, "axial_offset_z_mm", 0.0))
     hybrid_options.setdefault("tilt_x_deg", getattr(receiver, "tilt_x_deg", 0.0))
     hybrid_options.setdefault("tilt_y_deg", getattr(receiver, "tilt_y_deg", 0.0))
     hybrid_options.setdefault("include_breakdown", True)
+    # The node-based UI stores the former simulation-page numerical choices in
+    # analysis_settings.  Carry them into every generated sample so changing a
+    # dropdown actually changes the dataset's physical problem.
+    mapping = {
+        "calc_pupil": "pupil_sample_count",
+        "calc_grid_size": "output_grid_size",
+        "calc_output_extent_mm": "output_extent_x_mm",
+        "calc_zero_padding": "zero_padding_factor",
+        "calc_propagation": "propagation_model",
+        "calc_auto_expand_output": "auto_expand_output",
+        "calc_sampling_convergence": "sampling_convergence_enabled",
+        "calc_high_precision_coupling": "high_precision_coupling_enabled",
+    }
+    for source_key, target_key in mapping.items():
+        if source_key in analysis_settings:
+            hybrid_options.setdefault(target_key, analysis_settings[source_key])
 
     options["hybrid"] = hybrid_options
     return options

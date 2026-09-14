@@ -73,7 +73,10 @@ class Canvas2DMixin:
         elif kind == "teaching_scan":
             self._teaching_scan(ax, data)
         elif kind == "line":
-            ax.plot(data.get("x", []), data.get("y", []), linewidth=1.8)
+            label = str(data.get("series_label") or data.get("label") or "").strip()
+            ax.plot(data.get("x", []), data.get("y", []), linewidth=1.8, label=label or None)
+            if label:
+                ax.legend()
         elif kind == "line_multi":
             for series in data.get("series", []):
                 ax.plot(
@@ -148,7 +151,12 @@ class Canvas2DMixin:
             else:
                 self._empty(ax, data.get("message", "暂无真实统计"))
         elif kind == "scatter":
-            ax.scatter(data.get("x", []), data.get("y", []), s=16, alpha=0.72)
+            label = str(data.get("series_label") or data.get("label") or "").strip()
+            ax.scatter(data.get("x", []), data.get("y", []), s=16, alpha=0.72, label=label or None)
+            if bool(data.get("zero_line", False)):
+                ax.axhline(0.0, color=theme.CHART_REFERENCE, linestyle="--", linewidth=1.0)
+            if label:
+                ax.legend()
             if bool(data.get("equal_aspect", False)):
                 ax.set_aspect("equal", adjustable="box")
             airy = float(data.get("airy_radius_um", 0.0) or 0.0)
@@ -172,8 +180,6 @@ class Canvas2DMixin:
                 transform=ax.transAxes,
                 linespacing=1.45,
             )
-        elif kind == "parameter_summary":
-            self._parameter_summary(ax, data)
         else:
             self._empty(ax, data.get("message", "暂无结果"))
 
@@ -214,98 +220,6 @@ class Canvas2DMixin:
             ax.grid(True, alpha=0.72, color=theme.CHART_GRID)
         else:
             ax.grid(False)
-
-    @staticmethod
-    def _parameter_value_text(row: dict) -> str:
-        value = row.get("value", "—")
-        if isinstance(value, (int, float)) and not isinstance(value, bool):
-            value_text = f"{float(value):.6g}"
-        else:
-            value_text = str(value)
-        unit = str(row.get("unit", "") or "").strip()
-        return f"{value_text} {unit}" if unit and unit != "—" else value_text
-
-    def _parameter_summary(self, ax, data: dict) -> None:
-        """Render optimized and fixed parameters without dropping long snapshots."""
-        ax.axis("off")
-        optimized = [item for item in data.get("optimized", []) if isinstance(item, dict)]
-        fixed = [item for item in data.get("fixed", []) if isinstance(item, dict)]
-        figure_height_px = max(320.0, ax.figure.get_figheight() * ax.figure.dpi)
-        line_step = max(0.036, 19.0 / figure_height_px)
-
-        def draw_rows(rows: list[dict], *, top: float, bottom: float, accent: bool) -> None:
-            if not rows or top <= bottom:
-                return
-            rows_per_column = max(1, int((top - bottom) / line_step + 0.5))
-            columns = max(1, int(np.ceil(len(rows) / rows_per_column)))
-            if columns > 2:
-                columns = 2
-                rows_per_column = int(np.ceil(len(rows) / columns))
-            effective_step = min(
-                line_step,
-                (top - bottom) / max(1, rows_per_column),
-            )
-            column_width = 0.96 / columns
-            font_size = max(7.2, min(9.4, effective_step * figure_height_px * 0.48))
-            max_label_chars = max(9, int(30 / columns + 5))
-            for index, row in enumerate(rows):
-                column = index // rows_per_column
-                row_index = index % rows_per_column
-                x = 0.02 + column * column_width
-                y = top - row_index * effective_step
-                label = str(row.get("label", "") or "—")
-                if len(label) > max_label_chars:
-                    label = f"{label[:max_label_chars - 1]}…"
-                ax.text(
-                    x,
-                    y,
-                    label,
-                    va="top",
-                    ha="left",
-                    fontsize=font_size,
-                    color=theme.TEXT_PRIMARY,
-                    fontweight="semibold" if accent else "normal",
-                    transform=ax.transAxes,
-                )
-                ax.text(
-                    x + column_width * 0.94,
-                    y,
-                    self._parameter_value_text(row),
-                    va="top",
-                    ha="right",
-                    fontsize=font_size,
-                    color=theme.PRIMARY if accent else theme.TEXT_SECONDARY,
-                    transform=ax.transAxes,
-                )
-
-        ax.text(
-            0.02, 0.97, "已优化变量", va="top", ha="left", fontsize=10.5,
-            fontweight="bold", color=theme.PRIMARY, transform=ax.transAxes,
-        )
-        optimized_rows_per_column = 6
-        optimized_height = min(0.34, line_step * min(len(optimized), optimized_rows_per_column))
-        draw_rows(optimized, top=0.90, bottom=max(0.58, 0.90 - optimized_height), accent=True)
-
-        fixed_heading_y = max(0.54, 0.86 - optimized_height)
-        ax.plot(
-            [0.02, 0.98], [fixed_heading_y + 0.045, fixed_heading_y + 0.045],
-            color=theme.DIVIDER, linewidth=0.8, transform=ax.transAxes, clip_on=False,
-        )
-        ax.text(
-            0.02, fixed_heading_y,
-            str(data.get("fixed_title", "固定参数（未参与本次优化）")),
-            va="top", ha="left",
-            fontsize=10.5, fontweight="bold", color=theme.TEXT_SECONDARY,
-            transform=ax.transAxes,
-        )
-        if fixed:
-            draw_rows(fixed, top=fixed_heading_y - 0.075, bottom=0.02, accent=False)
-        else:
-            ax.text(
-                0.02, fixed_heading_y - 0.08, "没有固定参数快照",
-                va="top", ha="left", fontsize=9.0, color=theme.TEXT_MUTED,
-                transform=ax.transAxes,
-            )
 
     def _beam_match(self, ax, data: dict) -> None:
         from matplotlib.patches import Ellipse
@@ -403,6 +317,10 @@ class Canvas2DMixin:
         right.set_ylabel("Y剖面", fontsize=11)
         right.tick_params(labelleft=False, labelsize=7)
         right.grid(True, alpha=0.72, color=theme.CHART_GRID)
+        if x_profiles:
+            top.legend(loc="best", fontsize=8)
+        if y_profiles:
+            right.legend(loc="best", fontsize=8)
 
         metrics = dict(data.get("metrics", {}) or {})
         summary_lines = []
@@ -1531,11 +1449,24 @@ class Canvas2DMixin:
                 )
 
         scale_visible = bool(data.get("scale_label")) and data.get("scale_mode") != "physical"
+        objects = tuple(
+            (
+                str(item.get("kind", "")),
+                float(item.get("z", 0.0) or 0.0),
+                float(item.get("center_y", item.get("center_x", 0.0)) or 0.0),
+                float(item.get("radius", 0.0) or 0.0),
+                float(item.get("width", 0.0) or 0.0),
+                float(item.get("height", 0.0) or 0.0),
+            )
+            for item in data.get("objects") or []
+            if isinstance(item, dict)
+        )
         signature = (
             len(surface_segments),
             len(rim_segments),
             tuple(sorted(grouped)),
             scale_visible,
+            objects,
         )
         return {
             "surface_segments": surface_segments,
@@ -1604,9 +1535,54 @@ class Canvas2DMixin:
                 fontsize=11,
                 color=theme.STATUS_STALE,
             )
+        self._draw_raytrace_objects(ax, data)
         self._raytrace_signature = model["signature"]
         fit_optical_section_2d(ax, data)
         ax.set_aspect("auto")
+
+    def _draw_raytrace_objects(self, ax, data: dict) -> None:
+        from matplotlib.patches import Ellipse, Rectangle
+
+        for item in data.get("objects") or []:
+            if not isinstance(item, dict) or item.get("visible", True) is False:
+                continue
+            kind = str(item.get("kind", ""))
+            z = float(item.get("z", 0.0) or 0.0)
+            cy = float(item.get("center_y", item.get("center_x", 0.0)) or 0.0)
+            if kind == "fiber":
+                radius = max(float(item.get("radius", 0.0) or 0.0), 0.02)
+                ax.add_patch(
+                    Ellipse(
+                        (z, cy),
+                        max(radius * 0.35, 0.02),
+                        2.0 * radius,
+                        fill=False,
+                        linewidth=1.4,
+                        edgecolor=theme.FIBER_CORE,
+                    )
+                )
+                ax.axvline(z, color=theme.FIBER_CLADDING, linestyle="--", linewidth=1.05, alpha=0.8)
+                continue
+            if kind not in {"detector", "image"}:
+                continue
+            height = max(
+                float(item.get("height", 0.0) or 0.0),
+                float(item.get("radius", 0.0) or 0.0) * 2.0,
+                0.08,
+            )
+            width = max(float(item.get("width", 0.0) or 0.0) * 0.04, 0.02)
+            ax.add_patch(
+                Rectangle(
+                    (z - 0.5 * width, cy - 0.5 * height),
+                    width,
+                    height,
+                    fill=True,
+                    facecolor=theme.DETECTOR_FILL,
+                    edgecolor=theme.DETECTOR_EDGE,
+                    alpha=0.28,
+                    linewidth=1.2,
+                )
+            )
 
     def _update_raytrace_section(self, ax, data: dict) -> bool:
         model = self._raytrace_artist_model(data)

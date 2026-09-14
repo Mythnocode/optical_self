@@ -56,6 +56,34 @@ def resolve_feature_path(payload: Any, path: str) -> float:
     return value
 
 
+def _shared_project(payload: Any):
+    """Normalize the two project representations used by the desktop app.
+
+    The workbench keeps an editable dataclass, while the backend contracts use
+    a pydantic ``ProjectSnapshot``.  Treating the dataclass as if it were the
+    pydantic model makes physics feature derivation fail and used to be hidden
+    by a broad UI exception, leaving prediction/SHAP with incomplete inputs.
+    """
+    from shared_contracts.project import ProjectSnapshot
+
+    if isinstance(payload, ProjectSnapshot):
+        return payload
+    if isinstance(payload, Mapping):
+        return ProjectSnapshot.model_validate(payload)
+    model_dump = getattr(payload, "model_dump", None)
+    if callable(model_dump):
+        return ProjectSnapshot.model_validate(model_dump())
+
+    # The editable PySide project is a dataclass and must go through the same
+    # serializer used for formal simulation requests.  This preserves canonical
+    # paths such as source.wavelength_nm and surfaces[i].distance_to_next_mm.
+    if hasattr(payload, "surfaces") and hasattr(payload, "wavelength_nm"):
+        from frontend_pyside.api.payloads import serialize_project
+
+        return ProjectSnapshot.model_validate(serialize_project(payload))
+    raise TypeError("payload is not a supported optical project")
+
+
 def features_from_project(payload: Any, feature_paths: Sequence[str]) -> dict[str, float]:
     """Build exactly the feature vector declared by a trained-model manifest.
 
@@ -72,22 +100,27 @@ def features_from_project(payload: Any, feature_paths: Sequence[str]) -> dict[st
         derive_coupling_physics_features,
     )
     from machine_learning.explainability.physics_features import PhysicsFeatureError
-    from shared_contracts.project import ProjectSnapshot
 
     physics_paths = set(PHYSICS_RESIDUAL_FEATURE_PATHS)
     requested_physics = [path for path in feature_paths if path in physics_paths]
     physics: dict[str, float] = {}
+    canonical_project = None
+    try:
+        canonical_project = _shared_project(payload)
+    except (TypeError, ValueError) as exc:
+        if requested_physics:
+            raise FeaturePathError(f"cannot read optical project: {exc}") from exc
     if requested_physics:
         try:
-            project = payload if isinstance(payload, ProjectSnapshot) else ProjectSnapshot.model_validate(payload)
-            physics = derive_coupling_physics_features(project)
+            physics = derive_coupling_physics_features(canonical_project)
         except (PhysicsFeatureError, TypeError, ValueError) as exc:
             raise FeaturePathError(f"cannot derive coupling physics features: {exc}") from exc
 
+    resolution_payload = canonical_project if canonical_project is not None else payload
     values: dict[str, float] = {}
     for path in feature_paths:
         if path in physics:
             values[path] = float(physics[path])
         else:
-            values[path] = resolve_feature_path(payload, path)
+            values[path] = resolve_feature_path(resolution_payload, path)
     return values

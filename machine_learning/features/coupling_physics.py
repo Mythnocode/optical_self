@@ -18,7 +18,7 @@ from optical_core.physics.geometric.formulas.paraxial import (
     translation_matrix,
 )
 from optical_core.models.project_mapper import build_optical_system
-from shared_contracts.metrics import read_metric
+from shared_contracts.metrics import canonical_metric_name, read_metric
 from shared_contracts.project import ProjectSnapshot
 
 PHYSICS_RESIDUAL_FEATURE_PATHS: tuple[str, ...] = (
@@ -62,10 +62,10 @@ def derive_coupling_physics_features(
         raise PhysicsFeatureError("波长必须大于0")
 
     system = build_optical_system(project)
-    matrix, n_input, n_output = _base_matrix(project, system)
+    matrices, n_input, n_output = _base_matrix(project, system)
     x_state = _axis_state(
         project,
-        matrix,
+        matrices["x"],
         n_input,
         n_output,
         wavelength_mm,
@@ -73,7 +73,7 @@ def derive_coupling_physics_features(
     )
     y_state = _axis_state(
         project,
-        matrix,
+        matrices["y"],
         n_input,
         n_output,
         wavelength_mm,
@@ -132,6 +132,49 @@ def coupling_loss_db(metrics: Mapping[str, Any], *, floor: float = 1.0e-15) -> f
     return float(-10.0 * log10(max(raw, floor)))
 
 
+def coupling_efficiency_from_loss_db(metrics: Mapping[str, Any]) -> float | None:
+    loss = read_metric(metrics, "coupling_loss_db")
+    if not isinstance(loss, (int, float)) or not isfinite(float(loss)):
+        return None
+    return float(10.0 ** (-float(loss) / 10.0))
+
+
+def paired_coupling_targets(targets) -> list[str]:
+    """Keep coupling efficiency and dB loss together so XGBoost can train on datasets saved as η."""
+    names = [canonical_metric_name(target) for target in (targets or [])]
+    result = list(dict.fromkeys(name for name in names if name))
+    has_efficiency = "coupling_efficiency" in result
+    has_loss = "coupling_loss_db" in result
+    if has_efficiency and not has_loss:
+        result.append("coupling_loss_db")
+    elif has_loss and not has_efficiency:
+        result.append("coupling_efficiency")
+    return result
+
+
+def resolve_stored_target(target_values: Mapping[str, Any], target: str) -> float:
+    """Read a sample target, deriving the coupling η ↔ dB pair when only one is stored."""
+    values = dict(target_values or {})
+    canonical = canonical_metric_name(target)
+    direct = read_metric(values, canonical)
+    if isinstance(direct, (int, float)) and isfinite(float(direct)):
+        return float(direct)
+    if canonical == "coupling_loss_db":
+        derived = coupling_loss_db(values)
+        if derived is not None:
+            return derived
+    if canonical == "coupling_efficiency":
+        derived = coupling_efficiency_from_loss_db(values)
+        if derived is not None:
+            return derived
+    available = ", ".join(sorted(str(key) for key in values)) or "无"
+    raise ValueError(
+        f"数据集样本缺少目标列 {canonical}，现有列：{available}。"
+        "XGBoost 物理残差需要 coupling_loss_db；若样本只有 coupling_efficiency，"
+        "请重新生成数据集，或使用已含耦合效率的样本以便自动换算。"
+    )
+
+
 def enrich_candidate_features(
     base_project: ProjectSnapshot,
     raw_features: Mapping[str, float],
@@ -151,7 +194,7 @@ def enrich_candidate_features(
     return output
 
 
-def _base_matrix(project: ProjectSnapshot, system) -> tuple[np.ndarray, float, float]:
+def _base_matrix(project: ProjectSnapshot, system) -> tuple[dict[str, np.ndarray], float, float]:
     if system.surfaces:
         n_input = float(
             system.material_index(
@@ -163,17 +206,23 @@ def _base_matrix(project: ProjectSnapshot, system) -> tuple[np.ndarray, float, f
                 system.surfaces[-1].material_after, project.source.wavelength_nm
             )
         )
-        matrix = np.asarray(
-            system_matrix_to_image(system, project.source.wavelength_nm), dtype=float
-        )
+        matrices = {
+            axis: np.asarray(
+                system_matrix_to_image(system, project.source.wavelength_nm, axis=axis),
+                dtype=float,
+            )
+            for axis in ("x", "y")
+        }
     else:
         n_input = n_output = 1.0
         matrix = translation_matrix(
             float(project.object_distance_mm) + float(project.image_distance_mm),
             1.0,
         )
-    matrix = translation_matrix(float(project.receiver.axial_offset_z_mm), n_output) @ matrix
-    return matrix, n_input, n_output
+        matrices = {"x": matrix.copy(), "y": matrix.copy()}
+    receiver_shift = translation_matrix(float(project.receiver.axial_offset_z_mm), n_output)
+    matrices = {axis: receiver_shift @ matrix for axis, matrix in matrices.items()}
+    return matrices, n_input, n_output
 
 
 def _axis_state(
@@ -229,7 +278,10 @@ def _equivalent_curvature(x_um: float, y_um: float) -> float:
 __all__ = [
     "PHYSICS_RESIDUAL_FEATURE_PATHS",
     "PHYSICS_RESIDUAL_FEATURE_UNITS",
+    "coupling_efficiency_from_loss_db",
     "coupling_loss_db",
     "derive_coupling_physics_features",
     "enrich_candidate_features",
+    "paired_coupling_targets",
+    "resolve_stored_target",
 ]

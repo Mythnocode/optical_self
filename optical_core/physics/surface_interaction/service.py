@@ -206,6 +206,8 @@ def interact_ray_with_surface(
         conic=surface.conic,
         asphere_a2=surface.asphere_a2,
         asphere_coefficients=surface.asphere_coefficients,
+        surface_type=surface.surface_type,
+        cylinder_axis_deg=surface.cylinder_axis_deg,
     )
     if float(np.dot(direction, normal)) > 0.0:
         normal = -normal

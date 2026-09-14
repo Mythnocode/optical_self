@@ -119,6 +119,14 @@ def build_optical_system(
             )
         thermal_scale = linear_thermal_scale(temperature_c, expansion_model)
         raw_radius = _read(raw, "radius_mm", "radius", default=None)
+        raw_metadata = dict(_read(raw, "metadata", default={}) or {})
+        raw_type_parameters = dict(raw_metadata.get("type_parameters", {}) or {})
+        cylinder_axis_deg = _read(raw, "cylinder_axis_deg", default=None)
+        if cylinder_axis_deg is None:
+            cylinder_axis_deg = raw_type_parameters.get(
+                "cylinder_axis_deg",
+                raw_type_parameters.get("axis_angle_deg", raw_metadata.get("cylinder_axis_deg", 0.0)),
+            )
         if compiled_index + 1 < len(compiled_inputs):
             next_vertex_z = compiled_inputs[compiled_index + 1][2]
             effective_distance = float(next_vertex_z - vertex_z)
@@ -162,7 +170,8 @@ def build_optical_system(
                 tilt_x_deg=float(_read(raw, "tilt_x_deg", default=0.0) or 0.0),
                 tilt_y_deg=float(_read(raw, "tilt_y_deg", default=0.0) or 0.0),
                 tilt_z_deg=float(_read(raw, "tilt_z_deg", default=0.0) or 0.0),
-                metadata=dict(_read(raw, "metadata", default={}) or {}),
+                cylinder_axis_deg=float(cylinder_axis_deg or 0.0) % 180.0,
+                metadata=raw_metadata,
             )
         )
         previous_material = str(material_after or "AIR")

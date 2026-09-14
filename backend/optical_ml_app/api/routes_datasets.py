@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Response, status
+from fastapi import APIRouter, Body, Request, Response, status
 from shared_contracts.datasets import DatasetGenerationRequest
 
 from backend.optical_ml_app.api.responses import failure, success
@@ -13,6 +13,22 @@ router = APIRouter()
 def submit_dataset(payload: DatasetGenerationRequest, request: Request):
     job_id = request.app.state.services["dataset_app"].submit(payload)
     return success(request, {"job_id": job_id}, status_code=status.HTTP_202_ACCEPTED)
+
+
+@router.post("/headless-datasets/import-file")
+def import_dataset_file(request: Request, payload: dict = Body(...)):
+    """Register a user-selected local table as a native trainable dataset."""
+    try:
+        registry = request.app.state.services["dataset_registry"]
+        entry = registry.import_tabular_file(
+            str(payload.get("source_path", "") or ""),
+            dataset_name=str(payload.get("dataset_name", "") or ""),
+            target_name=str(payload.get("target_name", "coupling_efficiency") or "coupling_efficiency"),
+            random_seed=int(payload.get("random_seed", 42) or 42),
+        )
+        return success(request, entry.to_dict())
+    except BackendApplicationError as exc:
+        return failure(request, status_code=400, **exc.to_dict())
 
 
 @router.get("/headless-datasets")

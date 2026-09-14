@@ -7,6 +7,7 @@ import numpy as np
 from optical_core.models.domain.surface import OpticalSurface
 from optical_core.models.representations.ray import Ray
 from optical_core.physics.geometric.formulas.surface_sag import sag_conic_asphere, sag_derivative_conic_asphere
+from optical_core.physics.geometric.formulas.surface_normal import cylindrical_power_axis
 
 
 @dataclass(frozen=True, slots=True)
@@ -40,7 +41,18 @@ def intersect_ray_with_surface(
         return SurfaceIntersection(p0, 0.0, False, "初值求交失败")
     for _ in range(max_iterations):
         point = p0 + t * d
-        radial = float(np.hypot(point[0], point[1]))
+        if surface.is_cylindrical:
+            power_axis = cylindrical_power_axis(surface.cylinder_axis_deg)
+            signed_profile = float(np.dot(power_axis, point[:2]))
+            radial = abs(signed_profile)
+            radial_rate = float(np.sign(signed_profile) * np.dot(power_axis, d[:2]))
+        else:
+            radial = float(np.hypot(point[0], point[1]))
+            radial_rate = (
+                0.0
+                if radial <= 1.0e-15
+                else float((point[0] * d[0] + point[1] * d[1]) / radial)
+            )
         sag = float(sag_conic_asphere(
             radial,
             radius_mm=surface.radius_mm,
@@ -60,7 +72,6 @@ def intersect_ray_with_surface(
             asphere_a2=surface.asphere_a2,
             asphere_coefficients=surface.asphere_coefficients,
         ))
-        radial_rate = 0.0 if radial <= 1.0e-15 else (point[0] * d[0] + point[1] * d[1]) / radial
         jacobian = d[2] - derivative * radial_rate
         if abs(jacobian) <= 1.0e-14:
             break

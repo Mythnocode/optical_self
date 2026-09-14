@@ -19,6 +19,8 @@ Rectangle {
     property bool orbiting: false
     property bool panning: false
     property bool analysisPanelsVisible: false
+    // 左上角信息卡（当前实验结果 / 最终成像预览）：画布子节点承载时由宿主关闭
+    property bool infoPanelsVisible: true
 
     // Diagnostics are opt-in so normal teaching sessions do not pay for extended
     // renderer statistics.  They are used by the automated 3D interaction gate.
@@ -96,12 +98,6 @@ Rectangle {
     }
     function clampWorldX(value) { return Math.max(-573.8, Math.min(573.8, value)) }
     function clampWorldZ(value) { return Math.max(-235.6, Math.min(235.6, value)) }
-    function resetDragState() {
-        dragObject = null
-        dragId = ""
-        draggingDevice = false
-        dragMoved = false
-    }
 
     function dx(a) { return a.x2-a.x1 }
     function dy(a) { return a.y2-a.y1 }
@@ -125,7 +121,7 @@ Rectangle {
             backgroundMode: SceneEnvironment.Color
             clearColor: "#F4F7FA"
             antialiasingMode: SceneEnvironment.MSAA
-            antialiasingQuality: SceneEnvironment.Medium
+            antialiasingQuality: SceneEnvironment.High
         }
         Node {
             id: cameraPivot
@@ -147,26 +143,65 @@ Rectangle {
             materials: PrincipledMaterial { baseColor:"#475467"; opacity:0.32; alphaMode:PrincipledMaterial.Blend }
         }
 
-        // True 3D Gaussian envelope.  Each active edge is subdivided so radius can
-        // vary between the same source/target radii used by the 2D teaching view.
+        // Formal chief-ray only. Abstract Gaussian envelope tubes were removed.
         Repeater3D {
             model: sceneBridge.envelopeSegments
             delegate: Model {
                 required property var modelData
-                visible: sceneBridge.showEnvelope && !root.draggingDevice
+                visible: false
+                objectName: "envelope:" + modelData.id
+                pickable: false
                 source: "#Cylinder"
-                position: Qt.vector3d((modelData.x1+modelData.x2)/2, 52, (modelData.z1+modelData.z2)/2)
-                eulerRotation.z: 90
+                position: Qt.vector3d((modelData.x1+modelData.x2)/2, (modelData.y1+modelData.y2)/2, (modelData.z1+modelData.z2)/2)
+                scale: Qt.vector3d(0.001, 0.001, 0.001)
+                materials: PrincipledMaterial { baseColor: "#0E7490"; opacity: 0.0; alphaMode: PrincipledMaterial.Blend }
+            }
+        }
+
+        Repeater3D {
+            model: sceneBridge.structureEdges
+            delegate: Model {
+                required property var modelData
+                visible: sceneBridge.showNodes
+                objectName: "structure:" + modelData.id
+                pickable: false
+                source: "#Cylinder"
+                position: Qt.vector3d((modelData.x1+modelData.x2)/2, (modelData.y1+modelData.y2)/2, (modelData.z1+modelData.z2)/2)
+                eulerRotation.z: root.tiltFromY(modelData)
                 eulerRotation.y: root.yaw(modelData)
-                scale: Qt.vector3d(modelData.radius/50, root.length2d(modelData)/100, modelData.radius/50)
+                scale: Qt.vector3d(0.010, root.length3d(modelData)/100, 0.010)
                 materials: PrincipledMaterial {
-                    baseColor:"#1597A8"; opacity:0.16; alphaMode:PrincipledMaterial.Blend
-                    roughness:0.18; cullMode:Material.NoCulling
+                    baseColor: "#334155"
+                    opacity: 0.28
+                    alphaMode: PrincipledMaterial.Blend
+                    roughness: 0.65
                 }
             }
         }
 
-        // Main/branch ray path is actual 3D geometry, not a line painted onto a 2D image.
+        Repeater3D {
+            model: sceneBridge.previewEdges
+            delegate: Model {
+                required property var modelData
+                visible: sceneBridge.showAxis && sceneBridge.showNodes
+                objectName: "preview:" + modelData.id
+                pickable: false
+                source: "#Cylinder"
+                position: Qt.vector3d((modelData.x1+modelData.x2)/2, (modelData.y1+modelData.y2)/2, (modelData.z1+modelData.z2)/2)
+                eulerRotation.z: root.tiltFromY(modelData)
+                eulerRotation.y: root.yaw(modelData)
+                scale: Qt.vector3d(0.018, root.length3d(modelData)/100, 0.018)
+                materials: PrincipledMaterial {
+                    baseColor: "#0E7490"
+                    opacity: 0.48
+                    alphaMode: PrincipledMaterial.Blend
+                    roughness: 0.35
+                    emissiveFactor: Qt.vector3d(0.02, 0.10, 0.12)
+                }
+            }
+        }
+
+        // Formal solver rays only. Topology never becomes red light.
         Repeater3D {
             model: sceneBridge.edges
             delegate: Model {
@@ -178,13 +213,12 @@ Rectangle {
                 position: Qt.vector3d((modelData.x1+modelData.x2)/2, (modelData.y1+modelData.y2)/2, (modelData.z1+modelData.z2)/2)
                 eulerRotation.z: root.tiltFromY(modelData)
                 eulerRotation.y: root.yaw(modelData)
-                scale: Qt.vector3d(modelData.active ? (sceneBridge.placementActive ? 0.078 : 0.042) : 0.016, root.length3d(modelData)/100, modelData.active ? (sceneBridge.placementActive ? 0.078 : 0.042) : 0.016)
+                scale: Qt.vector3d(modelData.active ? (sceneBridge.placementActive ? 0.078 : 0.042) : 0.022, root.length3d(modelData)/100, modelData.active ? (sceneBridge.placementActive ? 0.078 : 0.042) : 0.022)
                 materials: PrincipledMaterial {
-                    baseColor: modelData.active ? "#FF0000" : "#667085"
-                    opacity: root.draggingDevice ? (modelData.active ? 0.32 : 0.16) : (modelData.active ? 0.95 : 0.30)
+                    baseColor: modelData.expired ? "#B45309" : (modelData.active ? "#FF0000" : "#667085")
+                    opacity: root.draggingDevice ? (modelData.active ? 0.32 : 0.12) : (modelData.expired ? 0.28 : (modelData.active ? 0.95 : 0.30))
                     alphaMode: PrincipledMaterial.Blend
-                    emissiveFactor: modelData.active ? Qt.vector3d(0.35,0.0,0.0) : Qt.vector3d(0,0,0)
-                    specularAmount: 0.0
+                    emissiveFactor: modelData.active ? Qt.vector3d(0.55,0.0,0.0) : Qt.vector3d(0,0,0)
                 }
             }
         }
@@ -192,15 +226,15 @@ Rectangle {
         // Movable I(x,y,z) teaching cross-section.  The disc is perpendicular to
         // the active beam segment and follows the same beam-radius state as 2D.
         Model {
-            visible: root.analysisPanelsVisible && sceneBridge.sectionAvailable && sceneBridge.showEnvelope && !root.draggingDevice
+            visible: root.analysisPanelsVisible && sceneBridge.sectionAvailable && !root.draggingDevice
             source: "#Cylinder"
             position: Qt.vector3d(sceneBridge.sectionX, sceneBridge.sectionY, sceneBridge.sectionZ)
             eulerRotation.z: 90
             eulerRotation.y: sceneBridge.sectionYaw
             scale: Qt.vector3d(Math.max(0.10, sceneBridge.sectionRadius/42), 0.045, Math.max(0.10, sceneBridge.sectionRadius/42))
             materials: PrincipledMaterial {
-                baseColor: "#1597A8"; opacity: 0.24; alphaMode: PrincipledMaterial.Blend
-                roughness: 0.18; cullMode: Material.NoCulling; specularAmount: 0.0
+                baseColor: "#7C3AED"; opacity: 0.32; alphaMode: PrincipledMaterial.Blend
+                roughness: 0.12; cullMode: Material.NoCulling
             }
         }
 
@@ -293,15 +327,12 @@ Rectangle {
             }
         }
         onReleased: function(mouse) {
-            var releasedId = root.dragId
-            var releasedMoved = root.dragMoved
-            var hadDrag = root.dragObject !== null && root.draggingDevice
-            var finalPosition = hadDrag ? root.dragObject.localDragPosition : null
-            var elapsed = Date.now() - root.pressTimestamp
-            root.resetDragState()
-            root.orbiting = false
-            root.panning = false
-            if (mouse.button === Qt.LeftButton && hadDrag && finalPosition !== null) {
+            if (mouse.button === Qt.LeftButton && root.dragObject !== null) {
+                var releasedId = root.dragId
+                var releasedMoved = root.dragMoved
+                var finalPosition = root.dragObject.localDragPosition
+                var elapsed = Date.now() - root.pressTimestamp
+                root.dragObject = null; root.dragId = ""; root.draggingDevice = false; root.dragMoved = false
                 if (releasedMoved)
                     sceneBridge.moveNodeWorld(releasedId, finalPosition.x, finalPosition.z)
                 else if (releasedId !== "") {
@@ -309,9 +340,10 @@ Rectangle {
                     if (elapsed < 420) sceneBridge.activateDouble(releasedId)
                 }
             }
+            root.orbiting=false; root.panning=false
         }
         onCanceled: {
-            root.resetDragState()
+            root.dragObject = null; root.dragId = ""; root.draggingDevice = false; root.dragMoved = false
             root.orbiting=false; root.panning=false
         }
         onWheel: function(wheel) {
@@ -349,12 +381,6 @@ Rectangle {
 
     Connections {
         target: sceneBridge
-        function onSceneChanged() {
-            // Formal raytrace refreshes can rebuild delegates while a drag is active.
-            // Clear stale grab state so orbit/drag does not freeze after background updates.
-            if (root.draggingDevice)
-                root.resetDragState()
-        }
         function onRotateRequested(degrees) { cameraPivot.eulerRotation.y += degrees; root.reportCamera() }
         function onZoomRequested(factor) { camera.z=Math.max(420,Math.min(2600,camera.z*factor)); root.reportCamera() }
         function onResetRequested() {
@@ -436,22 +462,44 @@ Rectangle {
 
     Rectangle {
         anchors.left: parent.left; anchors.top: parent.top; anchors.leftMargin: 14; anchors.topMargin: 14
-        z: 30; width: 300; height: 118; radius: 8
+        visible: root.infoPanelsVisible
+        z: 30; width: 300; height: 150; radius: 8
         color: "#F7FFFFFF"; border.color: "#8EA2B3"
         Column {
             anchors.fill: parent; anchors.margins: 12; spacing: 6
             Text { text: "当前实验结果"; color: "#101828"; font.pixelSize: 16; font.bold: true }
-            Text { text: sceneBridge.resultEfficiencyApplicable ? "总耦合效率  " + (sceneBridge.resultMetrics.total * 100).toFixed(1) + "%" : "相机测量模式"; color: "#0F766E"; font.pixelSize: 20; font.bold: true }
-            Text { text: sceneBridge.resultEfficiencyApplicable ? "系统 " + (sceneBridge.resultMetrics.system * 100).toFixed(1) + "%    接收 " + (sceneBridge.resultMetrics.receiver * 100).toFixed(1) + "%" : "耦合效率不适用于当前接收方式"; color: "#344054"; font.pixelSize: 13 }
-            Text { text: sceneBridge.resultEfficiencyApplicable ? "输出功率  " + Number(sceneBridge.resultMetrics.power).toFixed(2) + " mW" : "查看下方接收面测量"; color: "#344054"; font.pixelSize: 13 }
+            Text {
+                text: sceneBridge.resultHeadline
+                color: sceneBridge.resultPhysicsStatus === "verified" ? "#15803D"
+                     : sceneBridge.resultPhysicsStatus === "expired" ? "#B45309"
+                     : sceneBridge.resultPhysicsStatus === "blocked" ? "#B91C1C"
+                     : "#475569"
+                font.pixelSize: 20; font.bold: true
+            }
+            Text { text: sceneBridge.resultDetail; color: "#344054"; font.pixelSize: 13; wrapMode: Text.WordWrap; width: parent.width }
+            Text { text: sceneBridge.resultPowerLine; color: "#344054"; font.pixelSize: 13; visible: sceneBridge.resultPowerLine.length > 0 }
+            Text {
+                text: "效率：" + sceneBridge.resultSource + " · 光线：" + sceneBridge.resultStatus
+                color: "#667085"; font.pixelSize: 11
+            }
         }
     }
 
     Rectangle {
         id: imagingPreview
-        anchors.left: parent.left; anchors.top: parent.top; anchors.leftMargin: 14; anchors.topMargin: 144
-        z: 30; width: 300; height: 148; radius: 8
+        anchors.left: parent.left; anchors.top: parent.top; anchors.leftMargin: 14; anchors.topMargin: 176
+        visible: root.infoPanelsVisible
+        z: 30; width: 300; height: 160; radius: 8
         color: "#10202A"; border.color: sceneBridge.imageReceiverHit ? "#FF4D4F" : "#708796"
+
+        Text {
+            anchors.left: parent.left; anchors.top: parent.top
+            anchors.leftMargin: 10; anchors.topMargin: 8
+            text: sceneBridge.imageReceiverAvailable && sceneBridge.imageReceiverLabel.length > 0
+                  ? "最终成像预览 · " + sceneBridge.imageReceiverLabel
+                  : "最终成像预览"
+            color: "#E6F4F7"; font.pixelSize: 11; font.bold: true
+        }
 
         // A spot exists only when the routed teaching beam actually reaches a
         // valid imaging detector.  This deliberately does not reuse fiber
@@ -460,6 +508,7 @@ Rectangle {
             id: imageSpotHost
             visible: sceneBridge.imageReceiverHit
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: 8
             width: 150; height: 112
             property real rx: Math.max(sceneBridge.imageRadiusXUm, 0.001)
             property real ry: Math.max(sceneBridge.imageRadiusYUm, 0.001)
@@ -503,6 +552,7 @@ Rectangle {
         Column {
             visible: !sceneBridge.imageReceiverHit
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: 10
             width: parent.width - 34
             spacing: 5
             Text {

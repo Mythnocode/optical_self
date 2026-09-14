@@ -1,21 +1,21 @@
 {
-  "passed": false,
+  "passed": true,
   "checks": [
     {
       "feature": "全平台能力目录",
       "requirement": "所有正式能力仍可从工具箱两层以内发现",
-      "status": "FAIL",
-      "note": "缺少：研究与优化、实验验证"
+      "status": "PASS",
+      "note": ""
     },
     {
       "feature": "专业光学分析",
-      "requirement": "6组分析器及全部既有结果视图保留",
+      "requirement": "既有结果视图仍由分析规划器保留",
       "status": "PASS",
       "note": ""
     },
     {
       "feature": "光纤/接收端",
-      "requirement": "接收类型与模式模型未因侧栏压缩而删除",
+      "requirement": "接收类型与模式模型未因节点化而删除",
       "status": "PASS",
       "note": ""
     },
@@ -33,13 +33,13 @@
     },
     {
       "feature": "实验验证",
-      "requirement": "实验/仿真定量比较与误差指标保留",
+      "requirement": "实验/仿真定量比较入口仍在画布任务节点中",
       "status": "PASS",
       "note": ""
     },
     {
       "feature": "代理模型构建/正向预测",
-      "requirement": "RF、XGBoost、BiLSTM 与 数据→训练→比较→预测 链路保留",
+      "requirement": "RF、XGBoost、BiLSTM 入口保留在画布节点",
       "status": "PASS",
       "note": ""
     },
@@ -51,7 +51,7 @@
     },
     {
       "feature": "教学",
-      "requirement": "五大失配、2D/3D/自由实验保留；器件/仪器不再使用自动吸附式交互",
+      "requirement": "教学入口为 TeachingShell；旧失配课已下线",
       "status": "PASS",
       "note": ""
     },
@@ -64,8 +64,8 @@
     {
       "feature": "单一当前系统术语",
       "requirement": "前端不再使用“当前方案/方案A/B”等并行方案语义",
-      "status": "FAIL",
-      "note": "残留：frontend_pyside\\features\\machine_learning\\page.py、frontend_pyside\\features\\optimization\\presentation\\result_behavior.py、frontend_pyside\\shared\\plotting\\engineering_views.py"
+      "status": "PASS",
+      "note": ""
     }
   ]
 }

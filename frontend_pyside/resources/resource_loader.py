@@ -9,7 +9,7 @@ def register_resources() -> bool:
     if _REGISTERED:
         return True
     try:
-        from frontend_pyside.resources import resources_rc  
+        pass  
     except ImportError:
         return False
     _REGISTERED = True

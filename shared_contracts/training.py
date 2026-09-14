@@ -19,3 +19,20 @@ class TrainingResult(BaseModel):
     training_elapsed_ms: float
     warnings: List[str] = Field(default_factory=list)
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
+class JointTrainingRequest(BaseModel):
+    dataset_id: str
+    random_seed: int = 42
+    random_forest_hyperparameters: Dict[str, Any] = Field(default_factory=dict)
+    xgboost_hyperparameters: Dict[str, Any] = Field(default_factory=dict)
+
+
+class JointTrainingResult(BaseModel):
+    bundle_id: str
+    dataset_id: str
+    random_forest: TrainingResult
+    xgboost: Optional[TrainingResult] = None
+    primary_model_id: str = ""
+    status: Literal["completed", "partial"] = "completed"
+    warnings: List[str] = Field(default_factory=list)

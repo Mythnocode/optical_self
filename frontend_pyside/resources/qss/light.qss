@@ -151,6 +151,9 @@ QPushButton[kind="primary"] {
     color: #FFFFFF;
     border: 1px solid #155EEF;
     font-weight: 700;
+    text-align: center;
+    padding: 0 16px;
+    min-height: 34px;
 }
 QPushButton[kind="primary"]:hover { background: #004EEB; }
 QPushButton[kind="primary"]:pressed { background: #0040C1; }
@@ -1750,4 +1753,340 @@ QToolButton#compactTextTool {
 QToolButton#compactTextTool:hover {
     color: #0B63D9;
     text-decoration: underline;
+}
+
+/* ===== Refactored workbench shell =====
+   The shell owns navigation; documents own plots and metrics.  No persistent
+   full-width footer is needed. */
+QFrame#PrimaryBar {
+    background: #FFFFFF;
+    border-bottom: 1px solid #C7CDD6;
+}
+QToolButton#PrimaryModuleButton,
+QToolButton#PrimaryActionButton,
+QToolButton#SecondaryFunctionButton,
+QToolButton#TeachingToolButton {
+    min-height: 32px;
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: #344054;
+    font-weight: 650;
+}
+QToolButton#PrimaryActionButton {
+    padding: 4px 6px;
+    min-width: 40px;
+    min-height: 40px;
+}
+QToolButton#DocumentPinButton {
+    border: 0;
+    background: transparent;
+    padding: 2px;
+    border-radius: 4px;
+}
+QToolButton#DocumentPinButton:checked {
+    color: #0A327A;
+    background: #DCE9FF;
+}
+QToolButton#PrimaryModuleButton:hover,
+QToolButton#PrimaryActionButton:hover,
+QToolButton#SecondaryFunctionButton:hover,
+QToolButton#TeachingToolButton:hover {
+    background: #EEF4FF;
+    border-color: #B8CCF3;
+    color: #0A327A;
+}
+QToolButton#PrimaryModuleButton:checked,
+QToolButton#SecondaryFunctionButton:checked {
+    background: #DCE9FF;
+    border-color: #8FB3F4;
+    color: #073A89;
+}
+QToolButton#TeachingToolButton:checked,
+QToolButton#RailCategoryButton:checked {
+    background: #155EEF;
+    border-color: #0B4EAE;
+    color: #FFFFFF;
+    font-weight: 800;
+}
+QToolButton#RailCategoryButton {
+    min-height: 30px;
+    padding: 4px 9px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: #344054;
+    font-weight: 700;
+}
+QToolButton#RailCategoryButton:hover {
+    background: #EEF4FF;
+    border-color: #B8CCF3;
+    color: #0A327A;
+}
+QFrame#SecondaryBar,
+QFrame#TeachingToolbar {
+    background: #F8FAFC;
+    border-bottom: 1px solid #D0D5DD;
+}
+QFrame#ObjectRail {
+    background: #F8FAFC;
+    border-right: 1px solid #D0D5DD;
+}
+QFrame#AccordionSection {
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+}
+QToolButton#AccordionHeader {
+    min-height: 34px;
+    padding: 4px 8px;
+    border: none;
+    background: #F8FAFC;
+    color: #101828;
+    font-weight: 700;
+    text-align: left;
+}
+QToolButton#AccordionHeader:checked,
+QToolButton#AccordionHeader:hover {
+    background: #EEF4FF;
+    color: #0A327A;
+}
+QFrame#ObjectInspector {
+    background: transparent;
+    border: none;
+}
+QFrame#FieldGroup {
+    background: #F8FAFC;
+    border: 1px solid #E4E7EC;
+    border-radius: 8px;
+}
+QLabel#FieldGroupTitle {
+    color: #344054;
+    font-size: 10.5pt;
+    font-weight: 700;
+}
+QFrame#ObjectInspector QDoubleSpinBox,
+QFrame#ObjectInspector QSpinBox,
+QFrame#ObjectInspector QComboBox,
+QFrame#ObjectInspector QLineEdit,
+QDialog#EngineeringDialog QDoubleSpinBox,
+QDialog#EngineeringDialog QSpinBox,
+QDialog#EngineeringDialog QComboBox,
+QDialog#EngineeringDialog QLineEdit {
+    min-height: 26px;
+    max-height: 28px;
+    padding: 1px 8px;
+    border-radius: 5px;
+}
+QFrame#ObjectInspector QDoubleSpinBox,
+QFrame#ObjectInspector QSpinBox,
+QDialog#EngineeringDialog QDoubleSpinBox,
+QDialog#EngineeringDialog QSpinBox {
+    padding-right: 8px;
+}
+QFrame#ObjectInspector QComboBox::drop-down,
+QDialog#EngineeringDialog QComboBox::drop-down {
+    width: 18px;
+}
+QLabel#RailTitle,
+QLabel#SectionTitle {
+    color: #101828;
+    font-size: 13.5pt;
+    font-weight: 750;
+}
+QListWidget#ObjectList {
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    padding: 3px;
+}
+QListWidget#ObjectList::item {
+    min-height: 30px;
+    padding: 4px 7px;
+    border-radius: 5px;
+}
+QListWidget#ObjectList::item:hover { background: #EEF4FF; }
+QListWidget#ObjectList::item:selected { background: #DCE9FF; color: #073A89; }
+QFrame#DocumentWorkspace { background: #EEF1F5; }
+QToolButton#DocumentSplitButton {
+    min-height: 28px;
+    padding: 3px 10px;
+    border: 1px solid #B8CCF3;
+    border-radius: 5px;
+    background: #FFFFFF;
+    color: #0A327A;
+    font-weight: 700;
+}
+QToolButton#DocumentSplitButton:hover { background: #EEF4FF; }
+QTabWidget#DocumentPane::pane {
+    background: #FFFFFF;
+    border: 1px solid #C7CDD6;
+    border-radius: 6px;
+}
+QTabWidget#DocumentPane QTabBar::tab {
+    min-width: 100px;
+    padding: 7px 12px;
+    background: #E6EAF0;
+    color: #475467;
+    border: 1px solid #C7CDD6;
+    border-bottom: 0;
+}
+QTabWidget#DocumentPane QTabBar::tab:selected {
+    background: #FFFFFF;
+    color: #073A89;
+    font-weight: 700;
+}
+QLabel#DocumentTitle,
+QLabel#HomeTitle {
+    color: #101828;
+    font-size: 16pt;
+    font-weight: 800;
+}
+QLabel#DocumentSubtitle,
+QLabel#HelperText,
+QLabel#TeachingStatus {
+    color: #667085;
+}
+QWidget#TeachingAnalysisVisual {
+    background: #101828;
+    border: 1px solid #344054;
+    border-radius: 8px;
+}
+QLabel#TeachingAnalysisSummary {
+    color: #047857;
+    background: #ECFDF3;
+    border: 1px solid #6EE7B7;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14pt;
+    font-weight: 800;
+}
+QFrame#TeachingQuickActions {
+    background: rgba(255, 255, 255, 235);
+    border: 1px solid #8FB3F4;
+    border-radius: 8px;
+}
+QToolButton#TeachingQuickAction {
+    min-width: 60px;
+    min-height: 36px;
+    padding: 5px 8px;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: #1D2939;
+    font-weight: 700;
+}
+QToolButton#TeachingQuickAction:hover { background: #EEF4FF; border-color: #8FB3F4; }
+QToolButton#TeachingQuickAction:disabled { background: #F2F4F7; border-color: #EAECF0; color: #98A2B3; }
+QLabel#ExplainFormulaCard {
+    background: #F8FBFF;
+    border: 1px solid #B8CCF3;
+    border-radius: 8px;
+    padding: 8px;
+    color: #344054;
+}
+QPushButton#teachingV2PrimaryButton {
+    background: #155EEF;
+    color: #FFFFFF;
+    border: 1px solid #155EEF;
+    border-radius: 6px;
+    font-size: 12pt;
+    font-weight: 800;
+    padding: 7px 16px;
+}
+QPushButton#teachingV2PrimaryButton:hover { background: #004EEB; }
+QPushButton#teachingV2PrimaryButton:disabled { background: #84ADFF; border-color: #84ADFF; }
+QLabel#DocumentMetric {
+    color: #0A327A;
+    background: #EEF4FF;
+    border: 1px solid #B8CCF3;
+    border-radius: 6px;
+    padding: 7px 9px;
+    font-weight: 700;
+}
+QLabel#ExplanationPlotPlaceholder {
+    background: #F8FAFC;
+    border: 1px dashed #98A2B3;
+    border-radius: 6px;
+    color: #667085;
+}
+QLabel#ResultSource,
+QLabel#TeachingResultSource {
+    color: #05603A;
+    background: #DDF5E8;
+    border: 1px solid #86EFAC;
+    border-radius: 5px;
+    padding: 4px 7px;
+    font-weight: 700;
+}
+QLabel#ResultSource[stale="true"] {
+    color: #7A2E0E;
+    background: #FFF0D5;
+    border-color: #F2B84B;
+}
+QLabel#TeachingResultSource {
+    color: #7A2E0E;
+    background: #FFF0D5;
+    border-color: #F2B84B;
+}
+QPushButton#WorkflowNode {
+    min-width: 210px;
+    background: #FFFFFF;
+    border: 1px solid #C7CDD6;
+    border-radius: 9px;
+    color: #102A56;
+    font-weight: 700;
+    padding: 10px;
+}
+QPushButton#WorkflowNode:hover {
+    background: #EEF4FF;
+    border-color: #8FB3F4;
+}
+QFrame#SchematicCanvas {
+    background: #F8FAFC;
+    border: 1px solid #C7CDD6;
+    border-radius: 9px;
+}
+QLabel#SchematicNode {
+    background: #FFFFFF;
+    border: 1px solid #8FB3F4;
+    border-radius: 7px;
+    padding: 14px 12px;
+    color: #0A327A;
+    font-weight: 700;
+}
+QFrame#TeachingEquipmentPopup {
+    background: #FFFFFF;
+    border: 1px solid #98A2B3;
+    border-radius: 7px;
+}
+QLabel#PopupGroupTitle {
+    color: #344054;
+    font-weight: 750;
+    padding-top: 5px;
+}
+QFrame#TeachingResultPopup {
+    background: #FFFFFF;
+    border: 1px solid #98A2B3;
+    border-radius: 8px;
+}
+QLabel#Teaching3DFallback {
+    background: #F4F7FA;
+    color: #667085;
+    border: 1px solid #D0D5DD;
+    border-radius: 8px;
+    padding: 12px;
+}
+QWidget#teachingV2Inspector {
+    background: #F8FAFC;
+    border-left: 1px solid #D0D5DD;
+}
+QLabel#teachingV2SectionTitle {
+    color: #101828;
+    font-weight: 700;
+}
+QLabel#TeachingStatus {
+    color: #344054;
+    padding-right: 8px;
 }

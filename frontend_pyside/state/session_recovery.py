@@ -42,7 +42,14 @@ class SessionRecoveryStore(QObject):
         super().__init__(parent)
         self.project_context = project_context
         base = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation))
-        base.mkdir(parents=True, exist_ok=True)
+        try:
+            base.mkdir(parents=True, exist_ok=True)
+        except (FileExistsError, PermissionError, OSError):
+            # 某些 Windows 环境中既有 AppData 目录可能由其他权限/进程持有；
+            # 恢复文件不是业务数据，回退到项目运行目录即可保证前端可启动。
+            base = Path.cwd() / ".runtime" / "recovery"
+            base.mkdir(parents=True, exist_ok=True)
+        self._fallback_dir = Path.cwd() / ".runtime" / "recovery"
         self.path = base / "workspace_recovery.json"
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
@@ -84,9 +91,17 @@ class SessionRecoveryStore(QObject):
             "research_journal": _json_safe(self.project_context.research_journal),
             "design_revision": int(self.project_context.design_revision),
         }
+        content = json.dumps(payload, ensure_ascii=False, indent=2)
         tmp = self.path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        tmp.replace(self.path)
+        try:
+            tmp.write_text(content, encoding="utf-8")
+            tmp.replace(self.path)
+        except (PermissionError, OSError):
+            self._fallback_dir.mkdir(parents=True, exist_ok=True)
+            self.path = self._fallback_dir / "workspace_recovery.json"
+            tmp = self.path.with_suffix(".tmp")
+            tmp.write_text(content, encoding="utf-8")
+            tmp.replace(self.path)
 
     def has_recovery(self) -> bool:
         return self.path.exists() and self.path.stat().st_size > 0

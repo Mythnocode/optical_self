@@ -175,19 +175,12 @@ def parameter_label(name: object) -> str:
         if text.endswith("radius_mm"):
             return f"S{surface_no}曲率半径"
         if text.endswith("distance_to_next_mm") or text.endswith("thickness_mm"):
-            
-            
-            if isinstance(surface_no, int) and surface_no == 8:
-                return "L4–名义焦面距离"
-            if isinstance(surface_no, int) and surface_no % 2 == 0:
-                lens = surface_no // 2
-                return f"L{lens}–L{lens + 1}空气间隔"
-            return f"S{surface_no}后距离"
+            return f"S{surface_no}厚度"
         if text.endswith("semi_aperture_mm"):
             return f"S{surface_no}有效孔径"
         return f"S{surface_no}参数"
     aliases = {
-        "spacing": "空气间隔",
+        "spacing": "厚度",
         "curvature": "镜面曲率",
         "fiber": "光纤位置",
         "alignment": "五轴装调",

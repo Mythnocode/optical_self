@@ -42,6 +42,38 @@ def _qimage(value: Any) -> QImage:
     image = QImage(rgb.data, rgb.shape[1], rgb.shape[0], rgb.strides[0], QImage.Format.Format_RGB888)
     return image.copy()
 
+def physical_span(data: dict[str, Any], image: QImage | None = None) -> tuple[float, float]:
+    x = np.asarray(data.get("x", []), dtype=float).reshape(-1)
+    y = np.asarray(data.get("y", []), dtype=float).reshape(-1)
+    x = x[np.isfinite(x)]
+    y = y[np.isfinite(y)]
+    span_x = float(abs(x[-1] - x[0])) if x.size >= 2 else 0.0
+    span_y = float(abs(y[-1] - y[0])) if y.size >= 2 else 0.0
+    if span_x > 0.0 and span_y > 0.0:
+        return span_x, span_y
+    if image is not None and not image.isNull():
+        return float(max(image.width(), 1)), float(max(image.height(), 1))
+    return 1.0, 1.0
+
+
+def fitted_physical_rect(available: QRect, span_x: float, span_y: float) -> QRect:
+    width = max(int(available.width()), 1)
+    height = max(int(available.height()), 1)
+    if span_x <= 0.0 or span_y <= 0.0:
+        return QRect(available.x(), available.y(), width, height)
+    target = span_x / span_y
+    current = width / float(height)
+    if current > target:
+        fitted_w = max(1, int(round(height * target)))
+        fitted_h = height
+    else:
+        fitted_w = width
+        fitted_h = max(1, int(round(width / target)))
+    x = available.x() + (width - fitted_w) // 2
+    y = available.y() + (height - fitted_h) // 2
+    return QRect(x, y, fitted_w, fitted_h)
+
+
 def prewarm_fast_heatmap() -> dict[str, float]:
 
     started = perf_counter()
@@ -110,9 +142,11 @@ class FastHeatmapWidget(QWidget):
     def _draw_beam_match(self, painter: QPainter) -> None:
         left_profile_w, top_profile_h = 58, 54
         margin_right, margin_bottom = 24, 42
-        main = self.rect().adjusted(left_profile_w + 12, top_profile_h + 10, -margin_right, -margin_bottom)
-        if main.width() <= 2 or main.height() <= 2:
+        available = self.rect().adjusted(left_profile_w + 12, top_profile_h + 10, -margin_right, -margin_bottom)
+        if available.width() <= 2 or available.height() <= 2:
             return
+        span_x, span_y = physical_span(self._data, self._images[0] if self._images else None)
+        main = fitted_physical_rect(available, span_x, span_y)
         painter.drawImage(main, self._images[0])
         painter.setPen(QPen(QColor("#111827"), 1))
         painter.drawRect(main)
@@ -150,6 +184,30 @@ class FastHeatmapWidget(QWidget):
         for index, values in enumerate(y_profiles.values()):
             painter.setPen(QPen(profile_colors[index % len(profile_colors)], 1.35))
             painter.drawPath(self._profile_path(values, side, vertical=True))
+        legend_labels = [str(label) for label in list(x_profiles.keys() or y_profiles.keys()) if str(label).strip()]
+        if legend_labels:
+            row_height = 18
+            legend_width = min(220, max(150, main.width() // 3))
+            legend_height = 10 + row_height * len(legend_labels)
+            legend = QRect(
+                main.left() + 10,
+                main.top() + 10,
+                legend_width,
+                legend_height,
+            )
+            painter.fillRect(legend, QColor(255, 255, 255, 224))
+            painter.setPen(QPen(QColor("#94a3b8"), 1))
+            painter.drawRect(legend)
+            for index, label in enumerate(legend_labels):
+                y_pos = legend.top() + 9 + index * row_height
+                painter.setPen(QPen(profile_colors[index % len(profile_colors)], 2.0))
+                painter.drawLine(legend.left() + 8, y_pos, legend.left() + 28, y_pos)
+                painter.setPen(QPen(QColor("#111827"), 1))
+                painter.drawText(
+                    QRect(legend.left() + 36, y_pos - 9, legend.width() - 42, 18),
+                    Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                    label,
+                )
         painter.setPen(QPen(QColor("#111827"), 1))
         painter.drawText(QRect(main.left(), main.bottom()+8, main.width(), 24), Qt.AlignmentFlag.AlignCenter, str(self._data.get("x_label", "x")))
         painter.save(); painter.translate(14, main.center().y()); painter.rotate(-90)
@@ -169,18 +227,27 @@ class FastHeatmapWidget(QWidget):
             return
         margin_left, margin_right, margin_top, margin_bottom = 52, 24, 14, 42
         plot = self.rect().adjusted(margin_left, margin_top, -margin_right, -margin_bottom)
-        count = len(self._images); gap = 12 if count > 1 else 0
-        width = max(1, (plot.width()-gap*(count-1))//count)
+        count = len(self._images)
+        gap = 12 if count > 1 else 0
+        width = max(1, (plot.width() - gap * (count - 1)) // count)
         painter.setPen(QPen(QColor("#111827"), 1))
+        pair_labels = ("\u5165\u5c04\u573a", "\u76ee\u6807\u6a21\u573a")
         for index, image in enumerate(self._images):
-            rect = QRect(plot.left()+index*(width+gap), plot.top(), width, plot.height())
-            painter.drawImage(rect, image); painter.drawRect(rect)
+            cell = QRect(plot.left() + index * (width + gap), plot.top(), width, plot.height())
+            span_x, span_y = physical_span(self._data, image)
+            rect = fitted_physical_rect(cell, span_x, span_y)
+            painter.drawImage(rect, image)
+            painter.drawRect(rect)
             if count > 1:
-                painter.drawText(rect.adjusted(4,4,-4,-4), Qt.AlignmentFlag.AlignTop|Qt.AlignmentFlag.AlignLeft, "入射场" if index == 0 else "目标模式")
+                painter.drawText(
+                    rect.adjusted(4, 4, -4, -4),
+                    Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft,
+                    pair_labels[index] if index < len(pair_labels) else "",
+                )
         painter.drawText(QRect(plot.left(), plot.bottom()+8, plot.width(), 24), Qt.AlignmentFlag.AlignCenter, str(self._data.get("x_label", "x")))
         painter.save(); painter.translate(16, plot.center().y()); painter.rotate(-90)
         painter.drawText(QRect(-plot.height()//2, -12, plot.height(), 24), Qt.AlignmentFlag.AlignCenter, str(self._data.get("y_label", "y")))
         painter.restore()
 
 
-__all__ = ["FastHeatmapWidget", "prewarm_fast_heatmap"]
+__all__ = ["FastHeatmapWidget", "fitted_physical_rect", "physical_span", "prewarm_fast_heatmap"]

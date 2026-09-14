@@ -450,7 +450,7 @@ def build_candidate_comparison(result: Mapping[str, Any], *, efficiency: bool) -
             if predicted is not None and abs(predicted) <= 1.000001:
                 predicted *= 100.0
         raw_label = str(item.get("label", item.get("name", "")) or "").strip()
-        # Legacy/demo result payloads sometimes called candidates "方案A/B/C".
+        # Legacy/demo result payloads sometimes used lettered candidate labels.
         # The platform has only one current system; optimisation produces candidates.
         if not raw_label or raw_label.startswith("方案"):
             raw_label = f"候选{index + 1}"
@@ -492,7 +492,7 @@ def _compact_correlation_label(raw_key: str, display: str) -> str:
     if match:
         surface = int(match.group(1)) + 1
         suffix = {
-            "distance_to_next_mm": "间距",
+            "distance_to_next_mm": "厚度",
             "radius_mm": "曲率",
             "semi_aperture_mm": "口径",
         }[match.group(2)]

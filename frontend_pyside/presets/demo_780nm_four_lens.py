@@ -40,12 +40,17 @@ DEFAULT_ANALYSES = ("raytrace", "coupling")
 DEFAULT_ONLY_VISIBLE_RESULTS = True
 DEFAULT_HIGH_PRECISION_COUPLING = True
 
-REFERENCE_COUPLING_EFFICIENCY = 0.9521742176876733
+# These values are verified by the same formal engine used by the simulation
+# page.  ``coupling`` is mode overlap; ``total`` also includes transmission
+# and the receiver end-face, so it is the number shown as total coupling.
+REFERENCE_COUPLING_EFFICIENCY = 0.9526683715245725
+REFERENCE_TOTAL_COUPLING_EFFICIENCY = 0.9478689950587655
+REFERENCE_TRANSMISSION_EFFICIENCY = 0.9999619850016022
 REFERENCE_GRID_SIZE = 513
 REFERENCE_ELAPSED_SECONDS = 2.132368888998826
 
 
-FOUR_LENS_SURFACES = (
+_RAW_FOUR_LENS_SURFACES = (
     {
         "name": "L1 前表面", "radius_mm": 5.11, "thickness_mm": 3.0,
         "material": "N-BK7", "semi_aperture_mm": 3.0,
@@ -97,6 +102,24 @@ FOUR_LENS_SURFACES = (
         "surface_type": "平面", "conic": 0.0,
         "group_id": "L4", "mechanical_diameter_mm": 6.0,
     },
+)
+
+# 780 nm single-layer quarter-wave AR prescription.  It is attached to every
+# refracting surface and is part of the project payload, rather than a UI-only
+# efficiency multiplier.  Thus teaching and simulation use exactly the same
+# optical prescription when the teaching bench is synchronised from simulation.
+_DEMO_AR_LAYER = {
+    "name": "780 nm 设计波长增透膜",
+    "refractive_index": 1.229,
+    "thickness_nm": 158.67,
+}
+FOUR_LENS_SURFACES = tuple(
+    {
+        **surface,
+        "coating": "自定义镀膜",
+        "type_parameters": {"coating_layers": [dict(_DEMO_AR_LAYER)]},
+    }
+    for surface in _RAW_FOUR_LENS_SURFACES
 )
 
 __all__ = [name for name in globals() if name.isupper()]

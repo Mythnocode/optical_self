@@ -88,7 +88,7 @@ class SurfacePropertyMixin:
             self._field("表面名称", self.surface_name),
             self._field("表面类型", self.surface_type, "切换后下方专用参数页自动变化"),
             self._field("曲率半径 R", self.radius, "正负号遵循光传播方向"),
-            self._field("厚度 / 后间隔", self.thickness, "该面到下一面的轴向距离"),
+            self._field("厚度", self.thickness, "该面到下一面的轴向距离"),
             self._field("材料 / 后介质", self.material, "空气间隔使用 AIR"),
             self._field("半口径", self.aperture, "有效通光半径"),
         ]

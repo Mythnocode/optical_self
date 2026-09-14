@@ -266,9 +266,9 @@ class GuidanceSession:
             "optimization.variables": "完成参数优化",
             "optimization.variable_structure": "完成可变结构研究",
             "machine_learning.training": "训练并评估代理模型",
-            "teaching.explore": "用可视化实验理解当前问题",
-            "teaching.mismatch": "探索模场失配现象",
-            "teaching.diagnosis": "通过可视化证据学习诊断",
+            "teaching.explore": "打开教学实验台",
+            "teaching.mismatch": "打开教学实验台",
+            "teaching.diagnosis": "打开教学实验台",
         }
         return labels.get(self.target, str(self.action.get("label") or "继续当前研究"))
 

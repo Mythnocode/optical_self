@@ -14,26 +14,62 @@ def translation_matrix(distance_mm: float, refractive_index: float = 1.0) -> np.
     return np.array([[1.0, float(distance_mm) / float(refractive_index)], [0.0, 1.0]], dtype=float)
 
 
-def refraction_matrix(surface: OpticalSurface, n_before: float, n_after: float) -> np.ndarray:
-    power = (float(n_after) - float(n_before)) * surface.curvature
+def meridional_curvature(surface: OpticalSurface, axis: str | None = None) -> float:
+    """Return curvature seen by an x/y paraxial meridian.
+
+    A cylindrical surface has zero power along its cylinder axis and full power
+    perpendicular to it.  For an oblique cylinder this is the diagonal part of
+    the exact 2-D power tensor; the full ray tracer retains the cross coupling.
+    ``axis=None`` preserves the legacy powered-meridian result.
+    """
+    curvature = surface.curvature
+    if not surface.is_cylindrical or axis is None:
+        return curvature
+    name = str(axis).strip().lower()
+    if name not in {"x", "y"}:
+        raise ValueError("近轴方向必须是 x 或 y。")
+    angle = np.deg2rad(float(surface.cylinder_axis_deg))
+    power_axis = np.array([-np.sin(angle), np.cos(angle)], dtype=float)
+    component = float(power_axis[0] if name == "x" else power_axis[1])
+    return float(curvature * component * component)
+
+
+def refraction_matrix(
+    surface: OpticalSurface,
+    n_before: float,
+    n_after: float,
+    *,
+    axis: str | None = None,
+) -> np.ndarray:
+    power = (float(n_after) - float(n_before)) * meridional_curvature(surface, axis)
     return np.array([[1.0, 0.0], [-power, 1.0]], dtype=float)
 
 
-def matrix_from_first_to_after_last(system: SequentialOpticalSystem, wavelength_nm: float | None = None) -> np.ndarray:
+def matrix_from_first_to_after_last(
+    system: SequentialOpticalSystem,
+    wavelength_nm: float | None = None,
+    *,
+    axis: str | None = None,
+) -> np.ndarray:
     wavelength = float(wavelength_nm or system.wavelength_nm)
     matrix = np.eye(2)
     for index, surface in enumerate(system.surfaces):
         n_before = system.material_index(surface.material_before, wavelength)
         n_after = system.material_index(surface.material_after, wavelength)
-        matrix = refraction_matrix(surface, n_before, n_after) @ matrix
+        matrix = refraction_matrix(surface, n_before, n_after, axis=axis) @ matrix
         if index < len(system.surfaces) - 1:
             matrix = translation_matrix(surface.distance_to_next_mm, n_after) @ matrix
     return matrix
 
 
-def effective_focal_length_mm(system: SequentialOpticalSystem, wavelength_nm: float | None = None) -> float:
+def effective_focal_length_mm(
+    system: SequentialOpticalSystem,
+    wavelength_nm: float | None = None,
+    *,
+    axis: str | None = None,
+) -> float:
     wavelength = float(wavelength_nm or system.wavelength_nm)
-    c_value = float(matrix_from_first_to_after_last(system, wavelength)[1, 0])
+    c_value = float(matrix_from_first_to_after_last(system, wavelength, axis=axis)[1, 0])
     n_output = system.material_index(system.surfaces[-1].material_after, wavelength)
     return float("inf") if abs(c_value) < 1.0e-15 else float(abs(-n_output / c_value))
 

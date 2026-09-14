@@ -107,6 +107,8 @@ class XGBoostPhysicsResidualRegressor:
         params.update(
             {key: value for key, value in self.hyperparameters.items() if key in allowed}
         )
+        if int(params.get("early_stopping_rounds") or 0) <= 0:
+            params.pop("early_stopping_rounds", None)
         return XGBRegressor(**params)
 
     def fit(self, X: Any, y: Any, *, X_validation: Any | None = None, y_validation: Any | None = None):

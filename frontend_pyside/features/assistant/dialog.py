@@ -1275,9 +1275,7 @@ class AiAssistantDialog(QDialog):
         context_collection_errors: list[str] = []
         shell = self.parentWidget()
         try:
-            host = getattr(shell, "_pages", {}).get(self._page_id)
-            page = getattr(host, "loaded_page", None) if host is not None else None
-            provider = getattr(page, "assistant_context", None)
+            provider = getattr(shell, "assistant_context", None)
             if callable(provider):
                 value = provider()
                 if isinstance(value, dict):

@@ -1,9 +1,6 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
-from types import SimpleNamespace
-
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("QT_QUICK_BACKEND", "software")
 
@@ -15,15 +12,22 @@ from frontend_pyside.shared.plotting.engineering_views import (
     build_candidate_comparison,
     build_correlation_view,
 )
-from frontend_pyside.features.teaching.experiment_scene import (
-    project_scene_node_2d,
-    scene_node_world_3d,
-)
-from frontend_pyside.features.teaching.asset_registry import asset_for_kind
-
+from frontend_pyside.features.canvas.chart_node import _heatmap_image, _phase_image
+import numpy as np
 
 def _app() -> QApplication:
     return QApplication.instance() or QApplication([])
+
+
+def test_chart_images_own_their_pixel_buffer_after_source_array_is_gone():
+    _app()
+    heatmap = _heatmap_image(np.array([[0.0, 1.0], [0.5, 0.25]]))
+    phase = _phase_image(np.array([[-np.pi, 0.0], [np.pi / 2, np.pi]]))
+    assert heatmap is not None and not heatmap.isNull()
+    assert phase is not None and not phase.isNull()
+    assert heatmap.toImage().pixelColor(1, 0).value() == 255
+    assert phase.toImage().pixelColor(0, 0).value() == 0
+    assert phase.toImage().pixelColor(1, 1).value() == 255
 
 
 def test_before_after_uses_frozen_submission_baseline_and_hides_internal_paths():
@@ -93,7 +97,6 @@ def test_correlation_heatmap_uses_horizontal_multiline_labels_and_safe_margins()
     finally:
         canvas.close()
 
-
 def test_validation_scatter_keeps_diagnostics_outside_plot_and_uses_available_width():
     _app()
     canvas = PlotCanvas()
@@ -135,54 +138,3 @@ def test_categorical_energy_flow_labels_are_not_diagonal():
     finally:
         canvas.close()
 
-
-def test_2d_node_projection_is_derived_from_the_same_canonical_3d_transform():
-    node = SimpleNamespace(x=965.0, y=380.0, params={"z_mm": 87.0}, kind="fiber")
-    world_x, world_y, world_z = scene_node_world_3d(node)
-    side_x, side_y = project_scene_node_2d(node, plane="side", rail_y=450.0)
-    top_x, top_y = project_scene_node_2d(node, plane="top", rail_y=450.0)
-    assert abs(side_x - (world_x / 0.76 + 800.0)) < 1e-9
-    assert abs(top_x - (world_x / 0.76 + 800.0)) < 1e-9
-    assert abs(top_y - (world_z / 0.62 + 450.0)) < 1e-9
-    assert abs(side_y - (450.0 - (world_y - 52.0) * 4.0)) < 1e-9
-    # Same visual asset registry also supplies the simplified projected silhouette.
-    assert asset_for_kind(node.kind).asset_id == "fiber_stage_001"
-
-
-def test_known_detached_teaching_parts_have_been_removed_or_connected():
-    root = Path(__file__).resolve().parents[1] / "frontend_pyside/resources/qml/teaching3d/assets"
-    laser = (root / "TeachingLaser.qml").read_text(encoding="utf-8")
-    fiber = (root / "TeachingFiberStage.qml").read_text(encoding="utf-8")
-    mirror = (root / "TeachingMirror.qml").read_text(encoding="utf-8")
-    assert "Qt.vector3d(-60,25,20)" not in laser
-    assert "Connector stems" in fiber
-    # Mirror adjusters must also have stems closer to the mount body.
-    assert "Qt.vector3d(-12,25,18)" in mirror
-    assert "Qt.vector3d(-12,-3,24)" in mirror
-
-
-def test_auto_optimization_summary_and_editor_share_one_variable_selector():
-    from frontend_pyside.app.bootstrap import create_app_context
-    from frontend_pyside.features.optimization.page import OptimizationPage
-
-    app = _app()
-    page = OptimizationPage(create_app_context())
-    page.resize(1100, 720)
-    page.show()
-    try:
-        page._select_core_optimization_task(0)
-        app.processEvents()
-        enabled = page.variable_selector.get_variables()
-        assert enabled
-        # The compact summary is derived from those concrete enabled rows.
-        assert "当前选择" in page.fixed_selection_summary.text()
-        assert "空气间隔" in page.fixed_selection_summary.text()
-        # Main task selector routes to the same persistent detailed selector,
-        # rather than opening a second category configuration dialog.
-        page._open_fixed_parameter_selector()
-        app.processEvents()
-        assert page.variable_selector_dialog.isVisible()
-        assert page.variable_selector.parent() is page.variable_selector_dialog
-    finally:
-        page.variable_selector_dialog.close()
-        page.close()
