@@ -1939,9 +1939,10 @@ QTabWidget#DocumentPane QTabBar::tab:selected {
 }
 QLabel#DocumentTitle,
 QLabel#HomeTitle {
-    color: #101828;
-    font-size: 16pt;
+    color: #155EEF;
+    font-size: 24pt;
     font-weight: 800;
+    padding: 0 6px;
 }
 QLabel#DocumentSubtitle,
 QLabel#HelperText,
@@ -2032,16 +2033,104 @@ QLabel#TeachingResultSource {
 }
 QPushButton#WorkflowNode {
     min-width: 210px;
+    min-height: 76px;
     background: #FFFFFF;
-    border: 1px solid #C7CDD6;
-    border-radius: 9px;
+    border: 2px solid #B8CCF3;
+    border-radius: 14px;
     color: #102A56;
     font-weight: 700;
-    padding: 10px;
+    padding: 6px;
+    text-align: left;
 }
 QPushButton#WorkflowNode:hover {
+    background: #F7FAFF;
+    border-color: #155EEF;
+}
+QPushButton#WorkflowNode:focus {
+    background: #F7FAFF;
+    border: 2px solid #155EEF;
+}
+QPushButton#WorkflowNode:pressed {
+    background: #DCE9FF;
+    border-color: #0B4EAE;
+}
+QPushButton#WorkflowNode:disabled {
+    background: #F2F4F7;
+    border-color: #D0D5DD;
+}
+QPushButton#WorkflowNode[workflowKind="teaching"] {
+    min-width: 620px;
+    min-height: 96px;
+}
+QPushButton#HomeActionButton {
+    min-height: 32px;
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: #344054;
+    font-weight: 650;
+}
+QPushButton#HomeActionButton:hover,
+QPushButton#HomeActionButton:focus {
     background: #EEF4FF;
-    border-color: #8FB3F4;
+    border-color: #B8CCF3;
+    color: #0A327A;
+}
+QWidget#WorkflowHome {
+    background: #F8FAFC;
+}
+QFrame#WorkflowCanvas {
+    background: #FFFFFF;
+    border: 1px solid #C7CDD6;
+    border-radius: 16px;
+}
+QFrame#WorkflowTitleRule {
+    color: #8FB3F4;
+    max-height: 2px;
+}
+QLabel#WorkflowNodeIcon {
+    background: #EEF4FF;
+    border: 2px solid #8FB3F4;
+    border-radius: 28px;
+}
+QLabel#WorkflowNodeTitle {
+    color: #0A327A;
+    font-size: 17pt;
+    font-weight: 800;
+}
+QLabel#WorkflowNodeSubtitle {
+    color: #344054;
+    font-size: 13pt;
+    font-weight: 650;
+}
+QLabel#WorkflowNodeArrow {
+    background: #F7FAFF;
+    border: 2px solid #8FB3F4;
+    border-radius: 19px;
+}
+QWidget#WorkflowConnector {
+    background: transparent;
+}
+QFrame#WorkflowSimulationPanel {
+    background: #F8FBFF;
+    border: 2px solid #8FB3F4;
+    border-radius: 18px;
+}
+QFrame#WorkflowSimulationHeader {
+    background: #FFFFFF;
+    border: 2px solid #8FB3F4;
+    border-radius: 10px;
+}
+QLabel#WorkflowSectionIcon {
+    background: #DCE9FF;
+    border: 1px solid #8FB3F4;
+    border-radius: 15px;
+}
+QLabel#WorkflowSectionTitle {
+    color: #0A327A;
+    font-size: 15pt;
+    font-weight: 800;
 }
 QFrame#SchematicCanvas {
     background: #F8FAFC;

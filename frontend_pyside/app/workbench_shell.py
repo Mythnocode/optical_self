@@ -4396,6 +4396,117 @@ class DocumentWorkspace(QFrame):
         self._collapse_empty_panes()
 
 
+_WORKFLOW_NODE_ICONS: dict[str, str] = {
+    "teaching": "guide",
+    "lens_data": "settings",
+    "ray_layout": "chart",
+    "spot": "intensity",
+    "coupling": "phase",
+    "dataset": "list",
+    "opt_vars": "properties",
+    "global_contrib": "explainability",
+}
+
+
+class WorkflowNodeButton(QPushButton):
+    """A native, accessible workflow card with a stable click target."""
+
+    def __init__(
+        self,
+        kind: str,
+        title: str,
+        subtitle: str,
+        icon_name: str,
+        parent: QWidget | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.setObjectName("WorkflowNode")
+        self.setProperty("workflowKind", kind)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.setMinimumHeight(76)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.setAccessibleName(title)
+        self.setAccessibleDescription(subtitle)
+        self.setToolTip(f"{title}：{subtitle}")
+        # Keep the application-wide Qt font family; only the QSS size/weight
+        # varies by hierarchy so the home page stays consistent with the shell.
+
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(16, 12, 16, 12)
+        layout.setSpacing(14)
+
+        icon_label = QLabel()
+        icon_label.setObjectName("WorkflowNodeIcon")
+        icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        icon_label.setFixedSize(56, 56)
+        icon_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        icon_label.setPixmap(icon(icon_name, "#155EEF", 32).pixmap(QSize(32, 32)))
+        layout.addWidget(icon_label)
+
+        copy = QVBoxLayout()
+        copy.setContentsMargins(0, 0, 0, 0)
+        copy.setSpacing(3)
+        title_label = QLabel(title)
+        title_label.setObjectName("WorkflowNodeTitle")
+        subtitle_label = QLabel(subtitle)
+        subtitle_label.setObjectName("WorkflowNodeSubtitle")
+        for label in (title_label, subtitle_label):
+            label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+            label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        copy.addWidget(title_label)
+        copy.addWidget(subtitle_label)
+        copy.addStretch(1)
+        layout.addLayout(copy, 1)
+
+        arrow = QLabel()
+        arrow.setObjectName("WorkflowNodeArrow")
+        arrow.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        arrow.setFixedSize(38, 38)
+        arrow.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        arrow.setPixmap(icon("chevron_right", "#155EEF", 20).pixmap(QSize(20, 20)))
+        layout.addWidget(arrow)
+
+
+class WorkflowConnector(QWidget):
+    """A compact, paint-backed connector that cannot crop a text glyph."""
+
+    def __init__(self, direction: str, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.direction = direction
+        self.setObjectName("WorkflowConnector")
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        if direction == "down":
+            self.setFixedSize(28, 30)
+        else:
+            self.setFixedSize(42, 30)
+
+    def paintEvent(self, event) -> None:  # noqa: N802 - Qt override
+        del event
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        pen = QPen(QColor("#155EEF"))
+        pen.setWidthF(2.4)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+        painter.setPen(pen)
+
+        if self.direction == "down":
+            x = self.width() // 2
+            tip_y = self.height() - 4
+            shaft_end_y = tip_y - 7
+            painter.drawLine(QPoint(x, 3), QPoint(x, shaft_end_y))
+            painter.drawLine(QPoint(x - 5, shaft_end_y - 5), QPoint(x, tip_y))
+            painter.drawLine(QPoint(x, tip_y), QPoint(x + 5, shaft_end_y - 5))
+        else:
+            center_y = self.height() // 2
+            tip_x = self.width() - 4
+            shaft_end_x = tip_x - 7
+            painter.drawLine(QPoint(3, center_y), QPoint(shaft_end_x, center_y))
+            painter.drawLine(QPoint(shaft_end_x - 5, center_y - 5), QPoint(tip_x, center_y))
+            painter.drawLine(QPoint(tip_x, center_y), QPoint(shaft_end_x - 5, center_y + 5))
+
+
 class WorkflowHome(QWidget):
     nodeRequested = Signal(str, str)
     homeActionRequested = Signal(str)
@@ -4404,8 +4515,9 @@ class WorkflowHome(QWidget):
         super().__init__(parent)
         self.setObjectName("WorkflowHome")
         root = QVBoxLayout(self)
-        root.setContentsMargins(22, 18, 22, 18)
-        root.setSpacing(12)
+        root.setContentsMargins(22, 14, 22, 22)
+        root.setSpacing(10)
+
         subbar = QFrame()
         subbar.setObjectName("SecondaryBar")
         subrow = QHBoxLayout(subbar)
@@ -4413,40 +4525,118 @@ class WorkflowHome(QWidget):
         subrow.setSpacing(4)
         for key, label in (("quick_start", "快速开始"), ("help", "帮助")):
             button = _button(label)
+            button.setObjectName("HomeActionButton")
             button.clicked.connect(lambda _checked=False, value=key: self.homeActionRequested.emit(value))
             subrow.addWidget(button)
         subrow.addStretch(1)
         root.addWidget(subbar)
-        title = QLabel("光学研究工作流")
-        title.setObjectName("HomeTitle")
-        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        root.addWidget(title)
-        grid = QGridLayout()
-        grid.setHorizontalSpacing(10)
-        grid.setVerticalSpacing(10)
-        nodes = [
-            ("teaching", "教学入门", "认识器材与光路", 0, 1),
-            ("lens_data", "搭建系统", "进入仿真镜头表", 1, 0),
-            ("ray_layout", "观察结果", "进入仿真光路图", 1, 1),
-            ("spot", "测量数据", "进入仿真光斑图", 1, 2),
-            ("coupling", "分析结果", "进入仿真光纤耦合", 2, 1),
-            ("dataset", "建立模型", "进入数据集生成", 3, 0),
-            ("opt_vars", "优化参数", "进入优化变量", 3, 1),
-            ("global_contrib", "解释原因", "进入解释全局贡献", 3, 2),
-        ]
-        for kind, title_text, subtitle, row, column in nodes:
-            button = QPushButton(f"{title_text}\n{subtitle}")
-            button.setObjectName("WorkflowNode")
-            button.setMinimumHeight(76)
+
+        canvas = QFrame()
+        canvas.setObjectName("WorkflowCanvas")
+        canvas_layout = QVBoxLayout(canvas)
+        canvas_layout.setContentsMargins(24, 18, 24, 24)
+        canvas_layout.setSpacing(10)
+
+        title_row = QHBoxLayout()
+        title_row.setContentsMargins(0, 0, 0, 0)
+        title_row.setSpacing(14)
+        for _ in range(2):
+            rule = QFrame()
+            rule.setObjectName("WorkflowTitleRule")
+            rule.setFrameShape(QFrame.Shape.HLine)
+            rule.setFrameShadow(QFrame.Shadow.Plain)
+            title_row.addWidget(rule, 1)
+            if title_row.count() == 1:
+                title = QLabel("光学研究工作流")
+                title.setObjectName("HomeTitle")
+                title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                title_row.addWidget(title)
+        canvas_layout.addLayout(title_row)
+
+        def connector(direction: str) -> WorkflowConnector:
+            return WorkflowConnector(direction)
+
+        def node(kind: str, title_text: str, subtitle: str) -> WorkflowNodeButton:
+            button = WorkflowNodeButton(kind, title_text, subtitle, _WORKFLOW_NODE_ICONS[kind])
             module = "teaching" if kind == "teaching" else (
                 "simulation" if kind in {"lens_data", "ray_layout", "spot", "coupling"} else
                 "model" if kind == "dataset" else
                 "optimization" if kind == "opt_vars" else "explainability"
             )
             button.clicked.connect(lambda _checked=False, m=module, k=kind: self.nodeRequested.emit(m, k))
-            grid.addWidget(button, row, column)
-        root.addLayout(grid)
-        root.addStretch(1)
+            return button
+
+        intro_row = QHBoxLayout()
+        intro_row.setContentsMargins(0, 0, 0, 0)
+        intro_row.addStretch(1)
+        intro = node("teaching", "教学入门", "认识器材与光路")
+        intro.setFixedWidth(620)
+        intro.setMinimumHeight(108)
+        intro.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        intro_row.addWidget(intro)
+        intro_row.addStretch(1)
+        canvas_layout.addLayout(intro_row)
+        canvas_layout.addWidget(connector("down"), 0, Qt.AlignmentFlag.AlignHCenter)
+
+        simulation_panel = QFrame()
+        simulation_panel.setObjectName("WorkflowSimulationPanel")
+        simulation_panel.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        simulation_layout = QVBoxLayout(simulation_panel)
+        simulation_layout.setContentsMargins(14, 10, 14, 14)
+        simulation_layout.setSpacing(10)
+
+        simulation_header = QFrame()
+        simulation_header.setObjectName("WorkflowSimulationHeader")
+        simulation_header.setFixedSize(220, 52)
+        simulation_header.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        header_layout = QHBoxLayout(simulation_header)
+        header_layout.setContentsMargins(12, 6, 12, 6)
+        header_layout.setSpacing(10)
+        simulation_icon = QLabel()
+        simulation_icon.setObjectName("WorkflowSectionIcon")
+        simulation_icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        simulation_icon.setFixedSize(30, 30)
+        simulation_icon.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        simulation_icon.setPixmap(icon("application", "#155EEF", 22).pixmap(QSize(22, 22)))
+        simulation_label = QLabel("仿真")
+        simulation_label.setObjectName("WorkflowSectionTitle")
+        simulation_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        header_layout.addWidget(simulation_icon)
+        header_layout.addWidget(simulation_label)
+        header_layout.addStretch(1)
+        simulation_layout.addWidget(simulation_header, 0, Qt.AlignmentFlag.AlignLeft)
+
+        simulation_grid = QGridLayout()
+        simulation_grid.setHorizontalSpacing(12)
+        simulation_grid.setVerticalSpacing(12)
+        simulation_titles = {
+            "lens_data": ("搭建系统", "进入仿真镜头表"),
+            "ray_layout": ("观察结果", "进入仿真光路图"),
+            "spot": ("测量数据", "进入仿真光斑图"),
+            "coupling": ("分析结果", "进入仿真光纤耦合"),
+        }
+        for row, kinds in enumerate((("lens_data", "ray_layout"), ("spot", "coupling"))):
+            for column, kind in enumerate(kinds):
+                title_text, subtitle = simulation_titles[kind]
+                simulation_grid.addWidget(node(kind, title_text, subtitle), row, column)
+        simulation_layout.addLayout(simulation_grid)
+        canvas_layout.addWidget(simulation_panel)
+        canvas_layout.addWidget(connector("down"), 0, Qt.AlignmentFlag.AlignHCenter)
+
+        final_row = QHBoxLayout()
+        final_row.setContentsMargins(0, 0, 0, 0)
+        final_row.setSpacing(8)
+        final_nodes = (
+            ("dataset", "建立模型", "进入数据集生成"),
+            ("opt_vars", "优化参数", "进入优化变量"),
+            ("global_contrib", "解释原因", "进入解释全局贡献"),
+        )
+        for index, (kind, title_text, subtitle) in enumerate(final_nodes):
+            final_row.addWidget(node(kind, title_text, subtitle), 1)
+            if index < len(final_nodes) - 1:
+                final_row.addWidget(connector("right"))
+        canvas_layout.addLayout(final_row)
+        root.addWidget(canvas, 1)
 
     def assistant_context(self) -> dict:
         return {"page": "首页", "current_view": "平台总览"}
