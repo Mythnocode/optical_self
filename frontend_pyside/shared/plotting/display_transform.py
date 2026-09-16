@@ -1,4 +1,10 @@
 
+"""绘图坐标与显示坐标之间的变换。
+
+光学计算可能使用米、毫米或归一化坐标；本模块负责把物理范围、像素范围和
+显示比例转换为渲染器需要的值，不改变原始仿真数据。
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

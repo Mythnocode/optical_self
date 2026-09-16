@@ -1,4 +1,10 @@
 
+"""3D 光学场景的交互控制。
+
+本模块处理鼠标旋转、缩放、平移、悬停和交互刷新节流；场景对象如何绘制由
+``canvas_3d_rendering`` 和 ``canvas_3d_static_parts`` 负责。
+"""
+
 from __future__ import annotations
 
 from time import monotonic

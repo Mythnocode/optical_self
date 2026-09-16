@@ -1,3 +1,9 @@
+"""画布交互事件的薄封装。
+
+它把 Qt/Matplotlib 的鼠标事件转换为统一的缩放、平移、3D 视角和悬停操作，
+不负责业务数据计算。
+"""
+
 from __future__ import annotations
 
 from frontend_pyside.shared.plotting.canvas_view import apply_optical_scene_3d_zoom, zoom_axes_at_event

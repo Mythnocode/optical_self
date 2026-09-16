@@ -12,22 +12,10 @@ from frontend_pyside.shared.plotting.engineering_views import (
     build_candidate_comparison,
     build_correlation_view,
 )
-from frontend_pyside.features.canvas.chart_node import _heatmap_image, _phase_image
 import numpy as np
 
 def _app() -> QApplication:
     return QApplication.instance() or QApplication([])
-
-
-def test_chart_images_own_their_pixel_buffer_after_source_array_is_gone():
-    _app()
-    heatmap = _heatmap_image(np.array([[0.0, 1.0], [0.5, 0.25]]))
-    phase = _phase_image(np.array([[-np.pi, 0.0], [np.pi / 2, np.pi]]))
-    assert heatmap is not None and not heatmap.isNull()
-    assert phase is not None and not phase.isNull()
-    assert heatmap.toImage().pixelColor(1, 0).value() == 255
-    assert phase.toImage().pixelColor(0, 0).value() == 0
-    assert phase.toImage().pixelColor(1, 1).value() == 255
 
 
 def test_before_after_uses_frozen_submission_baseline_and_hides_internal_paths():

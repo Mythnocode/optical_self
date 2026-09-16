@@ -1,3 +1,9 @@
+"""绘图诊断指标的通用计算和格式化工具。
+
+这些函数为验证图、残差图、容差线和结果摘要准备数值，不负责创建画布；
+它们通常由 ``canvas_parts.canvas_2d`` 调用。
+"""
+
 from __future__ import annotations
 
 from collections.abc import Mapping

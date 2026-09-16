@@ -68,6 +68,31 @@ def feature_display_name(feature_name: str) -> str:
     return display_feature_name(feature_name)
 
 
+def explain_shap_failure(message: str) -> str:
+    """Turn SHAP service errors into an actionable workbench message."""
+    text = str(message or "").strip()
+    lowered = text.lower()
+    if (
+        "schema" in lowered
+        or "missing_feature" in lowered
+        or "missing one or more trained features" in lowered
+    ):
+        return "当前镜头组参数和这个模型对不上。请用训练该模型时的镜头组再解释。"
+    if "model_not_found" in lowered or "could not be loaded" in lowered:
+        return "找不到这个已训练模型。请重新训练后再解释。"
+    if "not configured" in lowered or "shap_backend" in lowered:
+        return "本机还没装好解释组件，暂时无法计算参数贡献。"
+    if "dataset" in lowered and "mismatch" in lowered:
+        return "解释用的数据集和训练这个模型时不一致。请改用训练时的数据集。"
+    if "internal server error" in lowered:
+        return "解释失败：后端解释服务发生内部错误，请查看后端日志或重新训练模型。"
+    if not text:
+        return "解释失败，请稍后重试。"
+    if "学不成" in text or "数据管理" in text:
+        return text
+    return f"解释失败：{text}"
+
+
 PHYSICAL_MISMATCH_ORDER: tuple[str, ...] = (
     "中心位置失配",
     "尺寸失配",
@@ -617,6 +642,7 @@ __all__ = [
     "build_markdown_report",
     "build_structured_report_html",
     "feature_display_name",
+    "explain_shap_failure",
     "formula_binding_for_feature",
     "formula_latex",
     "formula_location_for_feature",

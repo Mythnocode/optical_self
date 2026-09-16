@@ -1,4 +1,10 @@
 
+"""仿真结果适配器包。
+
+这里负责把后端结果转换为前端绘图、诊断和结果文档能够消费的结构化数据，
+不直接创建 Qt 控件或执行具体的 Matplotlib/QImage 绘制。
+"""
+
 from __future__ import annotations
 
 from importlib import import_module

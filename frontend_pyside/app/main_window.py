@@ -19,10 +19,10 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QToolTip
 
 from frontend_pyside.app.main_window_layout import MainWindowWidgets, build_main_window_layout
 from frontend_pyside.app.shell_controller import ShellController
-from frontend_pyside.app.workbench_shell import CombinedSettingsDialog
-from frontend_pyside.core.constants import APP_NAME, APP_VERSION
+from frontend_pyside.core.constants import APP_NAME
 from frontend_pyside.features.assistant.dialog import AiAssistantDialog
 from frontend_pyside.features.assistant.floating import AssistantFloatingButton
+from frontend_pyside.modules.simulation.settings import CombinedSettingsDialog
 from frontend_pyside.shared.font_fallback import configure_qt_font
 from frontend_pyside.state.session_recovery import SessionRecoveryStore
 
@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
         self.recovery_store = SessionRecoveryStore(context.project, self)
 
         self.setObjectName("mainWindow")
-        self.setWindowTitle(f"{APP_NAME} · {APP_VERSION}")
+        self.setWindowTitle(APP_NAME)
         # Keep the workbench usable on compact laptops and portrait displays;
         # the document/rail splitters provide the remaining adaptation.
         self.setMinimumSize(720, 560)
@@ -321,12 +321,7 @@ class MainWindow(QMainWindow):
         QToolTip.showText(self.mapToGlobal(self.rect().topRight()), self._last_notice, self)
 
     def _refresh_window_title(self) -> None:
-        project = self.context.project.project
-        dirty = " *" if bool(getattr(self.context.project, "dirty", False)) else ""
-        title = f"{APP_NAME} · {project.name}{dirty} · {APP_VERSION}"
-        if self._connection_status:
-            title = f"{title} · {self._connection_status}"
-        self.setWindowTitle(title)
+        self.setWindowTitle(APP_NAME)
 
     # ------------------------------------------------------------------
     # AI assistant

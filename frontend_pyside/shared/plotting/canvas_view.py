@@ -1,4 +1,10 @@
 
+"""画布视角和缩放操作。
+
+这里集中处理 2D 坐标轴范围、3D 相机视角以及以鼠标位置为中心的缩放，
+使交互策略与具体图表类型解耦。
+"""
+
 from __future__ import annotations
 
 import numpy as np

@@ -1,4 +1,10 @@
 
+"""光学场景数据适配器。
+
+它把后端的镜片、光阑、探测面和光线记录转换为 3D 场景模型，隔离后端字段
+命名与渲染器所需的几何结构。
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

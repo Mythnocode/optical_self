@@ -58,4 +58,17 @@ def build_multipath_payload(
     }
 
 
-__all__ = ["build_multipath_payload", "build_simulation_payload"]
+def restrict_payload(payload: dict[str, Any], analyses) -> dict[str, Any]:
+    """Restrict a simulation payload to a selected analysis subset."""
+    names = sorted({str(item) for item in analyses if str(item)})
+    restricted = dict(payload)
+    restricted["analyses"] = names
+    project = dict(payload.get("project") or {})
+    settings = dict(project.get("analysis_settings") or {})
+    settings["requested_analyses"] = list(names)
+    project["analysis_settings"] = settings
+    restricted["project"] = project
+    return restricted
+
+
+__all__ = ["build_multipath_payload", "build_simulation_payload", "restrict_payload"]

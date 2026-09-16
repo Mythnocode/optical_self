@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from PySide6.QtCore import QObject, Signal
 
-from frontend_pyside.features.canvas.task_runner import explain_job_failure
+from frontend_pyside.app.workbench_payloads import explain_job_failure
 from frontend_pyside.features.machine_learning.feature_adapter import (
     FeaturePathError,
     features_from_project,

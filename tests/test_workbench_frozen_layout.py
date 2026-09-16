@@ -157,14 +157,14 @@ def test_frozen_secondary_and_accordion_layout():
         detector.enabled.setChecked(True)
         assert not detector.placement.isHidden()
         assert shell.object_rail.lens_sliders.list.minimumHeight() >= 200
+        # 高频项在前，环境/视场这两个低频项排在最后；「镜头组」已从左侧栏移除。
         assert list(shell.object_rail._sections) == [
-            "environment",
-            "field",
             "source",
-            "lens_group",
             "materials",
             "fiber",
             "detector",
+            "environment",
+            "field",
         ]
         assert shell.object_rail.materials_inspector is not None
         used_names = [

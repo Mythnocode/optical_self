@@ -1,3 +1,10 @@
+"""Matplotlib 图表画布和绘图类型分发器。
+
+``PlotCanvas`` 是非快速热图结果的统一入口。它不关心仿真页面名称，只根据
+绘图载荷中的 ``kind`` 选择 2D 曲线、热图、光路图、3D 场景或诊断图的绘制
+分支。具体 2D/3D 绘制实现通过 Mixin 拆分到 ``canvas_parts`` 目录。
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -26,6 +33,8 @@ from frontend_pyside.shared.plotting.canvas_view import (
 from frontend_pyside.shared.plotting.surface_hover_controller import SurfaceHoverController
 from frontend_pyside.shared.plotting.scene_cache import DualQualitySceneCache
 
+# 全局 Matplotlib 样式：字体、颜色、网格和图例的默认值集中在此处。
+# 单个图需要特殊样式时，应在具体绘图函数中覆盖，而不是修改业务页面。
 rcParams.update(
     {
         **matplotlib_font_config(),
@@ -60,6 +69,7 @@ from frontend_pyside.shared.plotting.canvas_parts import Canvas2DMixin, Canvas3D
 from frontend_pyside.shared.plotting.canvas_parts.data_utils import _csv_cell, _csv_rows, _numeric_arrays, _scene_static_signature
 
 class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCanvas):
+    """承载 2D/3D Matplotlib 图形并负责结果 kind 分发。"""
 
 
     surfaceSelected = Signal(int)
@@ -69,7 +79,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
     viewChanged = Signal()
 
     def __init__(self, parent=None):
-        
+        """创建 Figure、交互控制器、场景缓存和可复用绘图对象。"""
         self.figure = Figure(figsize=(5, 4), facecolor=theme.SCENE_BACKGROUND)
         self.figure.subplots_adjust(
             left=0.13,
@@ -128,9 +138,11 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
 
     @property
     def data(self) -> dict:
+        """返回当前绘图载荷的浅拷贝。"""
         return dict(self._data)
 
     def clear(self) -> None:
+        """清空 Figure、交互状态、场景缓存和可复用 artist。"""
         self.figure.clear()
         self._axis = None
         self._scene_static_signature = None
@@ -155,7 +167,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
 
     @staticmethod
     def _apply_high_contrast_axes(figure: Figure) -> None:
-
+        """统一设置坐标轴、标题、图例和网格的可读性样式。"""
         from matplotlib.ticker import ScalarFormatter
 
         axes = list(figure.axes)
@@ -201,16 +213,23 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
                 continue
 
     def set_plot(self, data) -> None:
+        """接收结构化绘图载荷并按 ``kind`` 创建或更新图形。
+
+        更新顺序是：可复用 2D artist -> 可增量更新的 3D 场景 -> 完整重建。
+        这个顺序兼顾了交互刷新速度和不同图类型之间的正确切换。
+        """
         started = perf_counter()
         new_data = dict(data or {})
         new_kind = new_data.get("kind", "empty")
         if new_kind in {"optical_scene_3d", "raytrace3d"}:
+            # 3D 场景先经过双质量缓存，降低拖动和重复刷新时的对象创建成本。
             formal = "正式" in str(new_data.get("source", ""))
             changed_layers = self._scene_layer_cache.update(new_data, formal=formal)
             new_data = self._scene_layer_cache.snapshot(formal=formal)
             new_data["_scene_changed_layers"] = sorted(changed_layers)
             new_kind = new_data.get("kind", new_kind)
         if self._try_update_reusable_2d(new_data):
+            # 曲线数据变化但图类型不变时，只更新 artist，不清空整个 Figure。
             self._data = new_data
             self.draw_idle()
             record_perf(
@@ -227,6 +246,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
             and self._scene_static_signature == _scene_static_signature(new_data)
             and self._static_scene_artists is not None
         ):
+            # 静态镜头和坐标系不变时，只更新动态光线/标记层。
             self._data = new_data
             self._update_optical_scene_dynamic(new_data)
             self.draw_idle()
@@ -240,6 +260,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
 
         self._capture_view_state()
         self._data = new_data
+        # 其余情况需要完整重建，并清理旧的轴、交互对象和颜色条引用。
         self.figure.clear()
         
         
@@ -272,9 +293,11 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
         self.figure.set_facecolor(theme.SCENE_BACKGROUND)
         kind = self._data.get("kind", "empty")
         if kind == "heatmap_pair":
+            # Matplotlib 仍支持双热图；嵌入工作区通常会优先使用快速热图路径。
             self._heatmap_pair(self._data)
             self._axis = None
         elif kind in {"optical_scene_3d", "raytrace3d"}:
+            # 两种 3D 光路 kind 共用三维轴和场景绘制实现。
             ax = self.figure.add_subplot(111, projection="3d")
             self._axis = ax
             self._optical_scene_3d(ax, self._data)
@@ -295,6 +318,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
             else:
                 ax.text2D(0.04, 0.92, self._data.get("message", "暂无三维数据"), transform=ax.transAxes)
         else:
+            # 普通结果统一进入 Canvas2DMixin 的 kind 分发函数。
             ax = self.figure.add_subplot(111)
             self._axis = ax
             self._plot_2d(ax, self._data)
@@ -315,7 +339,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
 
 
     def _apply_safe_plot_margins(self, kind: str) -> None:
-        """Reserve predictable room for labels inside embedded result workspaces.
+        """为嵌入式结果工作区预留稳定的标题和坐标轴标签空间。
 
         Embedded plots have a fixed visual slot.  A chart must adapt to that slot rather
         than draw labels outside it and rely on clipping.  Composite plots keep their
@@ -355,6 +379,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
             pass
 
     def _try_update_reusable_2d(self, new_data: dict) -> bool:
+        """尝试原地更新同类型 2D artist；无法复用时返回 False。"""
         kind = str(new_data.get("kind", "empty"))
         if self._axis is None or kind != str(self._data.get("kind", "empty")):
             return False
@@ -435,6 +460,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
         return True
 
     def dispose(self) -> None:
+        """断开 Matplotlib 信号并释放交互、悬停和场景资源。"""
         try:
             self._interaction.clear()
             self._hover.clear()
@@ -453,6 +479,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
         self.deleteLater()
 
     def reset_view(self) -> None:
+        """恢复当前 2D 或 3D 图的默认视图范围。"""
         if self._axis is None:
             return
         kind = self._data.get("kind", "empty")
@@ -469,6 +496,7 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
         self.viewChanged.emit()
 
     def set_optical_3d_view(self, preset: str = "all") -> bool:
+        """将当前光路结果切换到指定的 3D 视角预设。"""
         """Fit the formal Matplotlib 3D optical result to a useful axial region.
 
         This deliberately changes only the formal simulation plot.  The teaching
@@ -538,12 +566,14 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
         self.draw_idle(); self.viewChanged.emit(); return True
 
     def save_figure(self, path: str | Path) -> Path:
+        """将当前 Figure 保存为图片文件并返回规范化路径。"""
         output = Path(path)
         output.parent.mkdir(parents=True, exist_ok=True)
         self.figure.savefig(output, dpi=220, bbox_inches="tight")
         return output
 
     def export_data(self, path: str | Path) -> Path:
+        """把当前结构化绘图载荷导出为 JSON/CSV 等数据文件。"""
 
         output = Path(path)
         output.parent.mkdir(parents=True, exist_ok=True)

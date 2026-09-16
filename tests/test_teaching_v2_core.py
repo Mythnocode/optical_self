@@ -812,8 +812,6 @@ def test_v1_teaching_package_is_removed() -> None:
     import importlib.util
 
     assert importlib.util.find_spec("frontend_pyside.features.teaching") is None
-    assert importlib.util.find_spec("frontend_pyside.features.canvas.teaching_3d_node") is None
-    assert importlib.util.find_spec("frontend_pyside.features.canvas.teaching_experiment_node") is None
 
 
 def test_laser_beam_radius_and_ccd_size_round_trip() -> None:

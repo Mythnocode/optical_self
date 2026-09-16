@@ -1,4 +1,10 @@
 
+"""绘图缩略图缓存。
+
+它保存小尺寸预览的最近使用结果，用于页面导航或结果列表快速展示；正式图表
+仍由结果工作区和对应渲染器生成。
+"""
+
 from __future__ import annotations
 
 from collections import OrderedDict

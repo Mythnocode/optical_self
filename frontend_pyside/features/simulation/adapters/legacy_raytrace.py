@@ -1,3 +1,9 @@
+"""旧版光线追迹结果的兼容适配器。
+
+它把历史 ray-trace 数据字段整理成当前绘图层使用的截面、光线和统计载荷，
+从而让旧结果仍可复用统一的 2D/3D 渲染器。
+"""
+
 from __future__ import annotations
 
 from collections.abc import Mapping

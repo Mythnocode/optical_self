@@ -16,10 +16,10 @@ from PySide6.QtWidgets import QMainWindow, QStackedWidget, QVBoxLayout, QWidget
 
 from frontend_pyside.app.workbench_shell import (
     PrimaryBar,
-    TeachingShell,
     WorkbenchShell,
-    WorkflowHome,
 )
+from frontend_pyside.modules.home import WorkflowHome
+from frontend_pyside.modules.teaching import TeachingShell
 
 
 @dataclass(slots=True)

@@ -1,4 +1,10 @@
 
+"""光学场景构建结果缓存。
+
+缓存静态几何和可复用场景状态，减少 3D 画布在切换结果或调整视角时重复生成
+几何对象的开销；它不缓存最终图片。
+"""
+
 from __future__ import annotations
 
 from copy import deepcopy

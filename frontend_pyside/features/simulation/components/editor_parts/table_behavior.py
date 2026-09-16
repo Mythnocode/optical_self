@@ -42,10 +42,10 @@ class SurfaceTableMixin:
                     surface.group_id,
                     surface.name,
                     surface.surface_type,
-                    f"{surface.radius_mm:.8g}",
-                    f"{surface.thickness_mm:.8g}",
+                    f"{surface.radius_mm:.2f}",
+                    f"{surface.thickness_mm:.2f}",
                     surface.material,
-                    f"{surface.semi_aperture_mm:.8g}",
+                    f"{surface.semi_aperture_mm:.2f}",
                 ]
                 for column, value in enumerate(values):
                     item = QTableWidgetItem(str(value))
@@ -118,7 +118,7 @@ class SurfaceTableMixin:
             self.selected_badge.set_tone("info")
             feature = surface_feature_summary(surface)
             self.selection_context.setText(
-                f"{surface.surface_type}｜材料 {surface.material}｜半口径 {surface.semi_aperture_mm:.3f} mm｜{feature}"
+                f"{surface.surface_type}｜材料 {surface.material}｜半口径 {surface.semi_aperture_mm:.2f} mm｜{feature}"
             )
             self.group_id.setText(surface.group_id)
             self.surface_name.setText(surface.name)

@@ -1,4 +1,10 @@
 
+"""3D 光学场景的数据模型。
+
+数据类描述元件、光线、标注和场景范围，便于适配器与渲染器之间传递结构化
+信息，避免在 Matplotlib artist 上直接承载业务状态。
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

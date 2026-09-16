@@ -1,3 +1,9 @@
+"""波动光学结果的绘图适配器。
+
+本模块只负责从波前、衍射和传播结果中提取曲线/热图所需的数据；颜色、坐标轴、
+图例和画布布局由 ``shared.plotting`` 层决定。
+"""
+
 from __future__ import annotations
 
 from collections.abc import Mapping

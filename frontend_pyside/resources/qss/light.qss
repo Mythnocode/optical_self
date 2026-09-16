@@ -209,6 +209,26 @@ QTextEdit:focus, QPlainTextEdit:focus { border: 1px solid #155EEF; }
 QComboBox::drop-down { width: 26px; border: 0; }
 QRadioButton, QCheckBox { min-height: 30px; spacing: 6px; }
 QFormLayout QLabel { color: #344054; }
+/* 单位小方块：跟在数值输入框右边的 "nm" / "mm" 之类。
+   生成处：frontend_pyside/modules/shared.py 的 _spin_unit_row()。
+
+   高度必须和它左边的输入框严格对齐，否则一行里两个框一高一矮。
+   Qt QSS 走的是 CSS2 盒模型：min/max-height 管的是**内容区**高度，
+   最终控件高 = 内容高 + 上下 padding + 上下 border。所以：
+
+     输入框（见下方 ObjectInspector 那条） 28 + 1+1 + 1+1 = 32px
+     单位框（本条）                        28 + 1+1 + 1+1 = 32px
+
+   两处的 28 必须同时改，只改一处就会重新错位。 */
+QLabel#UnitLabel {
+    min-height: 28px;
+    max-height: 28px;
+    padding: 1px 7px;
+    background: #F8FAFC;
+    border: 1px solid #C7CDD6;
+    border-radius: 6px;
+    color: #475467;
+}
 
 
 QTabWidget::pane {
@@ -1762,12 +1782,30 @@ QFrame#PrimaryBar {
     background: #FFFFFF;
     border-bottom: 1px solid #C7CDD6;
 }
+/* 一级栏（首页/仿真/教学/模型/优化/解释）、一级栏右侧的动作按钮
+   （保存/计算/设置）、教学栏按钮：都是纯文字，保持紧凑高度。
+   二级功能栏**不在这组里**，它单独一条，见下面。 */
 QToolButton#PrimaryModuleButton,
 QToolButton#PrimaryActionButton,
-QToolButton#SecondaryFunctionButton,
 QToolButton#TeachingToolButton {
     min-height: 32px;
     padding: 4px 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: #344054;
+    font-weight: 650;
+}
+/* 二级功能栏按钮：上图下字（图标在上、文字在下）。
+   图标由 Python 侧设置（workbench_shell 的 _secondary_icon），
+   QSS 只管高度和配色。
+   高度 = 图标 22 + 行距若干 + 文字一行 ≈ 54，还要留出 padding，
+   所以 min-height 给小了文字会被压掉。
+   注意：这条是独立规则，不要并回上面那一组，否则一级栏会被一起撑高。 */
+QToolButton#SecondaryFunctionButton {
+    min-height: 54px;
+    min-width: 72px;
+    padding: 5px 10px;
     border: 1px solid transparent;
     border-radius: 6px;
     background: transparent;
@@ -1842,15 +1880,29 @@ QToolButton#AccordionHeader {
     min-height: 34px;
     padding: 4px 8px;
     border: none;
+    /* 圆角很重要：展开态是一整块实心色，不切圆角会变成一条顶到边的方块，
+       看起来像被右侧滚动条切掉了。 */
+    border-radius: 6px;
     background: #F8FAFC;
     color: #101828;
     font-weight: 700;
     text-align: left;
 }
-QToolButton#AccordionHeader:checked,
+/* 悬停但未展开：只提亮一点，不要和展开态撞色 */
 QToolButton#AccordionHeader:hover {
     background: #EEF4FF;
     color: #0A327A;
+}
+/* 展开态：实心主蓝 + 白字，与首页「仿真」栏标题头（WorkflowSectionHeader）同一套观感 */
+QToolButton#AccordionHeader:checked {
+    background: #155EEF;
+    color: #FFFFFF;
+    font-weight: 800;
+}
+/* 展开态悬停：再深一档，避免和上面的蓝色一样导致点不动 */
+QToolButton#AccordionHeader:checked:hover {
+    background: #004EEB;
+    color: #FFFFFF;
 }
 QFrame#ObjectInspector {
     background: transparent;
@@ -2012,6 +2064,14 @@ QLabel#ExplanationPlotPlaceholder {
     border-radius: 6px;
     color: #667085;
 }
+QLabel#coup{
+    color: #FFFFFF;
+    background: #f59e0b;
+    border: 2px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 4px 7px;
+    font-weight: 700;
+}
 QLabel#ResultSource,
 QLabel#TeachingResultSource {
     color: #05603A;
@@ -2031,37 +2091,66 @@ QLabel#TeachingResultSource {
     background: #FFF0D5;
     border-color: #F2B84B;
 }
+/* ===== 首页（工作流总览页）=====
+   实现代码：frontend_pyside/modules/home/shell.py
+   页面结构：WorkflowHome > WorkflowCanvas > 五栏 WorkflowSection > 卡片 WorkflowNode
+
+   这一段的每条规则都靠 objectName 命中 Python 里 setObjectName(...) 设下的名字，
+   所以在 Python 里改一个 objectName，这里对应的样式就会失效（不会报错，只是变回
+    Qt 默认外观）。改配色主要就改这一段，不需要动 Python。
+
+   主色板：#155EEF 主蓝 / #8FB3F4 浅蓝描边 / #B8CCF3 更浅的描边
+           #EEF4FF #F7FAFF #F8FBFF #DCE9FF 由浅到深的蓝底
+           #0A327A 深蓝标题字 / #102A56 正文深蓝 / #475467 #667085 灰字 */
+
+/* --- 卡片：首页最小的工作流节点，点一下跳一个页面 ----------------------------
+   Python: WorkflowNodeButton（QPushButton 子类，objectName="WorkflowNode"）
+   这是 QPushButton 而不是自绘控件，四个状态伪类必须都写全，否则键盘 Tab 选中
+   和按下时会出现 Qt 默认外观，跟整体风格对不上。 */
 QPushButton#WorkflowNode {
-    min-width: 210px;
-    min-height: 76px;
+    min-width: 118px;
+    min-height: 62px;
     background: #FFFFFF;
     border: 2px solid #B8CCF3;
-    border-radius: 14px;
+    border-radius: 12px;
     color: #102A56;
     font-weight: 700;
-    padding: 6px;
+    padding: 4px;
     text-align: left;
 }
+/* 悬停：底色转极浅蓝、描边转主蓝，表示「可点」 */
 QPushButton#WorkflowNode:hover {
     background: #F7FAFF;
     border-color: #155EEF;
 }
+/* 键盘焦点：比悬停更强的描边，保证纯键盘操作时能看清当前停在哪张卡片 */
 QPushButton#WorkflowNode:focus {
     background: #F7FAFF;
     border: 2px solid #155EEF;
 }
+/* 按下：底色明显变深，给一个确定的点击反馈 */
 QPushButton#WorkflowNode:pressed {
     background: #DCE9FF;
     border-color: #0B4EAE;
 }
+/* 禁用态：整张卡片转灰，用于将来按权限/前置条件灰掉某个入口 */
 QPushButton#WorkflowNode:disabled {
     background: #F2F4F7;
     border-color: #D0D5DD;
 }
+
+/* 按卡片类型单独调样式。
+   属性 workflowKind 来自 Python 的 setProperty("workflowKind", kind)，
+   值就是 NodeSpec.kind。想给某一种卡片换颜色/加粗，就在这里再加一条规则。
+   下面这条只是把「教学」这张卡片的描边加重，作为「入门入口」的视觉强调。 */
 QPushButton#WorkflowNode[workflowKind="teaching"] {
-    min-width: 620px;
-    min-height: 96px;
+    border-color: #155EEF;
 }
+
+/* --- 顶部动作条按钮：快速开始 / 帮助 ----------------------------------------
+   Python: WorkflowHome.__init__ 里 setObjectName("HomeActionButton") 的按钮
+   默认无描边无底色，只有悬停/选中时才浮出色块，避免顶部多出一排「按钮感」很重
+   的控件抢视觉。 */
 QPushButton#HomeActionButton {
     min-height: 32px;
     padding: 4px 10px;
@@ -2077,6 +2166,10 @@ QPushButton#HomeActionButton:focus {
     border-color: #B8CCF3;
     color: #0A327A;
 }
+
+/* --- 页面底板与主画布 -------------------------------------------------------
+   WorkflowHome 是最外层灰底；WorkflowCanvas 是里面那张白色圆角大卡片，
+   标题和五栏都装在这张白卡里。 */
 QWidget#WorkflowHome {
     background: #F8FAFC;
 }
@@ -2085,52 +2178,141 @@ QFrame#WorkflowCanvas {
     border: 1px solid #C7CDD6;
     border-radius: 16px;
 }
+
+/* 大标题「光学研究工作流」两侧的装饰横线。
+   QFrame 的 HLine 是靠 color 画的（不是 background），所以这里写 color；
+   max-height 把这条线压成 2px，否则它会按布局撑高成一条粗条。
+   标题本身的字号在下面 QLabel#HomeTitle（和文档标题共用一条规则，搜 HomeTitle）。 */
 QFrame#WorkflowTitleRule {
     color: #8FB3F4;
     max-height: 2px;
 }
+
+/* --- 卡片内部的三块内容 -----------------------------------------------------
+   图标 / 标题 / 副标题都是 QLabel，全部设了 WA_TransparentForMouseEvents，
+   鼠标事件会穿透到外层的 WorkflowNode 按钮上。
+   border-radius 取控件边长的一半才能得到正圆：图标 36px → 18px。
+   若在 Python 里改了 setFixedSize，这里的圆角要跟着改成「边长 ÷ 2」。 */
 QLabel#WorkflowNodeIcon {
     background: #EEF4FF;
     border: 2px solid #8FB3F4;
-    border-radius: 28px;
+    border-radius: 18px;
 }
 QLabel#WorkflowNodeTitle {
     color: #0A327A;
-    font-size: 17pt;
+    font-size: 13pt;
     font-weight: 800;
 }
 QLabel#WorkflowNodeSubtitle {
-    color: #344054;
-    font-size: 13pt;
+    color: #475467;
+    font-size: 10.5pt;
     font-weight: 650;
 }
-QLabel#WorkflowNodeArrow {
-    background: #F7FAFF;
-    border: 2px solid #8FB3F4;
-    border-radius: 19px;
-}
+
+/* 卡片之间的连接箭头。箭头本体由 Python 的 paintEvent 用 QPainter 画，
+   这条规则只是把控件本身刷成透明，免得在蓝底栏上露出一个灰方块。 */
 QWidget#WorkflowConnector {
     background: transparent;
 }
-QFrame#WorkflowSimulationPanel {
+
+/* --- 五等分栏 ---------------------------------------------------------------
+   「水平平分」由 Python 侧的 QHBoxLayout 给每栏 stretch=1 实现，
+   QSS 只负责外观，管不了宽度分配。 */
+/* 滚动容器与内部承载控件都刷透明，让它们不遮挡上面 WorkflowCanvas 的白底。
+   QScrollArea 默认会画自己的方框底，必须显式去掉 frame 与底色。 */
+QScrollArea#WorkflowColumns,
+QWidget#WorkflowColumnsHost {
+    background: transparent;
+    border: 0;
+}
+/* 一栏的整体：浅蓝底 + 蓝色描边 + 大圆角，把「一个业务阶段」圈在一起 */
+QFrame#WorkflowSection {
     background: #F8FBFF;
     border: 2px solid #8FB3F4;
-    border-radius: 18px;
+    border-radius: 16px;
 }
-QFrame#WorkflowSimulationHeader {
-    background: #FFFFFF;
-    border: 2px solid #8FB3F4;
+/* 栏标题头：蓝色底的小胶囊，跟栏底色拉开层次 */
+QFrame#WorkflowSectionHeader {
+    background: #155EEF;
+    border: 2px solid #155EEF;
     border-radius: 10px;
 }
+/* 栏标题的图标：26px 见方 → 圆角 13px 成正圆 */
 QLabel#WorkflowSectionIcon {
-    background: #DCE9FF;
-    border: 1px solid #8FB3F4;
-    border-radius: 15px;
+    border-radius: 13px;
+    background: #FFFFFF;
+    border: 1px solid #FFFFFF;
 }
 QLabel#WorkflowSectionTitle {
-    color: #0A327A;
+    color: #FFFFFF;
     font-size: 15pt;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+/* 栏标题下的灰色说明（SectionSpec.subtitle），留空时这一行不显示 */
+QLabel#WorkflowSectionHint {
+    color: #D6E4FF;
+    font-size: 10.5pt;
+    font-weight: 650;
+}
+/* 栏内介绍段落（SectionSpec.intro），显示在标题头和卡片之间，自动换行。
+   留空时这个控件根本不会被创建，所以可以放心写样式。
+   给它浅底 + 左侧竖线，读起来像「一段说明」而不是另一张卡片。 */
+QLabel#WorkflowSectionIntro {
+    color: #344054;
+    background: #FFFFFF;
+    border: 1px solid #D6E4FF;
+    border-left: 3px solid #8FB3F4;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13pt;
     font-weight: 800;
+}
+/* 注意：Qt 的 QSS 支持 letter-spacing，但**不支持 line-height**，
+   写了会被静默忽略（不报错、也不生效）。想调段落行距只能在 Python 里给
+   QLabel 设富文本样式，本页没这么做。 */
+
+/* ===== 只作用于「仿真」这一栏的样式 =====
+   sectionKey 属性来自 Python 的 setProperty("sectionKey", spec.key)
+   （见 modules/home/shell.py 的 WorkflowSection.__init__），值是 SectionSpec.key。
+
+   这几条必须写在上面那些通用规则**之后**：QSS 同样遵循「后者覆盖前者」，
+   属性选择器并没有更高的优先级，只是更具体而已。
+
+   这里的目标是让「仿真」的栏标题和它下面的节点卡片**明显不是一种东西**：
+   标题 = 深蓝实心条 + 白字（重、像区块头）
+   卡片 = 白底细描边（轻、像一个按钮）
+   两者靠底色和字色一次性拉开，而不是靠字号微调。 */
+
+/* 标题头整条换成深蓝实心 */
+QFrame#WorkflowSectionHeader[sectionKey="simulation"] {
+    background: #155EEF;
+    border: 2px solid #155EEF;
+    border-radius: 10px;
+}
+/* 标题字改白色。必须显式写，否则会继承通用的深蓝字，在深蓝底上看不见 */
+QLabel#WorkflowSectionTitle[sectionKey="simulation"] {
+    color: #FFFFFF;
+    font-size: 15pt;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+/* 标题下的说明也跟着调亮 */
+QLabel#WorkflowSectionHint[sectionKey="simulation"] {
+    color: #D6E4FF;
+}
+/* 图标底色改白。图标线条本身的颜色由 Python 的 SectionSpec.accent 决定
+   （这里是 "#155EEF"），深蓝底上会看不清——所以本栏的 accent 也得一起
+   改成浅色。当前这一栏靠白底圆 + 深蓝图标来对比，若仍觉不够，
+   把 accent 改成 "#FFFFFF" 并把这里改成透明即可。 */
+QLabel#WorkflowSectionIcon[sectionKey="simulation"] {
+    background: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+/* 本栏的整栏底色略深一点，和另外四栏区分开（可选，不要就删掉这条） */
+QFrame#WorkflowSection[sectionKey="simulation"] {
+    background: #F2F7FF;
+    border-color: #155EEF;
 }
 QFrame#SchematicCanvas {
     background: #F8FAFC;

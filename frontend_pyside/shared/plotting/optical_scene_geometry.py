@@ -1,4 +1,10 @@
 
+"""光学元件几何生成与空间布局工具。
+
+本模块只生成可绘制的点、线、面和包围盒等几何数据；颜色、线宽和交互状态
+由上层渲染器及样式模块决定。
+"""
+
 from __future__ import annotations
 
 from collections import OrderedDict

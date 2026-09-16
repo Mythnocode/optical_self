@@ -1,3 +1,10 @@
+"""光纤耦合结果的专用绘图数据适配器。
+
+本模块不直接画图，而是把接收面复场、目标光纤模式和耦合指标转换为
+统一绘图载荷。载荷中的 ``kind`` 决定后续使用快速热图还是 Matplotlib，
+而 ``x``、``y``、``z``、``series`` 和 ``metrics`` 决定图上具体显示内容。
+"""
+
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -12,6 +19,7 @@ FORMAL_SOURCE = "正式仿真"
 
 
 def _display_profile() -> tuple[bool, float]:
+    """读取端面匹配图的自动取景和填充比例配置。"""
     try:
         profile = SimulationNumericsProfileStore().load()
         return bool(profile.get("auto_display_frame", True)), float(profile.get("display_fill_fraction", 0.67))
@@ -20,12 +28,14 @@ def _display_profile() -> tuple[bool, float]:
 
 
 def _normalize(values: np.ndarray) -> np.ndarray:
+    """将数组按最大值归一化，用于热图和剖面比较显示。"""
     values = np.nan_to_num(np.asarray(values, dtype=float), nan=0.0, posinf=0.0, neginf=0.0)
     maximum = float(np.max(values)) if values.size else 0.0
     return values / maximum if maximum > 0.0 else values
 
 
 def _moments(values: np.ndarray, x: np.ndarray, y: np.ndarray) -> tuple[float, float, float, float]:
+    """计算场分布的质心和 X/Y 二阶矩尺寸。"""
     values = np.maximum(np.nan_to_num(values, nan=0.0), 0.0)
     total = float(np.sum(values))
     if total <= 0.0:
@@ -40,6 +50,7 @@ def _moments(values: np.ndarray, x: np.ndarray, y: np.ndarray) -> tuple[float, f
 
 
 def _recursive_number(data: Mapping[str, Any] | None, keys: tuple[str, ...], default: float) -> float:
+    """从指标字典及其嵌套字典中按候选键查找有限数值。"""
     if not isinstance(data, Mapping):
         return default
     for key in keys:
@@ -64,6 +75,12 @@ def _beam_match_view(
     y_label: str,
     source: str,
 ) -> dict[str, Any]:
+    """生成端面匹配载荷。
+
+    主图使用入射场，``contour`` 叠加目标模式轮廓，X/Y profiles 用于显示
+    两者的中心截面；metrics 则提供中心偏移、尺寸比和椭圆率。
+    """
+    # 通过二阶矩得到中心和 1/e² 尺寸，不依赖特定绘图库。
     incident = _moments(field, display_x, display_y)
     target = _moments(mode, display_x, display_y) if mode.shape == field.shape else (0.0, 0.0, 0.0, 0.0)
     cx, cy, wx, wy = incident
@@ -90,6 +107,7 @@ def _beam_match_view(
     else:
         mode_preview = np.zeros_like(field_preview)
 
+    # 大量背景像素会压缩主体，因此把自动取景信息传给渲染层。
     auto_frame, fill_fraction = _display_profile()
     description = (
         f"中心偏移 {center_distance:.3g} μm；X尺寸比 {ratio_x:.3f}；"
@@ -140,6 +158,7 @@ def _waist_position_view(
     project: Mapping[str, Any] | None,
     source: str,
 ) -> dict[str, Any]:
+    """根据端面光斑和轴向偏置估计 X/Y 束腰传播曲线。"""
     incident_radius = list(beam_match.get("incident_radius", [0.0, 0.0]))
     target_radius = list(beam_match.get("target_radius", [0.0, 0.0]))
     wx_plane = max(float(incident_radius[0] or 0.0), 0.1)
@@ -154,7 +173,7 @@ def _waist_position_view(
         dz_mm = v_axial * target_zr_mm
 
     def waist_from_plane(plane_radius: float, offset_mm: float) -> tuple[float, float]:
-        
+        """由某一截面半径和传播距离反推束腰半径及瑞利长度。"""
         lam_um = wavelength_nm * 1e-3
         z_um = abs(offset_mm) * 1000.0
         a = plane_radius**2
@@ -221,6 +240,12 @@ def _coupling_plots(
     metrics: Mapping[str, Any] | None = None,
     project: Mapping[str, Any] | None = None,
 ) -> dict[str, dict[str, Any]]:
+    """生成正式光纤耦合页面使用的全部绘图载荷。
+
+    该函数只负责准备数据：当后端没有单独返回强度或相位时，会由复场的
+    实部/虚部派生；当坐标缺失时，则退回像素坐标，保证图仍可显示。
+    """
+    # 后端数组是原始输入；后续所有视图都从这些数组派生，避免重复取数。
     x = _as_1d(arrays.get("coupling_grid_x_mm"))
     y = _as_1d(arrays.get("coupling_grid_y_mm"))
     real = _as_2d(arrays.get("coupling_field_real"))
@@ -230,6 +255,7 @@ def _coupling_plots(
     mode = _as_2d(arrays.get("coupling_mode_intensity"))
     mode_phase = _as_2d(arrays.get("coupling_mode_phase_rad"))
 
+    # 兼容只返回复场实部/虚部的后端载荷。
     if not field.size and real.size and imag.shape == real.shape:
         field = real * real + imag * imag
     if not phase.size and real.size and imag.shape == real.shape:
@@ -239,6 +265,7 @@ def _coupling_plots(
     if not mode.size or mode.shape != field.shape:
         mode = np.zeros_like(field)
 
+    # 坐标长度不匹配时使用像素坐标，避免数组索引和坐标轴长度不一致。
     if len(x) != field.shape[1]:
         display_x = np.arange(field.shape[1], dtype=float)
         x_label = "x / pixel"
@@ -257,6 +284,7 @@ def _coupling_plots(
     )
     mode_preview = mode[np.ix_(row_index, col_index)]
     phase_preview = phase[np.ix_(row_index, col_index)] if phase.size and phase.shape == field.shape else phase
+    # heatmap_pair 供快速热图同时显示入射场和目标模式。
     diagnostic_pair = {
         "kind": "heatmap_pair", "title": "正式接收面场与光纤模式",
         "x": display_x_preview.astype(float, copy=False), "y": display_y_preview.astype(float, copy=False),
@@ -265,6 +293,7 @@ def _coupling_plots(
         "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
         "description": f"耦合场网格：{field.shape[0]} × {field.shape[1]}。",
     }
+    # beam_match 是端面匹配主图，包含热图、模式轮廓、剖面和摘要指标。
     beam_match = _beam_match_view(field, mode, display_x, display_y, x_label=x_label, y_label=y_label, source=FORMAL_SOURCE)
     coupling_efficiency = _recursive_number(
         metrics,
@@ -287,6 +316,7 @@ def _coupling_plots(
             100.0 * system_efficiency if abs(system_efficiency) <= 1.000001 else system_efficiency
         )
     waist = _waist_position_view(beam_match, metrics=metrics, project=project, source=FORMAL_SOURCE)
+    # 这里的 key 必须与 formal_results.py 和 results.py 中的请求名称一致。
     plots: dict[str, dict[str, Any]] = {
         "端面匹配": beam_match,
         "束腰位置": waist,
@@ -300,6 +330,7 @@ def _coupling_plots(
             "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
         },
     }
+    # 相位数组可选；没有相位时不生成相位热图。
     if phase.size and phase.shape == field.shape:
         plots["相位"] = {
             "kind": "heatmap", "title": "正式接收面场相位",
@@ -321,6 +352,7 @@ def _coupling_plots(
     col_incident = int(np.argmin(np.abs(display_x - beam_match.get("incident_center", [0.0, 0.0])[0]))) if len(display_x) else field.shape[1] // 2
     row_target = int(np.argmin(np.abs(display_y - beam_match.get("fiber_center", [0.0, 0.0])[1]))) if len(display_y) else mode.shape[0] // 2
     col_target = int(np.argmin(np.abs(display_x - beam_match.get("fiber_center", [0.0, 0.0])[0]))) if len(display_x) else mode.shape[1] // 2
+    # X/Y 两个方向分别比较入射场与目标模式，避免只看二维热图时遗漏椭圆率和偏心。
     plots["XY模场比较"] = {
         "kind": "profile_pair", "title": "X/Y 模场比较",
         "x_axis": display_x.astype(float).tolist(),
@@ -336,6 +368,7 @@ def _coupling_plots(
         "x_label": x_label, "y_label": y_label, "value_label": "归一化强度", "source": FORMAL_SOURCE,
         "description": "分别比较 X、Y 方向的入射场与光纤基模截面。",
     }
+    # 复场重叠贡献需要入射场和目标模式都包含相位信息。
     if phase.size and phase.shape == field.shape and mode_phase.size and mode_phase.shape == field.shape:
         overlap = np.sqrt(np.maximum(field, 0.0) * np.maximum(mode, 0.0)) * np.cos(phase - mode_phase)
         scale = float(np.nanmax(np.abs(overlap))) if overlap.size else 0.0
@@ -356,6 +389,7 @@ def _coupling_plots(
 
 
 def _mode_overlay_from_pair(coupling: Mapping[str, Any]) -> dict[str, Any] | None:
+    """把预览阶段的双热图载荷转换为端面匹配载荷。"""
     field = _as_2d(coupling.get("z1"))
     mode = _as_2d(coupling.get("z2"))
     if not field.size or mode.shape != field.shape:
@@ -375,6 +409,7 @@ def _mode_overlay_from_pair(coupling: Mapping[str, Any]) -> dict[str, Any] | Non
 
 
 def _derived_coupling_views(coupling: Mapping[str, Any], *, source: str) -> dict[str, dict[str, Any]]:
+    """从一份耦合双热图载荷派生束腰和中心截面视图。"""
     field = _as_2d(coupling.get("z1"))
     mode = _as_2d(coupling.get("z2"))
     x = _as_1d(coupling.get("x"))

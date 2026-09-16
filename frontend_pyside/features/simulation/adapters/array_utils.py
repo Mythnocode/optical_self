@@ -1,3 +1,9 @@
+"""仿真数组适配辅助函数。
+
+本模块统一处理结果字典中的数组读取、有限值过滤、形状归一化和数值安全转换，
+避免各个绘图适配器重复编写兼容不同后端返回格式的代码。
+"""
+
 from __future__ import annotations
 
 from collections.abc import Mapping

@@ -1,4 +1,10 @@
 
+"""动态 3D 光学场景渲染器。
+
+这里把光线、光斑、传播方向和场景对象转换为 Matplotlib 3D artists，重点是
+动态数据的更新和重绘；静态镜片/元件几何体位于同目录的静态渲染模块。
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

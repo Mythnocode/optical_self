@@ -219,7 +219,7 @@ def _format_value(value: Any, parameter: SurfaceParameterSpec) -> str:
         return "是" if bool(value) else "否"
     if parameter.kind == "float":
         try:
-            text = f"{float(value):.6g}"
+            text = f"{float(value):.2f}"
         except (TypeError, ValueError):
             text = str(value)
     else:
@@ -232,7 +232,7 @@ def surface_feature_summary(surface: Any, max_items: int = 3) -> str:
     spec = get_surface_type(surface.surface_type)
     if not spec.parameters:
         if surface.surface_type == "非球面":
-            return f"k={surface.conic:.4g}"
+            return f"k={surface.conic:.2f}"
         return "—"
     preferred_keys: dict[str, tuple[str, ...]] = {
         "柱面": ("cylinder_axis_deg",),
@@ -300,7 +300,7 @@ def format_parameter_cell(value: Any, parameter: SurfaceParameterSpec) -> str:
         return "是" if bool(value) else "否"
     if parameter.kind == "float":
         try:
-            return f"{float(value):.8g}"
+            return f"{float(value):.2f}"
         except (TypeError, ValueError):
             return str(value)
     if parameter.kind == "int":

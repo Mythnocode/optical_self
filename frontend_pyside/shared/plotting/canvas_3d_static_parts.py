@@ -1,4 +1,10 @@
 
+"""静态 3D 光学元件渲染器。
+
+本模块绘制镜片、平面、光阑、探测面等不会随每帧结果变化的几何对象，供 3D
+画布初始化或场景结构变化时调用。
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

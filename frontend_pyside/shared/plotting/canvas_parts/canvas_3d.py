@@ -1,3 +1,9 @@
+"""3D 绘图入口和渲染器组合层。
+
+它根据载荷选择动态场景或静态场景渲染实现，并把结果挂接到统一的
+``PlotCanvas``；具体几何和 artist 细节分散在 3D 渲染模块中。
+"""
+
 from __future__ import annotations
 
 from frontend_pyside.shared.plotting.canvas_3d_rendering import render_dynamic_scene

@@ -1,3 +1,9 @@
+"""绘图导出、格式化和小型通用工具。
+
+这些函数服务于图片/数据导出、标签格式化和绘图安全处理，不决定某个页面的
+图表类型。
+"""
+
 from __future__ import annotations
 
 from datetime import datetime

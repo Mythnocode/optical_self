@@ -2,7 +2,7 @@ import os
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from frontend_pyside.features.canvas.task_runner import explain_job_failure
+from frontend_pyside.app.workbench_payloads import explain_job_failure
 from machine_learning.datasets.splitter import (
     resolve_training_splits,
     split_ids,

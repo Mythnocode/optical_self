@@ -1,3 +1,10 @@
+"""Matplotlib 二维绘图实现。
+
+``Canvas2DMixin`` 按绘图载荷的 ``kind`` 分发普通曲线、热图、耦合诊断图、
+光路截面图以及模型/优化诊断图。它只接收字典数据和 Matplotlib ``Axes``，
+因此页面层可以通过改变载荷而复用同一套绘图实现。
+"""
+
 from __future__ import annotations
 
 import numpy as np
@@ -9,9 +16,11 @@ from frontend_pyside.shared.plotting.ray_plot_style import (RAY_ALPHA_2D, RAY_LI
 from .data_utils import _downsample_grid, _field_crop_slices
 
 class Canvas2DMixin:
+    """为 PlotCanvas 提供二维绘图和数据标签处理能力。"""
+
     @staticmethod
     def _readable_category_labels(labels: list[str], *, max_chars: int = 16) -> list[str]:
-
+        """把过长的分类标签拆行或截断，避免坐标轴文字互相覆盖。"""
         result: list[str] = []
         for raw in labels:
             text = str(raw).strip() or "—"
@@ -26,12 +35,19 @@ class Canvas2DMixin:
         return result
 
     def _set_category_plot_layout(self, ax, labels: list[str]) -> None:
+        """根据分类标签长度动态调整左、右、上、下边距。"""
         longest = max((max(len(part) for part in label.split("\n")) for label in labels), default=6)
         left = min(0.34, max(0.22, 0.16 + 0.008 * longest))
         ax.figure.subplots_adjust(left=left, right=0.96, bottom=0.17, top=0.86)
 
     def _plot_2d(self, ax, data: dict) -> None:
+        """二维绘图总分发器。
+
+        页面或适配器只需设置 ``data["kind"]``，这里就会选择对应的专用
+        绘图函数；普通 line/heatmap/bar 等类型直接在此完成绘制。
+        """
         kind = data.get("kind", "empty")
+        # 专用诊断图交给独立函数，保证复杂布局不会污染普通图分支。
         if kind == "beam_match":
             self._beam_match(ax, data)
         elif kind == "waist_position":
@@ -73,11 +89,13 @@ class Canvas2DMixin:
         elif kind == "teaching_scan":
             self._teaching_scan(ax, data)
         elif kind == "line":
+            # 单曲线载荷使用 x/y 数组；label 存在时才显示图例。
             label = str(data.get("series_label") or data.get("label") or "").strip()
             ax.plot(data.get("x", []), data.get("y", []), linewidth=1.8, label=label or None)
             if label:
                 ax.legend()
         elif kind == "line_multi":
+            # 多曲线载荷共享 x 轴，每个 series 提供自己的 y 和 label。
             for series in data.get("series", []):
                 ax.plot(
                     data.get("x", []),
@@ -88,6 +106,7 @@ class Canvas2DMixin:
             if data.get("series"):
                 ax.legend()
         elif kind == "heatmap":
+            # Matplotlib 热图用于导出和非快速路径；嵌入页面通常优先走 QImage。
             z, extent = self._prepare_heatmap_data(data)
             if z.size:
                 image = ax.imshow(z, origin="lower", aspect="equal", extent=extent)
@@ -96,6 +115,7 @@ class Canvas2DMixin:
         elif kind == "heatmap_contour":
             self._heatmap_contour(ax, data)
         elif kind == "bar":
+            # 分类柱状图先处理标签，再保存 bars 供交互和数值标注使用。
             labels = self._readable_category_labels([str(value) for value in data.get("labels", [])], max_chars=14)
             values = data.get("values", [])
             colors = data.get("colors") or None
@@ -183,6 +203,7 @@ class Canvas2DMixin:
         else:
             self._empty(ax, data.get("message", "暂无结果"))
 
+        # 复合图内部会自行创建子坐标轴，不能再被通用标题/标签逻辑覆盖。
         composite_kinds = {
             "phase_comparison", "multi_plane_evolution", "before_after", "profile_pair",
             "adjustment_trajectory", "teaching_scan",
@@ -190,6 +211,7 @@ class Canvas2DMixin:
         if kind in composite_kinds:
             return
 
+        # 这些诊断图的标题由画布内的布局或注释承担，避免重复显示大标题。
         diagnostic_titleless_kinds = {
             "waterfall", "mismatch_budget", "beeswarm", "scatter_formula", "research_preview",
             "beam_match", "phase_comparison", "multi_plane_evolution", "before_after",
@@ -212,6 +234,7 @@ class Canvas2DMixin:
             ax.set_ylabel(data.get("y_label", ""), rotation=90, labelpad=28, va="center")
         elif kind != "research_preview":
             ax.set_ylabel(data.get("y_label", ""), rotation=90, labelpad=12, va="center")
+        # 仅对带数值坐标的图显示网格；光路和热图的网格会干扰主体信息。
         if kind in (
             "line", "line_multi", "scatter", "beeswarm", "scatter_formula",
             "mismatch_budget", "waist_position", "parameter_response",
@@ -222,6 +245,7 @@ class Canvas2DMixin:
             ax.grid(False)
 
     def _beam_match(self, ax, data: dict) -> None:
+        """绘制 Matplotlib 版端面匹配复合图。"""
         from matplotlib.patches import Ellipse
 
         field = np.asarray(data.get("z", []), dtype=float)
@@ -269,9 +293,7 @@ class Canvas2DMixin:
         mode_view = mode[rows, columns] if mode.shape == field.shape else np.empty((0, 0))
         xv, yv = x[columns], y[rows]
         extent = [float(xv[0]), float(xv[-1]), float(yv[0]), float(yv[-1])]
-        
-        
-        
+
         ax.set_position([0.25, 0.14, 0.54, 0.54])
         self.figure.suptitle(
             str(data.get("title", "端面匹配总览")),
@@ -349,6 +371,7 @@ class Canvas2DMixin:
             )
 
     def _waist_position(self, ax, data: dict) -> None:
+        """绘制 X/Y 束腰半径随传播距离变化的曲线。"""
         z = np.asarray(data.get("x", []), dtype=float)
         for series in data.get("series", []):
             values = np.asarray(series.get("y", []), dtype=float)
@@ -419,6 +442,7 @@ class Canvas2DMixin:
         ax.grid(True, alpha=0.42, color=theme.CHART_GRID)
 
     def _parameter_response(self, ax, data: dict) -> None:
+        """绘制参数研究或扫描任务的响应曲线。"""
         x = np.asarray(data.get("x", []), dtype=float)
         y = np.asarray(data.get("y", []), dtype=float)
         if len(x) and len(y):
@@ -459,6 +483,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _finite_pairs(first, second) -> tuple[np.ndarray, np.ndarray]:
+        """过滤两组数组中的非有限配对值。"""
 
         try:
             first_values = np.asarray(first, dtype=float).reshape(-1)
@@ -474,6 +499,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _diagnostic_tolerance(residual: np.ndarray, configured=None) -> float:
+        """确定残差诊断图使用的容差，优先使用载荷中的配置值。"""
 
         try:
             tolerance = float(configured)
@@ -491,6 +517,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _diagnostic_metric_lines(data: dict, actual: np.ndarray, residual: np.ndarray, tolerance: float) -> list[str]:
+        """生成验证/残差图右侧显示的诊断指标文本。"""
 
         if not residual.size:
             return []
@@ -513,6 +540,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _diagnostic_limits(*arrays: np.ndarray) -> tuple[float, float]:
+        """根据多个数组计算对称的诊断坐标范围。"""
         values = [array[np.isfinite(array)] for array in arrays if array.size]
         values = [array for array in values if array.size]
         if not values:
@@ -525,6 +553,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _draw_diagnostic_metrics(ax, lines: list[str]) -> None:
+        """在坐标轴内绘制诊断指标文本框。"""
         if not lines:
             return
         ax.text(
@@ -541,6 +570,7 @@ class Canvas2DMixin:
         )
 
     def _validation_scatter(self, ax, data: dict) -> None:
+        """绘制正式值与预测值的验证散点图及 y=x 参考线。"""
 
         actual, predicted = self._finite_pairs(
             data.get("actual", data.get("x", [])),
@@ -602,6 +632,7 @@ class Canvas2DMixin:
         # embedded canvases.
 
     def _residual_plot(self, ax, data: dict) -> None:
+        """绘制预测残差、容差带和残差分布诊断。"""
 
         actual, residual = self._finite_pairs(
             data.get("actual", data.get("predicted", data.get("x", []))),
@@ -671,6 +702,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _residual_distribution_inset(ax, residual: np.ndarray, tolerance: float) -> None:
+        """在残差图中添加轻量分布嵌图。"""
 
         inset = ax.inset_axes([0.69, 0.57, 0.28, 0.35])
         inset._compact_diagnostic_inset = True
@@ -700,6 +732,7 @@ class Canvas2DMixin:
         inset.tick_params(axis="both", labelsize=7, length=2)
 
     def _waterfall(self, ax, data: dict) -> None:
+        """绘制特征贡献从基准值累加到预测值的瀑布图。"""
         
         labels = [str(value) for value in data.get("labels", [])]
         values = [float(value) for value in data.get("values", [])]
@@ -765,6 +798,7 @@ class Canvas2DMixin:
         ax.legend(handles=handles, loc="lower right", fontsize=10.5, frameon=True)
 
     def _mismatch_budget(self, ax, data: dict) -> None:
+        """绘制误差预算中各来源对总误差的贡献。"""
 
         labels = [str(value) for value in data.get("labels", [])]
         global_raw = np.asarray(data.get("global_values", []), dtype=float)
@@ -812,6 +846,7 @@ class Canvas2DMixin:
 
 
     def _profile_pair(self, ax, data: dict) -> None:
+        """绘制两组 X/Y 剖面曲线，用于比较入射场和目标模式。"""
         ax.remove()
         axes = self.figure.subplots(1, 2)
         x_axis = np.asarray(data.get("x_axis", []), dtype=float)
@@ -835,6 +870,7 @@ class Canvas2DMixin:
         self.figure.subplots_adjust(left=0.09, right=0.97, bottom=0.14, top=0.83, wspace=0.30)
 
     def _phase_comparison(self, ax, data: dict) -> None:
+        """绘制入射相位、目标相位和相位差的对比图。"""
         ax.remove()
         arrays = [
             np.asarray(data.get("incident", []), dtype=float),
@@ -863,6 +899,7 @@ class Canvas2DMixin:
             self.figure.text(0.5, 0.025, "目标模式采用光纤端面平相位参考", ha="center", fontsize=10)
 
     def _multi_plane_evolution(self, ax, data: dict) -> None:
+        """绘制多个传播平面的场强或束宽演化。"""
         ax.remove()
         planes = list(data.get("planes", []) or [])
         if not planes:
@@ -897,6 +934,7 @@ class Canvas2DMixin:
             self.figure.text(0.5, 0.02, "由端面复场与高斯传播拟合外推", ha="center", fontsize=10)
 
     def _energy_flow(self, ax, data: dict) -> None:
+        """绘制能量沿光路各阶段的累计变化。"""
         labels = [str(value) for value in data.get("labels", [])]
         cumulative = np.asarray(data.get("cumulative", []), dtype=float)
         losses = np.asarray(data.get("losses", []), dtype=float)
@@ -917,6 +955,7 @@ class Canvas2DMixin:
         ax.legend()
 
     def _before_after(self, ax, data: dict) -> None:
+        """绘制优化前后效率或指标的并列比较。"""
         ax.remove()
         before = dict(data.get("before", {}) or {})
         after = dict(data.get("after", {}) or {})
@@ -951,6 +990,7 @@ class Canvas2DMixin:
         self.figure.subplots_adjust(left=0.08, right=0.97, bottom=0.16, top=0.88, wspace=0.28)
 
     def _candidate_compare(self, ax, data: dict) -> None:
+        """绘制候选方案的预测值与正式仿真值对比。"""
         candidates = list(data.get("candidates", []) or [])
         if not candidates:
             self._empty(ax, data.get("message", "暂无候选结果数据"))
@@ -977,6 +1017,7 @@ class Canvas2DMixin:
         ax.legend()
 
     def _convergence_curve(self, ax, data: dict) -> None:
+        """绘制优化当前值、历史最佳值和最终最佳点。"""
         x = np.asarray(data.get("x", []), dtype=float)
         current = np.asarray(data.get("current", []), dtype=float)
         best = np.asarray(data.get("best", []), dtype=float)
@@ -990,6 +1031,7 @@ class Canvas2DMixin:
         ax.legend()
 
     def _correlation_heatmap(self, ax, data: dict) -> None:
+        """绘制变量相关系数矩阵，并在单元格内显示数值。"""
         labels = self._readable_category_labels([str(value) for value in data.get("labels", [])], max_chars=18)
         x_labels = self._readable_category_labels(
             [str(value) for value in data.get("x_labels", data.get("labels", []))], max_chars=9
@@ -1017,6 +1059,7 @@ class Canvas2DMixin:
         self.figure.subplots_adjust(left=0.27, right=0.90, bottom=0.19, top=0.86)
 
     def _target_achievement(self, ax, data: dict) -> None:
+        """绘制当前系统、最佳候选和设计目标之间的达成关系。"""
         """Physical inverse-design result: target vs current vs best candidate.
 
         This is intentionally not the auto-optimisation "before/after" chart.
@@ -1047,6 +1090,7 @@ class Canvas2DMixin:
             ax.set_ylim(0, max(100.0, max(values) * 1.12))
 
     def _histogram(self, ax, data: dict) -> None:
+        """绘制指标分布直方图及平均值、分位数和阈值线。"""
         values = np.asarray(data.get("values", []), dtype=float)
         values = values[np.isfinite(values)]
         if not values.size:
@@ -1066,6 +1110,7 @@ class Canvas2DMixin:
 
 
     def _adjustment_trajectory(self, ax, data: dict) -> None:
+        """绘制对准/调节过程中的效率和参数变化轨迹。"""
         ax.remove()
         top, bottom = self.figure.subplots(2, 1, sharex=True)
         x = np.asarray(data.get("x", []), dtype=float)
@@ -1089,6 +1134,7 @@ class Canvas2DMixin:
         self.figure.subplots_adjust(left=0.12, right=0.97, bottom=0.12, top=0.90, hspace=0.30)
 
     def _teaching_scan(self, ax, data: dict) -> None:
+        """绘制教学扫描主指标及其联动参数。"""
         ax.remove()
         top, bottom = self.figure.subplots(2, 1, sharex=True)
         x = np.asarray(data.get("x", []), dtype=float)
@@ -1113,6 +1159,7 @@ class Canvas2DMixin:
         self.figure.subplots_adjust(left=0.12, right=0.97, bottom=0.12, top=0.90, hspace=0.30)
 
     def _prepare_heatmap_data(self, data: dict) -> tuple[np.ndarray, list[float] | None]:
+        """校验、裁剪和降采样热图数组，并返回 Matplotlib extent。"""
         z = np.asarray(data.get("z", []), dtype=float)
         if z.ndim != 2 or not z.size:
             return np.empty((0, 0)), None
@@ -1142,6 +1189,7 @@ class Canvas2DMixin:
         return z, extent
 
     def _register_bar_items(self, bars, labels: list[str], data: dict) -> None:
+        """登记柱状图 artist 与标签，供点击选择和交互回调使用。"""
         selected = str(data.get("selected_label", ""))
         self._item_artists = []
         self._item_labels = list(labels)
@@ -1156,6 +1204,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _annotate_bars(ax, bars, values, *, horizontal: bool, enabled: bool) -> None:
+        """按配置在柱状图上方或右侧标注数值。"""
         if not enabled:
             return
         numeric = [float(value) for value in list(values)] if values is not None else []
@@ -1174,6 +1223,7 @@ class Canvas2DMixin:
                 ax.text(patch.get_x() + patch.get_width() / 2.0, y, text, ha="center", va=va, fontsize=11.5)
 
     def _beeswarm(self, ax, data: dict) -> None:
+        """绘制带抖动的样本分布图，避免相同值完全重叠。"""
         labels = [str(value) for value in data.get("labels", [])]
         points = list(data.get("points", []) or [])
         if not labels or not points:
@@ -1219,6 +1269,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _rank_correlation(x: np.ndarray, y: np.ndarray) -> float | None:
+        """计算两组有限数据的秩相关系数。"""
         if len(x) < 3 or len(y) < 3:
             return None
         x_rank = np.argsort(np.argsort(x)).astype(float)
@@ -1227,6 +1278,7 @@ class Canvas2DMixin:
         return float(coefficient) if np.isfinite(coefficient) else None
 
     def _scatter_formula(self, ax, data: dict) -> None:
+        """绘制散点、拟合公式和参考线。"""
         x = np.asarray(data.get("x", []), dtype=float)
         y = np.asarray(data.get("y", []), dtype=float)
         colors = data.get("point_colors") or None
@@ -1296,10 +1348,12 @@ class Canvas2DMixin:
 
     @staticmethod
     def _empty(ax, message: str) -> None:
+        """在没有有效数据时绘制统一的空结果提示。"""
         ax.axis("off")
         ax.text(0.5, 0.5, message, ha="center", va="center", transform=ax.transAxes)
 
     def _heatmap_contour(self, ax, data: dict) -> None:
+        """绘制带等值线的二维热图。"""
         z = np.asarray(data.get("z", []), dtype=float)
         contour = np.asarray(data.get("contour", []), dtype=float)
         if z.ndim != 2 or not z.size:
@@ -1348,6 +1402,7 @@ class Canvas2DMixin:
         ax.set_aspect("equal", adjustable="box")
 
     def _heatmap_pair(self, data: dict) -> None:
+        """绘制入射场与目标模式的双热图，并共享颜色和坐标语义。"""
         x = np.asarray(data.get("x", []), dtype=float)
         y = np.asarray(data.get("y", []), dtype=float)
         first = np.asarray(data.get("z1", []), dtype=float)
@@ -1381,6 +1436,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _raytrace_artist_model(data: dict) -> dict:
+        """把光路载荷转换为可复用的镜面、边框和射线 artist 模型。"""
 
         surfaces = list(data.get("surfaces", []) or [])
         rays = list(data.get("rays", []) or [])
@@ -1480,6 +1536,7 @@ class Canvas2DMixin:
 
     @staticmethod
     def _ray_role_style(role: str) -> tuple[str, float, float, str]:
+        """返回不同射线角色对应的颜色、线宽、透明度和线型。"""
         styles = {
             "chief": (theme.RAY_CHIEF, 1.45, 0.92, "solid"),
             "marginal": (theme.RAY_MARGINAL, 1.0, 0.76, "solid"),
@@ -1489,6 +1546,7 @@ class Canvas2DMixin:
         return styles.get(role, styles["regular"])
 
     def _raytrace_section(self, ax, data: dict) -> None:
+        """绘制二维光路截面，并保存可增量更新的 LineCollection。"""
         model = self._raytrace_artist_model(data)
 
         self._raytrace_surface_collection = LineCollection(
@@ -1541,6 +1599,7 @@ class Canvas2DMixin:
         ax.set_aspect("auto")
 
     def _draw_raytrace_objects(self, ax, data: dict) -> None:
+        """在光路截面中叠加光纤、探测器和像面对象。"""
         from matplotlib.patches import Ellipse, Rectangle
 
         for item in data.get("objects") or []:
@@ -1585,6 +1644,7 @@ class Canvas2DMixin:
             )
 
     def _update_raytrace_section(self, ax, data: dict) -> bool:
+        """尝试原地更新光路 artist；结构变化时返回 False 触发重建。"""
         model = self._raytrace_artist_model(data)
         if (
             self._raytrace_surface_collection is None

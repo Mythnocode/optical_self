@@ -37,14 +37,3 @@ def test_dataset_rejects_missing_or_invalid_wavelength() -> None:
 
     with pytest.raises(ValueError, match="finite positive"):
         _project_from_sample({"project": {"source": {"wavelength_nm": 0}}})
-
-
-def test_canvas_source_text_documents_reconnect_and_incremental_fixes() -> None:
-    scene = (ROOT / "frontend_pyside/features/canvas/scene.py").read_text(encoding="utf-8")
-    refresh = (ROOT / "frontend_pyside/features/canvas/refresh_controller.py").read_text(encoding="utf-8")
-
-    assert '("source", "view", "tool", "data")' in scene
-    assert "self._repair_workflow_edges()" in scene
-    assert 'active["rows"], active.get("requested")' in refresh
-    assert "status or '返回状态缺失'" in refresh
-    assert not (ROOT / "frontend_pyside/app/canvas_shell.py").exists()

@@ -4,7 +4,6 @@ from __future__ import annotations
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
-    QDoubleSpinBox,
     QFrame,
     QGridLayout,
     QLabel,
@@ -19,9 +18,22 @@ from frontend_pyside.features.simulation.surface_registry import (
     get_surface_type,
     surface_type_names,
 )
+from frontend_pyside.shared.components.unit_spinbox import UnitAwareDoubleSpinBox
 
 
 class SurfacePropertyMixin:
+    @staticmethod
+    def _number_control(minimum: float, maximum: float, decimals: int, unit: str = "") -> UnitAwareDoubleSpinBox:
+        """Create a lens parameter editor with short display and precise input."""
+        control = UnitAwareDoubleSpinBox()
+        control.setRange(float(minimum), float(maximum))
+        unit_text = str(unit or "").strip()
+        control.setTargetUnit(unit_text)
+        if unit_text:
+            control.setSuffix(f" {unit_text}")
+        control.setDisplayPrecision(2, max(8, int(decimals)))
+        return control
+
     @staticmethod
     def _field(label: str, control: QWidget, helper: str = "") -> QWidget:
         container = QWidget()
@@ -67,18 +79,9 @@ class SurfacePropertyMixin:
         self.surface_name = QLineEdit()
         self.surface_type = QComboBox()
         self.surface_type.addItems(surface_type_names())
-        self.radius = QDoubleSpinBox()
-        self.radius.setRange(-1e9, 1e9)
-        self.radius.setDecimals(6)
-        self.radius.setSuffix(" mm")
-        self.thickness = QDoubleSpinBox()
-        self.thickness.setRange(0, 1e9)
-        self.thickness.setDecimals(6)
-        self.thickness.setSuffix(" mm")
-        self.aperture = QDoubleSpinBox()
-        self.aperture.setRange(0.000001, 1e9)
-        self.aperture.setDecimals(6)
-        self.aperture.setSuffix(" mm")
+        self.radius = self._number_control(-1e9, 1e9, 6, "mm")
+        self.thickness = self._number_control(0, 1e9, 6, "mm")
+        self.aperture = self._number_control(0.000001, 1e9, 6, "mm")
         self.material = QComboBox()
         self.material.setEditable(True)
         self.material.addItems(["AIR", "N-BK7", "N-SF11", "F_SILICA", "MIRROR", "自定义"])
@@ -95,15 +98,10 @@ class SurfacePropertyMixin:
         return self._vertical_fields(fields)
 
     def _build_profile_properties(self):
-        self.conic = QDoubleSpinBox()
-        self.conic.setRange(-1e9, 1e9)
-        self.conic.setDecimals(9)
+        self.conic = self._number_control(-1e9, 1e9, 9)
         self.aperture_type = QComboBox()
         self.aperture_type.addItems(["圆形通光孔径", "矩形孔径", "椭圆孔径", "用户孔径"])
-        self.clear_aperture = QDoubleSpinBox()
-        self.clear_aperture.setRange(0.000001, 2e9)
-        self.clear_aperture.setDecimals(6)
-        self.clear_aperture.setSuffix(" mm")
+        self.clear_aperture = self._number_control(0.000001, 2e9, 6, "mm")
 
         fields = [
             self._field("圆锥系数 k", self.conic),
@@ -116,14 +114,8 @@ class SurfacePropertyMixin:
         self.coating = QComboBox()
         self.coating.setEditable(True)
         self.coating.addItems(["无", "增透膜", "高反膜", "金属膜", "自定义镀膜"])
-        self.roughness = QDoubleSpinBox()
-        self.roughness.setRange(0, 1e9)
-        self.roughness.setDecimals(6)
-        self.roughness.setSuffix(" nm RMS")
-        self.mechanical = QDoubleSpinBox()
-        self.mechanical.setRange(0.0001, 1e9)
-        self.mechanical.setDecimals(6)
-        self.mechanical.setSuffix(" mm")
+        self.roughness = self._number_control(0, 1e9, 6, "nm RMS")
+        self.mechanical = self._number_control(0.0001, 1e9, 6, "mm")
         self.enabled = QCheckBox("参与追迹和正式计算")
         self.enabled.setChecked(True)
         self.note = QLineEdit()
@@ -149,11 +141,12 @@ class SurfacePropertyMixin:
 
     def _create_parameter_control(self, parameter):
         if parameter.kind == "float":
-            control = QDoubleSpinBox()
-            control.setRange(float(parameter.minimum), float(parameter.maximum))
-            control.setDecimals(parameter.decimals)
-            if parameter.unit:
-                control.setSuffix(f" {parameter.unit}")
+            control = self._number_control(
+                parameter.minimum,
+                parameter.maximum,
+                parameter.decimals,
+                parameter.unit,
+            )
             control.setValue(float(parameter.default))
         elif parameter.kind == "int":
             control = QSpinBox()

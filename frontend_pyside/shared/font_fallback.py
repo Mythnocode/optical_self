@@ -8,6 +8,9 @@ from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtWidgets import QApplication
 
 
+UI_FONT_FAMILY = "Microsoft YaHei UI"
+
+
 _LATIN_CANDIDATES = (
     "Times New Roman",
     "Liberation Serif",
@@ -67,8 +70,8 @@ def preferred_cjk_family() -> str:
 
 
 def qt_font_families() -> list[str]:
-    ordered = [preferred_latin_family(), preferred_cjk_family(), "DejaVu Sans"]
-    return list(dict.fromkeys(ordered))
+    """Return the single font family used by the Qt interface."""
+    return [UI_FONT_FAMILY]
 
 
 def configure_qt_font(app: QApplication, *, point_size: float | None = None) -> QFont:
@@ -125,6 +128,7 @@ def matplotlib_font_config() -> dict[str, object]:
 
 
 __all__ = [
+    "UI_FONT_FAMILY",
     "available_families",
     "configure_qt_font",
     "matplotlib_font_config",

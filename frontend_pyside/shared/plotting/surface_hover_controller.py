@@ -1,4 +1,10 @@
 
+"""光学表面悬停提示控制器。
+
+本模块把鼠标位置映射到最近的光学表面并延迟更新提示，避免快速移动鼠标时
+频繁触发昂贵的场景查询或 Qt 重绘。
+"""
+
 from __future__ import annotations
 
 from PySide6.QtCore import QTimer

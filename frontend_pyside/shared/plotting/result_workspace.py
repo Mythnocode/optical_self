@@ -1,3 +1,14 @@
+"""仿真结果工作区和结果面板。
+
+本模块负责把结构化绘图载荷放进 Qt 工作区，并在两种渲染器之间分流：
+
+* 热图、双热图和端面匹配图走 :class:`FastHeatmapWidget`；
+* 曲线、散点、光路和 3D 场景走 :class:`PlotCanvas`。
+
+``ResultPane`` 管理一个结果面板，``ResultWorkspace`` 管理最多四个面板及
+布局切换。这里不生成光学数据，数据生成位于仿真结果适配器。
+"""
+
 from __future__ import annotations
 
 from collections.abc import Iterator, Sequence
@@ -25,6 +36,7 @@ from frontend_pyside.shared.plotting.plot_tools import PlotTools
 
 
 class ResultPane(QFrame):
+    """单个结果面板，负责选择渲染器并显示图表摘要。"""
     maximizeRequested = Signal(object)
     surfaceSelected = Signal(int)
     surfaceActivated = Signal(int)
@@ -33,6 +45,7 @@ class ResultPane(QFrame):
     rendered = Signal(str)
 
     def __init__(self, title: str = "结果", parent=None) -> None:
+        """创建 Matplotlib 和快速热图两条渲染路径。"""
         super().__init__(parent)
         self.setObjectName("resultPane")
         self.setMinimumSize(240, 220)
@@ -98,26 +111,31 @@ class ResultPane(QFrame):
         self._current_plot_data: dict = {}
 
     def _active_pixmap(self):
+        """返回当前渲染器的像素图，用于工具栏预览或导出。"""
         if self.plot_stack.currentWidget() is self.fast_heatmap:
             return self.fast_heatmap.current_pixmap()
         return self.canvas.grab()
 
     def _prepare_matplotlib_export(self) -> None:
+        """在导出前把快速热图数据同步到 Matplotlib 画布。"""
         if self.plot_stack.currentWidget() is self.fast_heatmap:
             self.canvas.set_plot(self._current_plot_data)
 
     def reset_view(self) -> None:
+        """恢复当前图的视图范围或快速热图显示。"""
         if self.plot_stack.currentWidget() is self.fast_heatmap:
             self.fast_heatmap.reset_view()
         else:
             self.canvas.reset_view()
 
     def set_optical_3d_view(self, preset: str) -> bool:
+        """把当前结果切换为指定的 3D 光学视图预设。"""
         if self.plot_stack.currentWidget() is self.fast_heatmap:
             return False
         return bool(self.canvas.set_optical_3d_view(preset))
 
     def _on_draw_event(self, _event) -> None:
+        """在 Matplotlib 完成绘制后发出当前渲染键。"""
         key = self._pending_render_key
         if key is None:
             return
@@ -125,18 +143,22 @@ class ResultPane(QFrame):
         self.rendered.emit(str(key))
 
     def set_result(self, title: str, data) -> None:
+        """接收结构化绘图载荷，并按 kind 选择快速热图或 Matplotlib。"""
         self.title.setText(str(title))
         self.source.setText(data.get("source", "预览") if isinstance(data, dict) else "预览")
         render_key = data.get("render_key") if isinstance(data, dict) else None
         self._current_plot_data = dict(data or {}) if isinstance(data, dict) else {}
         if render_key is None or render_key != self._render_key:
+            # 只有数据版本变化时才重建图形，避免重复绘制造成卡顿。
             self._pending_render_key = str(render_key or f"{title}:{id(data)}")
             if isinstance(data, dict) and data.get("kind") in {"heatmap", "heatmap_pair", "beam_match"}:
+                # 热图直接用 QImage 渲染；同时把数据同步到 canvas，方便导出。
                 self.canvas._data = dict(data)
                 self.plot_stack.setCurrentWidget(self.fast_heatmap)
                 self.fast_heatmap.set_plot(dict(data))
                 self._pending_render_key = None
             else:
+                # 其他 kind 交给包含 2D/3D 分发逻辑的 PlotCanvas。
                 self.plot_stack.setCurrentWidget(self.canvas)
                 self.canvas.set_plot(data)
             self._render_key = render_key
@@ -150,18 +172,22 @@ class ResultPane(QFrame):
 
 
     def set_header_visible(self, visible: bool) -> None:
+        """设置面板标题栏是否显示。"""
         self.header_widget.setVisible(bool(visible))
 
     def set_tools_visible(self, visible: bool) -> None:
+        """设置图表工具按钮是否显示。"""
         self.tools_widget.setVisible(bool(visible))
 
     def set_footer_visible(self, visible: bool) -> None:
+        """设置图表底部摘要是否显示。"""
         self.footer.setVisible(bool(visible) and bool(self.footer.text()))
         self.footer.setProperty("forceHidden", not bool(visible))
 
 
 
     def dispose(self) -> None:
+        """断开 Matplotlib 回调并释放画布资源。"""
 
         try:
             if getattr(self, "_draw_cid", None) is not None:
@@ -179,6 +205,7 @@ class ResultPane(QFrame):
 
     @staticmethod
     def _result_summary(data: dict) -> str:
+        """根据绘图 kind 生成面板底部的数据摘要。"""
         description = str(data.get("description", "")).strip()
         kind = data.get("kind", "empty")
         if description:
@@ -273,15 +300,19 @@ class ResultPane(QFrame):
 
 
 class _PaneAccessor(Sequence):
+    """延迟创建结果面板的序列式访问器。"""
 
 
     def __init__(self, workspace: "ResultWorkspace") -> None:
+        """保存所属工作区引用。"""
         self._workspace = workspace
 
     def __len__(self) -> int:
+        """返回工作区支持的最大面板数量。"""
         return self._workspace.PANE_COUNT
 
     def __getitem__(self, index):
+        """按索引或切片取得面板，面板在首次访问时创建。"""
         if isinstance(index, slice):
             return [self._workspace._ensure_pane(i) for i in range(*index.indices(len(self)))]
         normalized = int(index)
@@ -292,10 +323,12 @@ class _PaneAccessor(Sequence):
         return self._workspace._ensure_pane(normalized)
 
     def __iter__(self) -> Iterator[ResultPane]:
+        """只迭代已经实际创建的面板。"""
         return iter(self._workspace._created_panes())
 
 
 class ResultWorkspace(QWidget):
+    """管理结果面板、布局模式和结果选择的工作区。"""
 
 
     layoutModeChanged = Signal(str)
@@ -315,6 +348,7 @@ class ResultWorkspace(QWidget):
     }
 
     def __init__(self, parent=None) -> None:
+        """创建工具栏、结果容器并绑定布局切换信号。"""
         super().__init__(parent)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self._single_view_only = False
@@ -392,12 +426,15 @@ class ResultWorkspace(QWidget):
 
     @property
     def panes(self) -> _PaneAccessor:
+        """返回延迟面板访问器，兼容旧调用方的 ``workspace.panes``。"""
         return self._pane_accessor
 
     def _created_panes(self) -> list[ResultPane]:
+        """返回已经创建的结果面板。"""
         return [pane for pane in self._pane_slots if pane is not None]
 
     def _ensure_pane(self, index: int) -> ResultPane:
+        """按索引创建并初始化结果面板，同时恢复待显示结果。"""
         pane = self._pane_slots[index]
         if pane is not None:
             return pane
@@ -421,6 +458,7 @@ class ResultWorkspace(QWidget):
         return pane
 
     def _apply_preset(self, text: str) -> None:
+        """应用常用布局预设；预设只影响显示，不重新计算结果。"""
         if self._single_view_only or text == "自定义":
             return
         mode = self.PRESET_LAYOUTS.get(text)
@@ -429,10 +467,12 @@ class ResultWorkspace(QWidget):
         self.presetChanged.emit(text)
 
     def _single_view_changed(self, _index: int) -> None:
+        """单图模式下切换当前主图。"""
         if self.mode.currentText() == "单图":
             self._apply("单图")
 
     def _positions(self, text: str) -> list[tuple[int, int, int]]:
+        """把布局名称转换为面板索引、行和列的位置列表。"""
         if self._single_view_only or text == "单图":
             return [(self.single_view.currentIndex(), 0, 0)]
         positions = {
@@ -443,6 +483,7 @@ class ResultWorkspace(QWidget):
         return [(index, row, column) for index, (row, column) in enumerate(positions)]
 
     def _apply(self, text: str) -> None:
+        """根据布局模式重排结果面板。"""
         if self._single_view_only and text != "单图":
             text = "单图"
         self._restore_grid(clear_only=True)
@@ -470,6 +511,7 @@ class ResultWorkspace(QWidget):
         self.layoutModeChanged.emit(text)
 
     def _toggle_maximize(self, pane: ResultPane) -> None:
+        """在网格和单面板最大化视图之间切换。"""
         if self.container_layout.currentWidget() is self.max_widget:
             self._restore_grid()
             return
@@ -481,6 +523,7 @@ class ResultWorkspace(QWidget):
         self.container_layout.setCurrentWidget(self.max_widget)
 
     def _restore_grid(self, *, clear_only: bool = False) -> None:
+        """恢复网格容器；clear_only 用于重排前清空旧位置。"""
         pane = self._maximized
         if pane is not None:
             self.max_layout.removeWidget(pane)
@@ -494,21 +537,25 @@ class ResultWorkspace(QWidget):
             self._apply("单图" if self._single_view_only else self.mode.currentText())
 
     def _reset_all(self) -> None:
+        """恢复当前所有已创建面板的视图范围。"""
         if self._maximized is not None:
             self._restore_grid()
         for pane in self._created_panes():
             pane.reset_view()
 
     def set_optical_3d_view(self, preset: str, *, index: int | None = None) -> bool:
+        """将指定结果面板切换为 3D 光学视图。"""
         pane_index = self.single_view.currentIndex() if index is None else int(index)
         if not 0 <= pane_index < self.PANE_COUNT:
             return False
         return self._ensure_pane(pane_index).set_optical_3d_view(preset)
 
     def set_toolbar_visible(self, visible: bool) -> None:
+        """设置工作区顶部工具栏的可见性。"""
         self.toolbar.setVisible(bool(visible))
 
     def set_maximize_controls_visible(self, visible: bool) -> None:
+        """设置每个结果面板的最大化按钮可见性。"""
         self._maximize_controls_visible = bool(visible)
         if not visible and self._maximized is not None:
             self._restore_grid()
@@ -516,31 +563,37 @@ class ResultWorkspace(QWidget):
             pane.max_btn.setVisible(bool(visible))
 
     def set_pane_header_visible(self, visible: bool) -> None:
+        """设置结果面板标题栏可见性。"""
         self._pane_header_visible = bool(visible)
         for pane in self._created_panes():
             pane.set_header_visible(visible)
 
     def set_pane_title_visible(self, visible: bool) -> None:
+        """设置结果面板标题文本可见性。"""
         self._pane_title_visible = bool(visible)
         for pane in self._created_panes():
             pane.title.setVisible(bool(visible))
 
     def set_pane_source_visible(self, visible: bool) -> None:
+        """设置结果来源标签可见性。"""
         self._pane_source_visible = bool(visible)
         for pane in self._created_panes():
             pane.source.setVisible(bool(visible))
 
     def set_plot_tools_visible(self, visible: bool) -> None:
+        """设置结果面板图表工具按钮可见性。"""
         self._plot_tools_visible = bool(visible)
         for pane in self._created_panes():
             pane.set_tools_visible(visible)
 
     def set_footer_visible(self, visible: bool) -> None:
+        """设置结果面板底部摘要可见性。"""
         self._footer_visible = bool(visible)
         for pane in self._created_panes():
             pane.set_footer_visible(visible)
 
     def set_single_view_only(self, enabled: bool = True) -> None:
+        """限制工作区为单图模式，供单一结果页面使用。"""
         enabled = bool(enabled)
         if enabled == self._single_view_only:
             return
@@ -557,6 +610,7 @@ class ResultWorkspace(QWidget):
         self._apply("单图" if enabled else self.mode.currentText())
 
     def set_result(self, index: int, title: str, data) -> None:
+        """登记指定索引的结构化结果，并在需要时创建对应面板。"""
         index = int(index)
         if not 0 <= index < self.PANE_COUNT:
             return
@@ -569,11 +623,13 @@ class ResultWorkspace(QWidget):
             self._ensure_pane(index).set_result(str(title), normalized)
 
     def select_result(self, index: int) -> None:
+        """选择当前主结果面板。"""
         index = int(index)
         if 0 <= index < self.PANE_COUNT:
             self.single_view.setCurrentIndex(index)
 
     def set_layout_mode(self, text: str) -> None:
+        """设置网格布局模式。"""
         if self._single_view_only:
             text = "单图"
         index = self.mode.findText(text)
@@ -583,6 +639,7 @@ class ResultWorkspace(QWidget):
             self._apply("单图")
 
     def set_preset(self, text: str) -> None:
+        """设置布局预设名称并同步工具栏选择。"""
         if self._single_view_only:
             return
         index = self.preset.findText(text)
@@ -591,12 +648,14 @@ class ResultWorkspace(QWidget):
 
     @property
     def selected_figure(self):
+        """返回当前选中面板的 Matplotlib Figure。"""
         index = max(0, min(self.single_view.currentIndex(), self.PANE_COUNT - 1))
         pane = self._ensure_pane(index)
         pane._prepare_matplotlib_export()
         return pane.canvas.figure
 
     def dispose(self) -> None:
+        """释放所有已经创建的结果面板及其绘图资源。"""
         self._restore_grid(clear_only=True)
         self._pending_results.clear()
         for index, pane in enumerate(list(self._pane_slots)):
@@ -611,6 +670,7 @@ class ResultWorkspace(QWidget):
             self._pane_slots[index] = None
 
     def closeEvent(self, event) -> None:
+        """关闭工作区时先释放绘图资源，再交给 Qt 完成关闭。"""
         self.dispose()
         super().closeEvent(event)
 
