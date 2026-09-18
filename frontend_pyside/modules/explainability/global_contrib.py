@@ -6,8 +6,8 @@ from frontend_pyside.modules.page_spec import PageSpec
 
 PAGE = PageSpec(
     "explainability", "global_contrib", "global_contrib",
-    "全局贡献", "哪些量对模型输出更重要",
-    "全局贡献", "数据集上的平均 |SHAP|",
+    "贡献排序", "先看 SHAP 对各参数的依赖排名",
+    "贡献排序", "数据集上的平均 |SHAP|",
 )
 
 

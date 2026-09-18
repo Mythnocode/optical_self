@@ -6,8 +6,8 @@ from frontend_pyside.modules.page_spec import PageSpec
 
 PAGE = PageSpec(
     "model", "train_result", "train_result",
-    "训练结果", "残差图、实测对照和学习曲线",
-    "训练结果", "残差图、实测对照和学习曲线",
+    "训练结果", "残差、实测值与预测值对照、残差分布和验证误差曲线",
+    "训练结果", "残差、实测值与预测值对照、残差分布和验证误差曲线",
 )
 
 

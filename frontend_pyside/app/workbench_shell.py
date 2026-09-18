@@ -117,6 +117,7 @@ from frontend_pyside.app.workbench_jobs import (
     opt_chart_payload,
     sampling_backend_name,
     scan_curve_payload,
+    sequence_prediction_payload,
     shap_dependence_item,
     shap_supported,
     target_backend_name,
@@ -132,7 +133,7 @@ from frontend_pyside.features.teaching_v2.physics import FormalTeachingGateway
 from frontend_pyside.features.teaching_v2.tasks import ComputationController
 from frontend_pyside.features.teaching_v2.view3d import BenchView3D
 from frontend_pyside.resources import theme_tokens as theme
-from frontend_pyside.shared.icons import icon
+from frontend_pyside.shared.icons import icon, icon_pixmaps
 
 
 # ---------------------------------------------------------------------------
@@ -151,6 +152,7 @@ from frontend_pyside.modules.shared import (
     _formal_target_value,
     _icon_action_button,
     _job_title,
+    _labeled_field,
     _parse_auxiliary_wavelengths,
     _payload_float,
     _payload_length_um,
@@ -219,7 +221,10 @@ class PrimaryBar(QFrame):
 
 # 二级功能栏「上图下字」的图标参数。
 # 尺寸决定按钮最小高度；两个颜色分别对应未选中 / 已选中。
-SECONDARY_ICON_SIZE = 22
+# 图标尺寸。sim_/ml_/opt_/explain_*.png 那些是细线条的矢量风格位图
+# （源图 1254×1254），22px 时细节会糊掉、认不出画的是什么，26px 起才清晰，
+# 30px 更好但二级栏会更高。内嵌 SVG 那几张在这个尺寸下同样清晰，所以统一用 50。
+SECONDARY_ICON_SIZE = 50
 # 这两个色号要和 light.qss 里 QToolButton#SecondaryFunctionButton 的
 # color / :checked color 保持一致，否则选中时图标和文字会是两种蓝。
 SECONDARY_ICON_OFF_COLOR = "#344054"   # = 未选中时的文字色
@@ -235,19 +240,22 @@ def _secondary_icon(key: str) -> QIcon:
     Qt 的 QIcon 自带 (Mode, State) 两维：对可勾选的 QToolButton 来说，
     ``Mode.Normal + State.Off`` 是未选中，``Mode.Normal + State.On`` 是选中。
     两个都塞进同一个 QIcon，按钮勾选时 Qt 会自动换图，不需要手动 setIcon。
+
+    注意：位图图标若关掉了重新着色（``shared/icons.py`` 的
+    ``TINT_PNG_ICONS = False``，当前设置），两态拿到的是同一张原图，
+    选中与否只体现在按钮底色和文字颜色上。要恢复图标随选中变色，
+    把那个开关打开，并把下面两个颜色对齐 QSS 里的配色即可。
     """
     name = SECONDARY_ICONS.get(str(key)) or SECONDARY_ICON_FALLBACK
-    size = QSize(SECONDARY_ICON_SIZE, SECONDARY_ICON_SIZE)
     result = QIcon()
     for state, color in (
         (QIcon.State.Off, SECONDARY_ICON_OFF_COLOR),
         (QIcon.State.On, SECONDARY_ICON_ON_COLOR),
     ):
-        result.addPixmap(
-            icon(name, color, SECONDARY_ICON_SIZE).pixmap(size),
-            QIcon.Mode.Normal,
-            state,
-        )
+        # icon_pixmaps 已经把常见显示缩放比各烘了一张并标好 devicePixelRatio，
+        # 直接整组塞进去，Qt 会挑尺寸最合适的那张，不会放大绘制。
+        for pixmap in icon_pixmaps(name, color, SECONDARY_ICON_SIZE):
+            result.addPixmap(pixmap, QIcon.Mode.Normal, state)
     return result
 
 
@@ -1137,9 +1145,139 @@ class AccordionSection(QFrame):
         self.body_layout.addWidget(widget)
 
 
+class DatasetRailItem(QWidget):
+    """Compact dataset row used by the left rail.
+
+    Dataset generation is a long-running job, so its progress belongs to the
+    dataset item itself rather than to a separate full-width table in the
+    document.  The right-hand check is deliberately part of the row so the
+    selected training source remains visible while the document is scrolled.
+    """
+
+    activated = Signal()
+    cancelRequested = Signal()
+
+    def __init__(
+        self,
+        title: str,
+        *,
+        selected: bool = False,
+        progress: float | None = None,
+        status: str = "",
+        state: str = "",
+        cancellable: bool = False,
+        parent: QWidget | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.setObjectName("DatasetRailItem")
+        self._state = str(state or "")
+        root = QVBoxLayout(self)
+        root.setContentsMargins(5, 3, 5, 3)
+        root.setSpacing(2)
+
+        top = QHBoxLayout()
+        top.setContentsMargins(0, 0, 0, 0)
+        top.setSpacing(4)
+        self.title_label = QLabel(str(title or "数据集"))
+        self.title_label.setObjectName("datasetRailTitle")
+        self.title_label.setToolTip(str(title or "数据集"))
+        self.title_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.title_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+        top.addWidget(self.title_label, 1)
+        self.check_label = QLabel()
+        self.check_label.setObjectName("datasetSelectionCheck")
+        self.check_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+        self.check_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        self.check_label.setFixedWidth(20)
+        self._set_state_indicator(bool(selected))
+        top.addWidget(self.check_label)
+        self.cancel_button: QToolButton | None = None
+        if cancellable:
+            self.cancel_button = QToolButton()
+            self.cancel_button.setObjectName("datasetCancelButton")
+            self.cancel_button.setText("取消")
+            self.cancel_button.setToolTip("取消数据集生成")
+            self.cancel_button.setAccessibleName("取消数据集生成")
+            self.cancel_button.setCursor(Qt.CursorShape.PointingHandCursor)
+            self.cancel_button.clicked.connect(self.cancelRequested.emit)
+            top.addWidget(self.cancel_button)
+        root.addLayout(top)
+
+        self.progress_bar: QProgressBar | None = None
+        self.progress_label: QLabel | None = None
+        if progress is not None:
+            value = max(0.0, min(1.0, float(progress)))
+            status_text = str(status or "生成中")
+            progress_row = QHBoxLayout()
+            progress_row.setContentsMargins(0, 0, 0, 0)
+            progress_row.setSpacing(5)
+            self.progress_label = QLabel(f"{status_text} {value:.0%}")
+            self.progress_label.setObjectName("datasetProgressText")
+            self.progress_label.setMinimumWidth(72)
+            self.progress_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+            self.progress_bar = QProgressBar()
+            self.progress_bar.setObjectName("datasetProgressBar")
+            self.progress_bar.setProperty("datasetState", self._state)
+            self.progress_bar.setRange(0, 100)
+            self.progress_bar.setValue(round(value * 100))
+            self.progress_bar.setTextVisible(False)
+            self.progress_bar.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+            progress_row.addWidget(self.progress_label)
+            progress_row.addWidget(self.progress_bar, 1)
+            root.addLayout(progress_row)
+            self.setMinimumHeight(47)
+        else:
+            self.setMinimumHeight(32)
+
+    def set_progress(self, progress: float, status: str = "生成中") -> bool:
+        """Update a pending row without destroying and recreating its widgets."""
+        if self.progress_bar is None or self.progress_label is None:
+            return False
+        value = max(0.0, min(1.0, float(progress)))
+        self.progress_label.setText(f"{str(status or '生成中')} {value:.0%}")
+        self.progress_bar.setValue(round(value * 100))
+        return True
+
+    def set_cancelling(self, cancelling: bool) -> None:
+        if self.cancel_button is None:
+            return
+        self.cancel_button.setEnabled(not cancelling)
+        self.cancel_button.setText("取消中" if cancelling else "取消")
+
+    def _set_state_indicator(self, selected: bool) -> None:
+        if self._state == "generated_failed":
+            self.check_label.setObjectName("datasetFailureMark")
+            self.check_label.setPixmap(icon("close", "#DC2626", 16).pixmap(QSize(16, 16)))
+            self.check_label.setToolTip("数据集生成失败")
+            self.check_label.setAccessibleName("数据集生成失败")
+            self.check_label.setVisible(True)
+            return
+        if self._state == "generated_cancelled":
+            self.check_label.setObjectName("datasetCancelledMark")
+            self.check_label.setPixmap(icon("close", "#667085", 16).pixmap(QSize(16, 16)))
+            self.check_label.setToolTip("数据集生成已取消")
+            self.check_label.setAccessibleName("数据集生成已取消")
+            self.check_label.setVisible(True)
+            return
+        self.check_label.setObjectName("datasetSelectionCheck")
+        self.check_label.setPixmap(icon("check", "#16A34A", 16).pixmap(QSize(16, 16)))
+        self.check_label.setToolTip("已选中的数据集")
+        self.check_label.setAccessibleName("已选中的数据集")
+        self.check_label.setVisible(bool(selected))
+
+    def mouseReleaseEvent(self, event) -> None:  # noqa: N802 - Qt override
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.activated.emit()
+        event.ignore()
+
+    def sizeHint(self) -> QSize:  # noqa: N802 - Qt override
+        return QSize(0, 47 if self.progress_bar is not None else 32)
+
+
 class ObjectRail(QFrame):
     objectRequested = Signal(str)
     optimizationSelectionChanged = Signal(str, bool)
+    datasetCancelRequested = Signal(str)
 
     def __init__(self, context, parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -1154,11 +1292,43 @@ class ObjectRail(QFrame):
         self.heading = QLabel("对象")
         self.heading.setObjectName("RailTitle")
         root.addWidget(self.heading)
+        self._optimization_view = "variables"
+        self.optimization_view_switcher = QWidget()
+        self.optimization_view_switcher.setObjectName("OptimizationRailTabs")
+        optimization_view_layout = QHBoxLayout(self.optimization_view_switcher)
+        optimization_view_layout.setContentsMargins(0, 0, 0, 0)
+        optimization_view_layout.setSpacing(4)
+        self.optimization_view_group = QButtonGroup(self)
+        self.optimization_view_group.setExclusive(True)
+        self.optimization_variables_button = QToolButton()
+        self.optimization_variables_button.setObjectName("OptimizationRailTab")
+        self.optimization_variables_button.setText("优化变量")
+        self.optimization_variables_button.setCheckable(True)
+        self.optimization_more_button = QToolButton()
+        self.optimization_more_button.setObjectName("OptimizationRailTab")
+        self.optimization_more_button.setText("更多参数")
+        self.optimization_more_button.setCheckable(True)
+        for key, button in (
+            ("variables", self.optimization_variables_button),
+            ("more", self.optimization_more_button),
+        ):
+            self.optimization_view_group.addButton(button)
+            button.clicked.connect(
+                lambda _checked=False, value=key: self._set_optimization_view(value)
+            )
+            optimization_view_layout.addWidget(button, 1)
+        self.optimization_variables_button.setChecked(True)
+        self.optimization_view_switcher.setVisible(False)
+        root.addWidget(self.optimization_view_switcher)
+        # self.optimization_hint = QLabel("先勾选需要调整的参数。")
+        # self.optimization_hint.setObjectName("OptimizationRailHint")
+        # self.optimization_hint.setWordWrap(True)
+        # self.optimization_hint.setVisible(False)
+        # root.addWidget(self.optimization_hint)
         self.search = QLineEdit()
         self.search.setPlaceholderText("筛选…")
         self.search.setClearButtonEnabled(True)
         self.search.textChanged.connect(self._filter)
-        root.addWidget(self.search)
         self.filter_row = QWidget()
         filter_layout = QGridLayout(self.filter_row)
         filter_layout.setContentsMargins(0, 0, 0, 0)
@@ -1182,12 +1352,11 @@ class ObjectRail(QFrame):
         self.shap_button.setCheckable(True)
         self.shap_button.setVisible(False)
         self.shap_button.setEnabled(False)
-        self.shap_button.setToolTip("请先训练并对着同一目标看过全局贡献")
+        self.shap_button.setToolTip("请先训练并对着同一目标看过贡献排序")
         self.shap_button.toggled.connect(self._set_shap_sort)
         filter_layout.addWidget(self.shap_button, 2, 0, 1, 3)
         for column in range(3):
             filter_layout.setColumnStretch(column, 1)
-        root.addWidget(self.filter_row)
         self.accordion = QScrollArea()
         self.accordion.setWidgetResizable(True)
         self.accordion.setFrameShape(QFrame.Shape.NoFrame)
@@ -1200,12 +1369,48 @@ class ObjectRail(QFrame):
         self.accordion_layout.setSpacing(4)
         self.accordion_layout.addStretch(1)
         self.accordion.setWidget(self.accordion_host)
-        root.addWidget(self.accordion, 1)
         self.list = QListWidget()
         self.list.setObjectName("ObjectList")
         self.list.itemClicked.connect(self._clicked)
         self.list.itemChanged.connect(self._item_changed)
-        root.addWidget(self.list, 1)
+        self.optimization_variable_host = QWidget()
+        variable_layout = QVBoxLayout(self.optimization_variable_host)
+        variable_layout.setContentsMargins(0, 0, 0, 0)
+        variable_layout.setSpacing(6)
+        variable_layout.addWidget(self.search)
+        variable_layout.addWidget(self.filter_row)
+        variable_layout.addWidget(self.list, 1)
+        root.addWidget(self.optimization_variable_host, 1)
+
+        self.optimization_more_scroll = QScrollArea()
+        self.optimization_more_scroll.setObjectName("OptimizationMoreScroll")
+        self.optimization_more_scroll.setWidgetResizable(True)
+        self.optimization_more_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        self.optimization_more_scroll.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
+        )
+        self.optimization_more_scroll.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+        self.optimization_more_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.optimization_more_host = QWidget()
+        self.optimization_more_host.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Preferred,
+        )
+        self.optimization_more_layout = QVBoxLayout(self.optimization_more_host)
+        self.optimization_more_layout.setContentsMargins(0, 0, 4, 0)
+        self.optimization_more_layout.setSpacing(6)
+        self.optimization_more_placeholder = QLabel("打开优化页面后可配置更多参数。")
+        self.optimization_more_placeholder.setObjectName("OptimizationRailHint")
+        self.optimization_more_placeholder.setWordWrap(True)
+        self.optimization_more_layout.addWidget(self.optimization_more_placeholder)
+        self.optimization_more_layout.addStretch(1)
+        self.optimization_more_scroll.setWidget(self.optimization_more_host)
+        self.optimization_more_scroll.setVisible(False)
+        root.addWidget(self.optimization_more_scroll, 1)
+        root.addWidget(self.accordion, 1)
         self._module = ""
         self._sections: dict[str, AccordionSection] = {}
         self._checked_keys: set[str] = set()
@@ -1217,11 +1422,17 @@ class ObjectRail(QFrame):
         self.lens_sliders: LensSliderPanel | None = None
         self.materials_inspector: UsedMaterialInspector | None = None
         self.goal_inspector: OptimizationGoalInspector | None = None
+        self.max_evaluations: QWidget | None = None
+        self.max_evaluations_group: QFrame | None = None
         self.lens_list: QListWidget | None = None
         self._document_kind = ""
         self._datasets: list[dict[str, Any]] = []
         self._models: list[dict[str, Any]] = []
         self._dataset_family = "tabular"
+        self._selected_dataset_id = ""
+        self._selected_model_id = str(
+            getattr(getattr(context, "registry", None), "current_model_id", "") or ""
+        )
         self._shap_sort = False
         self._shap_scores: dict[str, float] = {}
         context.project.project_changed.connect(lambda _project: self._refresh_contents())
@@ -1237,6 +1448,56 @@ class ObjectRail(QFrame):
         if self._module == "model":
             self._populate()
 
+    def set_selected_dataset(self, dataset_id: str) -> None:
+        self._selected_dataset_id = str(dataset_id or "")
+        if self._module == "model" and (self._document_kind or "dataset") == "dataset":
+            self._populate()
+
+    def set_selected_model(self, model_id: str) -> None:
+        self._selected_model_id = str(model_id or "")
+        if self._module == "model" and (self._document_kind or "dataset") != "dataset":
+            self._populate()
+
+    def selected_dataset_id(self) -> str:
+        return self._selected_dataset_id
+
+    def update_dataset_progress(
+        self,
+        dataset_id: str,
+        progress: float,
+        status: str = "生成中",
+    ) -> bool:
+        """Update one visible dataset row in place.
+
+        Rebuilding the QListWidget for every progress event briefly exposed an
+        orphaned child widget as a tiny top-level window on Windows.  Keeping
+        the existing row also avoids needless allocations during long jobs.
+        """
+        key = f"dataset:{str(dataset_id or '').strip()}"
+        for index in range(self.list.count()):
+            item = self.list.item(index)
+            if item is None or item.data(Qt.ItemDataRole.UserRole) != key:
+                continue
+            row = self.list.itemWidget(item)
+            if not isinstance(row, DatasetRailItem):
+                return False
+            item.setToolTip(str(status or "生成中"))
+            return row.set_progress(progress, status)
+        return False
+
+    def set_dataset_cancelling(self, dataset_id: str, cancelling: bool) -> bool:
+        key = f"dataset:{str(dataset_id or '').strip()}"
+        for index in range(self.list.count()):
+            item = self.list.item(index)
+            if item is None or item.data(Qt.ItemDataRole.UserRole) != key:
+                continue
+            row = self.list.itemWidget(item)
+            if not isinstance(row, DatasetRailItem):
+                return False
+            row.set_cancelling(cancelling)
+            return True
+        return False
+
     def set_document_kind(self, kind: str) -> None:
         self._document_kind = str(kind or "")
         if self._module in {"model", "explainability"}:
@@ -1248,18 +1509,35 @@ class ObjectRail(QFrame):
             "simulation": "对象",
             "analysis": "当前系统",
             "model": "数据集",
-            "optimization": "参数筛选",
+            "optimization": "优化",
             "explainability": "参数",
         }.get(self._module, "对象"))
         simulation = self._module == "simulation"
+        optimization = self._module == "optimization"
         filtered = self._module in {"optimization", "explainability"}
         self.search.setVisible(self._module in {"optimization", "explainability"})
         self.filter_row.setVisible(filtered)
-        self.shap_button.setVisible(self._module == "optimization")
+        # self.optimization_hint.setVisible(self._module == "optimization")
+        # SHAP belongs to the explanation workflow. Keep optimization focused
+        # on choosing variables and bounds.
+        self.shap_button.setVisible(False)
         self.accordion.setVisible(simulation)
         self.list.setVisible(not simulation)
-        self._rail_layout.setStretch(self._rail_layout.indexOf(self.accordion), 1 if simulation else 0)
-        self._rail_layout.setStretch(self._rail_layout.indexOf(self.list), 0 if simulation else 1)
+        self._rail_layout.setStretch(
+            self._rail_layout.indexOf(self.optimization_variable_host),
+            0 if simulation else 1,
+        )
+        self._rail_layout.setStretch(
+            self._rail_layout.indexOf(self.optimization_more_scroll),
+            1 if optimization else 0,
+        )
+        self._rail_layout.setStretch(
+            self._rail_layout.indexOf(self.accordion),
+            1 if simulation else 0,
+        )
+        if optimization:
+            self.ensure_optimization_controls()
+        self._set_optimization_view(self._optimization_view)
         if simulation:
             if "environment" not in self._sections:
                 self._build_simulation()
@@ -1272,6 +1550,54 @@ class ObjectRail(QFrame):
             self._clear_accordion()
             self._populate()
 
+    def ensure_optimization_controls(self) -> None:
+        if self.goal_inspector is not None and self.max_evaluations is not None:
+            return
+        self.optimization_more_layout.removeWidget(self.optimization_more_placeholder)
+        self.optimization_more_placeholder.deleteLater()
+        self.goal_inspector = OptimizationGoalInspector(self.context, compact=True)
+        self.goal_inspector.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Maximum,
+        )
+        self.goal_inspector.collimation.toggled.connect(
+            self._reveal_optimization_collimation
+        )
+        self.max_evaluations = _spin(10, 100000, 0, "", 300)
+        self.max_evaluations.setMinimumWidth(0)
+        self.max_evaluations.setSizePolicy(
+            QSizePolicy.Policy.Ignored,
+            QSizePolicy.Policy.Fixed,
+        )
+        self.max_evaluations_group, max_evaluations_layout = _field_group("")
+        max_evaluations_row = _labeled_field("最大评价次数", self.max_evaluations)
+        max_evaluations_row.setMinimumWidth(0)
+        max_evaluations_layout.addWidget(max_evaluations_row)
+        self.optimization_more_layout.insertWidget(0, self.goal_inspector)
+        self.optimization_more_layout.insertWidget(1, self.max_evaluations_group)
+
+    def _reveal_optimization_collimation(self, enabled: bool) -> None:
+        """Keep newly expanded collimation fields inside the rail viewport."""
+        if not enabled or self.goal_inspector is None:
+            return
+        target = self.goal_inspector.collimation_tilt
+        QTimer.singleShot(
+            0,
+            lambda: self.optimization_more_scroll.ensureWidgetVisible(target, 0, 12),
+        )
+
+    def _set_optimization_view(self, view: str) -> None:
+        self._optimization_view = "more" if str(view) == "more" else "variables"
+        self.optimization_variables_button.setChecked(self._optimization_view == "variables")
+        self.optimization_more_button.setChecked(self._optimization_view == "more")
+        optimization = self._module == "optimization"
+        simulation = self._module == "simulation"
+        self.optimization_view_switcher.setVisible(optimization)
+        self.optimization_variable_host.setVisible(not simulation and not (optimization and self._optimization_view == "more"))
+        self.optimization_more_scroll.setVisible(optimization and self._optimization_view == "more")
+        if optimization and self._optimization_view == "more":
+            self.ensure_optimization_controls()
+
     def _clear_accordion(self) -> None:
         while self.accordion_layout.count() > 1:
             item = self.accordion_layout.takeAt(0)
@@ -1281,7 +1607,6 @@ class ObjectRail(QFrame):
                 widget.setParent(None)
                 widget.deleteLater()
         self._sections.clear()
-        self.goal_inspector = None
         self.source_inspector = None
         self.fiber_inspector = None
         self.environment_inspector = None
@@ -1358,6 +1683,16 @@ class ObjectRail(QFrame):
 
     def _populate(self) -> None:
         self.list.blockSignals(True)
+        # A visible item widget must be hidden before QListWidget releases it.
+        # Otherwise Qt can briefly promote it to a native top-level window on
+        # Windows, producing a small blank window flash during rapid refreshes.
+        for index in range(self.list.count()):
+            item = self.list.item(index)
+            if item is None:
+                continue
+            widget = self.list.itemWidget(item)
+            if widget is not None:
+                widget.hide()
         self.list.clear()
         module = self._module
         if module == "analysis":
@@ -1376,11 +1711,40 @@ class ObjectRail(QFrame):
                 for item in self._datasets:
                     if str(item.get("family") or "tabular") != family:
                         continue
-                    self._add_item(f"dataset:{item.get('id', '')}", str(item.get("title") or item.get("id") or "数据集"), str(item.get("kind") or ""))
+                    dataset_id = str(item.get("id") or "")
+                    kind = str(item.get("kind") or "")
+                    self._add_item(
+                        f"dataset:{dataset_id}",
+                        str(item.get("title") or dataset_id or "数据集"),
+                        str(item.get("status") or ""),
+                        dataset=True,
+                        selected=dataset_id == self._selected_dataset_id,
+                        progress=(
+                            float(item.get("progress") or 0.0)
+                            if kind in {
+                                "generated_pending",
+                                "generated_failed",
+                                "generated_cancelled",
+                            } else None
+                        ),
+                        dataset_state=kind,
+                        dataset_error=str(item.get("error") or ""),
+                        cancellable=(
+                            kind == "generated_pending"
+                            and str(item.get("status") or "") != "正在取消"
+                        ),
+                    )
             else:
                 self.heading.setText("训练结果" if kind == "train_result" else "模型")
                 for item in self._models:
-                    self._add_item(f"model:{item.get('id', '')}", str(item.get("title") or item.get("id") or "模型"), "已训练")
+                    model_id = str(item.get("id") or "")
+                    self._add_item(
+                        f"model:{model_id}",
+                        str(item.get("title") or model_id or "模型"),
+                        "已训练",
+                        selected=model_id == self._selected_model_id,
+                        catalog=True,
+                    )
         elif module == "explainability":
             kind = self._document_kind or "global_contrib"
             if kind in {"global_contrib", "current_system"}:
@@ -1388,7 +1752,14 @@ class ObjectRail(QFrame):
                 self.search.setVisible(False)
                 self.filter_row.setVisible(False)
                 for item in self._models:
-                    self._add_item(f"model:{item.get('id', '')}", str(item.get("title") or item.get("id") or "模型"), "已训练")
+                    model_id = str(item.get("id") or "")
+                    self._add_item(
+                        f"model:{model_id}",
+                        str(item.get("title") or model_id or "模型"),
+                        "已训练",
+                        selected=model_id == self._selected_model_id,
+                        catalog=True,
+                    )
             else:
                 self.heading.setText("参数")
                 self.search.setVisible(True)
@@ -1404,10 +1775,8 @@ class ObjectRail(QFrame):
         elif module == "optimization":
             self.search.setVisible(True)
             self.filter_row.setVisible(True)
-            self.shap_button.setVisible(True)
+            self.shap_button.setVisible(False)
             rows = list(_variable_rows(self.context.project.project))
-            if self._shap_sort and self._shap_scores:
-                rows = _ranked_variable_rows(rows, self._shap_scores)
             for row in rows:
                 key, group, _face, _parameter = row
                 item = QListWidgetItem(_display_variable(row))
@@ -1420,18 +1789,56 @@ class ObjectRail(QFrame):
             self._filter(self.search.text())
         self.list.blockSignals(False)
 
-    def _add_item(self, key: str, title: str, hint: str) -> None:
-        item = QListWidgetItem(title)
+    def _add_item(
+        self,
+        key: str,
+        title: str,
+        hint: str,
+        *,
+        dataset: bool = False,
+        catalog: bool = False,
+        selected: bool = False,
+        progress: float | None = None,
+        dataset_state: str = "",
+        dataset_error: str = "",
+        cancellable: bool = False,
+    ) -> None:
+        # Dataset rows are rendered by DatasetRailItem.  Leaving the title on
+        # QListWidgetItem as well makes Qt paint the same text underneath the
+        # custom widget, which is especially visible at Windows display
+        # scaling values above 100%.
+        rich_row = dataset or catalog
+        item = QListWidgetItem("" if rich_row else title)
         item.setData(Qt.ItemDataRole.UserRole, key)
-        item.setToolTip(hint)
+        item.setData(Qt.ItemDataRole.UserRole + 2, title)
+        item.setData(Qt.ItemDataRole.AccessibleTextRole, title)
+        item.setToolTip(dataset_error or hint)
         self.list.addItem(item)
+        if rich_row:
+            row = DatasetRailItem(
+                title,
+                selected=selected,
+                progress=progress,
+                status=hint,
+                state=dataset_state,
+                cancellable=cancellable,
+            )
+            self.list.setItemWidget(item, row)
+            item.setSizeHint(row.sizeHint())
+            row.activated.connect(lambda item_key=key: self._activate_item(item_key))
+            if dataset and cancellable:
+                row.cancelRequested.connect(
+                    lambda dataset_key=key: self.datasetCancelRequested.emit(
+                        dataset_key.split(":", 1)[1]
+                    )
+                )
 
     def set_shap_scores(self, scores: dict[str, float]) -> None:
         self._shap_scores = {str(key): float(value) for key, value in dict(scores or {}).items()}
         has = bool(self._shap_scores)
         self.shap_button.setEnabled(has)
         self.shap_button.setToolTip(
-            "按全局贡献从高到低排列变量" if has else "请先训练并对着同一目标看过全局贡献"
+            "按贡献排序从高到低排列变量" if has else "请先训练并对着同一目标看过贡献排序"
         )
         if not has and self.shap_button.isChecked():
             blocked = self.shap_button.blockSignals(True)
@@ -1460,8 +1867,15 @@ class ObjectRail(QFrame):
 
     def _clicked(self, item: QListWidgetItem) -> None:
         key = str(item.data(Qt.ItemDataRole.UserRole) or "")
+        self._activate_item(key)
+
+    def _activate_item(self, key: str) -> None:
         if self._module == "optimization":
             return
+        if self._module == "model" and key.startswith("dataset:"):
+            self.set_selected_dataset(key.split(":", 1)[1])
+        elif self._module == "model" and key.startswith("model:"):
+            self.set_selected_model(key.split(":", 1)[1])
         self.objectRequested.emit(key)
 
     def _item_changed(self, item: QListWidgetItem) -> None:
@@ -1481,7 +1895,7 @@ class ObjectRail(QFrame):
             item = self.list.item(index)
             if item is None:
                 continue
-            label = item.text().lower()
+            label = str(item.data(Qt.ItemDataRole.UserRole + 2) or item.text()).lower()
             item_group = str(item.data(Qt.ItemDataRole.UserRole + 1) or "")
             hidden = bool(query) and query not in label
             if group == "fiber":
@@ -1775,8 +2189,12 @@ class WorkbenchShell(QWidget):
             {"id": "dataset-880bdde6c292", "title": "内置演示·780 nm 四透镜耦合", "kind": "builtin", "family": "tabular"},
         ]
         self._trained_models: list[dict[str, Any]] = []
+        self._normalizing_model_names = False
         self._shap_scores: dict[str, float] = {}
         self._last_dataset_id = ""
+        self._pending_generated_dataset_id = ""
+        self._pending_generated_dataset_name = ""
+        self._pending_import_dataset_name = ""
         self._explain_dataset: dict[str, dict[str, Any]] = {}
         self._explain_current: dict[str, dict[str, Any]] = {}
         self._pending_candidate_validation: dict[str, Any] | None = None
@@ -1802,6 +2220,8 @@ class WorkbenchShell(QWidget):
         self._jobs.progress.connect(self._on_workbench_job_progress)
         self._jobs.finished.connect(self._on_workbench_job_finished)
         self._jobs.failed.connect(self._on_workbench_job_failed)
+        self._jobs.cancelled.connect(self._on_workbench_job_cancelled)
+        self._jobs.cancellationFailed.connect(self._on_workbench_job_cancellation_failed)
         root = QVBoxLayout(self)
         root.setContentsMargins(0, 0, 0, 0)
         root.setSpacing(0)
@@ -1818,6 +2238,7 @@ class WorkbenchShell(QWidget):
         self.secondary.itemRequested.connect(self._secondary_clicked)
         self.object_rail.objectRequested.connect(self._object_clicked)
         self.object_rail.optimizationSelectionChanged.connect(self._optimization_selected)
+        self.object_rail.datasetCancelRequested.connect(self._cancel_dataset_generation)
         self.context.project.project_changed.connect(self._project_state_changed)
         self.set_module("simulation")
 
@@ -1951,6 +2372,7 @@ class WorkbenchShell(QWidget):
         if self.module == "explainability":
             if str(key).startswith("model:"):
                 ident = key.split(":", 1)[1]
+                self.object_rail.set_selected_model(ident)
                 record = next((item for item in self._trained_models if item.get("id") == ident), None)
                 title = str((record or {}).get("title") or ident)
                 widget = self._widgets.get(f"explainability:{self._current_document_kind()}")
@@ -1991,19 +2413,60 @@ class WorkbenchShell(QWidget):
     def _model_object_clicked(self, key: str) -> None:
         if key.startswith("dataset:"):
             ident = key.split(":", 1)[1]
-            title = next((item["title"] for item in self._datasets if item["id"] == ident), ident)
+            record = next(
+                (item for item in self._datasets if str(item.get("id") or "") == ident),
+                None,
+            )
+            if record is None:
+                return
+            self.object_rail.set_selected_dataset(ident)
+            if str(record.get("kind") or "") in {
+                "generated_pending",
+                "generated_failed",
+                "generated_cancelled",
+            }:
+                self.object_rail.set_selected_dataset("")
+                return
+            title = str(record.get("title") or ident)
             widget = self._widgets.get("model:dataset")
             if widget is not None:
+                family = str(record.get("family") or "tabular")
+                setter = getattr(widget, "_set_family", None)
+                if callable(setter):
+                    setter(family)
+                mode_index = widget.source_mode.findData("import")
+                if mode_index >= 0 and widget.source_mode.currentIndex() != mode_index:
+                    widget.source_mode.setCurrentIndex(mode_index)
                 widget.select_dataset(title)
+                source = {
+                    "builtin": "builtin",
+                    "file": "file",
+                    "generated": "generated",
+                }.get(str(record.get("kind") or ""))
+                if source:
+                    widget.set_active_dataset(ident, source)
+                    if family == "sequence" and source == "generated":
+                        widget.register_generated_sequence_dataset(ident, record)
             return
         if not key.startswith("model:"):
             return
         ident = key.split(":", 1)[1]
         title = next((item["title"] for item in self._trained_models if item["id"] == ident), ident)
         kind = self._current_document_kind()
+        self.object_rail.set_selected_model(ident)
+        registry = getattr(self.context, "registry", None)
+        if registry is not None and ident:
+            registry.set_current_model(ident)
         if kind == "train_result":
             widget = self._widgets.get("model:train_result")
             if widget is not None:
+                record = next(
+                    (item for item in self._trained_models if str(item.get("id") or "") == ident),
+                    None,
+                )
+                marker = getattr(widget, "mark_trained", None)
+                if isinstance(record, dict) and callable(marker):
+                    marker(record)
                 widget.show_train_chart(widget.chart.currentText())
             return
         widget = self._widgets.get("model:predict") or self._widgets.get("model:predict_eval")
@@ -2133,13 +2596,16 @@ class WorkbenchShell(QWidget):
                 predict.connect(self._start_model_predict)
             generated = getattr(document, "datasetGenerated", None)
             if generated is not None:
-                generated.connect(self._register_dataset)
+                generated.connect(self._register_generated_dataset)
             importer = getattr(document, "fileImportRequested", None)
             if importer is not None:
                 importer.connect(self._import_dataset_file)
             kind_changed = getattr(document, "dataKindChanged", None)
             if kind_changed is not None:
                 kind_changed.connect(self._set_dataset_family)
+            selection_changed = getattr(document, "datasetSelectionChanged", None)
+            if selection_changed is not None:
+                selection_changed.connect(self._dataset_selection_changed)
             setter = getattr(document, "set_trained_models", None)
             if callable(setter):
                 setter(self._trained_models)
@@ -2152,7 +2618,16 @@ class WorkbenchShell(QWidget):
             }.get(spec.kind)
             if document_factory is None:
                 return EmptyDocument(spec.title, spec.subtitle)
-            document = document_factory(self.context, self._selected_optimization)
+            if spec.kind == "opt_vars":
+                self.object_rail.ensure_optimization_controls()
+                document = document_factory(
+                    self.context,
+                    self._selected_optimization,
+                    goal=self.object_rail.goal_inspector,
+                    max_evaluations=self.object_rail.max_evaluations,
+                )
+            else:
+                document = document_factory(self.context, self._selected_optimization)
             document.startRequested.connect(self.start_optimization)
             scan = getattr(document, "scanRequested", None)
             if scan is not None:
@@ -2243,33 +2718,41 @@ class WorkbenchShell(QWidget):
             self.taskRequested.emit("请先打开数据集页。")
             return
         family = dataset.current_family()
+        source = dataset.current_dataset_source()
         kind = "bilstm" if family == "sequence" else "train"
         if family == "sequence":
-            path = str(dataset.file_path.text() or "").strip()
-            if not path:
+            generated = dataset.generated_sequence_config() if source == "generated" else {}
+            path = str(
+                generated.get("sequence_dataset_path")
+                if generated else dataset.file_path.text() or ""
+            ).strip()
+            if source not in {"file", "generated"} or not path:
                 self.open_document("model", "train_result")
                 widget = self._widgets.get("model:train_result")
                 status = getattr(widget, "show_train_status", None)
                 if callable(status):
-                    status("请先选择序列数据文件。")
+                    status("请先选择文件并点击“导入”。")
                 return
             payload = {
                 "dataset_path": path,
-                "system_id_column": str(dataset.system_id_column.text() or "system_id"),
-                "order_column": str(dataset.order_column.text() or "element_index"),
-                "element_type_column": str(dataset.element_type_column.text() or "element_type"),
-                "numeric_feature_columns": [item.strip() for item in str(dataset.numeric_columns.text() or "").split(",") if item.strip()],
-                "target_columns": [item.strip() for item in str(dataset.sequence_target.text() or "coupling_efficiency").split(",") if item.strip()],
+                "system_id_column": str(generated.get("system_id_column") or dataset.system_id_column.text() or "system_id"),
+                "order_column": str(generated.get("order_column") or dataset.order_column.text() or "element_index"),
+                "element_type_column": str(generated.get("element_type_column") or dataset.element_type_column.text() or "element_type"),
+                "numeric_feature_columns": list(generated.get("numeric_feature_columns") or [item.strip() for item in str(dataset.numeric_columns.text() or "").split(",") if item.strip()]),
+                "target_columns": list(generated.get("target_columns") or [item.strip() for item in str(dataset.sequence_target.text() or "coupling_efficiency").split(",") if item.strip()]),
                 "config": dataset.train_hyperparameters(),
             }
         else:
-            selected_dataset_id = str(dataset.builtin.currentData() or self._last_dataset_id or "")
+            selected_dataset_id = dataset.selected_dataset_id()
             if not selected_dataset_id:
                 self.open_document("model", "train_result")
                 widget = self._widgets.get("model:train_result")
                 status = getattr(widget, "show_train_status", None)
                 if callable(status):
-                    status("请选择内置数据集、导入文件，或先生成数据集，再训练。")
+                    status(
+                        "请选择“内置”，或在“生成”模式完成生成；"
+                        "导入文件后请点击“导入”。"
+                    )
                 return
             payload = {
                 "dataset_id": selected_dataset_id,
@@ -2285,6 +2768,9 @@ class WorkbenchShell(QWidget):
         dataset.set_job_busy(True)
         error = self._jobs.submit("joint_train" if family == "tabular" else kind, payload)
         if error:
+            handler = getattr(widget, "show_train_failed", None)
+            if callable(handler):
+                handler(error)
             dataset.set_job_busy(False)
             if callable(status):
                 status(error)
@@ -2293,25 +2779,36 @@ class WorkbenchShell(QWidget):
     def _import_dataset_file(self, path: str) -> None:
         """Import the selected local table before allowing tabular training."""
         dataset = self._widgets.get("model:dataset")
-        api = getattr(self.context, "api_client", None)
-        if dataset is None or api is None:
+        if dataset is None:
             return
         source_path = str(path or "").strip()
         if not source_path:
             return
+        if dataset.current_family() == "sequence":
+            dataset.mark_file_imported()
+            dataset.show_generate_status(
+                "文件已导入",
+                [("—", source_path.replace("\\", "/").rsplit("/", 1)[-1], "—", "可训练")],
+            )
+            return
+        api = getattr(self.context, "api_client", None)
+        if api is None:
+            dataset.set_import_busy(False)
+            return
+        self._pending_import_dataset_name = source_path.replace("\\", "/").rsplit("/", 1)[-1]
         self._dataset_import_token = f"workbench.dataset.import.{uuid4().hex[:8]}"
         if not getattr(self, "_dataset_import_bound", False):
             api.completed.connect(self._on_dataset_import_completed)
             api.failed.connect(self._on_dataset_import_failed)
             self._dataset_import_bound = True
-        dataset.set_job_busy(True)
+        dataset.set_import_busy(True)
         dataset.show_generate_status("正在导入文件数据集…")
         from frontend_pyside.api.headless_dataset_client import HeadlessDatasetClient
         HeadlessDatasetClient(api).import_file(
             self._dataset_import_token,
             {
                 "source_path": source_path,
-                "dataset_name": source_path.replace("\\", "/").rsplit("/", 1)[-1],
+                "dataset_name": self._pending_import_dataset_name,
                 "target_name": target_backend_name(str(dataset.target.currentText() or "耦合效率")),
                 "random_seed": int(dataset.seed.value()),
             },
@@ -2325,13 +2822,20 @@ class WorkbenchShell(QWidget):
         dataset = self._widgets.get("model:dataset")
         if dataset is not None:
             dataset.set_job_busy(False)
+            if dataset_id:
+                dataset.mark_file_imported(dataset_id)
+            else:
+                dataset.set_import_busy(False)
             dataset.show_generate_status("文件已导入", [(dataset_id or "—", "文件数据集", "—", "可训练")])
         if not dataset_id:
+            self._pending_import_dataset_name = ""
             self.taskRequested.emit("文件已提交，但后端没有返回数据集 ID。")
             return
         self._last_dataset_id = dataset_id
-        title = str(body.get("dataset_name") or dataset_id)
+        title = str(body.get("dataset_name") or self._pending_import_dataset_name or dataset_id)
+        self._pending_import_dataset_name = ""
         self._register_dataset(title, dataset_id=dataset_id)
+        self.object_rail.set_selected_dataset(dataset_id)
         registry = getattr(self.context, "registry", None)
         if registry is not None:
             registry.merge_dataset({"dataset_id": dataset_id, "id": dataset_id, "name": title, **body})
@@ -2340,39 +2844,62 @@ class WorkbenchShell(QWidget):
     def _on_dataset_import_failed(self, key: str, message: str) -> None:
         if str(key) != getattr(self, "_dataset_import_token", ""):
             return
+        self._pending_import_dataset_name = ""
         dataset = self._widgets.get("model:dataset")
         if dataset is not None:
             dataset.set_job_busy(False)
-            dataset.show_generate_status(f"文件导入失败：{message}")
+            dataset.set_import_busy(False)
+        self.taskRequested.emit(f"文件导入失败：{message}")
 
     def _start_dataset_generation(self) -> None:
         dataset = self._widgets.get("model:dataset")
-        if dataset is None or dataset.current_family() != "tabular":
+        if (
+            dataset is None
+            or dataset.current_source_mode() != "generate"
+        ):
             return
-        from uuid import uuid4
-
         from machine_learning.features.coupling_physics import paired_coupling_targets
 
         state = self.collect_simulation_state()
         project_payload = serialize_project(self.context.project.project, state)
-        from machine_learning.datasets.variable_schemes import resolve_variable_scheme
-        try:
-            scheme = resolve_variable_scheme(
-                project_payload,
-                lens_count=int(dataset.lens_count.currentData() or 1),
-                include_conic=dataset.variable_scheme.currentData() == "asphere",
-            )
-        except ValueError as exc:
-            dataset.show_generate_status(str(exc))
-            return
-        parameters = build_dataset_parameters(project_payload, explicit_paths=scheme.design_variable_paths)
+        family = dataset.current_family()
+        scheme_id = None
+        lens_count = None
+        if family == "sequence":
+            from machine_learning.datasets.variable_schemes import resolve_lens_bindings
+
+            lens_count = len(resolve_lens_bindings(project_payload))
+            paths = dataset.sequence_variable_paths()
+            if not lens_count:
+                self.taskRequested.emit("当前系统没有可识别的实体镜片，无法生成序列数据集")
+                return
+            if not paths:
+                self.taskRequested.emit("请至少选择一个用于扰动的变量")
+                return
+            scheme_id = "arbitrary_lens_sequence"
+        else:
+            from machine_learning.datasets.variable_schemes import resolve_variable_scheme
+            try:
+                scheme = resolve_variable_scheme(
+                    project_payload,
+                    lens_count=int(dataset.lens_count.currentData() or 1),
+                    include_conic=dataset.variable_scheme.currentData() == "asphere",
+                )
+            except ValueError as exc:
+                self.taskRequested.emit(str(exc))
+                return
+            paths = list(scheme.design_variable_paths)
+            scheme_id = scheme.scheme_id
+            lens_count = scheme.lens_count
+        parameters = build_dataset_parameters(project_payload, explicit_paths=paths)
         if not parameters:
-            dataset.show_generate_status("未选择可采样参数")
+            self.taskRequested.emit("未选择可采样参数")
             return
         validation = min(0.45, max(0.05, float(dataset.split.value())))
         test = min(0.15, max(0.05, validation))
+        self._pending_generated_dataset_name = self._next_generated_dataset_name()
         payload = {
-            "dataset_name": f"workbench-{uuid4().hex[:8]}",
+            "dataset_name": self._pending_generated_dataset_name,
             "base_project": project_payload,
             "parameters": parameters,
             "targets": paired_coupling_targets([target_backend_name(str(dataset.target.currentText() or "耦合损耗(dB)"))]),
@@ -2383,18 +2910,24 @@ class WorkbenchShell(QWidget):
             "test_ratio": test,
             "random_seed": int(dataset.seed.value()),
             "precision": PRECISION_MAP.get(str(dataset.precision.currentText() or ""), "standard"),
-            "variable_scheme_id": scheme.scheme_id,
-            "lens_count": scheme.lens_count,
-            "design_variable_paths": list(scheme.design_variable_paths),
+            "variable_scheme_id": scheme_id,
+            "lens_count": lens_count,
+            "design_variable_paths": list(paths),
+            "dataset_layout": "sequence_long" if family == "sequence" else "tabular",
         }
-        dataset.show_generate_status(
-            "生成中", [("—", f"{scheme.label} · {len(parameters)} 个变量", "固定", "生成中")]
+        self._pending_generated_dataset_id = f"pending-dataset-{uuid4().hex[:10]}"
+        self._register_pending_generated_dataset(
+            self._pending_generated_dataset_id,
+            status="生成中",
+            family=family,
         )
+        self.object_rail.set_selected_dataset(self._pending_generated_dataset_id)
         dataset.set_job_busy(True)
         error = self._jobs.submit("dataset", payload)
         if error:
+            self._remove_pending_generated_dataset()
+            self._pending_generated_dataset_name = ""
             dataset.set_job_busy(False)
-            dataset.show_generate_status(error)
             self.taskRequested.emit(error)
 
     def _start_model_predict(self) -> None:
@@ -2419,11 +2952,6 @@ class WorkbenchShell(QWidget):
         if api is None:
             predict.show_predict_status("后端不可用（无 API 连接）")
             return
-        try:
-            features = model_features(self.context.project.project, record)
-        except FeaturePathError as exc:
-            predict.show_predict_status(f"当前镜头无法构造模型特征：{exc}")
-            return
         predict._fill_predict_inputs()
         predict.show_predict_status("正在预测…")
         self._predict_token = f"workbench.predict.{uuid4().hex[:8]}"
@@ -2431,6 +2959,27 @@ class WorkbenchShell(QWidget):
             api.completed.connect(self._on_predict_completed)
             api.failed.connect(self._on_predict_failed)
             self._predict_api_bound = True
+        model_kind = model_backend_kind(record.get("model_type") or record.get("family") or "")
+        if model_kind == "bilstm_structure_sequence":
+            try:
+                sequence_payload = sequence_prediction_payload(
+                    self.context.project.project,
+                    record,
+                )
+            except ValueError as exc:
+                predict.show_predict_status(str(exc))
+                return
+            TrainingClient(api).predict_bilstm(
+                self._predict_token,
+                model_id,
+                sequence_payload,
+            )
+            return
+        try:
+            features = model_features(self.context.project.project, record)
+        except FeaturePathError as exc:
+            predict.show_predict_status(f"当前镜头无法构造模型特征：{exc}")
+            return
         TrainingClient(api).predict(
             self._predict_token,
             model_id,
@@ -2478,23 +3027,243 @@ class WorkbenchShell(QWidget):
     def _set_dataset_family(self, family: str) -> None:
         self.object_rail.set_dataset_family(family)
 
-    def _register_dataset(self, title: str, *, dataset_id: str = "") -> None:
+    def _dataset_selection_changed(self, dataset_id: str) -> None:
+        self.object_rail.set_selected_dataset(str(dataset_id or ""))
+
+    def _next_generated_dataset_name(self) -> str:
+        """Return the next collision-free display name for a generated dataset."""
+        numbers = []
+        for item in self._datasets:
+            title = str(item.get("title") or "").strip()
+            suffix = title[len("数据集"):] if title.startswith("数据集") else ""
+            if suffix.isdigit():
+                numbers.append(int(suffix))
+        number = max(numbers, default=0) + 1
+        existing_titles = {str(item.get("title") or "").strip() for item in self._datasets}
+        while f"数据集{number}" in existing_titles:
+            number += 1
+        return f"数据集{number}"
+
+    @staticmethod
+    def _model_display_type(model_type: str) -> str:
+        return {
+            "random_forest": "随机森林",
+            "xgboost_physics_residual": "XGBoost物理残差",
+            "bilstm_structure_sequence": "BiLSTM",
+        }.get(str(model_type or "").strip(), str(model_type or "模型").strip() or "模型")
+
+    def _next_model_name(self, model_type: str) -> tuple[str, int]:
+        """Return a stable ``模型名字+序号`` display name for a new model."""
+        prefix = self._model_display_type(model_type)
+        numbers: set[int] = set()
+        for item in self._trained_models:
+            if self._model_display_type(item.get("model_type", "")) != prefix:
+                continue
+            try:
+                number = int(item.get("model_number") or 0)
+            except (TypeError, ValueError):
+                number = 0
+            title = str(item.get("title") or "")
+            if number <= 0 and title.startswith(prefix):
+                suffix = title[len(prefix):]
+                number = int(suffix) if suffix.isdigit() else 0
+            if number > 0:
+                numbers.add(number)
+        number = max(numbers, default=0) + 1
+        while number in numbers:
+            number += 1
+        return f"{prefix}{number}", number
+
+    def _register_dataset(self, title: str, *, dataset_id: str = "", kind: str = "file") -> None:
         name = str(title or "").strip()
         if not name or any(item.get("title") == name for item in self._datasets):
             return
         widget = self._widgets.get("model:dataset")
         family = widget.current_family() if widget is not None and hasattr(widget, "current_family") else "tabular"
-        self._datasets.append({"id": str(dataset_id or f"file-{len(self._datasets) + 1}"), "title": name, "kind": "file", "family": family})
+        self._datasets.append({"id": str(dataset_id or f"file-{len(self._datasets) + 1}"), "title": name, "kind": kind, "family": family})
         self.object_rail.set_catalogs(self._datasets, self._trained_models)
+
+    def _register_pending_generated_dataset(
+        self, dataset_id: str, *, status: str = "生成中", family: str = "tabular"
+    ) -> None:
+        """Put a transient generation item in the dataset rail immediately."""
+        ident = str(dataset_id or "").strip()
+        if not ident:
+            return
+        self._datasets = [
+            item for item in self._datasets
+            if str(item.get("id") or "") != ident
+        ]
+        self._datasets.append(
+            {
+                "id": ident,
+                "title": "数据集生成",
+                "kind": "generated_pending",
+                "family": str(family or "tabular"),
+                "progress": 0.0,
+                "status": str(status or "生成中"),
+            }
+        )
+        self.object_rail.set_catalogs(self._datasets, self._trained_models)
+
+    def _update_pending_generated_dataset(self, progress: float, stage: str = "") -> None:
+        ident = str(self._pending_generated_dataset_id or "").strip()
+        if not ident:
+            return
+        record = next(
+            (item for item in self._datasets if str(item.get("id") or "") == ident),
+            None,
+        )
+        if record is None:
+            return
+        try:
+            value = max(0.0, min(1.0, float(progress)))
+        except (TypeError, ValueError):
+            value = 0.0
+        record["progress"] = value
+        record["status"] = "生成中"
+        if str(stage or "").strip():
+            record["stage"] = str(stage).strip()
+        if not self.object_rail.update_dataset_progress(ident, value, "生成中"):
+            self.object_rail.set_catalogs(self._datasets, self._trained_models)
+
+    def _set_pending_generated_dataset_state(
+        self,
+        kind: str,
+        status: str,
+        *,
+        error: str = "",
+    ) -> None:
+        """Settle a transient dataset row without erasing its job history."""
+        ident = str(self._pending_generated_dataset_id or "").strip()
+        if not ident:
+            return
+        record = next(
+            (item for item in self._datasets if str(item.get("id") or "") == ident),
+            None,
+        )
+        if record is None:
+            self._pending_generated_dataset_id = ""
+            return
+        was_selected = self.object_rail.selected_dataset_id() == ident
+        record.update({"kind": kind, "status": status})
+        if error:
+            record["error"] = str(error)
+        self._pending_generated_dataset_id = ""
+        if was_selected:
+            self.object_rail.set_selected_dataset("")
+        self.object_rail.set_catalogs(self._datasets, self._trained_models)
+        dataset = self._widgets.get("model:dataset")
+        if dataset is not None and dataset.current_dataset_source() == "generated_pending":
+            dataset.set_active_dataset("", "")
+
+    def _mark_pending_generated_dataset_cancelling(self) -> None:
+        ident = str(self._pending_generated_dataset_id or "").strip()
+        record = next(
+            (item for item in self._datasets if str(item.get("id") or "") == ident),
+            None,
+        )
+        if record is None:
+            return
+        record["status"] = "正在取消"
+        value = float(record.get("progress") or 0.0)
+        if not self.object_rail.update_dataset_progress(ident, value, "正在取消"):
+            self.object_rail.set_catalogs(self._datasets, self._trained_models)
+            return
+        self.object_rail.set_dataset_cancelling(ident, True)
+
+    def _cancel_dataset_generation(self, dataset_id: str) -> None:
+        ident = str(dataset_id or "").strip()
+        if not ident or ident != str(self._pending_generated_dataset_id or ""):
+            return
+        error = self._jobs.cancel("dataset")
+        if error:
+            self.taskRequested.emit(error)
+            return
+        self._mark_pending_generated_dataset_cancelling()
+        self.taskRequested.emit("正在取消数据集生成…")
+
+    def _remove_pending_generated_dataset(self) -> None:
+        ident = str(self._pending_generated_dataset_id or "").strip()
+        if not ident:
+            return
+        was_selected = self.object_rail.selected_dataset_id() == ident
+        self._datasets = [
+            item for item in self._datasets
+            if str(item.get("id") or "") != ident
+        ]
+        self._pending_generated_dataset_id = ""
+        if was_selected:
+            self.object_rail.set_selected_dataset("")
+        self.object_rail.set_catalogs(self._datasets, self._trained_models)
+
+    def _finalize_pending_generated_dataset(
+        self,
+        dataset_id: str,
+        *,
+        title: str = "",
+        metadata: dict[str, Any] | None = None,
+    ) -> tuple[str, bool]:
+        """Rename the transient rail row in place when the backend returns an ID."""
+        ident = str(dataset_id or "").strip()
+        if not ident:
+            return "", False
+        pending_id = str(self._pending_generated_dataset_id or "").strip()
+        pending = next(
+            (item for item in self._datasets if str(item.get("id") or "") == pending_id),
+            None,
+        ) if pending_id else None
+        was_selected = pending is not None and self.object_rail.selected_dataset_id() == pending_id
+        if pending is None:
+            name = self._register_generated_dataset(ident, title=title)
+            return name, self.object_rail.selected_dataset_id() == ident
+
+        name = str(title or "").strip() or self._next_generated_dataset_name()
+        if any(
+            item is not pending and str(item.get("title") or "") == name
+            for item in self._datasets
+        ):
+            name = self._next_generated_dataset_name()
+        pending.update(
+            {
+                "id": ident,
+                "title": name,
+                "kind": "generated",
+                "progress": 1.0,
+                "status": "已完成",
+            }
+        )
+        if metadata:
+            pending.update(dict(metadata))
+        self._pending_generated_dataset_id = ""
+        self.object_rail.set_catalogs(self._datasets, self._trained_models)
+        if was_selected:
+            self.object_rail.set_selected_dataset(ident)
+        return name, was_selected
+
+    def _register_generated_dataset(
+        self, dataset_id: str, *, title: str = "", family: str = "tabular"
+    ) -> str:
+        """Register a generated dataset with a stable sequential display name."""
+        ident = str(dataset_id or "").strip()
+        if not ident:
+            return ""
+        existing = next((item for item in self._datasets if str(item.get("id") or "") == ident), None)
+        if existing is not None:
+            return str(existing.get("title") or ident)
+        name = str(title or "").strip() or self._next_generated_dataset_name()
+        if any(item.get("title") == name for item in self._datasets):
+            name = self._next_generated_dataset_name()
+        self._register_dataset(name, dataset_id=ident, kind="generated")
+        record = next((item for item in self._datasets if str(item.get("id") or "") == ident), None)
+        if record is not None:
+            record["family"] = str(family or "tabular")
+        return name
 
     def _on_registry_models_changed(self, records: list[dict[str, Any]]) -> None:
         """Mirror the authoritative model registry into the workbench rail."""
-        reverse_types = {
-            "random_forest": "随机森林",
-            "xgboost_physics_residual": "XGBoost物理残差",
-            "bilstm_structure_sequence": "BiLSTM",
-        }
         normalized: list[dict[str, Any]] = []
+        used_numbers: dict[str, set[int]] = {}
         for item in list(records or []):
             if not isinstance(item, dict):
                 continue
@@ -2502,14 +3271,41 @@ class WorkbenchShell(QWidget):
             if not model_id:
                 continue
             model_type = str(item.get("model_type") or "")
-            display_type = reverse_types.get(model_type, model_type or "模型")
+            display_type = self._model_display_type(model_type)
+            used = used_numbers.setdefault(display_type, set())
+            try:
+                number = int(item.get("model_number") or 0)
+            except (TypeError, ValueError):
+                number = 0
             title = str(item.get("title") or "")
-            if not title:
-                name = str(item.get("name") or "")
-                title = name if name and name != model_id else f"{display_type} · {model_id[-8:]}"
+            if number <= 0 and title.startswith(display_type):
+                suffix = title[len(display_type):]
+                number = int(suffix) if suffix.isdigit() else 0
+            if number <= 0 or number in used:
+                number = max(used, default=0) + 1
+                while number in used:
+                    number += 1
+            used.add(number)
             record = dict(item)
-            record.update({"id": model_id, "title": title})
+            record.update(
+                {
+                    "id": model_id,
+                    "title": f"{display_type}{number}",
+                    "model_number": number,
+                }
+            )
             normalized.append(record)
+        registry = getattr(self.context, "registry", None)
+        if (
+            registry is not None
+            and not self._normalizing_model_names
+            and normalized != list(records or [])
+        ):
+            self._normalizing_model_names = True
+            try:
+                registry.set_models(normalized)
+            finally:
+                self._normalizing_model_names = False
         self._trained_models = normalized
         self._sync_rail_document()
 
@@ -2823,6 +3619,9 @@ class WorkbenchShell(QWidget):
             starter(path, selected)
         error = self._jobs.submit("optimize", payload)
         if error:
+            handler = getattr(widget, "show_opt_failed", None)
+            if callable(handler):
+                handler(error)
             if widget is not None:
                 widget.workspace.set_result(0, "过程曲线", {"kind": "empty", "message": error})
             self.taskRequested.emit(error)
@@ -2897,6 +3696,9 @@ class WorkbenchShell(QWidget):
             scan.run_button.setEnabled(False)
         error = self._jobs.submit("scan", payload)
         if error:
+            handler = getattr(scan, "show_scan_failed", None)
+            if callable(handler):
+                handler(error)
             scan.show_scan_status(error)
             scan.run_button.setEnabled(bool(ranges))
             self.taskRequested.emit(error)
@@ -2912,17 +3714,17 @@ class WorkbenchShell(QWidget):
             key = str(key_item.data(Qt.ItemDataRole.UserRole) or "") if key_item is not None else ""
             if not key:
                 continue
+            compact_table = table.columnCount() == 4
+            current_column = 1 if compact_table else 3
+            lower_column = 2 if compact_table else 4
+            upper_column = 3 if compact_table else 5
             try:
-                current = float(table.item(row, 3).text()) if table.item(row, 3) is not None else 0.0
-                low = float(table.item(row, 4).text()) if table.item(row, 4) is not None else current
-                high = float(table.item(row, 5).text()) if table.item(row, 5) is not None else current
+                current = float(table.item(row, current_column).text()) if table.item(row, current_column) is not None else 0.0
+                low = float(table.item(row, lower_column).text()) if table.item(row, lower_column) is not None else current
+                high = float(table.item(row, upper_column).text()) if table.item(row, upper_column) is not None else current
             except (TypeError, ValueError):
                 continue
-            label = " ".join(
-                str(table.item(row, column).text())
-                for column in range(3)
-                if table.item(row, column) is not None
-            )
+            label = str(table.item(row, 0).text()) if table.item(row, 0) is not None else key
             variables.append({
                 "path": key,
                 "label": label,
@@ -2935,26 +3737,58 @@ class WorkbenchShell(QWidget):
         return variables
 
     def _on_workbench_job_submitted(self, kind: str, job_id: str) -> None:
+        note = f"{_job_title(kind)}已提交"
+        if kind in {"train", "joint_train", "bilstm"}:
+            widget = self._widgets.get("model:train_result")
+            handler = getattr(widget, "show_train_progress", None)
+            if callable(handler):
+                handler(0.0, note)
+        elif kind == "scan":
+            scan = self._widgets.get("optimization:scan")
+            handler = getattr(scan, "show_scan_progress", None)
+            if callable(handler):
+                handler(0.0, note)
+        elif kind == "optimize":
+            widget = self._widgets.get("optimization:opt_result")
+            handler = getattr(widget, "show_opt_progress", None)
+            if callable(handler):
+                handler(0.0, note)
         self.taskRequested.emit(f"{_job_title(kind)}已提交")
 
     def _on_workbench_job_progress(self, kind: str, progress: float, stage: str) -> None:
+        if kind in {"train", "joint_train", "bilstm"}:
+            widget = self._widgets.get("model:train_result")
+            handler = getattr(widget, "show_train_progress", None)
+            if callable(handler):
+                handler(progress, stage or "训练中")
+        elif kind == "scan":
+            scan = self._widgets.get("optimization:scan")
+            handler = getattr(scan, "show_scan_progress", None)
+            if callable(handler):
+                handler(progress, stage or "扫描中")
+        elif kind == "optimize":
+            widget = self._widgets.get("optimization:opt_result")
+            handler = getattr(widget, "show_opt_progress", None)
+            if callable(handler):
+                handler(progress, stage or "优化中")
         note = f"{_job_title(kind)} {progress:.0%}"
         if kind == "dataset":
-            dataset = self._widgets.get("model:dataset")
-            if dataset is not None:
-                dataset.show_generate_status(note)
+            self._update_pending_generated_dataset(progress, stage)
         elif kind in {"train", "joint_train", "bilstm"}:
             widget = self._widgets.get("model:train_result")
             status = getattr(widget, "show_train_status", None)
-            if callable(status):
+            if not callable(handler) and callable(status):
                 status(note)
         elif kind == "scan":
             scan = self._widgets.get("optimization:scan")
             if scan is not None:
-                scan.show_scan_status(note)
+                if not callable(handler):
+                    scan.show_scan_status(note)
         elif kind == "optimize":
             widget = self._widgets.get("optimization:opt_result")
             if widget is not None:
+                if callable(handler):
+                    return
                 widget.workspace.set_result(0, "过程曲线", {"kind": "empty", "message": note})
 
     def _on_workbench_job_finished(self, kind: str, result: object) -> None:
@@ -2969,31 +3803,67 @@ class WorkbenchShell(QWidget):
 
     def _on_workbench_job_finished_impl(self, kind: str, result: object) -> None:
         body = dict(result or {}) if isinstance(result, dict) else {}
+        if kind in {"train", "joint_train", "bilstm"}:
+            widget = self._widgets.get("model:train_result")
+            handler = getattr(widget, "show_train_progress", None)
+            if callable(handler):
+                handler(1.0, "训练完成", state="complete")
+        elif kind == "scan":
+            scan = self._widgets.get("optimization:scan")
+            handler = getattr(scan, "show_scan_progress", None)
+            if callable(handler):
+                handler(1.0, "扫描完成", state="complete")
+        elif kind == "optimize":
+            widget = self._widgets.get("optimization:opt_result")
+            handler = getattr(widget, "show_opt_progress", None)
+            if callable(handler):
+                handler(1.0, "优化完成", state="complete")
         if kind == "dataset":
             dataset = self._widgets.get("model:dataset")
             dataset_id = str(body.get("dataset_id") or body.get("training_dataset_id") or "")
+            metadata_raw = body.get("metadata") or {}
+            metadata = metadata_raw if isinstance(metadata_raw, dict) else {}
+            sequence_config = (
+                dict(metadata)
+                if str(metadata.get("dataset_layout") or "") == "sequence_long"
+                else {}
+            )
+            family = "sequence" if sequence_config else "tabular"
             self._last_dataset_id = dataset_id
-            count = int(body.get("sample_count") or 0)
+            generated_name = ""
+            selected_generated = False
+            if dataset_id:
+                generated_name, selected_generated = self._finalize_pending_generated_dataset(
+                    dataset_id,
+                    title=self._pending_generated_dataset_name,
+                    metadata=sequence_config,
+                )
+            else:
+                self._remove_pending_generated_dataset()
+            self._pending_generated_dataset_name = ""
             if dataset is not None:
                 dataset.set_job_busy(False)
-                dataset.show_generate_status(
-                    "已完成",
-                    [(dataset_id or "数据集", f"{count} 条", "—", "已完成")],
-                )
-            if dataset_id:
-                self._register_dataset(dataset_id)
+            if dataset_id and selected_generated:
                 if dataset is not None:
                     # Make the freshly generated dataset the explicit current
                     # choice. The packaged demo must not silently win over a
                     # dataset the user has just generated.
-                    for index in range(dataset.builtin.count() - 1, -1, -1):
-                        if str(dataset.builtin.itemData(index) or "") == dataset_id:
-                            dataset.builtin.removeItem(index)
-                    dataset.builtin.insertItem(0, f"本次生成·{dataset_id[-8:]}", dataset_id)
-                    dataset.builtin.setCurrentIndex(0)
+                    if family == "tabular":
+                        for index in range(dataset.builtin.count() - 1, -1, -1):
+                            if str(dataset.builtin.itemData(index) or "") == dataset_id:
+                                dataset.builtin.removeItem(index)
+                        dataset.builtin.insertItem(0, generated_name or "数据集", dataset_id)
+                        dataset.builtin.setCurrentIndex(0)
+                    else:
+                        dataset.register_generated_sequence_dataset(dataset_id, sequence_config)
+                    dataset.set_active_dataset(dataset_id, "generated")
             registry = getattr(self.context, "registry", None)
             if registry is not None and dataset_id:
-                registry.merge_dataset({"dataset_id": dataset_id, "id": dataset_id, "name": dataset_id})
+                registry.merge_dataset({
+                    "dataset_id": dataset_id, "id": dataset_id,
+                    "name": generated_name or dataset_id, "family": family,
+                    **sequence_config,
+                })
                 registry.set_current_dataset(dataset_id)
             return
         if kind == "joint_train":
@@ -3024,6 +3894,7 @@ class WorkbenchShell(QWidget):
                 else str(dataset.target.currentText() if dataset is not None else "耦合损耗(dB)")
             )
             if model_id:
+                model_title, model_number = self._next_model_name(name)
                 metadata_raw = body.get("metadata") or {}
                 metadata = metadata_raw if isinstance(metadata_raw, dict) else {}
                 result_targets = list(body.get("target_names") or metadata.get("target_names") or [])
@@ -3039,12 +3910,18 @@ class WorkbenchShell(QWidget):
                     feature_units_raw = metadata.get("feature_units")
                 record = {
                     "id": model_id,
-                    "title": f"{name} · {model_id[-8:]}",
+                    "title": model_title,
+                    "model_number": model_number,
                     "model_type": name,
                     "target": target,
                     "family": dataset.current_family() if dataset is not None else "tabular",
                     "dataset_id": str(body.get("dataset_id") or self._last_dataset_id),
                     "feature_paths": feature_paths,
+                    "numeric_feature_names": list(
+                        body.get("numeric_feature_names")
+                        or metadata.get("numeric_feature_names")
+                        or []
+                    ),
                     "feature_units": _coerce_feature_units(feature_units_raw, feature_paths),
                     "design_variable_paths": list(body.get("design_variable_paths") or metadata.get("design_variable_paths") or []),
                     "physics_feature_paths": list(body.get("physics_feature_paths") or metadata.get("physics_feature_paths") or []),
@@ -3052,8 +3929,25 @@ class WorkbenchShell(QWidget):
                     "target_names": result_targets,
                     "validation_metrics": dict(body.get("validation_metrics") or {}),
                     "test_metrics": dict(body.get("test_metrics") or {}),
+                    "evaluation": dict(
+                        body.get("evaluation")
+                        or metadata.get("evaluation")
+                        or {}
+                    ),
+                    "training_history": dict(
+                        body.get("training_history")
+                        or metadata.get("training_history")
+                        or {}
+                    ),
+                    "oob_error_curve": list(
+                        body.get("oob_error_curve")
+                        or metadata.get("oob_error_curve")
+                        or []
+                    ),
                     "training_summary": dict(body.get("training_summary") or metadata.get("training_summary") or {}),
                     "training_curve_status": str(body.get("training_curve_status") or metadata.get("training_curve_status") or "unavailable"),
+                    "training_curve_label": str(body.get("training_curve_label") or metadata.get("training_curve_label") or ""),
+                    "training_curve_description": str(body.get("training_curve_description") or metadata.get("training_curve_description") or ""),
                     "model_quality": dict(body.get("model_quality") or metadata.get("model_quality") or {}),
                 }
                 self._trained_models.append(record)
@@ -3064,6 +3958,7 @@ class WorkbenchShell(QWidget):
                     if callable(setter):
                         setter(model_id)
                 self._sync_rail_document()
+                self.object_rail.set_selected_model(model_id)
             self.open_document("model", "train_result")
             widget = self._widgets.get("model:train_result")
             marker = getattr(widget, "mark_trained", None)
@@ -3091,11 +3986,31 @@ class WorkbenchShell(QWidget):
 
     def _on_workbench_job_failed(self, kind: str, message: str) -> None:
         text = str(message or "任务失败")
+        if kind in {"train", "joint_train", "bilstm"}:
+            widget = self._widgets.get("model:train_result")
+            handler = getattr(widget, "show_train_failed", None)
+            if callable(handler):
+                handler(text)
+        elif kind == "scan":
+            scan = self._widgets.get("optimization:scan")
+            handler = getattr(scan, "show_scan_failed", None)
+            if callable(handler):
+                handler(text)
+        elif kind == "optimize":
+            widget = self._widgets.get("optimization:opt_result")
+            handler = getattr(widget, "show_opt_failed", None)
+            if callable(handler):
+                handler(text)
         if kind == "dataset":
+            self._set_pending_generated_dataset_state(
+                "generated_failed",
+                "生成失败",
+                error=text,
+            )
+            self._pending_generated_dataset_name = ""
             dataset = self._widgets.get("model:dataset")
             if dataset is not None:
                 dataset.set_job_busy(False)
-                dataset.show_generate_status(text)
         elif kind in {"train", "joint_train", "bilstm"}:
             dataset = self._widgets.get("model:dataset")
             if dataset is not None:
@@ -3118,6 +4033,56 @@ class WorkbenchShell(QWidget):
             if widget is not None:
                 widget.workspace.set_result(0, "过程曲线", {"kind": "empty", "message": text})
         self.taskRequested.emit(text)
+
+    def _on_workbench_job_cancelled(self, kind: str) -> None:
+        if kind != "dataset":
+            if kind in {"train", "joint_train", "bilstm"}:
+                widget = self._widgets.get("model:train_result")
+                handler = getattr(widget, "show_train_cancelled", None)
+                if callable(handler):
+                    handler()
+                dataset = self._widgets.get("model:dataset")
+                if dataset is not None:
+                    dataset.set_job_busy(False)
+            elif kind == "scan":
+                scan = self._widgets.get("optimization:scan")
+                handler = getattr(scan, "show_scan_cancelled", None)
+                if callable(handler):
+                    handler()
+                if scan is not None and getattr(scan, "run_button", None) is not None:
+                    scan.run_button.setEnabled(bool(scan.selected))
+            elif kind == "optimize":
+                widget = self._widgets.get("optimization:opt_result")
+                handler = getattr(widget, "show_opt_cancelled", None)
+                if callable(handler):
+                    handler()
+                opt = self._widgets.get("optimization:opt_vars")
+                if opt is not None and getattr(opt, "start_button", None) is not None:
+                    opt.start_button.setEnabled(bool(self._selected_optimization))
+            self.taskRequested.emit(f"{_job_title(kind)}已取消")
+            return
+        self._set_pending_generated_dataset_state("generated_cancelled", "已取消")
+        self._pending_generated_dataset_name = ""
+        dataset = self._widgets.get("model:dataset")
+        if dataset is not None:
+            dataset.set_job_busy(False)
+        self.taskRequested.emit("数据集生成已取消")
+
+    def _on_workbench_job_cancellation_failed(self, kind: str, message: str) -> None:
+        if kind == "dataset":
+            ident = str(self._pending_generated_dataset_id or "").strip()
+            record = next(
+                (item for item in self._datasets if str(item.get("id") or "") == ident),
+                None,
+            )
+            if record is not None:
+                record["status"] = "生成中"
+                value = float(record.get("progress") or 0.0)
+                if not self.object_rail.update_dataset_progress(ident, value, "生成中"):
+                    self.object_rail.set_catalogs(self._datasets, self._trained_models)
+                else:
+                    self.object_rail.set_dataset_cancelling(ident, False)
+        self.taskRequested.emit(str(message or "取消任务失败"))
 
     def _request_train_shap(self, model_id: str) -> None:
         from uuid import uuid4
@@ -3195,10 +4160,9 @@ from frontend_pyside.modules.optimization.variables import VariablesTab
 from frontend_pyside.modules.home.shell import WorkflowConnector, WorkflowHome, WorkflowNodeButton
 from frontend_pyside.modules.teaching.shell import (
     KindDragButton,
-    TeachingAnalysisPopup,
     TeachingAnalysisVisual,
     TeachingEquipmentPopup,
-    TeachingResultPopup,
+    TeachingImagingCouplingPopup,
     TeachingShell,
 )
 
@@ -3212,7 +4176,7 @@ __all__ = [
     "PrimaryBar",
     "SecondaryBar",
     "TabSpec",
-    "TeachingAnalysisPopup",
+    "TeachingImagingCouplingPopup",
     "TeachingShell",
     "WorkflowHome",
     "WorkbenchShell",

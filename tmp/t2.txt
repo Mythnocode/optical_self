@@ -1,0 +1,23 @@
+.....................................................F.................. [ 81%]
+.............F.F                                                         [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) is None
+     +  where ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) = <function find_spec at 0x0000017F758785E0>('frontend_pyside.features.teaching')
+     +    where <function find_spec at 0x0000017F758785E0> = <module 'importlib.util' (frozen)>.find_spec
+     +      where <module 'importlib.util' (frozen)> = <module 'importlib' from 'D:\\python\\python3.12\\Lib\\importlib\\__init__.py'>.util
+D:\AAAWorkspace\optical_self\tests\test_teaching_v2_core.py:876: AssertionError: assert ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) is None
+E   AssertionError: assert ['lens_data',..._diffraction'] == ['lens_data',..._diffraction']
+      
+      At index 1 diff: 'layout' != 'materials'
+      Right contains one more item: 'wave_diffraction'
+      Use -v to get more diff
+D:\AAAWorkspace\optical_self\tests\test_workbench_frozen_layout.py:58: AssertionError: assert ['lens_data',..._diffraction'] == ['lens_data',..._diffraction']
+E   assert '后端已连接' in '激光耦合仿真系统及智能优化平台'
+     +  where '激光耦合仿真系统及智能优化平台' = <built-in method windowTitle of MainWindow object at 0x0000017F6BF2EB00>()
+     +    where <built-in method windowTitle of MainWindow object at 0x0000017F6BF2EB00> = <frontend_pyside.app.main_window.MainWindow(0x17f64419120, name="mainWindow") at 0x0000017F6BF2EB00>.windowTitle
+D:\AAAWorkspace\optical_self\tests\test_workbench_status_and_aspect.py:40: assert '后端已连接' in '激光耦合仿真系统及智能优化平台'
+=========================== short test summary info ===========================
+FAILED tests/test_teaching_v2_core.py::test_v1_teaching_package_is_removed - ...
+FAILED tests/test_workbench_frozen_layout.py::test_frozen_secondary_and_accordion_layout
+FAILED tests/test_workbench_status_and_aspect.py::test_main_window_backend_status_is_not_window_tooltip
+3 failed, 85 passed in 12.80s

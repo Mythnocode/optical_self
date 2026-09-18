@@ -267,7 +267,7 @@ class OpticalSystemEditor(SurfacePropertyMixin, SurfaceTableMixin, SurfaceComman
         self.apply_button.setIcon(icon("check", theme.TEXT_INVERSE, 16))
         footer.addWidget(self.previous_button)
         footer.addWidget(self.next_button)
-        auto_apply_hint = QLabel("修改完成后自动写入当前项目，并由完整镜头编辑器记录撤销历史。")
+        auto_apply_hint = QLabel("")
         auto_apply_hint.setObjectName("helperText")
         auto_apply_hint.setWordWrap(True)
         auto_apply_hint.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)

@@ -32,6 +32,10 @@ class DatasetGenerationRequest(BaseModel):
     variable_scheme_id: Optional[str] = None
     lens_count: Optional[int] = None
     design_variable_paths: List[str] = Field(default_factory=list)
+    # ``tabular`` keeps the established RF/XGBoost flat-feature contract.
+    # ``sequence_long`` additionally exports one row per physical lens so the
+    # same simulated systems can be trained by the variable-length BiLSTM.
+    dataset_layout: Literal["tabular", "sequence_long"] = "tabular"
 
 
 class DatasetManifest(BaseModel):

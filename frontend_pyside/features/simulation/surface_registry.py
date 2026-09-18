@@ -26,7 +26,6 @@ class SurfaceTypeSpec:
 
     name: str
     category: str
-    description: str
     group_prefix: str
     parameters: tuple[SurfaceParameterSpec, ...] = ()
     disabled_common_fields: tuple[str, ...] = ()
@@ -36,16 +35,11 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="球面",
         category="折射面",
-        description="标准旋转对称球面。公共列中的曲率、厚度、材料和半口径即可完整描述。",
         group_prefix="S",
     ),
     SurfaceTypeSpec(
         name="柱面",
         category="折射面",
-        description=(
-            "柱面在柱轴方向曲率为零，只在垂直柱轴的方向具有公共列所给曲率。"
-            "角度遵循局部 x-y 面内的 Zemax 式方位角定义。"
-        ),
         group_prefix="CYL",
         parameters=(
             SurfaceParameterSpec(
@@ -63,7 +57,6 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="非球面",
         category="折射面",
-        description="圆锥基底叠加偶次非球面系数；系数在本页单独管理。",
         group_prefix="A",
         parameters=(
             SurfaceParameterSpec("a4", "非球面 A4", default=0.0, minimum=-1.0, maximum=1.0, decimals=12),
@@ -75,14 +68,12 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="平面",
         category="折射面",
-        description="零曲率平面。曲率字段自动禁用，其他公共参数仍可编辑。",
         group_prefix="P",
         disabled_common_fields=("radius",),
     ),
     SurfaceTypeSpec(
         name="光阑",
         category="孔径元件",
-        description="定义孔径或系统光阑位置，不引入折射材料。",
         group_prefix="ST",
         disabled_common_fields=("radius", "material"),
         parameters=(
@@ -95,7 +86,6 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="反射镜",
         category="反射元件",
-        description="反射表面。可设置反射模型、反射率和设计入射角。",
         group_prefix="M",
         parameters=(
             SurfaceParameterSpec("mirror_mode", "反射模型", kind="choice", default="理想反射", choices=("理想反射", "金属膜", "介质高反膜", "用户模型")),
@@ -106,7 +96,6 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="衍射光栅",
         category="衍射元件",
-        description="反射式或透射式光栅。沟槽密度、级次、沟槽方向和闪耀角在此独立编辑。",
         group_prefix="G",
         parameters=(
             SurfaceParameterSpec("grating_mode", "光栅形式", kind="choice", default="反射式", choices=("反射式", "透射式")),
@@ -120,7 +109,6 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="坐标断点",
         category="坐标变换",
-        description="在顺序系统中施加偏心和倾斜。不会使用曲率、材料或半口径。",
         group_prefix="CB",
         disabled_common_fields=("radius", "material", "aperture"),
         parameters=(
@@ -135,7 +123,6 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="二元衍射面",
         category="衍射元件",
-        description="以径向多项式相位描述的二元衍射面。",
         group_prefix="DOE",
         parameters=(
             SurfaceParameterSpec("diffraction_order", "衍射级次 m", kind="int", default=1, minimum=-100, maximum=100),
@@ -147,7 +134,6 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="探测器/像面",
         category="接收面",
-        description="定义像面或探测器采样区域。曲率和材料不参与。",
         group_prefix="IMG",
         disabled_common_fields=("radius", "material"),
         parameters=(
@@ -160,7 +146,6 @@ SURFACE_TYPES: tuple[SurfaceTypeSpec, ...] = (
     SurfaceTypeSpec(
         name="用户自定义面",
         category="扩展",
-        description="为后续插件或后端自定义表面预留。公共列保持不变，扩展标识和参数说明在此保存。",
         group_prefix="USR",
         parameters=(
             SurfaceParameterSpec("plugin_id", "插件/模型标识", kind="text", default=""),

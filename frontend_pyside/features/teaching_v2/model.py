@@ -183,6 +183,11 @@ KIND_DEFAULT_PARAMS: dict[str, dict[str, Any]] = {
 
 TEACHING_KIND_MIME = "application/x-teaching-kind"
 
+# 台面左端留白。激光器的 x 坐标是出光面，管身从出光面向 -x 延伸；出光面
+# 直接摆在 x=0 时整个管身会悬在台面左侧外面。默认方案统一从这条留白开始
+# 排布，任意两件元件的间距都不变，只有整体在台面上的位置右移。
+BENCH_ORIGIN_X_MM = 50.0
+
 PLACEABLE_KINDS: tuple[tuple[str, str], ...] = (
     ("laser", "激光器"),
     ("isolator", "隔离器"),
@@ -622,11 +627,12 @@ class SceneStore(QObject):
             self._record_history()
         self.components.clear()
         self._counter = 0
-        self._add_raw("laser", "激光器", 0.0, 0.0, AXIS_HEIGHT_MM, params=default_params_for_kind("laser"))
+        self.baseline_x_mm = BENCH_ORIGIN_X_MM
+        self._add_raw("laser", "激光器", BENCH_ORIGIN_X_MM, 0.0, AXIS_HEIGHT_MM, params=default_params_for_kind("laser"))
         self._add_raw(
             "lens",
             "L1 透镜",
-            24.0,
+            BENCH_ORIGIN_X_MM + 24.0,
             0.0,
             AXIS_HEIGHT_MM,
             params={**default_params_for_kind("lens"), "focal_length_mm": 50.0, "focal_mm": 50.0, "diameter_mm": 12.7},
@@ -634,12 +640,12 @@ class SceneStore(QObject):
         self._add_raw(
             "lens",
             "L2 透镜",
-            48.0,
+            BENCH_ORIGIN_X_MM + 48.0,
             0.0,
             AXIS_HEIGHT_MM,
             params={**default_params_for_kind("lens"), "focal_length_mm": 12.0, "focal_mm": 12.0, "diameter_mm": 8.0},
         )
-        self._add_raw("fiber", "五轴光纤架", 72.0, 0.0, AXIS_HEIGHT_MM, params=default_params_for_kind("fiber"))
+        self._add_raw("fiber", "五轴光纤架", BENCH_ORIGIN_X_MM + 72.0, 0.0, AXIS_HEIGHT_MM, params=default_params_for_kind("fiber"))
         self.selected_component_id = "lens-002"
         self.revision = 1
         self.results.clear()
@@ -660,6 +666,8 @@ class SceneStore(QObject):
         self._counter = 0
         self.results.clear()
         self.active_result_revision = None
+        # 基准线跟着激光出光面走：默认方案里它是光路的起点。
+        self.baseline_x_mm = BENCH_ORIGIN_X_MM
         wavelength_nm = 780.0 if count == 4 else 808.0
         laser_params = {
             **default_params_for_kind("laser"),
@@ -667,11 +675,20 @@ class SceneStore(QObject):
             "power_mw": 100.0,
             "beam_radius_mm": 0.50,
         }
-        self._add_raw("laser", f"{wavelength_nm:.0f} nm 半导体激光器", 0.0, 0.0, AXIS_HEIGHT_MM, params=laser_params)
+        self._add_raw(
+            "laser",
+            f"{wavelength_nm:.0f} nm 半导体激光器",
+            BENCH_ORIGIN_X_MM,
+            0.0,
+            AXIS_HEIGHT_MM,
+            params=laser_params,
+        )
 
         # Values are transcribed from the user's four-lens Zemax reference.
         # Earlier schemes use the leading subset so that their physical meaning
         # remains comparable while their layout stays compact on the bench.
+        # The bench offset moves the assembly onto the breadboard and does not
+        # change any relative distance, so the optical problem is unchanged.
         four_lens = (
             (20.0, 6.425, -9.892, 5.360, 12.7),
             (42.0, 4.593, 29.948, 2.426, 12.7),
@@ -683,7 +700,7 @@ class SceneStore(QObject):
             self._add_raw(
                 "lens",
                 f"L{index} 透镜",
-                x_mm,
+                BENCH_ORIGIN_X_MM + x_mm,
                 0.0,
                 AXIS_HEIGHT_MM,
                 params={
@@ -702,7 +719,7 @@ class SceneStore(QObject):
         self._add_raw(
             "fiber",
             "单模光纤接收端",
-            fiber_x,
+            BENCH_ORIGIN_X_MM + fiber_x,
             0.0,
             AXIS_HEIGHT_MM,
             params={**default_params_for_kind("fiber"), "mfd_um": 5.6, "na": 0.12},
@@ -777,8 +794,10 @@ class SceneStore(QObject):
         return cid
 
     def _next_x(self) -> float:
+        # 空台面上新器件不贴左边缘：激光器等器件的外壳从位置点往回延伸，
+        # 摆在 x=0 会整段悬在台面外（见 BENCH_ORIGIN_X_MM）。
         if not self.components:
-            return 0.0
+            return BENCH_ORIGIN_X_MM
         return max(c.pose.x_mm for c in self.components.values()) + 12.0
 
     def remove_component(self, component_id: str) -> bool:

@@ -31,9 +31,11 @@ class DatasetGenerator:
 
     def generate(self, request, cancellation=None, progress=None, *, max_workers: int = 1):
         dataset_id = "dataset-" + uuid.uuid4().hex[:12]
+        target_valid_count = max(1, int(request.sample_count))
+        max_attempts = max(target_valid_count, target_valid_count * 3)
         plan = create_sampling_plan(
             request.parameters,
-            request.sample_count,
+            target_valid_count,
             request.sampling_method,
             request.random_seed,
         )
@@ -48,54 +50,69 @@ class DatasetGenerator:
         engine_name = "unknown"
         engine_version = "unknown"
 
-        prepared: list[tuple[str, dict[str, float], ProjectSnapshot, SimulationRequest]] = []
-        for index, sample_id in enumerate(plan.sample_ids):
-            if cancellation is not None and cancellation.is_cancelled:
-                break
-            feature_values: dict[str, float] = {}
-            changes = []
-            for parameter, value in zip(request.parameters, plan.values[index]):
-                feature_values[parameter.path] = float(value)
-                changes.append(
-                    self.resolver.create_change(
-                        parameter.path, float(value), parameter.unit
+        def prepare_attempts(values, start_index: int):
+            prepared_batch: list[
+                tuple[str, dict[str, float], ProjectSnapshot, SimulationRequest]
+            ] = []
+            for local_index, row in enumerate(values):
+                if cancellation is not None and cancellation.is_cancelled:
+                    break
+                index = start_index + local_index
+                sample_id = f"sample-{index + 1:06d}"
+                feature_values: dict[str, float] = {}
+                changes = []
+                for parameter, value in zip(request.parameters, row):
+                    feature_values[parameter.path] = float(value)
+                    changes.append(
+                        self.resolver.create_change(
+                            parameter.path, float(value), parameter.unit
+                        )
                     )
+                changed_project = apply_parameter_changes(request.base_project, changes)
+                sim_request = SimulationRequest(
+                    request_id=f"{dataset_id}-{sample_id}",
+                    project=changed_project,
+                    analyses=target_to_analyses(canonical_targets),
+                    parameter_changes=[],
+                    precision=request.precision,
+                    random_seed=request.random_seed + index,
+                    engine=request.engine,
+                    options=dataset_simulation_options(
+                        changed_project, precision=request.precision
+                    ),
                 )
-            changed_project = apply_parameter_changes(request.base_project, changes)
-            sim_request = SimulationRequest(
-                request_id=f"{dataset_id}-{sample_id}",
-                project=changed_project,
-                analyses=target_to_analyses(canonical_targets),
-                parameter_changes=[],
-                precision=request.precision,
-                random_seed=request.random_seed + index,
-                engine=request.engine,
-                options=dataset_simulation_options(changed_project),
-            )
-            prepared.append((sample_id, feature_values, changed_project, sim_request))
+                prepared_batch.append(
+                    (sample_id, feature_values, changed_project, sim_request)
+                )
+            return prepared_batch
 
-        if progress is not None:
-            progress.update(0.02, "dataset.preparing", 0, max(1, len(prepared)))
+        prepared = prepare_attempts(plan.values, 0)
 
-        simulation_requests = [item[3] for item in prepared]
-        results = []
-        if simulation_requests:
+        def run_batch(simulation_requests, *, progress_start: float | None = None,
+                      progress_stop: float | None = None):
+            results = []
+            if not simulation_requests:
+                return results
             batch = getattr(self.simulation_port, "batch_evaluate", None)
             batch_error: Exception | None = None
+            batch_progress = None
+            if progress is not None and progress_start is not None and progress_stop is not None:
+                from backend.optical_ml_app.jobs.progress import ScaledProgressReporter
+
+                batch_progress = ScaledProgressReporter(
+                    progress,
+                    progress_start,
+                    progress_stop,
+                    stage_prefix="dataset",
+                )
             if callable(batch):
                 try:
-                    from backend.optical_ml_app.jobs.progress import ScaledProgressReporter
-
                     try:
                         results = list(
                             batch(
                                 simulation_requests,
                                 cancellation=cancellation,
-                                progress=ScaledProgressReporter(
-                                    progress, 0.02, 0.90, stage_prefix="dataset"
-                                )
-                                if progress is not None
-                                else None,
+                                progress=batch_progress,
                                 max_workers=max(1, int(max_workers)),
                             )
                         )
@@ -106,11 +123,7 @@ class DatasetGenerator:
                             batch(
                                 simulation_requests,
                                 cancellation=cancellation,
-                                progress=ScaledProgressReporter(
-                                    progress, 0.02, 0.90, stage_prefix="dataset"
-                                )
-                                if progress is not None
-                                else None,
+                                progress=batch_progress,
                             )
                         )
                 except Exception as exc:
@@ -123,17 +136,185 @@ class DatasetGenerator:
             if not callable(batch) or batch_error is not None:
                 for index, sim_request in enumerate(simulation_requests):
                     try:
-                        result = self.simulation_port.evaluate(sim_request, cancellation, None)
+                        result = self.simulation_port.evaluate(
+                            sim_request, cancellation, None
+                        )
                     except Exception as exc:
                         result = exc
                     results.append(result)
-                    if progress is not None:
-                        progress.update(
-                            0.02 + 0.88 * (index + 1) / max(len(simulation_requests), 1),
+                    if batch_progress is not None:
+                        batch_progress.update(
+                            (index + 1) / max(len(simulation_requests), 1),
                             "dataset.simulation",
                             index + 1,
                             len(simulation_requests),
                         )
+            return results
+
+        def quality_decision(result):
+            if isinstance(result, Exception):
+                return None
+            try:
+                targets = extract_target_values(result.metrics, canonical_targets)
+                return evaluate_simulation_quality(
+                    result,
+                    targets,
+                    canonical_targets,
+                    require_converged=True,
+                )
+            except Exception:
+                return None
+
+        def quality_accepts(result) -> bool:
+            decision = quality_decision(result)
+            return bool(decision is not None and decision.accepted)
+
+        def precision_retry_allowed(result) -> bool:
+            """Only retry failures that finer numerical sampling can fix."""
+
+            decision = quality_decision(result)
+            if decision is None or decision.accepted:
+                return False
+            return decision.code in {
+                "SIMULATION_NOT_CONVERGED",
+                "OPTICAL_NYQUIST_CHECK_FAILED",
+            }
+
+        def retry_failed_precision(
+            items,
+            results,
+            *,
+            progress_start: float | None = None,
+            progress_stop: float | None = None,
+        ):
+            if str(request.precision).strip().lower() == "high":
+                return 0
+            retry_indices: list[int] = []
+            retry_requests: list[SimulationRequest] = []
+            for index, ((sample_id, feature_values, changed_project, sim_request), result) in enumerate(
+                zip(items, results)
+            ):
+                if quality_accepts(result) or not precision_retry_allowed(result):
+                    continue
+                high_request = sim_request.model_copy(
+                    update={
+                        "precision": "high",
+                        "options": dataset_simulation_options(
+                            changed_project, precision="high"
+                        ),
+                    }
+                )
+                retry_indices.append(index)
+                retry_requests.append(high_request)
+            if not retry_requests:
+                return 0
+            if progress is not None and progress_start is not None:
+                progress.update(
+                    progress_start,
+                    "dataset.precision_retry",
+                    0,
+                    len(retry_requests),
+                )
+            retry_results = run_batch(
+                retry_requests,
+                progress_start=progress_start,
+                progress_stop=progress_stop,
+            )
+            for index, high_request, result in zip(
+                retry_indices, retry_requests, retry_results
+            ):
+                sample_id, feature_values, changed_project, _ = items[index]
+                items[index] = (
+                    sample_id,
+                    feature_values,
+                    changed_project,
+                    high_request,
+                )
+                results[index] = result
+            if progress is not None and progress_stop is not None:
+                progress.update(
+                    progress_stop,
+                    "dataset.precision_retry.completed",
+                    len(retry_results),
+                    len(retry_requests),
+                )
+            return len(retry_results)
+
+        if progress is not None:
+            progress.update(0.02, "dataset.preparing", 0, max(1, len(prepared)))
+
+        results = run_batch(
+            [item[3] for item in prepared], progress_start=0.02, progress_stop=0.56
+        )
+        high_precision_retry_count = retry_failed_precision(
+            prepared,
+            results,
+            progress_start=0.56,
+            progress_stop=0.70,
+        )
+        if progress is not None:
+            progress.update(
+                0.70,
+                "dataset.quality_checked",
+                len(results),
+                len(prepared),
+            )
+        quality_valid_count = sum(quality_accepts(result) for result in results)
+
+        # A fixed number of attempts can leave too few usable labels when the
+        # design space contains numerically invalid combinations.  Supplement the
+        # plan until the requested valid count is reached, with a hard 3x cap.
+        while (
+            quality_valid_count < target_valid_count
+            and len(prepared) < max_attempts
+            and (cancellation is None or not cancellation.is_cancelled)
+        ):
+            supplement_count = min(
+                max_attempts - len(prepared),
+                target_valid_count - quality_valid_count,
+            )
+            supplement_plan = create_sampling_plan(
+                request.parameters,
+                supplement_count,
+                request.sampling_method,
+                request.random_seed + len(prepared),
+            )
+            supplement = prepare_attempts(supplement_plan.values, len(prepared))
+            attempt_start = len(prepared)
+            attempt_stop = attempt_start + len(supplement)
+            supplement_progress_start = 0.70 + 0.20 * (
+                attempt_start / max_attempts
+            )
+            supplement_progress_stop = 0.70 + 0.20 * (
+                attempt_stop / max_attempts
+            )
+            retry_progress_start = supplement_progress_start + 0.65 * (
+                supplement_progress_stop - supplement_progress_start
+            )
+            supplement_results = run_batch(
+                [item[3] for item in supplement],
+                progress_start=supplement_progress_start,
+                progress_stop=retry_progress_start,
+            )
+            high_precision_retry_count += retry_failed_precision(
+                supplement,
+                supplement_results,
+                progress_start=retry_progress_start,
+                progress_stop=supplement_progress_stop,
+            )
+            prepared.extend(supplement)
+            results.extend(supplement_results)
+            if progress is not None:
+                progress.update(
+                    supplement_progress_stop,
+                    "dataset.quality_checked",
+                    len(results),
+                    len(prepared),
+                )
+            quality_valid_count = sum(quality_accepts(result) for result in results)
+
+        if progress is not None:
+            progress.update(0.90, "dataset.simulation.completed", len(results), len(prepared))
 
         # Persist records only after the expensive optical batch.  This keeps
         # disk I/O single-threaded and deterministic while the actual simulations
@@ -277,7 +458,7 @@ class DatasetGenerator:
             engine_version=engine_version,
             feature_schema_version=FEATURE_SCHEMA_VERSION,
             created_at=datetime.now(timezone.utc).isoformat(),
-            sample_count=len(plan.sample_ids),
+            sample_count=len(prepared),
             valid_sample_count=len(valid_ids),
             failed_sample_count=failed,
             feature_names=requested_feature_names,
@@ -302,6 +483,10 @@ class DatasetGenerator:
                 "analytic_coupling_baseline": bool(include_coupling_physics),
                 "source_project": request.base_project.model_dump(),
                 "batch_workers": max(1, int(max_workers)),
+                "target_valid_sample_count": target_valid_count,
+                "max_sample_attempts": max_attempts,
+                "high_precision_retry_count": high_precision_retry_count,
+                "valid_sample_target_reached": len(valid_ids) >= target_valid_count,
                 "variable_scheme_id": request.variable_scheme_id,
                 "lens_count": request.lens_count,
                 "design_variable_paths": list(request.design_variable_paths or requested_feature_paths[:len(request.parameters)]),
@@ -344,33 +529,72 @@ def apply_parameter_changes(project: ProjectSnapshot, changes) -> ProjectSnapsho
     return ProjectSnapshot.model_validate(data)
 
 
-def dataset_simulation_options(project: ProjectSnapshot) -> dict:
+_DATASET_PRECISION_PROFILES: dict[str, dict[str, object]] = {
+    # Dataset generation is a repeated-label workload.  Keep the preview
+    # profile genuinely cheap; the previous implementation always used the
+    # balanced 257 grid and then ran sampling convergence as well.
+    "preview": {
+        "pupil_sample_count": 9,
+        "grid_size": 65,
+        "output_grid_size": 129,
+        "zero_padding_factor": 1.5,
+        "precision_mode": "preview",
+        "convergence_enabled": False,
+        "sampling_convergence_enabled": False,
+        "auto_expand_max_steps": 1,
+    },
+    "standard": {
+        "pupil_sample_count": 25,
+        # Use the same propagation grid as the rescue path up front.  The
+        # former 129 -> 257 profile caused most otherwise usable samples to
+        # fail the conservative Nyquist gate and be recomputed at high
+        # precision.  One 257 -> 513 run is cheaper than two runs, while the
+        # expensive sampling-convergence repeat remains disabled here.
+        "grid_size": 257,
+        "output_grid_size": 513,
+        "zero_padding_factor": 2.0,
+        "precision_mode": "balanced",
+        "convergence_enabled": False,
+        "sampling_convergence_enabled": False,
+        "auto_expand_max_steps": 1,
+    },
+    "high": {
+        "pupil_sample_count": 49,
+        "grid_size": 257,
+        "output_grid_size": 513,
+        "zero_padding_factor": 2.0,
+        "precision_mode": "quantitative",
+        "convergence_enabled": True,
+        "sampling_convergence_enabled": True,
+        "sampling_convergence_grid_sizes": (257, 513),
+        "auto_expand_max_steps": 3,
+    },
+}
+
+
+def dataset_simulation_options(
+    project: ProjectSnapshot, precision: str = "standard"
+) -> dict:
     options = {"source": "dataset_generation"}
 
     if project.receiver is not None:
+        precision_key = str(precision or "standard").strip().lower()
+        if precision_key == "test":
+            precision_key = "preview"
+        profile = dict(
+            _DATASET_PRECISION_PROFILES.get(
+                precision_key, _DATASET_PRECISION_PROFILES["standard"]
+            )
+        )
         options["hybrid"] = {
             "wavelength_nm": project.source.wavelength_nm,
             "pupil_radius_mm": project.pupil_radius_mm,
-            # Training data must be generated with the same physical numerics that
-            # the formal GUI uses for this 780 nm coupling workflow.  Previously
-            # the dataset path fell back to the hybrid defaults, so a packaged ML
-            # model could explain a different numerical problem from the one shown
-            # on the formal-result page.
-            "pupil_sample_count": 49,
-            "grid_size": 257,
-            "output_grid_size": 257,
             "output_extent_x_mm": 0.024,
             "output_extent_y_mm": 0.024,
             "propagation_model": "scaled_fresnel",
-            "zero_padding_factor": 2.0,
-            "precision_mode": "balanced",
-            "convergence_enabled": True,
-            "sampling_convergence_enabled": True,
             "auto_expand_output": True,
             # Training consumes scalar metrics and derived physics features,
             # not the large propagated-field arrays used by result viewers.
-            # The solver still performs the same high-precision coupling
-            # calculation; only its returned diagnostic payload is reduced.
             "include_diagnostic_arrays": False,
             "result_array_policy": "none",
             "high_precision_coupling_enabled": True,
@@ -393,6 +617,7 @@ def dataset_simulation_options(project: ProjectSnapshot) -> dict:
             "fiber_attenuation_db_per_km": project.receiver.attenuation_db_per_km,
             "fiber_connector_loss_db": project.receiver.connector_loss_db,
             "include_breakdown": True,
+            **profile,
         }
 
     return options

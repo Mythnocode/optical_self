@@ -13,6 +13,7 @@ from typing import Any, Callable
 from PySide6.QtCore import QByteArray, QMimeData, QPoint, QSize, QTimer, Qt, Signal
 from PySide6.QtGui import QAction, QColor, QDrag, QKeySequence, QPainter, QPen, QShortcut
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QAbstractSpinBox,
     QButtonGroup,
     QCheckBox,
@@ -34,6 +35,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QProgressBar,
+    QRadioButton,
     QScrollArea,
     QSizePolicy,
     QSlider,
@@ -106,11 +108,13 @@ from frontend_pyside.app.workbench_jobs import (
     opt_chart_payload,
     sampling_backend_name,
     scan_curve_payload,
+    shap_beeswarm_payload,
     shap_dependence_item,
     shap_supported,
     target_backend_name,
     train_chart_payload,
     train_chart_unavailable_message,
+    training_test_metrics,
 )
 from frontend_pyside.features.machine_learning.feature_adapter import FeaturePathError
 from frontend_pyside.shared.feature_labels import display_feature_name
@@ -492,7 +496,7 @@ def _job_title(kind: str) -> str:
     return {
         "dataset": "数据集生成",
         "train": "训练",
-        "joint_train": "联合训练",
+        "joint_train": "训练",
         "bilstm": "训练",
         "scan": "扫描",
         "optimize": "优化",

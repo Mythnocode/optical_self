@@ -84,15 +84,12 @@ class TrainingService:
             getattr(manifest, "design_variable_paths", None)
             or manifest.metadata.get("design_variable_paths", [])
         )
-        # The direct random-forest model stays in user-controlled design space,
-        # so its SHAP values are already expressed as radius/thickness/conic.
-        # XGBoost keeps the complete analytic feature vector for its residual
-        # baseline and correction model.
-        feature_paths = (
-            design_feature_paths
-            if request.model_type == "random_forest" and design_feature_paths
-            else all_feature_paths
-        )
+        # 随机森林与 XGBoost 都使用完整特征向量（设计变量 + 物理失配特征）。
+        # 物理特征（尺寸失配、光束半径、横向/角向/轴向/曲率失配）本质上是
+        # 耦合效率的解析公式因子；随机森林只用 8 个设计变量时 R² 约 -0.9，
+        # 补上物理特征后 R² 提升到约 0.95。代价：SHAP 解释会包含非用户直接
+        # 可控的派生特征，不再是纯"设计空间"。
+        feature_paths = all_feature_paths
         unit_by_path = {
             str(path): str(manifest.feature_units[index])
             for index, path in enumerate(all_feature_paths)

@@ -29,40 +29,30 @@ _SHAP_CACHE_SCHEMA_VERSION = 5
 
 def _default_display_feature_paths(
     feature_paths: Sequence[str],
-    manifest: Mapping[str, Any],
 ) -> list[str]:
-    """Return truthful, user-facing design features in model order.
+    """Return the full feature vector in model order for explanation.
 
-    Derived physics features remain available to the estimator, but the main
-    explanation ranks the radius/thickness/conic variables selected when the
-    dataset was created.  Older manifests are supported by a conservative path
-    inference; if no design feature can be identified we retain all inputs.
+    The model is trained on both the user-tunable design variables
+    (radius/thickness/conic) and the derived physics mismatch features (size,
+    beam radius, lateral/angular/axial/curvature mismatch).  Those physics
+    features carry most of the coupling-efficiency signal — a random forest
+    trained on only the 8 design variables scores R² ≈ −0.9, but ≈ 0.97 with
+    the full vector — so the default SHAP view shows every feature rather than
+    hiding the derived ones behind ``__other_model_features__``.  Design vs.
+    physics grouping is still available through the manifest's
+    ``design_variable_paths`` / ``physics_feature_paths`` fields.
     """
-    available = [str(path) for path in feature_paths]
-    declared = [
-        str(path)
-        for path in list(manifest.get("design_variable_paths") or [])
-        if str(path) in available
-    ]
-    if declared:
-        return declared
-    inferred = [
-        path
-        for path in available
-        if path.endswith((".radius_mm", ".thickness_mm", ".distance_to_next_mm", ".conic"))
-    ]
-    return inferred or available
+    return [str(path) for path in feature_paths]
 
 
 def _resolve_display_feature_paths(
     feature_paths: Sequence[str],
-    manifest: Mapping[str, Any],
     requested: Sequence[str] | None,
     *,
     model_id: str,
 ) -> list[str]:
     available = [str(path) for path in feature_paths]
-    defaults = _default_display_feature_paths(available, manifest)
+    defaults = _default_display_feature_paths(available)
     values = [str(path) for path in list(requested or [])]
     if not values:
         return defaults
@@ -550,7 +540,6 @@ class ModelExtensionService:
             )
         display_feature_paths = _resolve_display_feature_paths(
             feature_paths,
-            manifest,
             body.get("display_feature_paths"),
             model_id=model_id,
         )

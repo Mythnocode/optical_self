@@ -33,7 +33,11 @@ def _radius_bounds(surface: Mapping[str, Any], value: float) -> tuple[float, flo
     radicand_factor = max(0.0, 1.0 + conic)
     minimum_magnitude = max(1.0e-3, aperture * sqrt(radicand_factor) * 1.03)
 
-    spread = max(magnitude * 0.10, min(0.25, magnitude * 0.04))
+    # Keep the default design-space perturbation broad enough for regression,
+    # but avoid combinations that push the propagated beam far outside the
+    # receiver window.  Invalid samples are expensive because they still need
+    # a high-precision retry in the dataset generator.
+    spread = max(magnitude * 0.05, min(0.25, magnitude * 0.02))
     low_mag = max(minimum_magnitude, magnitude - spread)
     high_mag = max(low_mag + 1.0e-6, magnitude + spread)
     if value > 0.0:
@@ -44,7 +48,7 @@ def _radius_bounds(surface: Mapping[str, Any], value: float) -> tuple[float, flo
 def _positive_bounds(value: float) -> tuple[float, float] | None:
     if not isfinite(value) or value <= 1.0e-6:
         return None
-    spread = max(value * 0.10, min(0.25, value * 0.03))
+    spread = max(value * 0.05, min(0.25, value * 0.015))
     lower = max(1.0e-4, value - spread)
     upper = max(lower + 1.0e-6, value + spread)
     return lower, upper
@@ -69,6 +73,18 @@ def build_dataset_parameters(
     if explicit_paths is not None:
         ordered_paths = [str(path) for path in explicit_paths]
         for path in ordered_paths:
+            if path.startswith("receiver."):
+                receiver = project_payload.get("receiver") or {}
+                field = path.split(".", 1)[1]
+                value = _finite_number(receiver.get(field)) if isinstance(receiver, Mapping) else None
+                if value is None:
+                    value = 0.0
+                lower, upper = _spread_bounds(value, floor=5.0)
+                parameters.append({
+                    "name": f"receiver_{field}", "path": path, "unit": "um",
+                    "lower_bound": lower, "upper_bound": upper,
+                })
+                continue
             if not path.startswith("surfaces[") or "]." not in path:
                 continue
             index_text, field = path[len("surfaces["):].split("].", 1)
@@ -86,6 +102,8 @@ def build_dataset_parameters(
                 bounds, unit = _positive_bounds(value), "mm"
             elif field == "conic":
                 bounds = _spread_bounds(value or 0.0, floor=0.25)
+            elif field == "semi_aperture_mm" and value is not None:
+                bounds, unit = _positive_bounds(value), "mm"
             if bounds is not None:
                 parameters.append({
                     "name": f"surface_{index}_{field}", "path": path, "unit": unit,

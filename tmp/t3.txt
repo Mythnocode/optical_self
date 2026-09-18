@@ -1,0 +1,7 @@
+.............F                                                           [100%]
+================================== FAILURES ===================================
+E   AttributeError: 'TeachingImagingCouplingPopup' object has no attribute 'notes'
+D:\AAAWorkspace\optical_self\tests\test_teaching_v2_ui.py:559: AttributeError: 'TeachingImagingCouplingPopup' object has no attribute 'notes'
+=========================== short test summary info ===========================
+FAILED tests/test_teaching_v2_ui.py::test_teaching_analysis_popup_uses_one_user_facing_quality_message
+1 failed, 13 passed in 6.53s

@@ -86,12 +86,13 @@ class SectionSpec:
 
     ``key`` 是本栏的稳定标识（跟跳转无关）。它还有一个副作用：会被挂到本栏
     每个部件上作为 Qt 动态属性 ``sectionKey``，于是 QSS 可以用属性选择器
-    **只给某一栏**单独设样式，例如::
+    单独给某一栏设样式，例如::
 
-        QLabel#WorkflowSectionTitle[sectionKey="simulation"] { ... }
+        QLabel#WorkflowSectionTitle[sectionKey="teaching"] { ... }
 
-    所以 ``key`` 一旦改动，light.qss 里对应的样式规则就会失效（不报错，
-    只是退回通用外观）。
+    目前五栏共用同一套外观（见 light.qss 的通用规则），``sectionKey`` 只是
+    留给"以后要突出某一栏"的接口；改了 ``key`` 只会让已有的专属规则失效
+    （不报错，退回通用外观）。
 
     ``icon`` 是 ``resources/icons/`` 下的文件名，写错只会图标空白、不会报错。
     ``intro`` 留空 ``""`` 就不显示介绍段落；``nodes`` 留空 ``()`` 就是这一栏
@@ -105,9 +106,8 @@ class SectionSpec:
     nodes: tuple[NodeSpec, ...] = ()
     # 栏内介绍段落，显示在标题头和卡片之间，自动换行。留空则不占位。
     intro: str = ""
-    # 本栏的强调色，目前用于给栏标题的图标着色，默认全局主蓝。
-    # 若把标题头改成深底（见 light.qss 的 [sectionKey="simulation"]），
-    # 这里要改成 "#FFFFFF" 之类的浅色，否则深底上的深蓝图标看不清。
+    # 本栏的强调色，用于标题条里的图标。五栏标题条都是深蓝实心、图标底为白色，
+    # 所以这里的颜色要在白底上看得清；默认全局主蓝。
     accent: str = "#155EEF"
 
 
@@ -115,31 +115,37 @@ class SectionSpec:
 # 没有别的地方需要同步修改。
 #
 # SectionSpec 字段：key（标识）/ title（栏标题）/ subtitle（栏标题下的灰字）/
-#                   icon（栏图标）/ nodes（栏内卡片，自上而下排列）
+#                   icon（栏图标）/ intro（栏内一段说明）/ nodes（栏内卡片）
 # NodeSpec    字段：kind（页面） / module（一级入口）/ title（卡片标题）/
 #                   subtitle（卡片副标题）/ icon（卡片图标）
+#
+# 每栏都写 intro，并给够本模块真实存在的入口——卡片点了要能落到那个页面上：
+# 普通模块对应文档页，教学没有文档页签，kind 直接对应教学台的一个动作
+# （见 main_window._open_workflow_node）。
 HOME_SECTIONS: tuple[SectionSpec, ...] = (
     SectionSpec(
         key="teaching",
         title="教学",
         subtitle="认识器材与光路",
         icon="teaching",
-        intro=("这是教学部分的介绍文字"),
+        accent="#0E7490",
+        intro=(
+            "在实验台上摆好光源、镜片和接收端，画布即时显示光路示意。"
+            "示意只说明光去了哪里；确认光路后再做正式波动光学计算，"
+            "得到的成像与耦合数据才算结论。"
+        ),
         nodes=(
-            NodeSpec("teaching", "teaching", "教学入门", "认识器材与光路", "guide"),
+            NodeSpec("teaching", "teaching", "教学入门", "打开教学实验台", "guide"),
+            NodeSpec("equipment", "teaching", "器材库", "摆放光源与器件", "toolbox"),
+            NodeSpec("analysis", "teaching", "成像与耦合", "正式计算光斑与效率", "intensity"),
+            NodeSpec("sync_to_simulation", "teaching", "同步到仿真", "把教学场景写入工程", "next"),
         ),
     ),
-    # 这一栏演示了两件「只对本栏生效」的事：
-    #   1) intro  —— 标题头下面多一段介绍文字（其余四栏没写就不显示）
-    #   2) accent —— 本栏强调色，这里给深蓝，配合 light.qss 里
-    #                [sectionKey="simulation"] 那几条规则，把标题头做成
-    #                深色实心条，和下方白底节点卡片明显区分开。
     SectionSpec(
         key="simulation",
         title="仿真",
         subtitle="搭建、观察与测量",
         icon="simulation",
-        accent="#155EEF",
         intro=(
             "先建立镜头与光源，再由内核追迹光线并给出结果。"
             "四个入口按「搭—看—量—算」的顺序走，彼此共享同一份系统状态，"
@@ -157,9 +163,16 @@ HOME_SECTIONS: tuple[SectionSpec, ...] = (
         title="模型",
         subtitle="数据集与训练",
         icon="machine_learning",
-        intro=("这是代理模型部分的介绍文字"),
+        accent="#7C3AED",
+        intro=(
+            "先生成覆盖参数范围的样本，再用随机森林和 XGBoost 物理残差联合训练。"
+            "数据集缺少解析物理特征时只训练随机森林，训练页会写明原因，"
+            "不会把不完整的模型当作可用结果。"
+        ),
         nodes=(
-            NodeSpec("dataset", "model", "建立模型", "进入数据集生成", "list"),
+            NodeSpec("dataset", "model", "准备数据集", "生成样本或导入表格", "ml_dataset"),
+            NodeSpec("train_result", "model", "训练模型", "随机森林与物理残差", "ml_train_result"),
+            NodeSpec("predict", "model", "模型预测", "用当前镜头做推理", "ml_predict"),
         ),
     ),
     SectionSpec(
@@ -167,19 +180,33 @@ HOME_SECTIONS: tuple[SectionSpec, ...] = (
         title="优化",
         subtitle="目标与变量范围",
         icon="optimization",
-        intro=("这是优化部分的介绍文字"),
+        accent="#B45309",
+        intro=(
+            "先定优化目标和每个变量的取值范围，再运行扫描或寻优。"
+            "代理模型只负责筛选候选，候选结果要经过正式光学计算复核，"
+            "才允许写入镜头表。"
+        ),
         nodes=(
-            NodeSpec("opt_vars", "optimization", "优化参数", "进入优化变量", "properties"),
+            NodeSpec("opt_vars", "optimization", "优化变量", "选择变量与范围", "opt_vars"),
+            NodeSpec("scan", "optimization", "参数扫描", "单变量与双变量扫描", "opt_scan"),
+            NodeSpec("opt_result", "optimization", "优化结果", "候选对照与写入", "opt_result"),
         ),
     ),
     SectionSpec(
         key="explainability",
         title="解释",
         subtitle="模型为什么这样选",
-        intro=("这是解释部分的介绍文字"),
         icon="explainability",
+        accent="#155EEF",
+        intro=(
+            "用 SHAP 给出参数的平均贡献排序，再顺着物理公式链路回到"
+            "曲率半径、厚度和圆锥系数。SHAP 只回答模型依赖谁，"
+            "物理因果仍要用正式光学计算复核。"
+        ),
         nodes=(
-            NodeSpec("global_contrib", "explainability", "解释原因", "进入解释全局贡献", "explainability"),
+            NodeSpec("global_contrib", "explainability", "贡献排序", "平均 |SHAP| 排名", "explain_global"),
+            NodeSpec("param_trend", "explainability", "物理链路", "参数 → 公式 → 目标", "explain_trend"),
+            NodeSpec("current_system", "explainability", "当前系统验证", "把当前镜头当作样本", "explain_current"),
         ),
     ),
 )

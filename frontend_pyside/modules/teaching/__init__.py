@@ -2,18 +2,16 @@
 
 from .shell import (
     KindDragButton,
-    TeachingAnalysisPopup,
     TeachingAnalysisVisual,
+    TeachingImagingCouplingPopup,
     TeachingEquipmentPopup,
-    TeachingResultPopup,
     TeachingShell,
 )
 
 __all__ = [
     "KindDragButton",
-    "TeachingAnalysisPopup",
+    "TeachingImagingCouplingPopup",
     "TeachingAnalysisVisual",
     "TeachingEquipmentPopup",
-    "TeachingResultPopup",
     "TeachingShell",
 ]

@@ -408,6 +408,16 @@ def train_bilstm(
             "rmse": float(np.sqrt(mean_squared_error(truth, prediction))),
         }
 
+    # Keep the point-level test split alongside aggregate metrics.  The
+    # desktop training-result page uses this same evaluation contract as the
+    # tree models to draw residual and measured-vs-predicted charts.
+    evaluation = {
+        "sample_ids": [str(sample.system_id) for sample in test_samples],
+        "actual": test_truth.tolist(),
+        "predicted": test_prediction.tolist(),
+        "residual": (test_prediction - test_truth).tolist(),
+    }
+
     return {
         "state_dict": best_state,
         "config": asdict(config),
@@ -423,6 +433,7 @@ def train_bilstm(
             "validation": len(validation_samples),
             "test": len(test_samples),
         },
+        "evaluation": evaluation,
     }
 
 
@@ -444,6 +455,7 @@ def save_bilstm(artifact: dict[str, Any], model_dir: str | Path) -> Path:
             "metrics",
             "history",
             "split_counts",
+            "evaluation",
         )
     }
     (model_dir / "manifest.json").write_text(

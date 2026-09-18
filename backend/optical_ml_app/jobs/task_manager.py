@@ -451,20 +451,11 @@ class TaskManager:
         job_type = str(payload.get("job_type") or original.job_type)
         timeout_seconds = payload.get("timeout_seconds")
         stall_timeout_seconds = payload.get("stall_timeout_seconds")
-        # Dataset jobs created by older releases persisted the obsolete
-        # 1.8-seconds/sample timeout.  Recalculate their budget during retry so
-        # a valid retry does not deterministically hit the same timeout again.
+        # Dataset jobs have no total wall-clock budget.  Older persisted jobs
+        # may still carry one, so drop it on retry rather than reproducing an
+        # artificial timeout for a task that is continuing to make progress.
         if job_type == "dataset":
-            from backend.optical_ml_app.application.dataset_service import (
-                dataset_timeout_seconds,
-            )
-
-            retry_args = tuple(payload.get("args") or ())
-            request = retry_args[0] if retry_args else None
-            sample_count = int(getattr(request, "sample_count", 1) or 1)
-            timeout_seconds = max(
-                float(timeout_seconds or 0.0), dataset_timeout_seconds(sample_count)
-            )
+            timeout_seconds = None
             stall_timeout_seconds = max(float(stall_timeout_seconds or 0.0), 300.0)
         new_job_id = self.submit(
             job_type, function,

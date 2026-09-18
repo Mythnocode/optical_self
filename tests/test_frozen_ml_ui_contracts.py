@@ -104,7 +104,7 @@ def test_training_curve_and_optimization_charts_use_explicit_sources():
             {"metrics": {"coupling_efficiency": 0.11}, "merit": 0.8},
         ],
     }
-    curve = train_chart_payload(result, "学习曲线")
+    curve = train_chart_payload(result, "验证误差曲线")
     assert curve is not None
     assert curve["y"] == [0.4, 0.2]
     assert curve["y_label"] == "OOB RMSE"
@@ -114,7 +114,7 @@ def test_training_curve_and_optimization_charts_use_explicit_sources():
     assert "正式评价" in candidates["description"]
     assert "没有逐轮" in train_chart_unavailable_message(
         {"metadata": {"training_summary": {"convergence": "not_applicable"}}},
-        "学习曲线",
+        "验证误差曲线",
     )
 
 

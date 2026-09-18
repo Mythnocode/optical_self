@@ -1,0 +1,11 @@
+......................................................F................. [ 83%]
+..............                                                           [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) is None
+     +  where ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) = <function find_spec at 0x000001BC3F4085E0>('frontend_pyside.features.teaching')
+     +    where <function find_spec at 0x000001BC3F4085E0> = <module 'importlib.util' (frozen)>.find_spec
+     +      where <module 'importlib.util' (frozen)> = <module 'importlib' from 'D:\\python\\python3.12\\Lib\\importlib\\__init__.py'>.util
+D:\AAAWorkspace\optical_self\tests\test_teaching_v2_core.py:876: AssertionError: assert ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) is None
+=========================== short test summary info ===========================
+FAILED tests/test_teaching_v2_core.py::test_v1_teaching_package_is_removed - ...
+1 failed, 85 passed in 7.68s

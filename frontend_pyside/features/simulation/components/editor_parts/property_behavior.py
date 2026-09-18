@@ -87,13 +87,13 @@ class SurfacePropertyMixin:
         self.material.addItems(["AIR", "N-BK7", "N-SF11", "F_SILICA", "MIRROR", "自定义"])
 
         fields = [
-            self._field("元件组", self.group_id, "同一透镜的多个表面使用相同组号"),
+            self._field("元件组", self.group_id),
             self._field("表面名称", self.surface_name),
-            self._field("表面类型", self.surface_type, "切换后下方专用参数页自动变化"),
-            self._field("曲率半径 R", self.radius, "正负号遵循光传播方向"),
-            self._field("厚度", self.thickness, "该面到下一面的轴向距离"),
-            self._field("材料 / 后介质", self.material, "空气间隔使用 AIR"),
-            self._field("半口径", self.aperture, "有效通光半径"),
+            self._field("表面类型", self.surface_type),
+            self._field("曲率半径 R", self.radius, ),
+            self._field("厚度", self.thickness),
+            self._field("材料 / 后介质", self.material),
+            self._field("半口径", self.aperture),
         ]
         return self._vertical_fields(fields)
 
@@ -190,15 +190,11 @@ class SurfacePropertyMixin:
     def _rebuild_dynamic_editor(self, type_name: str, surface=None):
         self._clear_dynamic_layout()
         spec = get_surface_type(type_name)
-        description = QLabel(spec.description)
-        description.setObjectName("helperText")
-        description.setWordWrap(True)
-        self.dynamic_layout.addWidget(description, 0, 0)
         if not spec.parameters:
             empty = QLabel("该表面类型没有额外专用参数；使用公共参数与面形参数即可。")
             empty.setObjectName("emptyStateText")
             empty.setWordWrap(True)
-            self.dynamic_layout.addWidget(empty, 1, 0)
+            self.dynamic_layout.addWidget(empty, 0, 0)
         else:
             values = getattr(surface, "type_parameters", {}) if surface is not None else {}
             for index, parameter in enumerate(spec.parameters):
@@ -216,7 +212,7 @@ class SurfacePropertyMixin:
                     if signal is not None:
                         signal.connect(self._auto_apply_properties)
                 self.dynamic_layout.addWidget(
-                    self._field(parameter.label, control, parameter.helper), index + 1, 0
+                    self._field(parameter.label, control, parameter.helper), index, 0
                 )
                 self.dynamic_layout.setColumnStretch(0, 1)
         self.property_tabs.setTabText(self.dynamic_tab_index, f"{spec.name}参数")

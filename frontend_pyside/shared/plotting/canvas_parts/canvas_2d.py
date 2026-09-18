@@ -92,7 +92,17 @@ class Canvas2DMixin:
             # 单曲线载荷使用 x/y 数组；label 存在时才显示图例。
             label = str(data.get("series_label") or data.get("label") or "").strip()
             ax.plot(data.get("x", []), data.get("y", []), linewidth=1.8, label=label or None)
-            if label:
+            reference_y = data.get("reference_y")
+            reference_label = str(data.get("reference_label") or "测试集 RMSE").strip()
+            if isinstance(reference_y, (int, float)) and np.isfinite(float(reference_y)):
+                ax.axhline(
+                    float(reference_y),
+                    color=theme.CHART_REFERENCE,
+                    linestyle="--",
+                    linewidth=1.2,
+                    label=reference_label,
+                )
+            if label or isinstance(reference_y, (int, float)):
                 ax.legend()
         elif kind == "line_multi":
             # 多曲线载荷共享 x 轴，每个 series 提供自己的 y 和 label。
@@ -1098,6 +1108,14 @@ class Canvas2DMixin:
             return
         bins = int(data.get("bins", min(24, max(8, int(np.sqrt(values.size)) + 2))) or 12)
         ax.hist(values, bins=bins, alpha=0.78, edgecolor=theme.SURFACE, linewidth=0.55)
+        if bool(data.get("zero_line", False)):
+            ax.axvline(0.0, color=theme.CHART_REFERENCE, linewidth=1.2, label="零残差")
+        unit = str(data.get("value_unit", "%"))
+
+        def value_label(value: float) -> str:
+            suffix = f" {unit}" if unit else ""
+            return f"{value:.2f}{suffix}" if unit == "%" else f"{value:.4g}{suffix}"
+
         for key, label, style in (
             ("mean", "平均值", "-"),
             ("p05", "P05", ":"),
@@ -1105,7 +1123,7 @@ class Canvas2DMixin:
         ):
             value = data.get(key)
             if isinstance(value, (int, float)) and np.isfinite(float(value)):
-                ax.axvline(float(value), linestyle=style, linewidth=1.6, label=f"{label} {float(value):.2f}%")
+                ax.axvline(float(value), linestyle=style, linewidth=1.6, label=f"{label} {value_label(float(value))}")
         ax.legend(loc="best", fontsize=9.0)
 
 

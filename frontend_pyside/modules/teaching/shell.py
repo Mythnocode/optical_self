@@ -236,46 +236,60 @@ class TeachingAnalysisVisual(QWidget):
                          "每一行表示相对于该环节输入的保留比例；总耦合效率以正式引擎结果为准。")
 
 
-class TeachingAnalysisPopup(QFrame):
-    """Modeless formal-analysis window used by the teaching bench."""
+class TeachingImagingCouplingPopup(QFrame):
+    """成像与耦合：一个窗口里放成像预览和耦合数据。
 
-    calculateRequested = Signal(str)
+    这两项本来各有一个窗口，但它们读的是同一次正式计算处方，放在一起才能
+    对照着看：上面是接收面光斑预览，下面是效率数据（按钮式显示，与仿真页
+    的耦合效率一致）。
+    """
 
-    def __init__(self, analysis: str, parent=None) -> None:
-        info = TEACHING_ANALYSIS_INFO[str(analysis)]
+    calculateRequested = Signal()
+
+    # 效率口径取自教学引擎实际返回的量：仿真页那三项里的"系统效率/端面接收
+    # 效率"在教学台上没有对应输出，硬摆上去只会永远是"—"。
+    EFFICIENCY_PILLS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
+        ("coupling", "模式耦合效率", ("coupling_efficiency",)),
+        ("overlap", "模式重叠效率", ("mode_overlap_efficiency", "coupling_efficiency")),
+        ("total", "总耦合效率", ("total_coupling_efficiency", "coupling_efficiency")),
+    )
+    # 其余耦合指标直接列成一行，避免为每个值再开一个控件。
+    DETAIL_METRICS: tuple[tuple[str, str, str], ...] = (
+        ("coupling_loss_db", "耦合损耗", "dB"),
+    )
+
+    def __init__(self, parent=None) -> None:
         super().__init__(parent, Qt.WindowType.Tool)
-        self.analysis = str(analysis)
-        self.setObjectName(f"Teaching{info['key'].title()}Popup")
-        self.setWindowTitle(str(info["title"]))
-        self.setMinimumSize(700, 520)
-        self.resize(780, 590)
+        self.setObjectName("TeachingImagingCouplingPopup")
+        self.setWindowTitle("成像与耦合")
+        self.setMinimumSize(460, 520)
+        self.resize(500, 640)
         self._result_scene_revision: int | None = None
         self._scene_revision: int | None = None
-        self._busy_message = ""
+        self._coupling_metrics: dict[str, Any] = {}
+        self._imaging_metrics: dict[str, Any] = {}
 
         root = QVBoxLayout(self)
         root.setContentsMargins(14, 12, 14, 14)
-        root.setSpacing(10)
-        heading = QLabel(str(info["title"]))
-        heading.setObjectName("TeachingPopupTitle")
-        root.addWidget(heading)
+        root.setSpacing(8)
 
         action_row = QHBoxLayout()
         self.run_button = QPushButton("开始正式计算")
         self.run_button.setObjectName("teachingV2PrimaryButton")
         self.run_button.setMinimumHeight(38)
         self.run_button.setMinimumWidth(156)
-        self.run_button.clicked.connect(lambda: self.calculateRequested.emit(self.analysis))
+        self.run_button.clicked.connect(self.calculateRequested.emit)
         action_row.addWidget(self.run_button)
-        self.status = QLabel("尚未计算")
+        # 状态只在需要人注意时出现（正在算 / 算不出来）；成功不写提示词，
+        # 结果本身就是反馈。文案仍写入 text()，供验收脚本和读屏软件读取。
+        self.status = QLabel("")
         self.status.setObjectName("TeachingPopupStatus")
         self.status.setWordWrap(True)
+        self.status.hide()
         action_row.addWidget(self.status, 1)
         root.addLayout(action_row)
 
-        # Wave-optics analysis does not have a truthful percentage before the
-        # engine returns.  An indeterminate bar communicates active work
-        # without inventing a completion number.
+        # 波动光学没有可信的完成百分比，用不确定进度条表示正在算。
         self.progress = QProgressBar(self)
         self.progress.setObjectName("TeachingAnalysisProgress")
         self.progress.setTextVisible(False)
@@ -283,84 +297,166 @@ class TeachingAnalysisPopup(QFrame):
         self.progress.hide()
         root.addWidget(self.progress)
 
-        self.summary = QLabel("等待波动光学计算")
-        self.summary.setObjectName("TeachingAnalysisSummary")
-        root.addWidget(self.summary)
-        self.visual = TeachingAnalysisVisual(self.analysis, self)
-        root.addWidget(self.visual)
-        self.notes = QLabel(str(info["empty"]))
-        self.notes.setObjectName("TeachingPopupNotes")
-        self.notes.setWordWrap(True)
-        root.addWidget(self.notes)
+        # 没有结果就没有"成像预览"这一块：窗口里只留图和结果，不摆空态文案。
+        self.imaging_block = QWidget()
+        imaging_layout = QVBoxLayout(self.imaging_block)
+        imaging_layout.setContentsMargins(0, 0, 0, 0)
+        imaging_layout.setSpacing(6)
+        imaging_title = QLabel("成像预览")
+        imaging_title.setObjectName("PopupGroupTitle")
+        imaging_layout.addWidget(imaging_title)
+        self.imaging_summary = QLabel("")
+        self.imaging_summary.setObjectName("TeachingAnalysisSummary")
+        self.imaging_summary.setWordWrap(True)
+        imaging_layout.addWidget(self.imaging_summary)
+        self.imaging_visual = TeachingAnalysisVisual("spot", self)
+        # 预览只是示意图，窗口要保持"小窗"尺寸，别让预览把耦合数据挤出去。
+        self.imaging_visual.setMinimumHeight(168)
+        self.imaging_visual.setMaximumHeight(186)
+        imaging_layout.addWidget(self.imaging_visual)
+        self.imaging_block.hide()
+        root.addWidget(self.imaging_block)
+
+        coupling_title = QLabel("耦合数据")
+        coupling_title.setObjectName("PopupGroupTitle")
+        root.addWidget(coupling_title)
+        # 竖排而不是仿真页那种一行三块：这是个窄窗口，横排会把标签挤到被裁掉。
+        pills = QVBoxLayout()
+        pills.setSpacing(4)
+        self.coupling_pills: dict[str, QLabel] = {}
+        for key, title, _keys in self.EFFICIENCY_PILLS:
+            label = QLabel(f"{title}：—")
+            label.setObjectName("coup")
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            # 与仿真页一致：效率用按钮式标签显示，扫一眼就能比较。
+            pills.addWidget(label)
+            self.coupling_pills[key] = label
+        root.addLayout(pills)
+        self.coupling_detail = QLabel("")
+        self.coupling_detail.setObjectName("HelperText")
+        self.coupling_detail.setWordWrap(True)
+        self.coupling_detail.hide()
+        root.addWidget(self.coupling_detail)
+        root.addStretch(1)
+
+    def _set_status(self, text: str, *, attention: bool = True) -> None:
+        """写状态文字；只有需要人注意的状态才真的显示出来。"""
+        self.status.setText(str(text or ""))
+        self.status.setVisible(bool(text) and bool(attention))
+
+    @staticmethod
+    def _first_metric(metrics: dict[str, Any], keys: tuple[str, ...]) -> Any:
+        for key in keys:
+            if metrics.get(key) is not None:
+                return metrics[key]
+        return None
+
+    def _refresh_pills(self) -> None:
+        for key, title, keys in self.EFFICIENCY_PILLS:
+            value = self._first_metric(self._coupling_metrics, keys)
+            text = _format_teaching_metric(key, value, "%") if value is not None else "—"
+            self.coupling_pills[key].setText(f"{title}：{text}")
 
     def set_scene_revision(self, revision: int) -> None:
         self._scene_revision = int(revision)
-        if self._result_scene_revision is not None and self._result_scene_revision != int(revision):
-            self.run_button.setEnabled(True)
-            self.status.setText("场景已修改，当前指标已过期")
-            self.summary.setText("结果已过期 · 请重新计算")
-            self.notes.setText("修改教学台后，旧结果不会作为当前场景的结论。")
-            self.visual.set_metrics({}, available=False)
+        if self._result_scene_revision is None or self._result_scene_revision == int(revision):
+            return
+        # 场景改了就不再摆着旧数字：清空结果并提示需要重算，避免把过期值当现状。
+        self.run_button.setEnabled(True)
+        self._result_scene_revision = None
+        self._imaging_metrics = {}
+        self._coupling_metrics = {}
+        self.imaging_block.hide()
+        self.imaging_visual.set_metrics({}, available=False)
+        self.coupling_detail.clear()
+        self.coupling_detail.hide()
+        self._refresh_pills()
+        self._set_status("场景已修改，请重新计算")
 
     def set_busy(self, busy: bool, message: str = "") -> None:
         self.run_button.setEnabled(not bool(busy))
         if busy:
-            self._busy_message = str(message or "正在计算，界面仍可操作")
-            self.status.setText(self._busy_message)
+            # 正在算：进度条 + 一句状态，除此之外没有别的提示文字。
+            self._set_status(str(message or "正在计算，界面仍可操作"))
             self.progress.setRange(0, 0)
             self.progress.show()
         elif message:
-            self.status.setText(str(message))
+            self._set_status(str(message))
             self.progress.hide()
             self.progress.setRange(0, 100)
             self.progress.setValue(0)
         else:
+            self._set_status("", attention=False)
             self.progress.hide()
             self.progress.setRange(0, 100)
             self.progress.setValue(0)
 
-    def set_result(self, result: object) -> None:
-        info = TEACHING_ANALYSIS_INFO[self.analysis]
+    def set_running(self, analysis: str, *, done: bool = False) -> None:
+        """显示正在算哪一项：合并后是两个分析，进度要说清楚。"""
+        if done:
+            # 两项都算完：结果本身就是反馈，不再留一句提示词。
+            self.set_busy(False)
+            self._set_status("正式计算完成", attention=False)
+            return
+        title = str(TEACHING_ANALYSIS_INFO.get(str(analysis), {}).get("title") or analysis)
+        self.set_busy(True, f"正在计算{title}…")
+
+    def set_result(self, analysis: str, result: object) -> None:
+        analysis = str(analysis)
+        info = TEACHING_ANALYSIS_INFO.get(analysis, {})
+        title = str(info.get("title") or analysis)
         artifacts = getattr(result, "artifacts", {}) or {}
-        artifact = artifacts.get(self.analysis) if isinstance(artifacts, dict) else None
+        artifact = artifacts.get(analysis) if isinstance(artifacts, dict) else None
         artifact = dict(artifact or {})
         metrics = dict(artifact.get("metrics") or getattr(result, "metrics", {}) or {})
         status = str(artifact.get("status") or getattr(result, "status", "failed") or "failed")
         success = bool(getattr(result, "success", status == "completed"))
+        completed = bool(success and status == "completed")
         scene_revision = getattr(result, "scene_revision", None)
-        self._result_scene_revision = int(scene_revision) if scene_revision is not None else self._scene_revision
+        self._result_scene_revision = (
+            int(scene_revision) if scene_revision is not None else self._scene_revision
+        )
         self.run_button.setEnabled(True)
         self.progress.hide()
         self.progress.setRange(0, 100)
         self.progress.setValue(100)
-        self.visual.set_metrics(metrics, available=bool(success and status == "completed"))
-        if self.analysis == "coupling":
-            value = metrics.get("total_coupling_efficiency", metrics.get("coupling_efficiency"))
-            self.summary.setText(f"总耦合效率  {_format_teaching_metric('total_coupling_efficiency', value, '%')}")
+
+        if analysis == "coupling":
+            self._coupling_metrics = metrics if completed else {}
+            self._refresh_pills()
+            detail = [
+                f"{label} {_format_teaching_metric(key, metrics.get(key), unit)}"
+                for key, label, unit in self.DETAIL_METRICS
+                if metrics.get(key) is not None
+            ]
+            # 没有明细量就不留空行；算不出来时把原因交给状态栏。
+            self.coupling_detail.setText(" · ".join(detail) if completed else "")
+            self.coupling_detail.setVisible(bool(completed and detail))
         else:
+            self._imaging_metrics = metrics if completed else {}
+            self.imaging_visual.set_metrics(metrics, available=completed)
             value = metrics.get("rms_spot_radius_um", metrics.get("rms_um"))
-            self.summary.setText(f"RMS 光斑半径  {_format_teaching_metric('rms_spot_radius_um', value, 'μm')}")
+            self.imaging_summary.setText(
+                f"RMS 光斑半径  {_format_teaching_metric('rms_spot_radius_um', value, 'μm')}"
+                if completed
+                else ""
+            )
+            # 有结果才有"成像预览"这一块，没结果就整块收起。
+            self.imaging_block.setVisible(completed)
 
         errors = [str(item).strip() for item in (artifact.get("errors") or getattr(result, "errors", ()) or ())]
         errors = [item for item in errors if item]
-        raw_warnings = [str(item).strip() for item in (artifact.get("warnings") or getattr(result, "warnings", ()) or ())]
-        raw_warnings = [item for item in raw_warnings if item]
-        quality_needs_review = bool(raw_warnings)
-        comparison_note = str(artifact.get("comparison_note") or "教学场景正式计算")
-        if status == "missed":
-            self.status.setText("光束未命中接收端")
-        elif success and status == "completed":
+        if completed:
             elapsed = float(getattr(result, "elapsed_ms", 0.0) or 0.0)
             suffix = f" · {elapsed:.0f} ms" if elapsed > 0 else ""
-            self.status.setText(f"正式计算完成{suffix}")
+            # 成功不显示提示词：填好的图和数据本身就是反馈。
+            self._set_status(f"{title}完成{suffix}", attention=False)
+        elif status == "missed":
+            self._set_status(f"{title}：光束未命中接收端")
+        elif errors:
+            self._set_status(f"{title}：{errors[0]}")
         else:
-            self.status.setText("正式计算未完成")
-        if errors:
-            self.notes.setText(f"计算未完成：{errors[0]}")
-        elif quality_needs_review:
-            self.notes.setText(f"{comparison_note}；计算质量：建议提高采样精度后复核。")
-        else:
-            self.notes.setText(f"{comparison_note}；计算质量：正常。")
+            self._set_status(f"{title}计算未完成")
 
 
 class TeachingEquipmentPopup(QFrame):
@@ -518,64 +614,6 @@ class TeachingEquipmentPopup(QFrame):
             self.presetRequested.emit(self._preset_kind, payload)
 
 
-class TeachingResultPopup(QFrame):
-    def __init__(self, origin: str = "教学示意", parent=None) -> None:
-        super().__init__(parent, Qt.WindowType.Window)
-        self.setObjectName("TeachingResultPopup")
-        self.setWindowTitle("教学结果")
-        self.setMinimumSize(680, 480)
-        self.resize(760, 560)
-        root = QVBoxLayout(self)
-        title = QLabel("当前教学结果")
-        title.setObjectName("TeachingPopupTitle")
-        root.addWidget(title)
-        self.source = QLabel(f"来源：{origin}")
-        self.source.setObjectName("TeachingResultSource")
-        root.addWidget(self.source)
-        self.body = QLabel("")
-        self.body.setWordWrap(True)
-        self.body.setObjectName("TeachingResultBody")
-        root.addWidget(self.body, 1)
-        self.set_snapshot(None)
-
-    def set_origin(self, origin: str) -> None:
-        self.source.setText(f"来源：{origin}")
-
-    def set_snapshot(self, snapshot) -> None:
-        if snapshot is None:
-            self.body.setText("尚未进行正式成像或耦合计算。\n请从教学工具栏打开分析窗口。")
-            return
-        lines = [f"场景版本：{int(snapshot.revision)}"]
-        geometry = dict(snapshot.results.get("geometry") or {})
-        geometry_metrics = dict(geometry.get("metrics") or {})
-        if geometry_metrics:
-            path_count = geometry_metrics.get("path_count")
-            if path_count is not None:
-                lines.append(f"光路示意：{int(float(path_count))} 条光路")
-        for analysis, title, metric_specs in (
-            ("spot", "成像", TEACHING_ANALYSIS_INFO["spot"]["metrics"]),
-            ("coupling", "耦合", TEACHING_ANALYSIS_INFO["coupling"]["metrics"]),
-        ):
-            payload = dict(snapshot.results.get(analysis) or {})
-            if not payload:
-                lines.append(f"{title}：尚未计算")
-                continue
-            if payload.get("stale") or payload.get("scene_revision") != snapshot.revision:
-                lines.append(f"{title}：结果已过期，请重新计算")
-                continue
-            if str(payload.get("status") or "") != "completed":
-                errors = "；".join(str(item) for item in (payload.get("errors") or ()) if str(item))
-                lines.append(f"{title}：{errors or '计算未完成'}")
-                continue
-            metrics = dict(payload.get("metrics") or {})
-            visible = []
-            for key, label, unit in metric_specs:
-                if key in metrics:
-                    visible.append(f"{label} {_format_teaching_metric(key, metrics[key], unit)}")
-            lines.append(f"{title}：" + ("；".join(visible) if visible else "已完成，但引擎未返回可显示指标"))
-        self.body.setText("\n".join(lines))
-
-
 class TeachingShell(QWidget):
     """Large teaching canvas shell.  It deliberately has no document tabs."""
 
@@ -587,11 +625,12 @@ class TeachingShell(QWidget):
         self.setObjectName("TeachingShell")
         self.store = SceneStore(self, start_empty=True)
         self.equipment_popup: TeachingEquipmentPopup | None = None
-        self.analysis_popups: dict[str, TeachingAnalysisPopup] = {}
-        self.result_popup: TeachingResultPopup | None = None
+        self.analysis_popup: TeachingImagingCouplingPopup | None = None
         self._last_equipment_id: str | None = None
         self._teaching_result_origin = "教学示意"
         self._active_analysis = ""
+        # 成像与耦合在同一个窗口里，按顺序算：光斑 → 耦合。
+        self._analysis_queue: list[str] = []
         self._tool_buttons: dict[str, QToolButton] = {}
         self._engineering_contract: dict[str, Any] | None = None
         self._engineering_sync_scene_revision: int | None = None
@@ -603,11 +642,13 @@ class TeachingShell(QWidget):
         row = QHBoxLayout(toolbar)
         row.setContentsMargins(10, 5, 10, 5)
         row.setSpacing(5)
-        for key, title in (("scheme", "方案"), ("equipment", "器材库"), ("inspector", "属性"), ("display", "显示"), ("measure", "测量"), ("imaging", "成像"), ("coupling", "耦合"), ("calculate", "计算"), ("result", "结果"), ("sync_to_simulation", "同步到仿真"), ("sync_from_simulation", "从仿真更新")):
+        # 属性面板不再占一个按钮：点中器件就会自动弹出（见 _show_inspector_for_selection）；
+        # "结果"窗口也已去掉，成像与耦合那个窗口就是把结果摆给人看的地方。
+        for key, title in (("scheme", "方案"), ("equipment", "器材库"), ("display", "视角"), ("analysis", "成像与耦合"), ("measure", "测量"), ("calculate", "计算"), ("sync_to_simulation", "同步到仿真"), ("sync_from_simulation", "从仿真更新")):
             button = QToolButton()
             button.setText(title)
             button.setObjectName("TeachingToolButton")
-            button.setCheckable(key in {"equipment", "inspector", "imaging", "coupling", "result"})
+            button.setCheckable(key in {"equipment", "analysis"})
             if key == "scheme":
                 button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
                 scheme_menu = QMenu(button)
@@ -664,7 +705,8 @@ class TeachingShell(QWidget):
         self._create_quick_actions()
         self._install_teaching_shortcuts()
         self.store.sceneChanged.connect(self._scene_changed)
-        self.store.resultChanged.connect(lambda _kind, _result: self._refresh_result_popup())
+        # 属性面板没有工具栏按钮了：选中器件就自动弹出来。
+        self.store.selectionChanged.connect(self._show_inspector_for_selection)
         project_context = getattr(self.context, "project", None)
         project_changed = getattr(project_context, "project_changed", None)
         if project_changed is not None:
@@ -758,10 +800,19 @@ class TeachingShell(QWidget):
         if component is not None:
             self.status.setText(f"{component.label}：沿导轨 {x_mm:.1f} mm · 横向 {y_mm:.1f} mm")
 
+    def _show_inspector_for_selection(self, component_id: str | None) -> None:
+        """点中器件就把属性窗口摆出来：这一页现在只能这样打开。
+
+        取消选择（点空台面/删除器件）时保持窗口开着，内容会自己变成"未选择对象"，
+        不跟着一闪一隐。
+        """
+        self._open_selected_inspector(str(component_id or ""))
+
     def _open_selected_inspector(self, _component_id: str) -> None:
-        self._toolbar_action("inspector")
         if not self.inspector.isVisible():
-            self._toolbar_action("inspector")
+            self._place_tool_window(self.inspector, "", corner="right")
+            self.inspector.show()
+        self.inspector.raise_()
 
     def _undo_scene(self) -> None:
         if self.store.undo():
@@ -818,6 +869,8 @@ class TeachingShell(QWidget):
         return groups
 
     def _sync_scene_from_engineering_project(self) -> None:
+        from frontend_pyside.features.teaching_v2.model import BENCH_ORIGIN_X_MM
+
         project_context = getattr(self.context, "project", None)
         project = getattr(project_context, "project", None)
         if project is None:
@@ -835,12 +888,14 @@ class TeachingShell(QWidget):
         waist = max(0.01, float(source.get("waist_x_mm") or 0.5))
         mfd = float(receiver.get("mode_field_diameter_x_um") or getattr(project, "receiver_mfd_um", 0.0) or 5.0)
         na = float(receiver.get("na_x") or 0.12)
+        # 整条光路一起右移一段台面留白（见 BENCH_ORIGIN_X_MM）：光源 x 是出光面，
+        # 摆在台面左端时管身会悬空，而相对间距不变，所以光学问题不变。
         components: list[dict[str, Any]] = [
             {
                 "component_id": "laser-001",
                 "kind": "laser",
                 "label": "工程光源",
-                "pose": {"x_mm": 0.0, "y_mm": 0.0, "z_mm": axis_height},
+                "pose": {"x_mm": BENCH_ORIGIN_X_MM, "y_mm": 0.0, "z_mm": axis_height},
                 "params": {"wavelength_nm": wavelength, "beam_radius_mm": waist},
             }
         ]
@@ -859,7 +914,7 @@ class TeachingShell(QWidget):
                     "component_id": f"lens-{ordinal + 1:03d}",
                     "kind": "lens",
                     "label": f"{label} 透镜",
-                    "pose": {"x_mm": max(8.0, axial), "y_mm": 0.0, "z_mm": axis_height},
+                    "pose": {"x_mm": BENCH_ORIGIN_X_MM + max(8.0, axial), "y_mm": 0.0, "z_mm": axis_height},
                     "params": {
                         "radius1_mm": first_radius,
                         "radius2_mm": second_radius,
@@ -878,7 +933,7 @@ class TeachingShell(QWidget):
                 "component_id": f"fiber-{len(components) + 1:03d}",
                 "kind": "fiber",
                 "label": "工程光纤接收端",
-                "pose": {"x_mm": max(24.0, axial + image_distance), "y_mm": 0.0, "z_mm": axis_height},
+                "pose": {"x_mm": BENCH_ORIGIN_X_MM + max(24.0, axial + image_distance), "y_mm": 0.0, "z_mm": axis_height},
                 "params": {"mfd_um": mfd, "na": na},
             }
         )
@@ -887,6 +942,8 @@ class TeachingShell(QWidget):
             {
                 "revision": int(self.store.revision) + 1,
                 "components": components,
+                # 基准线画在光源出光面上，和默认方案保持一致。
+                "baseline_x_mm": BENCH_ORIGIN_X_MM,
                 "selected_component_id": components[1]["component_id"] if len(components) > 2 else components[0]["component_id"],
                 "results": {},
                 "active_result_revision": None,
@@ -915,14 +972,36 @@ class TeachingShell(QWidget):
         self.controller.request_preview()
         self.status.setText(f"已从仿真更新 {len(components) - 2} 片透镜、波长和光纤模场；{comparison}")
 
+    def _flash_tool_button(self, key: str) -> None:
+        """动作型按钮（计算/测量/显示等）点下去要看得出来。
+
+        这类按钮没有选中态，只有按下瞬间有反馈；补一次短亮，让"点到了"在
+        松开鼠标之后仍然可见，而不是只靠右上角的状态文字。
+        """
+        button = self._tool_buttons.get(key)
+        if button is None:
+            return
+        button.setProperty("flash", True)
+        button.style().unpolish(button)
+        button.style().polish(button)
+
+        def clear() -> None:
+            button.setProperty("flash", False)
+            button.style().unpolish(button)
+            button.style().polish(button)
+
+        QTimer.singleShot(220, clear)
+
     def _toolbar_action(self, key: str) -> None:
         # Tool windows stay modeless, but their pressed state makes it obvious
         # which analysis or panel the user just opened.
-        if key in {"equipment", "inspector", "imaging", "coupling", "result"}:
-            for name in {"equipment", "inspector", "imaging", "coupling", "result"}:
+        if key in {"equipment", "analysis"}:
+            for name in {"equipment", "analysis"}:
                 button = self._tool_buttons.get(name)
                 if button is not None:
                     button.setChecked(name == key)
+        else:
+            self._flash_tool_button(key)
         if key == "equipment":
             if self.equipment_popup is None:
                 self.equipment_popup = TeachingEquipmentPopup(self)
@@ -931,22 +1010,8 @@ class TeachingShell(QWidget):
             self._place_tool_window(self.equipment_popup, "equipment")
             self.equipment_popup.show()
             self.equipment_popup.raise_()
-        elif key == "inspector":
-            self._place_tool_window(self.inspector, "inspector", corner="right")
-            self.inspector.setVisible(not self.inspector.isVisible())
-            if self.inspector.isVisible():
-                self.inspector.raise_()
-        elif key == "result":
-            if self.result_popup is None:
-                self.result_popup = TeachingResultPopup(self._teaching_result_origin, self)
-            else:
-                self.result_popup.set_origin(self._teaching_result_origin)
-            self.result_popup.set_snapshot(self.store.snapshot())
-            self._place_tool_window(self.result_popup, "result", corner="right")
-            self.result_popup.show()
-            self.result_popup.raise_()
-        elif key in {"imaging", "coupling"}:
-            self._show_analysis_popup(key)
+        elif key == "analysis":
+            self._show_analysis_popup()
         elif key == "calculate":
             self.set_result_origin("近似计算")
             self.controller.request_preview()
@@ -1047,54 +1112,63 @@ class TeachingShell(QWidget):
             f"{item.label}  沿导轨 {pose.x_mm:.1f} mm  横向 {pose.y_mm:.1f} mm  离台 {pose.z_mm:.1f} mm"
         )
 
-    def _show_analysis_popup(self, key: str) -> None:
-        analysis = {"imaging": "spot", "coupling": "coupling"}.get(str(key), "")
-        if not analysis:
-            return
-        popup = self.analysis_popups.get(analysis)
+    def _show_analysis_popup(self) -> None:
+        popup = self.analysis_popup
         if popup is None:
-            popup = TeachingAnalysisPopup(analysis, self)
+            popup = TeachingImagingCouplingPopup(self)
             popup.calculateRequested.connect(self._request_formal_analysis)
-            self.analysis_popups[analysis] = popup
+            self.analysis_popup = popup
         popup.set_scene_revision(self.store.revision)
-        self._place_tool_window(popup, key, corner="right")
+        self._place_tool_window(popup, "analysis", corner="right")
         popup.show()
         popup.raise_()
 
-    def _request_formal_analysis(self, analysis: str) -> None:
-        analysis = str(analysis or "")
-        popup = self.analysis_popups.get(analysis)
+    def _request_formal_analysis(self) -> None:
+        """依次算光斑和耦合：合并窗口里两块数据要来自同一轮计算处方。"""
+        popup = self.analysis_popup
         if popup is None:
             return
+        self._analysis_queue = ["spot", "coupling"]
+        self._request_next_analysis()
+
+    def _request_next_analysis(self) -> None:
+        popup = self.analysis_popup
+        if popup is None:
+            self._analysis_queue = []
+            return
+        if not self._analysis_queue:
+            self._active_analysis = ""
+            popup.set_running("", done=True)
+            return
+        analysis = self._analysis_queue.pop(0)
         self._active_analysis = analysis
-        popup.set_busy(True, "正在提交正式光学计算…")
+        popup.set_running(analysis)
         self.set_result_origin("正式计算")
         self.controller.request_formal(analysis)
 
     def _on_formal_result(self, analysis: str, result: object) -> None:
         analysis = str(analysis or "")
-        popup = self.analysis_popups.get(analysis)
-        if popup is not None:
-            popup.set_result(result)
+        popup = self.analysis_popup
+        if popup is not None and analysis == self._active_analysis:
+            popup.set_result(analysis, result)
         self.set_result_origin("正式计算")
-        self._refresh_result_popup()
-        self._active_analysis = ""
-
-    def _refresh_result_popup(self) -> None:
-        if self.result_popup is not None:
-            self.result_popup.set_snapshot(self.store.snapshot())
+        if analysis == self._active_analysis:
+            # 第一项算完接着算第二项，中途失败也要把窗口状态收回可用。
+            self._request_next_analysis()
 
     def _on_compute_state(self, _state: str, message: str) -> None:
         if message:
             self.status.setText(message)
-        popup = self.analysis_popups.get(self._active_analysis)
-        if popup is None:
+        popup = self.analysis_popup
+        if popup is None or not self._active_analysis:
             return
         state = str(_state or "")
         if state == "running":
             popup.set_busy(True, message)
         elif state in {"blocked", "failed", "cancelled", "stale", "missed"}:
             popup.set_busy(False, message)
+            self._analysis_queue = []
+            self._active_analysis = ""
         elif state == "completed":
             popup.set_busy(False)
 
@@ -1117,8 +1191,6 @@ class TeachingShell(QWidget):
         allowed = {"教学示意", "近似计算", "正式计算"}
         value = str(origin or "教学示意")
         self._teaching_result_origin = value if value in allowed else "教学示意"
-        if self.result_popup is not None:
-            self.result_popup.set_origin(self._teaching_result_origin)
 
     def _place_tool_window(self, widget, button_key: str, *, corner: str = "left") -> None:
         button = self._tool_buttons.get(button_key)
@@ -1139,12 +1211,8 @@ class TeachingShell(QWidget):
         kwargs = {"pose": pose} if pose is not None else {}
         self._last_equipment_id = self.store.add_component(resolved, **kwargs)
         self.status.setText(f"已添加 {dict(PLACEABLE_KINDS).get(resolved, resolved)}")
-        # A click in the equipment library should immediately expose editable
-        # X/Y/Z coordinates for the newly selected component.
-        if not self.inspector.isVisible():
-            self._place_tool_window(self.inspector, "inspector", corner="right")
-            self.inspector.show()
-        self.inspector.raise_()
+        # 新器件会立即成为选中对象，属性窗口跟着弹出来给出可编辑的 X/Y/Z。
+        self._open_selected_inspector(self._last_equipment_id)
 
     def _apply_equipment_preset(self, kind: str, payload: object) -> None:
         component_id = self._last_equipment_id or self.store.selected_component_id
@@ -1164,9 +1232,8 @@ class TeachingShell(QWidget):
         set_rays = getattr(self.view3d, "set_rays", None)
         if callable(set_rays):
             set_rays(rays, snapshot)
-        for popup in self.analysis_popups.values():
-            popup.set_scene_revision(snapshot.revision)
-        self._refresh_result_popup()
+        if self.analysis_popup is not None:
+            self.analysis_popup.set_scene_revision(snapshot.revision)
         self._refresh_quick_actions()
         self._position_overlay_controls()
 
@@ -1178,4 +1245,4 @@ class TeachingShell(QWidget):
             "node_count": len(getattr(snapshot, "components", ()) or ()),
             "selected_component_id": getattr(snapshot, "selected_component_id", ""),
         }
-__all__ = ["KindDragButton", "TeachingAnalysisPopup", "TeachingAnalysisVisual", "TeachingEquipmentPopup", "TeachingResultPopup", "TeachingShell"]
+__all__ = ["KindDragButton", "TeachingImagingCouplingPopup", "TeachingAnalysisVisual", "TeachingEquipmentPopup", "TeachingShell"]

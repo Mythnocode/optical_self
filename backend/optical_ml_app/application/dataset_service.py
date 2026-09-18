@@ -14,37 +14,25 @@ from backend.optical_ml_app.application.dataset_registry_service import DatasetR
 from backend.optical_ml_app.runtime_env import configured_batch_worker_count
 
 
-DATASET_STARTUP_TIMEOUT_SECONDS = 30.0
-DATASET_SECONDS_PER_SAMPLE = 15.0
-DATASET_MIN_TIMEOUT_SECONDS = 300.0
-
-
-def dataset_timeout_seconds(sample_count: int) -> float:
-    """Return a conservative wall-clock budget for formal dataset samples.
-
-    Dataset samples use the same wave-optics coupling path as formal
-    verification.  On the supported desktop this currently takes roughly
-    8--9 seconds per sample, so the old 1.8 seconds/sample budget terminated
-    healthy jobs while they were still reporting progress.
-    """
-
-    count = max(1, int(sample_count or 1))
-    estimated = DATASET_STARTUP_TIMEOUT_SECONDS + count * DATASET_SECONDS_PER_SAMPLE
-    return max(DATASET_MIN_TIMEOUT_SECONDS, estimated)
-
-
 def _run_dataset_task(context, request, dataset_root: str):
     store = FileDatasetStore(Path(dataset_root))
     engine = context.get_or_create_resource(
         "optical_engine", create_optical_simulation_engine
     )
     generator = DatasetGenerator(engine, store)
-    return generator.generate(
+    manifest = generator.generate(
         request,
         context.cancellation,
         context.progress,
         max_workers=configured_batch_worker_count(),
     )
+    if getattr(request, "dataset_layout", "tabular") == "sequence_long":
+        from machine_learning.datasets.sequence_export import export_sequence_long_table
+
+        sequence_metadata = export_sequence_long_table(manifest, store)
+        manifest.metadata.update({"dataset_layout": "sequence_long", **sequence_metadata})
+        store.save_manifest(manifest)
+    return manifest
 
 
 def _register_dataset_manifest(manifest, dataset_root: str):
@@ -71,17 +59,16 @@ class DatasetApplicationService:
         self.dataset_registry = dataset_registry
 
     def submit(self, request):
-        sample_count = int(getattr(request, "sample_count", 1000) or 1000)
-        timeout = dataset_timeout_seconds(sample_count)
         return self.task_manager.submit(
             "dataset",
             _run_dataset_task,
             request,
             str(self.dataset_store.root),
             on_result=partial(_register_dataset_manifest, dataset_root=str(self.dataset_store.root)),
-            timeout_seconds=timeout,
-            # A sample reports progress after each formal evaluation.  Treat a
-            # long lack of progress as a stuck worker independently of the
-            # conservative total wall-clock budget above.
+            # Dataset duration depends on the optical system and the host
+            # hardware, so do not impose a total wall-clock deadline.  The
+            # manager still fails a genuinely wedged worker after five
+            # minutes with no activity, and the UI exposes explicit cancel.
+            timeout_seconds=None,
             stall_timeout_seconds=300.0,
         )

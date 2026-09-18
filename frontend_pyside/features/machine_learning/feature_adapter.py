@@ -7,6 +7,18 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 _PATH_TOKEN = re.compile(r"([^\.\[\]]+)|\[(\d+)\]")
+_LEGACY_SURFACE_PATH = re.compile(r"^surface\.(\d+)\.(.+)$")
+
+
+def _canonical_feature_path(path: str) -> str:
+    text = str(path or "").strip()
+    match = _LEGACY_SURFACE_PATH.fullmatch(text)
+    if match:
+        field = "distance_to_next_mm" if match.group(2) == "thickness_mm" else match.group(2)
+        return f"surfaces[{int(match.group(1))}].{field}"
+    if text == "wavelength_nm":
+        return "source.wavelength_nm"
+    return text
 
 
 class FeaturePathError(ValueError):
@@ -119,8 +131,23 @@ def features_from_project(payload: Any, feature_paths: Sequence[str]) -> dict[st
     resolution_payload = canonical_project if canonical_project is not None else payload
     values: dict[str, float] = {}
     for path in feature_paths:
-        if path in physics:
-            values[path] = float(physics[path])
+        original_path = str(path)
+        canonical_path = _canonical_feature_path(original_path)
+        if canonical_path in physics:
+            values[original_path] = float(physics[canonical_path])
+        elif canonical_path.startswith("surfaces[") and canonical_path.endswith("].active"):
+            # Legacy headless datasets exported an ``active`` flag for every
+            # surface. It is not a field on SurfaceSnapshot, but it can be
+            # reconstructed deterministically for prediction.
+            try:
+                index = int(canonical_path[len("surfaces[") : canonical_path.index("]")])
+                surfaces = list(getattr(resolution_payload, "surfaces", ()) or ())
+                values[original_path] = float(
+                    index < len(surfaces)
+                    and bool(getattr(surfaces[index], "enabled", True))
+                )
+            except (ValueError, TypeError):
+                raise FeaturePathError(f"{original_path}: invalid surface index")
         else:
-            values[path] = resolve_feature_path(resolution_payload, path)
+            values[original_path] = resolve_feature_path(resolution_payload, canonical_path)
     return values

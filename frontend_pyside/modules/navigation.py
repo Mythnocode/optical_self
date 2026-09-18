@@ -13,8 +13,8 @@ from frontend_pyside.modules.page_spec import PageSpec
 
 PRIMARY_MODULES: tuple[tuple[str, str], ...] = (
     ("home", "首页"),
-    ("simulation", "仿真"),
     ("teaching", "教学"),
+    ("simulation", "仿真"),
     ("model", "模型"),
     ("optimization", "优化"),
     ("explainability", "解释"),
@@ -47,38 +47,37 @@ SECONDARY_ITEMS: dict[str, tuple[tuple[str, str, str], ...]] = {
 # 图标本身是单色描边，颜色由代码按选中状态重新着色（见 workbench_shell 的
 # _secondary_icon），所以原图用什么颜色都无所谓，建议用纯色描边。
 SECONDARY_ICONS: dict[str, str] = {
-    # 仿真
-    "lens_data": "list",
-    "layout": "rays",
-    "image_quality": "intensity",
-    "fiber_coupling": "phase",
-    "wave_diffraction": "function",
+    # 仿真／模型／优化／解释：用的是专门画的 PNG（1254×1254、透明底单色线条），
+    # 放在 resources/icons/ 下，文件名按模块前缀 sim_* / ml_* / opt_* / explain_*。
+    # 首页和教学的二级按钮仍是内置单色 SVG（教学按需求不换图）。
+    "lens_data": "sim_lens_data",
+    "layout": "sim_layout",
+    "image_quality": "sim_spot",
+    "fiber_coupling": "sim_fiber_coupling",
+    "wave_diffraction": "sim_wavefront",
     "materials": "toolbox",
     # 模型
-    "dataset": "list",
-    "train_result": "machine_learning",
-    "predict_eval": "result",
+    "dataset": "ml_dataset",
+    "train_result": "ml_train_result",
+    "predict_eval": "ml_predict",
     # 优化
-    "scan": "chart",
-    "opt_vars": "properties",
-    "opt_result": "result",
+    "scan": "opt_scan",
+    "opt_vars": "opt_vars",
+    "opt_result": "opt_result",
     # 解释
-    "global_contrib": "explainability",
-    "param_trend": "chart",
-    "current_system": "inspect",
+    "global_contrib": "explain_global",
+    "param_trend": "explain_trend",
+    "current_system": "explain_current",
     # 首页
     "quick_start": "play",
     "help": "help",
     # 教学
     "scheme": "overview",
     "equipment": "toolbox",
-    "inspector": "properties",
     "display": "focus",
     "measure": "measure",
-    "imaging": "intensity",
-    "coupling": "phase",
+    "analysis": "intensity",
     "calculate": "play",
-    "result": "result",
     "sync_to_simulation": "next",
     "sync_from_simulation": "previous",
 }

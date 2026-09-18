@@ -45,14 +45,14 @@ def test_shap_feature_maps_only_onto_design_variables():
     assert "size_ratio" not in scores
 
 
-def test_optimization_shap_sorts_without_changing_checks():
+def test_optimization_keeps_shap_in_explanation_module():
     app = _app()
     shell = WorkbenchShell(create_app_context())
     shell.show()
     try:
         shell.set_module("optimization")
         rail = shell.object_rail
-        assert rail.shap_button.isVisible()
+        assert not rail.shap_button.isVisible()
         assert not rail.shap_button.isEnabled()
         rows = _variable_rows(shell.context.project.project)
         fiber = "receiver.offset_x_um"
@@ -65,11 +65,7 @@ def test_optimization_shap_sorts_without_changing_checks():
         )
         fiber_item.setCheckState(Qt.CheckState.Checked)
         rail.set_shap_scores({fiber: 8.0, str(first_key): 0.1})
-        assert rail.shap_button.isEnabled()
-        rail.shap_button.setChecked(True)
-        assert rail.list.item(0).data(Qt.ItemDataRole.UserRole) == fiber
-        assert rail.list.item(0).checkState() == Qt.CheckState.Checked
-        rail.shap_button.setChecked(False)
+        assert not rail.shap_button.isEnabled()
         assert rail.list.item(0).data(Qt.ItemDataRole.UserRole) == first_key
         still_checked = next(
             rail.list.item(index)

@@ -4,13 +4,12 @@ import os
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QPoint, Qt
 from PySide6.QtWidgets import (
     QAbstractSpinBox,
     QApplication,
     QCheckBox,
     QFormLayout,
-    QHeaderView,
     QLabel,
     QPushButton,
     QTabBar,
@@ -21,6 +20,7 @@ from PySide6.QtWidgets import (
 from frontend_pyside.app.bootstrap import create_app_context
 from frontend_pyside.app.workbench_shell import (
     CombinedSettingsDialog,
+    DatasetRailItem,
     EngineeringDialog,
     KIND_TITLES,
     PRIMARY_MODULES,
@@ -45,8 +45,8 @@ def test_frozen_secondary_and_accordion_layout():
         assert shell.context.project.dirty is False
         assert [key for key, _title in PRIMARY_MODULES] == [
             "home",
-            "simulation",
             "teaching",
+            "simulation",
             "model",
             "optimization",
             "explainability",
@@ -76,6 +76,11 @@ def test_frozen_secondary_and_accordion_layout():
             "global_contrib",
             "param_trend",
             "current_system",
+        ]
+        assert [title for _key, title, _hint in SECONDARY_ITEMS["explainability"]] == [
+            "贡献排序",
+            "物理链路",
+            "当前系统验证",
         ]
         assert ("explainability", "reason") not in KIND_TITLES
         assert ("analysis", "param_effect") not in KIND_TITLES
@@ -329,30 +334,28 @@ def test_frozen_secondary_and_accordion_layout():
         assert not any("结构序列" in text for text in rail_texts)
         shell.open_document("model", "dataset")
         dataset = shell._widgets["model:dataset"]
-        assert any(button.text() == "开始联合训练" for button in dataset.findChildren(QPushButton))
+        assert any(button.text() == "开始训练" for button in dataset.findChildren(QPushButton))
         assert any(button.text() == "选择文件" for button in dataset.findChildren(QPushButton))
+        assert any(button.text() == "导入" for button in dataset.findChildren(QPushButton))
+        assert any(button.text() == "内置" for button in dataset.findChildren(QPushButton))
         assert dataset.builtin.count() == 1
         assert [
             dataset.data_kind.itemText(index) for index in range(dataset.data_kind.count())
-        ] == ["按镜头采样", "按元件排列"]
+        ] == ["按照镜头", "按照元件"]
         assert "BiLSTM" not in [
             dataset.model_type.itemText(index) for index in range(dataset.model_type.count())
         ]
         dataset_labels = [child.text() for child in dataset.findChildren(QLabel) if child.text()]
-        assert "方式" in dataset_labels
-        assert "内置" in dataset_labels
-        assert "1. 选择数据" in dataset_labels
-        assert "2. 生成样本" in dataset_labels
-        assert "3. 训练" in dataset_labels
-        assert "3. 训练模型" not in dataset_labels
+        assert "数据来源" in dataset_labels
+        assert "采样方式" in dataset_labels
+        assert "1. 数据" in dataset_labels
+        assert "2. 训练" in dataset_labels
+        assert not any(text.startswith("3.") for text in dataset_labels)
         assert "训练模型" not in dataset_labels
         assert "计算精度" in dataset_labels
         assert "树数量" in dataset_labels
         assert "最大深度" in dataset_labels
-        assert [
-            dataset.table.horizontalHeaderItem(index).text()
-            for index in range(dataset.table.columnCount())
-        ] == ["编号", "选择的参数", "波长属性", "状态"]
+        assert not hasattr(dataset, "table")
         assert "样本" not in [
             child.text()
             for child in dataset.findChildren(QLabel)
@@ -360,20 +363,21 @@ def test_frozen_secondary_and_accordion_layout():
         ]
         assert dataset.lens_count.count() == 4
         assert dataset.variable_scheme.count() == 2
-        assert "8 个当前可变设计变量" in dataset.scheme_summary.text()
-        assert dataset.generate_host.isVisible()
+        assert dataset.import_host.isVisible()
+        assert dataset.generate_host.isHidden()
+        assert dataset.generate_more_host.isHidden()
         assert dataset.sequence_host.isHidden()
-        assert dataset.table.horizontalHeader().sectionResizeMode(0) == QHeaderView.ResizeMode.Stretch
         dataset.data_kind.setCurrentIndex(dataset.data_kind.findData("sequence"))
         assert dataset.builtin.count() == 1
         assert [dataset.model_type.itemText(index) for index in range(dataset.model_type.count())] == ["BiLSTM"]
-        assert dataset.generate_host.isHidden()
         assert dataset.sequence_host.isHidden()
         dataset.file_path.setText("custom_sequence.csv")
+        dataset.import_button.click()
         assert dataset.sequence_host.isVisible()
-        assert dataset.sequence_training_group.isVisible()
+        assert dataset.training_mode_button.text() == "任意镜头数"
+        assert dataset.training_parameters_host.isHidden()
+        assert dataset.sequence_training_group.isHidden()
         assert dataset.rf_training_group.isHidden()
-        assert "暂未纳入当前闭环" in dataset.bilstm_placeholder.text()
         tabs = dataset.findChildren(QTabWidget)
         tab_titles = [tab.tabText(index) for tab in tabs for index in range(tab.count())]
         assert "来源与训练" not in tab_titles
@@ -385,7 +389,7 @@ def test_frozen_secondary_and_accordion_layout():
         assert train_result._trained is False
         assert [
             train_result.chart.itemText(index) for index in range(train_result.chart.count())
-        ] == ["残差图", "实测对照", "学习曲线"]
+        ] == ["残差图", "实测值与预测值对照", "残差分布", "验证误差曲线"]
         shell.open_document("model", "predict")
         predict = shell._widgets["model:predict"]
         assert predict.predict_model.count() == 0
@@ -412,6 +416,12 @@ def test_frozen_secondary_and_accordion_layout():
         }]
         shell._trained_models = trained
         shell._sync_rail_document()
+        shell.open_document("model", "predict")
+        model_rows = [
+            shell.object_rail.list.itemWidget(shell.object_rail.list.item(index))
+            for index in range(shell.object_rail.list.count())
+        ]
+        assert any(isinstance(row, DatasetRailItem) for row in model_rows)
 
         shell.set_module("optimization")
         assert [key for key, _title, _hint in SECONDARY_ITEMS["optimization"]] == [
@@ -424,12 +434,50 @@ def test_frozen_secondary_and_accordion_layout():
             "优化",
             "优化结果",
         ]
-        assert shell.object_rail.goal_inspector is None
+        assert shell.object_rail.goal_inspector is not None
         assert shell.object_rail.list.count() > 3
         shell.open_document("optimization", "opt_goal")
         assert "optimization:opt_vars" in shell._tabs
         assert "optimization:opt_goal" not in shell._tabs
         opt_page = shell._widgets["optimization:opt_vars"]
+        assert opt_page.current_metric.parentWidget().height() == opt_page.secondary_objective.height()
+        rail = shell.object_rail
+        assert [
+            rail.optimization_variables_button.text(),
+            rail.optimization_more_button.text(),
+        ] == ["优化变量", "更多参数"]
+        assert rail.optimization_variable_host.isVisible()
+        rail.optimization_more_button.click()
+        assert rail.optimization_more_scroll.isVisible()
+        assert rail.optimization_more_scroll.widgetResizable()
+        goal = rail.goal_inspector
+        goal.collimation.setChecked(True)
+        app.processEvents()
+        viewport = rail.optimization_more_scroll.viewport()
+        for editor in (
+            goal.goal,
+            goal.max_length,
+            goal.collimation_surface,
+            goal.collimation_span,
+            goal.collimation_curvature,
+            goal.collimation_tilt,
+            rail.max_evaluations,
+        ):
+            editor_right = editor.mapTo(viewport, QPoint(editor.width(), 0)).x()
+            assert editor_right <= viewport.width()
+        goal.collimation.setChecked(False)
+        assert (
+            rail.optimization_more_scroll.verticalScrollBarPolicy()
+            == Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+        assert rail.optimization_variable_host.isHidden()
+        assert rail.goal_inspector is opt_page.goal
+        assert rail.max_evaluations is opt_page.max_evaluations
+        assert opt_page.more_button is None
+        assert opt_page.advanced_panel is None
+        rail.optimization_variables_button.click()
+        assert rail.optimization_variable_host.isVisible()
+        assert rail.optimization_more_scroll.isHidden()
         assert opt_page.goal is not None
         goal = opt_page.goal
         opt_labels = [child.text() for child in goal.findChildren(QLabel) if child.text()]
@@ -457,6 +505,7 @@ def test_frozen_secondary_and_accordion_layout():
         assert goal.collimation_surface.isHidden()
         goal.collimation.setChecked(True)
         assert not goal.collimation_surface.isHidden()
+        assert not goal.collimation_tilt.isHidden()
         assert getattr(opt_page, "workspace", None) is None
         shell.start_optimization()
         assert "optimization:opt_result" in shell._tabs
@@ -465,14 +514,14 @@ def test_frozen_secondary_and_accordion_layout():
             result_page.chart.itemText(index) for index in range(result_page.chart.count())
         ] == ["过程曲线", "候选对照"]
         rail = shell.object_rail
-        assert rail.shap_button.isVisible()
+        assert not rail.shap_button.isVisible()
         assert rail.shap_button.text() == "SHAP"
         assert not rail.shap_button.isEnabled()
         opt_table = opt_page.table
         assert [
             opt_table.horizontalHeaderItem(index).text()
             for index in range(opt_table.columnCount())
-        ] == ["对象", "面", "参数", "当前值", "最小", "最大", "步长"]
+        ] == ["参数", "当前值", "最小值", "最大值"]
         shell.open_document("optimization", "scan")
         scan_page = shell._widgets["optimization:scan"]
         assert not hasattr(scan_page, "variable_a")
@@ -496,7 +545,7 @@ def test_frozen_secondary_and_accordion_layout():
         assert widget.compute.isEnabled() is True
         shell._secondary_clicked("param_trend")
         assert shell.object_rail.list.count() > 3
-        assert shell._widgets["explainability:param_trend"].compute.isEnabled() is False
+        assert shell._widgets["explainability:param_trend"].compute.isEnabled() is True
 
         dialog = EngineeringDialog("compute", shell.context, calculation=shell._calculation_state)
         assert dialog.windowTitle() == "采样与运行"

@@ -1,0 +1,7 @@
+popup: <frontend_pyside.modules.teaching.shell.TeachingImagingCouplingPopup(0x1fa02efc230, name="TeachingImagingCouplingPopup") at 0x000001F9F4CFB900> title: 成像与耦合
+status: 正式计算完成
+imaging: RMS 光斑半径  212.419 μm | available: True
+pills: {'coupling': '模式耦合效率：0.02791%', 'overlap': '模式重叠效率：0.02791%', 'total': '总耦合效率：0.02357%'}
+detail: 
+notes: 教学台场景已改动，不能直接与工程仿真指标比较；耦合分析计算质量：建议提高采样精度后复核。
+saved tmp\teaching_analysis_2lens.png

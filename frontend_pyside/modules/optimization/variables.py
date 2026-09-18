@@ -12,8 +12,15 @@ PAGE = PageSpec(
 
 
 class VariablesTab(OptimizationDocument):
-    def __init__(self, context, selected, parent=None) -> None:
-        super().__init__("opt_vars", context, selected, parent)
+    def __init__(self, context, selected, parent=None, *, goal=None, max_evaluations=None) -> None:
+        super().__init__(
+            "opt_vars",
+            context,
+            selected,
+            parent,
+            goal=goal,
+            max_evaluations=max_evaluations,
+        )
 
 
 __all__ = ["VariablesTab"]

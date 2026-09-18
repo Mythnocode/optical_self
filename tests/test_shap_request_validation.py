@@ -51,26 +51,19 @@ def test_shap_dependence_map_pairs_values_with_contributions():
     assert dependence["b"]["y"] == [-0.2, -0.4]
 
 
-def test_shap_defaults_to_declared_design_variables_only():
+def test_shap_defaults_to_all_model_features():
     features = [
         "surfaces[0].radius_mm",
         "surfaces[0].distance_to_next_mm",
         "size_log_mismatch",
     ]
-    manifest = {
-        "design_variable_paths": [
-            "surfaces[0].radius_mm",
-            "surfaces[0].distance_to_next_mm",
-        ]
-    }
-    assert _default_display_feature_paths(features, manifest) == manifest["design_variable_paths"]
+    assert _default_display_feature_paths(features) == features
 
 
 def test_shap_rejects_display_variables_not_used_by_model():
     with pytest.raises(BackendApplicationError) as exc_info:
         _resolve_display_feature_paths(
             ["surfaces[0].radius_mm"],
-            {"design_variable_paths": ["surfaces[0].radius_mm"]},
             ["surfaces[2].conic"],
             model_id="model-1",
         )

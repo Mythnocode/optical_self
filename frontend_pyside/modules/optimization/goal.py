@@ -19,7 +19,7 @@ globals().update(
 class OptimizationGoalInspector(QFrame):
     startRequested = Signal()
 
-    def __init__(self, context=None, parent=None) -> None:
+    def __init__(self, context=None, parent=None, *, compact: bool = False) -> None:
         super().__init__(parent)
         self.context = context
         self.setObjectName("ObjectInspector")
@@ -49,7 +49,7 @@ class OptimizationGoalInspector(QFrame):
                     _labeled_field("方式", self.eval_mode),
                     self._eval_model_row,
                 ],
-                columns=2,
+                columns=1 if compact else 2,
             )
         )
         root.addWidget(box)
@@ -75,7 +75,7 @@ class OptimizationGoalInspector(QFrame):
                     _labeled_field("最小厚度", self.min_center),
                     _labeled_field("最小空气厚度", self.min_air),
                 ],
-                columns=2,
+                columns=1 if compact else 2,
             )
         )
         engineering_layout.addWidget(self.aperture_limit)
@@ -102,8 +102,35 @@ class OptimizationGoalInspector(QFrame):
             _labeled_field("最大质心漂移", self.collimation_centroid),
             _labeled_field("最大光轴倾角", self.collimation_tilt),
         ]
+        if compact:
+            # A vertical scrollbar narrows the rail viewport after the
+            # collimation rows expand. Ignore the editors' content-based
+            # width hints so every field contracts to the remaining width.
+            for editor in (
+                self.goal,
+                self.evaluation,
+                self.eval_mode,
+                self.predict_model,
+                self.max_length,
+                self.min_edge,
+                self.min_center,
+                self.min_air,
+                self.collimation_surface,
+                self.collimation_span,
+                self.collimation_radius,
+                self.collimation_curvature,
+                self.collimation_centroid,
+                self.collimation_tilt,
+            ):
+                editor.setMinimumWidth(0)
+                editor.setSizePolicy(
+                    QSizePolicy.Policy.Ignored,
+                    QSizePolicy.Policy.Fixed,
+                )
         collimation_layout.addWidget(self.collimation)
-        collimation_layout.addLayout(_field_grid(self._collimation_hosts, columns=2))
+        collimation_layout.addLayout(
+            _field_grid(self._collimation_hosts, columns=1 if compact else 2)
+        )
         root.addWidget(collimation)
 
         self.eval_mode.currentIndexChanged.connect(lambda _index: self._sync_eval_mode())

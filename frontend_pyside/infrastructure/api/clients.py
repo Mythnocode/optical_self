@@ -79,6 +79,9 @@ class TrainingClient:
     def predict(self, key: str, model_id: str, features: dict) -> None:
         self.api.post(key, f"/models/{model_id}/predict", {"model_id": model_id, "features": features})
 
+    def predict_bilstm(self, key: str, model_id: str, payload: dict) -> None:
+        self.api.post(key, f"/structure-models/{model_id}/predict", payload)
+
     def explain_shap(self, key: str, model_id: str, payload: dict | None = None) -> None:
         body = dict(payload or {})
         body.setdefault("top_k", 6)

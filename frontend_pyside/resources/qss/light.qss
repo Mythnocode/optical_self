@@ -1197,6 +1197,53 @@ QToolButton#previewToolButton:hover, QToolButton#editorActionButton:hover {
 QPushButton[kind="secondary"]:checked { background: #155EEF; color: #FFFFFF; border-color: #155EEF; }
 QPushButton:disabled, QToolButton:disabled { color: #8A94A3; background: #E6EAF0; border-color: #C7CDD6; }
 
+/* 训练模式是同一层级的两种路线，不使用“未选中白色 / 选中蓝色”的主次暗示。
+   固定镜头数对应表格模型（随机森林 + XGBoost），任意镜头数对应序列模型（BiLSTM）。 */
+QPushButton#trainingModeButton[trainingMode="fixed"] {
+    background: #F79009; color: #FFFFFF; border-color: #F79009; font-weight: 700;
+}
+QPushButton#trainingModeButton[trainingMode="fixed"]:hover,
+QPushButton#trainingModeButton[trainingMode="fixed"]:checked:hover {
+    background: #DC6803; border-color: #DC6803; color: #FFFFFF;
+}
+QPushButton#trainingModeButton[trainingMode="arbitrary"] {
+    background: #16A34A; color: #FFFFFF; border-color: #16A34A; font-weight: 700;
+}
+QPushButton#trainingModeButton[trainingMode="arbitrary"]:hover,
+QPushButton#trainingModeButton[trainingMode="arbitrary"]:checked:hover {
+    background: #15803D; border-color: #15803D; color: #FFFFFF;
+}
+QPushButton#generationModeButton[generationMode="fixed"] {
+    background: #F79009; color: #FFFFFF; border-color: #F79009; font-weight: 700;
+}
+QPushButton#generationModeButton[generationMode="fixed"]:hover,
+QPushButton#generationModeButton[generationMode="fixed"]:checked:hover {
+    background: #DC6803; border-color: #DC6803; color: #FFFFFF;
+}
+QPushButton#generationModeButton[generationMode="arbitrary"] {
+    background: #16A34A; color: #FFFFFF; border-color: #16A34A; font-weight: 700;
+}
+QPushButton#generationModeButton[generationMode="arbitrary"]:hover,
+QPushButton#generationModeButton[generationMode="arbitrary"]:checked:hover {
+    background: #15803D; border-color: #15803D; color: #FFFFFF;
+}
+QToolButton#trainingMoreButton {
+    min-height: 34px; padding: 3px 8px;
+    background: transparent; color: #344054; border: 1px solid transparent;
+    font-weight: 650;
+}
+QToolButton#trainingMoreButton:hover {
+    background: #F7F8FA; color: #155EEF; border-color: #B8CCF3;
+}
+QToolButton#sequenceVariableButton {
+    min-height: 28px; padding: 2px 7px;
+    background: transparent; color: #344054; border: 1px solid transparent;
+    font-weight: 650;
+}
+QToolButton#sequenceVariableButton:hover {
+    background: #F7F8FA; color: #155EEF; border-color: #B8CCF3;
+}
+
 QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QTextEdit, QPlainTextEdit {
     color: #101828; background: #FFFFFF; border: 1px solid #667085;
     selection-color: #FFFFFF; selection-background-color: #155EEF;
@@ -1778,14 +1825,17 @@ QToolButton#compactTextTool:hover {
 /* ===== Refactored workbench shell =====
    The shell owns navigation; documents own plots and metrics.  No persistent
    full-width footer is needed. */
+/* 一级栏：浅灰底。
+   这个灰必须比模块按钮悬停时的灰更浅，否则 hover 完全看不出来。
+   配色链（由浅到深）：一级栏 #F2F4F7 → 悬停 #E4E7EC。改任一个都要回头看另一个。 */
 QFrame#PrimaryBar {
-    background: #FFFFFF;
+    background: #F2F4F7;
     border-bottom: 1px solid #C7CDD6;
 }
-/* 一级栏（首页/仿真/教学/模型/优化/解释）、一级栏右侧的动作按钮
-   （保存/计算/设置）、教学栏按钮：都是纯文字，保持紧凑高度。
-   二级功能栏**不在这组里**，它单独一条，见下面。 */
-QToolButton#PrimaryModuleButton,
+/* 一级栏右侧的动作按钮（保存/计算/设置）和教学栏按钮：纯文字，紧凑高度。
+   一级栏的模块按钮和二级功能栏都**不在这组里**，它们各有独立的块。
+   改这组时注意：逗号分隔的选择器共用同一条规则体，从组中间插入或删除
+   会连带影响留在组里的其它选择器——要先确认整组内容。 */
 QToolButton#PrimaryActionButton,
 QToolButton#TeachingToolButton {
     min-height: 32px;
@@ -1796,14 +1846,56 @@ QToolButton#TeachingToolButton {
     color: #344054;
     font-weight: 650;
 }
+
+/* 一级栏模块按钮（首页/仿真/教学/模型/优化/解释）：
+   悬停 = 灰底；选中 = 蓝字 + 蓝色下划线，不带底色。
+   下划线是用 border-bottom 画的，所以有两个必须保留的细节：
+   1) 底边从一开始就是 3px 的**透明**边框，选中时只换颜色、不换尺寸。
+      否则选中的那一瞬间整条一级栏会突然长高 2px，图标那一行跟着跳。
+   2) 底部两个圆角置 0，否则下划线两端会被圆角带着往上翘。
+      顶部仍保留 6px 圆角，悬停的灰底就是一个上圆下方的块。 */
+QToolButton#PrimaryModuleButton {
+    min-height: 32px;
+    padding: 4px 10px 2px 10px;
+    border: 1px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: transparent;
+    color: #344054;
+    font-weight: 650;
+}
+/* 悬停：背景变灰，字色不变。
+   #E4E7EC 比一级栏底色 #F2F4F7 深一档，压在上面才能看出来是 hover 了。 */
+QToolButton#PrimaryModuleButton:hover {
+    background: #E4E7EC;
+    color: #344054;
+}
+/* 选中：蓝色下划线 + 蓝字 */
+QToolButton#PrimaryModuleButton:checked {
+    background: transparent;
+    border-bottom-color: #155EEF;
+    color: #155EEF;
+    font-weight: 800;
+}
+/* 选中且悬停：底色和普通悬停一致，但字色必须显式写回蓝色。
+   不写这条的话会被上面的 :hover 覆盖成灰字，下划线配灰字很怪。
+   这条有两个伪类，优先级高于上面两条，所以必须排在它们后面。 */
+QToolButton#PrimaryModuleButton:checked:hover {
+    background: #E4E7EC;
+    color: #155EEF;
+}
 /* 二级功能栏按钮：上图下字（图标在上、文字在下）。
    图标由 Python 侧设置（workbench_shell 的 _secondary_icon），
    QSS 只管高度和配色。
-   高度 = 图标 22 + 行距若干 + 文字一行 ≈ 54，还要留出 padding，
-   所以 min-height 给小了文字会被压掉。
-   注意：这条是独立规则，不要并回上面那一组，否则一级栏会被一起撑高。 */
+   高度 ≈ 图标 26（见 workbench_shell 的 SECONDARY_ICON_SIZE） + 图标与文字间距
+   + 文字一行 + 上下 padding，所以改图标尺寸时这里的 min-height 要跟着调，
+   给小了文字会被压掉。注意：这条是独立规则，不要并回上面那一组，
+   否则一级栏会被一起撑高。 */
 QToolButton#SecondaryFunctionButton {
-    min-height: 54px;
+    min-height: 58px;
     min-width: 72px;
     padding: 5px 10px;
     border: 1px solid transparent;
@@ -1827,7 +1919,6 @@ QToolButton#DocumentPinButton:checked {
     color: #0A327A;
     background: #DCE9FF;
 }
-QToolButton#PrimaryModuleButton:hover,
 QToolButton#PrimaryActionButton:hover,
 QToolButton#SecondaryFunctionButton:hover,
 QToolButton#TeachingToolButton:hover {
@@ -1835,11 +1926,29 @@ QToolButton#TeachingToolButton:hover {
     border-color: #B8CCF3;
     color: #0A327A;
 }
-QToolButton#PrimaryModuleButton:checked,
 QToolButton#SecondaryFunctionButton:checked {
     background: #DCE9FF;
     border-color: #8FB3F4;
     color: #073A89;
+}
+/* 按下状态。此前这里只有 hover 和 checked：动作型按钮（教学栏的"计算""测量"）
+   按下去没有任何外观变化，只能靠右上角文字知道点到了。动作型按钮还会由界面
+   代码短暂置 [flash="true"]，这样松开鼠标也能看见这一下点生效了。 */
+QToolButton#PrimaryActionButton:pressed,
+QToolButton#SecondaryFunctionButton:pressed,
+QToolButton#TeachingToolButton:pressed,
+QToolButton#TeachingQuickAction:pressed,
+QToolButton#TeachingToolButton[flash="true"] {
+    background: #DCE9FF;
+    border-color: #8FB3F4;
+    color: #073A89;
+}
+QToolButton#SecondaryFunctionButton:checked:pressed,
+QToolButton#TeachingToolButton:checked:pressed,
+QToolButton#TeachingToolButton:checked[flash="true"] {
+    background: #0B4EAE;
+    border-color: #083E8C;
+    color: #FFFFFF;
 }
 QToolButton#TeachingToolButton:checked,
 QToolButton#RailCategoryButton:checked {
@@ -1862,7 +1971,32 @@ QToolButton#RailCategoryButton:hover {
     border-color: #B8CCF3;
     color: #0A327A;
 }
-QFrame#SecondaryBar,
+QToolButton#OptimizationRailTab {
+    min-height: 30px;
+    padding: 4px 6px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: #344054;
+    font-weight: 700;
+}
+QToolButton#OptimizationRailTab:hover {
+    background: #EEF4FF;
+    border-color: #B8CCF3;
+    color: #0A327A;
+}
+QToolButton#OptimizationRailTab:checked {
+    background: #155EEF;
+    border-color: #0B4EAE;
+    color: #FFFFFF;
+    font-weight: 800;
+}
+/* 二级功能栏：白底。和上面浅灰的一级栏形成「灰 / 白」两层，层次靠底色区分。
+   这条原来是和教学栏共用的一组，已拆开——教学栏保持原来的浅灰底不受影响。 */
+QFrame#SecondaryBar {
+    background: #FFFFFF;
+    border-bottom: 1px solid #D0D5DD;
+}
 QFrame#TeachingToolbar {
     background: #F8FAFC;
     border-bottom: 1px solid #D0D5DD;
@@ -1870,6 +2004,10 @@ QFrame#TeachingToolbar {
 QFrame#ObjectRail {
     background: #F8FAFC;
     border-right: 1px solid #D0D5DD;
+}
+QScrollArea#OptimizationMoreScroll {
+    background: transparent;
+    border: 0;
 }
 QFrame#AccordionSection {
     background: #FFFFFF;
@@ -1960,6 +2098,25 @@ QListWidget#ObjectList::item {
 }
 QListWidget#ObjectList::item:hover { background: #EEF4FF; }
 QListWidget#ObjectList::item:selected { background: #DCE9FF; color: #073A89; }
+QWidget#DatasetRailItem { background: transparent; }
+QLabel#datasetRailTitle { color: #101828; font-size: 11.5pt; }
+QLabel#datasetSelectionCheck { color: #16A34A; font-size: 15pt; font-weight: 800; }
+QLabel#datasetFailureMark { color: #DC2626; font-size: 15pt; font-weight: 800; }
+QLabel#datasetCancelledMark { color: #667085; font-size: 15pt; font-weight: 800; }
+QLabel#datasetProgressText { color: #667085; font-size: 9pt; }
+QToolButton#datasetCancelButton {
+    min-width: 34px; max-width: 34px; min-height: 20px;
+    padding: 1px 4px; border: 1px solid #FCA5A5; border-radius: 4px;
+    background: #FEF2F2; color: #B42318; font-size: 9pt; font-weight: 700;
+}
+QToolButton#datasetCancelButton:hover { background: #FEE2E2; border-color: #DC2626; }
+QProgressBar#datasetProgressBar {
+    min-height: 5px; max-height: 5px; border: 0; border-radius: 3px;
+    background: #E4E7EC;
+}
+QProgressBar#datasetProgressBar::chunk { background: #16A34A; border-radius: 3px; }
+QProgressBar#datasetProgressBar[datasetState="generated_failed"]::chunk { background: #DC2626; }
+QProgressBar#datasetProgressBar[datasetState="generated_cancelled"]::chunk { background: #98A2B3; }
 QFrame#DocumentWorkspace { background: #EEF1F5; }
 QToolButton#DocumentSplitButton {
     min-height: 28px;
@@ -2038,6 +2195,110 @@ QLabel#ExplainFormulaCard {
     border-radius: 8px;
     padding: 8px;
     color: #344054;
+}
+QFrame#ExplainSelectionCard,
+QFrame#ExplainChainCard,
+QFrame#ExplainSummaryPanel {
+    background: #FFFFFF;
+    border: 1px solid #B8CCF3;
+    border-radius: 8px;
+}
+QLabel#ExplainSectionTitle {
+    color: #173A55;
+    font-size: 12.5pt;
+    font-weight: 700;
+}
+QToolButton#ExplainSummaryButton {
+    min-height: 34px;
+    padding: 4px 12px;
+    color: #344054;
+    background: #F7F8FA;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    font-weight: 700;
+    text-align: center;
+}
+QToolButton#ExplainSummaryButton:hover {
+    color: #155EEF;
+    background: #EEF4FF;
+    border-color: #8FB3F4;
+}
+QToolButton#ExplainSummaryButton:checked {
+    color: #FFFFFF;
+    background: #155EEF;
+    border-color: #155EEF;
+}
+QLabel#ExplainSummaryBody {
+    min-height: 44px;
+    padding: 8px 10px;
+    color: #344054;
+    background: #F8FAFC;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    font-size: 12pt;
+}
+QPushButton#ExplainActionButton {
+    min-height: 30px;
+    padding: 3px 10px;
+    color: #155EEF;
+    background: #EEF4FF;
+    border: 1px solid #8FB3F4;
+    border-radius: 6px;
+    font-weight: 700;
+}
+QPushButton#ExplainActionButton:hover {
+    color: #FFFFFF;
+    background: #155EEF;
+}
+QToolButton#ExplainViewSwitchButton {
+    min-height: 34px;
+    max-height: 34px;
+    padding: 3px 10px;
+    color: #344054;
+    background: #F7F8FA;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    font-weight: 700;
+}
+QToolButton#ExplainViewSwitchButton:hover {
+    color: #155EEF;
+    background: #EEF4FF;
+    border-color: #8FB3F4;
+}
+QToolButton#ExplainViewSwitchButton:checked {
+    color: #FFFFFF;
+    background: #155EEF;
+    border-color: #155EEF;
+}
+QListWidget#ExplainFeaturePicker {
+    min-height: 46px;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    background: #F8FAFC;
+    color: #344054;
+    font-size: 11.5pt;
+}
+QListWidget#ExplainFeaturePicker::item {
+    min-height: 28px;
+    padding: 2px 6px;
+    border-bottom: 1px solid #E6EAF0;
+}
+QListWidget#ExplainFeaturePicker::item:hover {
+    background: #EEF4FF;
+}
+QLabel#ExplainChainRow {
+    padding: 6px 8px;
+    color: #344054;
+    background: #F8FAFC;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+}
+QLabel#ExplainChainArrow {
+    min-height: 20px;
+    max-height: 24px;
+    color: #155EEF;
+    font-size: 16pt;
+    font-weight: 800;
 }
 QPushButton#teachingV2PrimaryButton {
     background: #155EEF;
@@ -2272,48 +2533,10 @@ QLabel#WorkflowSectionIntro {
    写了会被静默忽略（不报错、也不生效）。想调段落行距只能在 Python 里给
    QLabel 设富文本样式，本页没这么做。 */
 
-/* ===== 只作用于「仿真」这一栏的样式 =====
-   sectionKey 属性来自 Python 的 setProperty("sectionKey", spec.key)
-   （见 modules/home/shell.py 的 WorkflowSection.__init__），值是 SectionSpec.key。
-
-   这几条必须写在上面那些通用规则**之后**：QSS 同样遵循「后者覆盖前者」，
-   属性选择器并没有更高的优先级，只是更具体而已。
-
-   这里的目标是让「仿真」的栏标题和它下面的节点卡片**明显不是一种东西**：
-   标题 = 深蓝实心条 + 白字（重、像区块头）
-   卡片 = 白底细描边（轻、像一个按钮）
-   两者靠底色和字色一次性拉开，而不是靠字号微调。 */
-
-/* 标题头整条换成深蓝实心 */
-QFrame#WorkflowSectionHeader[sectionKey="simulation"] {
-    background: #155EEF;
-    border: 2px solid #155EEF;
-    border-radius: 10px;
-}
-/* 标题字改白色。必须显式写，否则会继承通用的深蓝字，在深蓝底上看不见 */
-QLabel#WorkflowSectionTitle[sectionKey="simulation"] {
-    color: #FFFFFF;
-    font-size: 15pt;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-/* 标题下的说明也跟着调亮 */
-QLabel#WorkflowSectionHint[sectionKey="simulation"] {
-    color: #D6E4FF;
-}
-/* 图标底色改白。图标线条本身的颜色由 Python 的 SectionSpec.accent 决定
-   （这里是 "#155EEF"），深蓝底上会看不清——所以本栏的 accent 也得一起
-   改成浅色。当前这一栏靠白底圆 + 深蓝图标来对比，若仍觉不够，
-   把 accent 改成 "#FFFFFF" 并把这里改成透明即可。 */
-QLabel#WorkflowSectionIcon[sectionKey="simulation"] {
-    background: #FFFFFF;
-    border: 1px solid #FFFFFF;
-}
-/* 本栏的整栏底色略深一点，和另外四栏区分开（可选，不要就删掉这条） */
-QFrame#WorkflowSection[sectionKey="simulation"] {
-    background: #F2F7FF;
-    border-color: #155EEF;
-}
+/* 五栏标题头与栏底色都在上面的通用规则里统一设定：一栏一个深蓝实心标题条 +
+   一栏一个强调色图标（SectionSpec.accent），五栏视觉完全一致，靠标题区分。
+   曾经这里另有 [sectionKey="simulation"] 的专属规则让仿真栏更突出；首页现在
+   五栏同等重要，那组规则已删除，恢复"只让某一栏特殊"时再加回来。 */
 QFrame#SchematicCanvas {
     background: #F8FAFC;
     border: 1px solid #C7CDD6;
@@ -2353,6 +2576,34 @@ QWidget#teachingV2Inspector {
     background: #F8FAFC;
     border-left: 1px solid #D0D5DD;
 }
+/* 属性面板里的"更多参数"折叠按钮：看起来像可点的分组标题，不要按钮框。 */
+QToolButton#teachingV2MoreButton {
+    min-height: 30px;
+    padding: 3px 6px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: #155EEF;
+    font-weight: 700;
+}
+/* 教学属性面板里的单位块：外观同 UnitLabel，但不钉死高度——面板的输入框比
+   仿真页更高，高度由界面代码按输入框实测值对齐。 */
+QLabel#teachingV2UnitLabel {
+    padding: 1px 4px;
+    background: #F8FAFC;
+    border: 1px solid #C7CDD6;
+    border-radius: 6px;
+    color: #475467;
+}
+QToolButton#teachingV2MoreButton:hover {
+    background: #EEF4FF;
+    border-color: #B8CCF3;
+}
+QToolButton#teachingV2MoreButton:pressed {
+    background: #DCE9FF;
+    border-color: #8FB3F4;
+    color: #073A89;
+}
 QLabel#teachingV2SectionTitle {
     color: #101828;
     font-weight: 700;
@@ -2360,4 +2611,162 @@ QLabel#teachingV2SectionTitle {
 QLabel#TeachingStatus {
     color: #344054;
     padding-right: 8px;
+}
+
+/* ===== 优化页面：面向新手的分步配置 ===== */
+QLabel#optimizationPageTitle {
+    color: #101828;
+    font-size: 22pt;
+    font-weight: 800;
+    padding: 2px 0 0 0;
+}
+QLabel#optimizationPageSubtitle {
+    color: #667085;
+    font-size: 13pt;
+    padding-bottom: 5px;
+}
+QFrame#optimizationCard {
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    border-radius: 11px;
+}
+QLabel#OptimizationRailHint {
+    color: #667085;
+    font-size: 11.5pt;
+    padding: 0 2px 4px 2px;
+}
+QLabel#optimizationStepTitle {
+    color: #101828;
+    font-size: 15pt;
+    font-weight: 800;
+}
+QFrame#optimizationModeOption {
+    background: #F7FAFF;
+    border: 1px solid #C7D7F2;
+    border-radius: 8px;
+}
+QFrame#optimizationModeOption[selected="true"] {
+    background: #D6E4FF;
+    border: 2px solid #155EEF;
+}
+QRadioButton#optimizationModeRadio {
+    color: #101828;
+    font-size: 13pt;
+    font-weight: 700;
+    spacing: 8px;
+    min-height: 32px;
+}
+QRadioButton#optimizationModeRadio::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton#optimizationModeRadio::indicator:unchecked {
+    border: 2px solid #98A2B3;
+    border-radius: 10px;
+    background: #FFFFFF;
+}
+QRadioButton#optimizationModeRadio::indicator:checked {
+    border: 5px solid #155EEF;
+    border-radius: 10px;
+    background: #FFFFFF;
+}
+QLabel#optimizationModeHint, QLabel#optimizationHelperText,
+QLabel#optimizationFooterHint {
+    color: #667085;
+    font-size: 11.5pt;
+}
+QFrame#optimizationMetricDivider {
+    background: #D0D5DD;
+}
+QFrame#optimizationMetricCard {
+    background: #F2F7FF;
+    border: 1px solid #E0EAFA;
+    border-radius: 8px;
+    min-width: 120px;
+}
+QLabel#optimizationMetricTitle {
+    color: #667085;
+    font-size: 11.5pt;
+}
+QLabel#optimizationMetricValue {
+    color: #155EEF;
+    font-size: 19pt;
+    font-weight: 800;
+}
+QCheckBox#optimizationSecondaryObjective {
+    background: #F7FAFF;
+    border: 1px solid #C7D7F2;
+    border-radius: 8px;
+    color: #101828;
+    font-size: 12.5pt;
+    font-weight: 650;
+    padding: 10px 12px;
+    min-height: 36px;
+}
+QFrame#optimizationAdvancedPanel {
+    background: #F8FAFC;
+    border: 1px solid #D0D5DD;
+    border-radius: 9px;
+}
+QToolButton#optimizationMoreButton {
+    color: #344054;
+    background: transparent;
+    border: 1px solid #C7D7F2;
+    border-radius: 7px;
+    padding: 5px 12px;
+    min-height: 31px;
+    font-weight: 700;
+}
+QToolButton#optimizationMoreButton:hover {
+    color: #155EEF;
+    background: #F2F7FF;
+    border-color: #155EEF;
+}
+QTableWidget#optimizationParameterTable {
+    border-radius: 8px;
+}
+QTableWidget#optimizationParameterTable QHeaderView::section {
+    background: #EAF1FB;
+    color: #344054;
+    font-weight: 700;
+}
+
+/* Long-running ML actions share one calm, persistent progress treatment. */
+QProgressBar#trainingProgressBar,
+QProgressBar#optimizationProgressBar,
+QProgressBar#scanProgressBar {
+    min-height: 18px;
+    max-height: 18px;
+    border: 1px solid #B8C7E2;
+    border-radius: 6px;
+    background: #F7F9FC;
+    text-align: center;
+}
+QProgressBar#trainingProgressBar::chunk,
+QProgressBar#optimizationProgressBar::chunk,
+QProgressBar#scanProgressBar::chunk {
+    background: #155EEF;
+    border-radius: 5px;
+}
+QProgressBar#trainingProgressBar[progressState="complete"]::chunk,
+QProgressBar#optimizationProgressBar[progressState="complete"]::chunk,
+QProgressBar#scanProgressBar[progressState="complete"]::chunk {
+    background: #16A34A;
+}
+QProgressBar#trainingProgressBar[progressState="error"]::chunk,
+QProgressBar#optimizationProgressBar[progressState="error"]::chunk,
+QProgressBar#scanProgressBar[progressState="error"]::chunk {
+    background: #DC2626;
+}
+QProgressBar#trainingProgressBar[progressState="cancelled"]::chunk,
+QProgressBar#optimizationProgressBar[progressState="cancelled"]::chunk,
+QProgressBar#scanProgressBar[progressState="cancelled"]::chunk {
+    background: #98A2B3;
+}
+QLabel#trainingProgressText,
+QLabel#optimizationProgressText,
+QLabel#scanProgressText {
+    color: #475467;
+    font-size: 11.25pt;
+    font-weight: 650;
 }

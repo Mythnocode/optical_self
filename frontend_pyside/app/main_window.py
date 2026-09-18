@@ -174,6 +174,11 @@ class MainWindow(QMainWindow):
     def _open_workflow_node(self, module: str, kind: str) -> None:
         if module == "teaching":
             self.navigate("teaching")
+            # 教学没有文档页签，卡片上的 kind 直接对应教学台的一个动作
+            # （"teaching" 只表示进入实验台本身）。
+            action = str(kind or "")
+            if action and action != "teaching":
+                self.teaching._toolbar_action(action)
             return
         self.open_document(module, kind)
 

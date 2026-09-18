@@ -7,6 +7,7 @@ import csv
 import io
 import json
 import logging
+import re
 from datetime import datetime, timezone
 from uuid import uuid4
 
@@ -24,6 +25,41 @@ from backend.optical_ml_app.domain.errors import DatasetRegistryError
 
 
 _logger = logging.getLogger(__name__)
+
+
+_LEGACY_SURFACE_PATH = re.compile(r"^surface\.(\d+)\.(.+)$")
+_DESIGN_SURFACE_FIELDS = {
+    "radius_mm",
+    "distance_to_next_mm",
+    "thickness_mm",
+    "conic",
+    "semi_aperture_mm",
+    "clear_aperture_mm",
+}
+
+
+def _canonical_external_feature_path(path: str) -> str:
+    """Normalize feature names emitted by the old headless exporter."""
+    text = str(path or "").strip()
+    match = _LEGACY_SURFACE_PATH.fullmatch(text)
+    if match:
+        field = match.group(2)
+        if field == "thickness_mm":
+            field = "distance_to_next_mm"
+        return f"surfaces[{int(match.group(1))}].{field}"
+    if text == "wavelength_nm":
+        return "source.wavelength_nm"
+    return text
+
+
+def _is_design_variable_path(path: str) -> bool:
+    text = str(path or "")
+    match = re.fullmatch(r"surfaces\[\d+\]\.(.+)", text)
+    if match:
+        return match.group(1) in _DESIGN_SURFACE_FIELDS
+    if text.startswith("receiver.") or text.startswith("source."):
+        return True
+    return text in {"object_distance_mm", "image_distance_mm", "pupil_radius_mm"}
 
 
 class DatasetRegistryEntry:
@@ -240,7 +276,7 @@ class DatasetRegistryService:
                 if not text or text in target_columns.values() or text in {"sample_id", "id", "valid", "failure_code"}:
                     continue
                 try:
-                    features[text] = float(value)
+                    features[_canonical_external_feature_path(text)] = float(value)
                 except (TypeError, ValueError):
                     continue
             if not features:
@@ -265,6 +301,14 @@ class DatasetRegistryService:
         ids = [str(record["sample_id"]) for record in records]
         train_ids, validation_ids, test_ids = split_ids(ids, 0.70, 0.15, int(random_seed))
         feature_list = sorted(feature_paths)
+        from machine_learning.features.coupling_physics import PHYSICS_RESIDUAL_FEATURE_PATHS
+
+        physics_set = set(PHYSICS_RESIDUAL_FEATURE_PATHS)
+        physics_paths = [path for path in feature_list if path in physics_set]
+        design_paths = [
+            path for path in feature_list
+            if path not in physics_set and _is_design_variable_path(path)
+        ]
         manifest = DatasetManifest(
             dataset_id=dataset_id,
             dataset_name=str(dataset_name or path.stem),
@@ -276,7 +320,18 @@ class DatasetRegistryService:
             feature_names=feature_list, feature_paths=feature_list, feature_units=["" for _ in feature_list],
             target_names=sorted(target_columns), train_ids=train_ids, validation_ids=validation_ids, test_ids=test_ids,
             random_seed=int(random_seed), source_project_fingerprint=f"external-file:{path.name}",
-            metadata={"source_kind": "external_tabular_file", "source_path": str(path), "selected_target": desired_target},
+            design_variable_paths=design_paths,
+            physics_feature_paths=physics_paths,
+            metadata={
+                "source_kind": "external_tabular_file",
+                "source_path": str(path),
+                "selected_target": desired_target,
+                "design_variable_paths": design_paths,
+                "physics_feature_paths": physics_paths,
+                "closed_loop_compatible": bool(
+                    design_paths and physics_set.issubset(feature_paths)
+                ),
+            },
         )
         self._dataset_store.save_manifest(manifest)
         for record in records:

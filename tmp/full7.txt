@@ -1,0 +1,274 @@
+................................................................F....... [ 36%]
+...............FF............................................F.......... [ 72%]
+.......................................F.........F.F...                  [100%]
+=================================== ERRORS ====================================
+____________ ERROR collecting tests/test_frozen_ml_ui_contracts.py ____________
+ImportError while importing test module 'D:\AAAWorkspace\optical_self\tests\test_frozen_ml_ui_contracts.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+D:\python\python3.12\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_frozen_ml_ui_contracts.py:20: in <module>
+    from frontend_pyside.app.workbench_shell import (
+E   ImportError: cannot import name '_optimization_status_label' from 'frontend_pyside.app.workbench_shell' (D:\AAAWorkspace\optical_self\frontend_pyside\app\workbench_shell.py)
+_________ ERROR collecting tests/test_optimization_frozen_controls.py _________
+ImportError while importing test module 'D:\AAAWorkspace\optical_self\tests\test_optimization_frozen_controls.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+D:\python\python3.12\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_optimization_frozen_controls.py:11: in <module>
+    from frontend_pyside.app.workbench_shell import (
+E   ImportError: cannot import name '_shap_feature_key' from 'frontend_pyside.app.workbench_shell' (D:\AAAWorkspace\optical_self\frontend_pyside\app\workbench_shell.py)
+___________ ERROR collecting tests/test_workbench_formal_results.py ___________
+ImportError while importing test module 'D:\AAAWorkspace\optical_self\tests\test_workbench_formal_results.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+D:\python\python3.12\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_workbench_formal_results.py:11: in <module>
+    from frontend_pyside.app.workbench_shell import (
+E   ImportError: cannot import name 'RESULT_PLOT_KEYS' from 'frontend_pyside.app.workbench_shell' (D:\AAAWorkspace\optical_self\frontend_pyside\app\workbench_shell.py)
+================================== FAILURES ===================================
+____ test_task_manager_reserves_100_percent_for_persisted_completed_state _____
+
+tmp_path = WindowsPath('C:/Users/qingxue/AppData/Local/Temp/pytest-of-qingxue/pytest-61/test_task_manager_reserves_1000')
+
+    def test_task_manager_reserves_100_percent_for_persisted_completed_state(tmp_path: Path):
+        repo = FileJobRepository(tmp_path / "jobs")
+        manager = TaskManager(repo, max_workers=1, persistent_workers={})
+        try:
+            job_id = manager.submit("test", _worker_claims_done_then_waits, 0.35)
+            deadline = time.monotonic() + 5.0
+            observed_worker_stage = None
+            while time.monotonic() < deadline:
+                status = manager.get_status(job_id)
+                if status.status == "running" and status.stage == "test.worker_claimed_done":
+                    observed_worker_stage = status
+                    break
+                time.sleep(0.01)
+>           assert observed_worker_stage is not None
+E           assert None is not None
+
+tests\test_progress_and_fastpath.py:121: AssertionError
+___________ test_retry_creates_new_real_job_id_and_replays_payload ____________
+
+tmp_path = WindowsPath('C:/Users/qingxue/AppData/Local/Temp/pytest-of-qingxue/pytest-61/test_retry_creates_new_real_jo0')
+
+    def test_retry_creates_new_real_job_id_and_replays_payload(tmp_path: Path):
+        marker = tmp_path / "marker.txt"
+        marker.write_text("fail", encoding="utf-8")
+        repo = FileJobRepository(tmp_path / "jobs")
+        manager = TaskManager(repo, max_workers=1, persistent_workers={})
+        try:
+            original_id = manager.submit(
+                "scan", _gate_task, str(marker), queue_timeout_seconds=5, stall_timeout_seconds=5
+            )
+            original = _wait_status(manager, original_id, {"failed"})
+            assert original.error is not None
+            assert original.error.retryable is True
+            assert original.retry_available is True
+    
+            marker.write_text("ok", encoding="utf-8")
+            retried = manager.retry(original_id)
+            assert retried.job_id != original_id
+            assert retried.retry_of == original_id
+            assert retried.status in {"queued", "running"}
+    
+>           completed = _wait_status(manager, retried.job_id, {"completed"})
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_task_lifecycle.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+manager = <backend.optical_ml_app.jobs.task_manager.TaskManager object at 0x000002ECFBDBB410>
+job_id = 'job-8ce2f50138f8', wanted = {'completed'}, timeout = 8.0
+
+    def _wait_status(manager: TaskManager, job_id: str, wanted: set[str], timeout: float = 8.0):
+        deadline = time.monotonic() + timeout
+        latest = None
+        while time.monotonic() < deadline:
+            latest = manager.get_status(job_id)
+            if latest.status in wanted:
+                return latest
+            time.sleep(0.05)
+>       raise AssertionError(f"job {job_id} did not reach {wanted}; latest={latest}")
+E       AssertionError: job job-8ce2f50138f8 did not reach {'completed'}; latest=job_id='job-8ce2f50138f8' job_type='scan' status='failed' progress=0.0 stage='queue.watchdog' completed_items=0 total_items=1 created_at='2026-09-18T18:58:52.770961+00:00' started_at=None finished_at='2026-09-18T18:58:57.776619+00:00' result_available=False error=ApplicationError(code='QUEUE_TIMEOUT', stage='queue.watchdog', message='任务排队超过 5 秒，未获得执行资源', retryable=True, trace_id=None, context={'elapsed_seconds': 5.005}) metrics={} timings_ms={} result_version=0 partial_result_available=False retry_available=True retry_of='job-7f519246e32b' last_activity_at='2026-09-18T18:58:57.776619+00:00'
+
+tests\test_task_lifecycle.py:26: AssertionError
+________ test_backend_restart_recovery_preserves_retry_and_can_replay _________
+
+tmp_path = WindowsPath('C:/Users/qingxue/AppData/Local/Temp/pytest-of-qingxue/pytest-61/test_backend_restart_recovery_0')
+
+    def test_backend_restart_recovery_preserves_retry_and_can_replay(tmp_path: Path):
+        marker = tmp_path / "marker.txt"
+        marker.write_text("fail", encoding="utf-8")
+        repo = FileJobRepository(tmp_path / "jobs")
+        manager = TaskManager(repo, max_workers=1, persistent_workers={})
+        try:
+            source_id = manager.submit("scan", _gate_task, str(marker), queue_timeout_seconds=5, stall_timeout_seconds=5)
+            source = _wait_status(manager, source_id, {"failed"})
+            assert source.retry_available
+        finally:
+            manager.shutdown(wait=True)
+    
+        interrupted_id = "job-interrupted-test"
+        interrupted_dir = tmp_path / "jobs" / interrupted_id
+        interrupted_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(tmp_path / "jobs" / source_id / "retry_payload.bin", interrupted_dir / "retry_payload.bin")
+        interrupted = JobStatus(
+            job_id=interrupted_id,
+            job_type="scan",
+            status="running",
+            progress=0.43,
+            stage="scan.evaluate",
+            created_at=source.created_at,
+            started_at=source.created_at,
+            retry_available=True,
+        )
+        repo.save_status(interrupted)
+    
+        recovered = repo.recover_interrupted_jobs()
+        assert interrupted_id in recovered
+        recovered_status = repo.load_status(interrupted_id)
+        assert recovered_status.status == "failed"
+        assert recovered_status.progress == pytest.approx(0.43)
+        assert recovered_status.error is not None
+        assert recovered_status.error.code == "BACKEND_RESTARTED"
+        assert recovered_status.error.retryable is True
+        assert recovered_status.retry_available is True
+    
+        marker.write_text("ok", encoding="utf-8")
+        manager2 = TaskManager(repo, max_workers=1, persistent_workers={})
+        try:
+            retried = manager2.retry(interrupted_id)
+            assert retried.retry_of == interrupted_id
+>           done = _wait_status(manager2, retried.job_id, {"completed"})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_task_lifecycle.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+manager = <backend.optical_ml_app.jobs.task_manager.TaskManager object at 0x000002ECF0BD43B0>
+job_id = 'job-debda2cc05a7', wanted = {'completed'}, timeout = 8.0
+
+    def _wait_status(manager: TaskManager, job_id: str, wanted: set[str], timeout: float = 8.0):
+        deadline = time.monotonic() + timeout
+        latest = None
+        while time.monotonic() < deadline:
+            latest = manager.get_status(job_id)
+            if latest.status in wanted:
+                return latest
+            time.sleep(0.05)
+>       raise AssertionError(f"job {job_id} did not reach {wanted}; latest={latest}")
+E       AssertionError: job job-debda2cc05a7 did not reach {'completed'}; latest=job_id='job-debda2cc05a7' job_type='scan' status='failed' progress=0.01 stage='scan.starting' completed_items=0 total_items=1 created_at='2026-09-18T18:59:10.065830+00:00' started_at='2026-09-18T18:59:10.092617+00:00' finished_at='2026-09-18T18:59:16.074079+00:00' result_available=False error=ApplicationError(code='WORKER_STALLED', stage='scan.starting', message='任务连续 5 秒没有新的工作进度，Worker 可能失去响应', retryable=True, trace_id=None, context={'stalled_seconds': 5.981}) metrics={} timings_ms={'queue_wait': 27.114, 'process_dispatch': 6.541} result_version=0 partial_result_available=False retry_available=True retry_of='job-interrupted-test' last_activity_at='2026-09-18T18:59:16.074079+00:00'
+
+tests\test_task_lifecycle.py:26: AssertionError
+_____________________ test_v1_teaching_package_is_removed _____________________
+
+    def test_v1_teaching_package_is_removed() -> None:
+        import importlib.util
+    
+>       assert importlib.util.find_spec("frontend_pyside.features.teaching") is None
+E       AssertionError: assert ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) is None
+E        +  where ModuleSpec(name='frontend_pyside.features.teaching', loader=None, submodule_search_locations=_NamespacePath(['D:\\AAAWorkspace\\optical_self\\frontend_pyside\\features\\teaching'])) = <function find_spec at 0x000002EC845BC5E0>('frontend_pyside.features.teaching')
+E        +    where <function find_spec at 0x000002EC845BC5E0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = <module 'importlib' from 'D:\\python\\python3.12\\Lib\\importlib\\__init__.py'>.util
+
+tests\test_teaching_v2_core.py:876: AssertionError
+_ TraceSchedulerProcessModeTests.test_process_mode_returns_latest_generation __
+
+self = <test_trace_scheduler_process.TraceSchedulerProcessModeTests testMethod=test_process_mode_returns_latest_generation>
+
+    def test_process_mode_returns_latest_generation(self) -> None:
+        from teaching_runtime.trace_scheduler import TeachingTraceScheduler
+        from teaching_runtime.physical_scene import TeachingPhysicalNode, TeachingPhysicalScene
+    
+        def _scene(generation: int) -> TeachingPhysicalScene:
+            nodes = (
+                TeachingPhysicalNode("laser", "laser", "激光器", 120, 310, 82, 0.0, params={"beam_radius_mm": 0.72}),
+                TeachingPhysicalNode("lens", "lens", "L1", 610, 310, 82, 0.0, params={"focal_mm": 50.0, "material": "N-BK7"}),
+                TeachingPhysicalNode("fiber", "fiber", "五轴光纤架", 1120, 310, 82, 180.0),
+            )
+            return TeachingPhysicalScene(
+                nodes=nodes, wavelength_nm=808.0, input_power_mw=100.0,
+                max_system_length_mm=140.0, generation=generation, trace_quality="settled",
+            )
+    
+        scheduler = TeachingTraceScheduler(process_mode=True)
+        try:
+            scheduler.submit(_scene(11), generation=11, quality="settled")
+            result = None
+            deadline = time.time() + 60
+            while time.time() < deadline and result is None:
+                result = scheduler.poll_latest()
+                time.sleep(0.02)
+>           self.assertIsNotNone(result)
+E           AssertionError: unexpectedly None
+
+tests\test_trace_scheduler_process.py:31: AssertionError
+_________________ test_frozen_secondary_and_accordion_layout __________________
+
+    def test_frozen_secondary_and_accordion_layout():
+        app = _app()
+        shell = WorkbenchShell(create_app_context())
+        shell.resize(1200, 800)
+        shell.show()
+        try:
+            assert shell.context.project.dirty is False
+            assert [key for key, _title in PRIMARY_MODULES] == [
+                "home",
+                "teaching",
+                "simulation",
+                "model",
+                "optimization",
+                "explainability",
+            ]
+            bar = PrimaryBar()
+            assert not any(button.toolTip() == "撤销" for button in bar.findChildren(QToolButton))
+            assert not any(button.toolTip() == "重做" for button in bar.findChildren(QToolButton))
+            bar.deleteLater()
+>           assert [key for key, _title, _hint in SECONDARY_ITEMS["simulation"]] == [
+                "lens_data",
+                "materials",
+                "layout",
+                "image_quality",
+                "fiber_coupling",
+                "wave_diffraction",
+            ]
+E           AssertionError: assert ['lens_data',..._diffraction'] == ['lens_data',..._diffraction']
+E             
+E             At index 1 diff: 'layout' != 'materials'
+E             Right contains one more item: 'wave_diffraction'
+E             Use -v to get more diff
+
+tests\test_workbench_frozen_layout.py:58: AssertionError
+____________ test_main_window_backend_status_is_not_window_tooltip ____________
+
+    def test_main_window_backend_status_is_not_window_tooltip():
+        app = _app()
+        window = MainWindow(create_app_context())
+        try:
+            window._backend_status("后端已连接", "ok")
+            assert window.toolTip() == ""
+>           assert "后端已连接" in window.windowTitle()
+E           assert '后端已连接' in '激光耦合仿真系统及智能优化平台'
+E            +  where '激光耦合仿真系统及智能优化平台' = <built-in method windowTitle of MainWindow object at 0x000002ECFD074C40>()
+E            +    where <built-in method windowTitle of MainWindow object at 0x000002ECFD074C40> = <frontend_pyside.app.main_window.MainWindow(0x2ed0ae9bb70, name="mainWindow") at 0x000002ECFD074C40>.windowTitle
+
+tests\test_workbench_status_and_aspect.py:40: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_progress_and_fastpath.py::test_task_manager_reserves_100_percent_for_persisted_completed_state
+FAILED tests/test_task_lifecycle.py::test_retry_creates_new_real_job_id_and_replays_payload
+FAILED tests/test_task_lifecycle.py::test_backend_restart_recovery_preserves_retry_and_can_replay
+FAILED tests/test_teaching_v2_core.py::test_v1_teaching_package_is_removed - ...
+FAILED tests/test_trace_scheduler_process.py::TraceSchedulerProcessModeTests::test_process_mode_returns_latest_generation
+FAILED tests/test_workbench_frozen_layout.py::test_frozen_secondary_and_accordion_layout
+FAILED tests/test_workbench_status_and_aspect.py::test_main_window_backend_status_is_not_window_tooltip
+ERROR tests/test_frozen_ml_ui_contracts.py
+ERROR tests/test_optimization_frozen_controls.py
+ERROR tests/test_workbench_formal_results.py
+7 failed, 192 passed, 3 errors in 268.87s (0:04:28)

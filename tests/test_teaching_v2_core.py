@@ -19,7 +19,12 @@ from frontend_pyside.features.teaching_v2.coordinates import (
     teaching_point_to_render,
     teaching_point_to_simulation,
 )
-from frontend_pyside.features.teaching_v2.model import Pose, ResultKind, SceneStore
+from frontend_pyside.features.teaching_v2.model import (
+    BENCH_ORIGIN_X_MM,
+    Pose,
+    ResultKind,
+    SceneStore,
+)
 from frontend_pyside.features.teaching_v2.physics import (
     ENGINE_ANALYSES,
     EMPTY_BEAM_MESSAGE,
@@ -32,6 +37,11 @@ from frontend_pyside.features.teaching_v2.physics import (
     setup_warnings,
     snapshot_to_physical_scene,
 )
+
+
+# 默认实验台的激光出光面落在台面左端留白处（见 BENCH_ORIGIN_X_MM）。测试里
+# 表达“相对光路起点”的坐标都从这里加起，改动台面留白不会让夹具错位。
+BEAM_X0 = BENCH_ORIGIN_X_MM
 
 
 class _Point(SimpleNamespace):
@@ -236,6 +246,56 @@ def test_engine_direction_to_render_goes_through_teaching() -> None:
     assert transform.engine_direction_to_render(lateral) == (0.0, 0.0, -1.0)
 
 
+def _bench_extents(components):
+    """Yield ``(component_id, back_x, front_x)`` housing footprints on the bench."""
+    from frontend_pyside.features.teaching_v2.assets import (
+        ORIGIN_INPUT_FACE,
+        ORIGIN_OUTPUT_FACE,
+        PH_PLATE_MM,
+        visual_housing,
+    )
+
+    for item in components:
+        housing = visual_housing(item.kind, item.params)
+        length = float(housing.length_mm)
+        if housing.origin == ORIGIN_OUTPUT_FACE:
+            back, front = length, 0.0
+        elif housing.origin == ORIGIN_INPUT_FACE:
+            back, front = 0.0, length
+        else:
+            back = front = 0.5 * length
+        # 立柱底座是 16 mm 见方，比薄透镜更长，决定元件实际占位。
+        margin = 0.5 * PH_PLATE_MM
+        x_mm = float(item.pose.x_mm)
+        yield item.component_id, x_mm - max(back, margin), x_mm + front + margin
+
+
+def test_demo_schemes_keep_every_part_on_the_breadboard() -> None:
+    """默认方案和空台面新加的器件都必须完整落在台面内。
+
+    激光器的 x 是出光面，管身从出光面往回延伸；出光面摆在台面左端时整段
+    管身会悬空在台面之外，所以默认方案和新器件都从一段左端留白开始排布。
+    """
+    from frontend_pyside.features.teaching_v2.assets import BREADBOARD_LENGTH_MM
+
+    store = SceneStore()
+    snapshots = [store.snapshot()]
+    for lens_count in (1, 2, 3, 4):
+        store.apply_optical_scheme(lens_count)
+        snapshots.append(store.snapshot())
+
+    # 空台面上放下的第一件器件同样不能贴边。
+    for kind in ("laser", "lens", "ccd"):
+        bench = SceneStore(start_empty=True)
+        bench.add_component(kind)
+        snapshots.append(bench.snapshot())
+
+    for snapshot in snapshots:
+        for component_id, back_x, front_x in _bench_extents(snapshot.components):
+            assert back_x >= 0.0, f"{component_id} 悬在台面左端之外：{back_x:.1f} mm"
+            assert front_x <= BREADBOARD_LENGTH_MM, f"{component_id} 超出台面右端：{front_x:.1f} mm"
+
+
 def test_view3d_nodes_use_render_frame_not_engine() -> None:
     from frontend_pyside.features.teaching_v2.view3d import snapshot_to_render_nodes, snapshot_view3d_guides
 
@@ -244,13 +304,13 @@ def test_view3d_nodes_use_render_frame_not_engine() -> None:
     laser = nodes["laser-001"]
     fiber = nodes["fiber-004"]
     assert laser["frame"] == FRAME_RENDER
-    assert laser["x"] == 0.0
+    assert laser["x"] == BEAM_X0
     assert laser["y"] == AXIS_HEIGHT_MM
     assert laser["z"] == 0.0
-    assert fiber["x"] == 72.0
+    assert fiber["x"] == BEAM_X0 + 72.0
     assert fiber["y"] == AXIS_HEIGHT_MM
-    engine_fiber = teaching_point_to_simulation((72.0, 0.0, AXIS_HEIGHT_MM))
-    assert engine_fiber == (0.0, 0.0, 72.0)
+    engine_fiber = teaching_point_to_simulation((BEAM_X0 + 72.0, 0.0, AXIS_HEIGHT_MM))
+    assert engine_fiber == (0.0, 0.0, BEAM_X0 + 72.0)
     assert (fiber["x"], fiber["y"], fiber["z"]) != engine_fiber
     guides = snapshot_view3d_guides(store.snapshot())
     assert guides["axisHeight"] == AXIS_HEIGHT_MM
@@ -372,7 +432,7 @@ def test_preview_is_not_a_coupling_result() -> None:
     assert "coupling_efficiency" not in result.metrics
     assert result.metrics["lens_count"] == 2
     starts = [ray.start_teaching_mm[0] for ray in result.rays]
-    assert starts[0] == 0.0
+    assert starts[0] == BEAM_X0
     assert len(result.rays) >= 7
 
 
@@ -456,15 +516,15 @@ def test_publish_dict_includes_compat_nodes() -> None:
     assert payload["wavelength_nm"] == 780.0
     assert payload["receiver_mode_radius_um"] == 2.8
     fiber = next(node for node in payload["nodes"] if node["kind"] == "fiber")
-    assert fiber["x"] == 72.0
+    assert fiber["x"] == BEAM_X0 + 72.0
     assert fiber["z"] == AXIS_HEIGHT_MM
     engine_fiber = next(node for node in payload["engine_nodes"] if node["kind"] == "fiber")
     assert engine_fiber["frame"] == "simulation_engine_mm"
-    assert engine_fiber["z_mm"] == 72.0
+    assert engine_fiber["z_mm"] == BEAM_X0 + 72.0
     assert engine_fiber["x_mm"] == 0.0
     assert engine_fiber["y_mm"] == 0.0
     engine_laser = next(node for node in payload["engine_nodes"] if node["kind"] == "laser")
-    assert engine_laser["z_mm"] == 0.0
+    assert engine_laser["z_mm"] == BEAM_X0
     assert engine_laser["direction"] == [0.0, 0.0, 1.0]
     assert engine_laser["params"]["beam_radius_mm"] == 0.72
     l1_engine = next(node for node in payload["engine_nodes"] if node["id"] == "lens-002")
@@ -484,8 +544,8 @@ def test_physical_scene_keeps_teaching_millimetres() -> None:
     physical = snapshot_to_physical_scene(store.snapshot())
     assert abs(mm_per_scene_unit(physical.max_system_length_mm, physical.scene_width_units) - 1.0) < 1.0e-12
     by_id = {node.node_id: node for node in physical.nodes}
-    assert by_id["laser-001"].scene_x == 0.0
-    assert by_id["fiber-004"].scene_x == 72.0
+    assert by_id["laser-001"].scene_x == BEAM_X0
+    assert by_id["fiber-004"].scene_x == BEAM_X0 + 72.0
     assert by_id["lens-002"].params["focal_mm"] == 50.0
     assert by_id["laser-001"].params["beam_radius_mm"] == 0.72
     assert "radius1_mm" not in by_id["lens-002"].params
@@ -499,8 +559,8 @@ def test_formal_gateway_keeps_result_layers_apart() -> None:
     assert result.artifacts["coupling"]["source"] == "formal_engine"
     assert result.artifacts["coupling"]["metrics"]["coupling_efficiency"] == 0.37
     rays = result.artifacts["raytrace"]["rays"]
-    assert rays[0]["start"][0] == 0.0
-    assert rays[0]["end"][0] == 72.0
+    assert rays[0]["start"][0] == BEAM_X0
+    assert rays[0]["end"][0] == BEAM_X0 + 72.0
 
 
 def test_formal_gateway_reuses_synced_engineering_project_and_options() -> None:
@@ -570,7 +630,7 @@ def test_failed_formal_layer_does_not_erase_raytrace() -> None:
     assert not result.success
     assert result.artifacts["raytrace"]["status"] == "completed"
     assert result.artifacts["spot"]["errors"] == ["模拟失败"]
-    assert result.artifacts["raytrace"]["rays"][0]["end"][0] == 72.0
+    assert result.artifacts["raytrace"]["rays"][0]["end"][0] == BEAM_X0 + 72.0
 
 
 def test_rays_from_trace_use_scene_millimetres() -> None:
@@ -631,7 +691,9 @@ def test_frozen_origin_ignores_scene_file_offsets() -> None:
     laser = next(node for node in published["engine_nodes"] if node["id"] == "laser-001")
     assert laser["x_mm"] == 0.0
     assert laser["y_mm"] == 0.0
-    assert laser["z_mm"] == 0.0
+    # Engine axial axis is the teaching rail position, so the laser keeps the
+    # bench offset the reference file tried to introduce.
+    assert laser["z_mm"] == BEAM_X0
 
 
 def test_permutation_matrix_is_rotation() -> None:
@@ -794,7 +856,7 @@ def test_live_entry_is_teaching_shell() -> None:
     from frontend_pyside.app.workbench_shell import PRIMARY_MODULES, TeachingShell
 
     keys = [key for key, _title in PRIMARY_MODULES]
-    assert keys[2] == "teaching"
+    assert keys[1] == "teaching"
     assert TeachingShell.__name__ == "TeachingShell"
 
 
@@ -865,7 +927,7 @@ def test_isolator_compiles_as_window_with_isolation_warning() -> None:
     from teaching_runtime.physical_scene import _compile_project
 
     store = SceneStore()
-    cid = store.add_component("isolator", pose=Pose(10.0, 0.0, AXIS_HEIGHT_MM))
+    cid = store.add_component("isolator", pose=Pose(BEAM_X0 + 10.0, 0.0, AXIS_HEIGHT_MM))
     item = store.components[cid]
     compiled, warnings = compile_component_params("isolator", item.params, label=item.label)
     assert compiled["isolation_db"] == 38.0
@@ -888,7 +950,7 @@ def test_ccd_compiles_as_imaging_camera_terminal() -> None:
     store = SceneStore()
     store.remove_component("fiber-004")
     store.remove_component("lens-003")
-    store.add_component("ccd", pose=Pose(74.0, 0.0, AXIS_HEIGHT_MM))
+    store.add_component("ccd", pose=Pose(BEAM_X0 + 74.0, 0.0, AXIS_HEIGHT_MM))
     physical = snapshot_to_physical_scene(store.snapshot())
     camera = next(node for node in physical.nodes if node.kind == "imaging_camera")
     assert camera.kind == "imaging_camera"
@@ -935,7 +997,7 @@ def test_aperture_priority_reaches_engine_surfaces() -> None:
 def test_coupling_without_fiber_is_refused() -> None:
     store = SceneStore()
     store.remove_component("fiber-004")
-    store.add_component("ccd", pose=Pose(72.0, 0.0, AXIS_HEIGHT_MM))
+    store.add_component("ccd", pose=Pose(BEAM_X0 + 72.0, 0.0, AXIS_HEIGHT_MM))
     result = FormalTeachingGateway(_Bridge()).compute(PhysicsRequest(store.snapshot(), "coupling"))
     assert not result.success
     assert any("光纤" in message for message in result.errors)
@@ -983,7 +1045,7 @@ def test_render_bridge_uses_stem_aperture_and_orientation() -> None:
     assert abs(axis[1]) < 1e-6
     assert abs(axis[2]) < 1e-6
     store.update_param("lens-002", "diameter_mm", 20.0)
-    store.update_pose("lens-002", Pose(24.0, 0.0, 90.0))
+    store.update_pose("lens-002", Pose(BEAM_X0 + 24.0, 0.0, 90.0))
     updated = {item["id"]: item for item in snapshot_to_render_nodes(store.snapshot())}["lens-002"]
     assert abs(updated["stemDrop"] - 10.0) < 1e-9
     assert abs(updated["stemHeight"] - (90.0 - 10.0 - 0.2)) < 1e-9
@@ -1042,19 +1104,19 @@ def test_mirror_preview_folds_toward_minus_y() -> None:
     for cid in list(store.components):
         if cid != "laser-001":
             store.remove_component(cid)
-    store.add_component("mirror", pose=Pose(40.0, 0.0, AXIS_HEIGHT_MM))
-    store.add_component("fiber", pose=Pose(40.0, -24.0, AXIS_HEIGHT_MM))
+    store.add_component("mirror", pose=Pose(BEAM_X0 + 40.0, 0.0, AXIS_HEIGHT_MM))
+    store.add_component("fiber", pose=Pose(BEAM_X0 + 40.0, -24.0, AXIS_HEIGHT_MM))
     result = compute_geometry_preview(store.snapshot(), FrameTransform())
     assert result.rays
     chief = [ray for ray in result.rays if ray.power_fraction >= 0.99]
     last = chief[-1]
-    assert abs(last.start_teaching_mm[0] - 40.0) < 1e-6
+    assert abs(last.start_teaching_mm[0] - (BEAM_X0 + 40.0)) < 1e-6
     assert last.end_teaching_mm[1] < -1.0
 
 
 def test_preview_does_not_kink_to_off_axis_fiber() -> None:
     store = SceneStore()
-    store.update_pose("fiber-004", Pose(72.0, 9.6, AXIS_HEIGHT_MM))
+    store.update_pose("fiber-004", Pose(BEAM_X0 + 72.0, 9.6, AXIS_HEIGHT_MM))
     result = compute_geometry_preview(store.snapshot(), FrameTransform())
     assert result.rays
     for ray in result.rays:
@@ -1067,7 +1129,7 @@ def test_preview_does_not_kink_to_off_axis_fiber() -> None:
 
 def test_preview_stops_at_first_fiber_and_ignores_extra() -> None:
     store = SceneStore()
-    store.add_component("fiber", pose=Pose(84.0, 9.6, AXIS_HEIGHT_MM))
+    store.add_component("fiber", pose=Pose(BEAM_X0 + 84.0, 9.6, AXIS_HEIGHT_MM))
     result = compute_geometry_preview(store.snapshot(), FrameTransform())
     assert result.rays
     for ray in result.rays:
@@ -1075,7 +1137,7 @@ def test_preview_stops_at_first_fiber_and_ignores_extra() -> None:
         assert abs(ray.end_teaching_mm[1]) < 1.0
     chief = [ray for ray in result.rays if ray.power_fraction >= 0.99]
     last = chief[-1]
-    assert abs(last.end_teaching_mm[0] - 72.0) < 0.5
+    assert abs(last.end_teaching_mm[0] - (BEAM_X0 + 72.0)) < 0.5
 
 
 def test_render_nodes_keep_placeholder_scale_when_mesh_present() -> None:
@@ -1308,7 +1370,7 @@ def test_engine_focus_aperture_and_fiber_offset_when_available() -> None:
                 pytest.skip(f"正式引擎 {analysis} 超时；编译测试已覆盖")
 
     focus = collimated_biconvex_focus_offset_mm(50.0)
-    terminal_x = 24.0 + focus
+    terminal_x = BEAM_X0 + 24.0 + focus
 
     def gold_scene(*, diameter_mm: float, beam_radius_mm: float, terminal: str) -> SceneStore:
         store = SceneStore()
@@ -1457,7 +1519,7 @@ def test_ccd_spot_sets_image_distance_to_terminal() -> None:
     store.remove_component("fiber-004")
     store.remove_component("lens-003")
     focus = collimated_biconvex_focus_offset_mm(50.0)
-    store.add_component("ccd", pose=Pose(24.0 + focus, 0.0, AXIS_HEIGHT_MM))
+    store.add_component("ccd", pose=Pose(BEAM_X0 + 24.0 + focus, 0.0, AXIS_HEIGHT_MM))
     project, _frame, _warnings, _options = _compile_project(snapshot_to_physical_scene(store.snapshot()))
     distance = _image_distance_to_terminal_mm(project)
     assert distance is not None

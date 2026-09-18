@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from PySide6.QtCore import QPointF, QRectF, Qt, Signal
+from PySide6.QtCore import QPointF, QRectF, QSize, Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QFont, QPainter, QPen
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsObject, QGraphicsScene, QGraphicsView
 
@@ -295,6 +295,11 @@ class BenchScene(QGraphicsScene):
 class BenchView(QGraphicsView):
     fitRequested = Signal()
 
+    # 缩放上下限：按 8 px/mm 的场景比例，0.02 能看整张台面，16 能看清单片透镜。
+    MIN_SCALE = 0.02
+    MAX_SCALE = 16.0
+    ZOOM_STEP = 1.15
+
     def __init__(self, scene: BenchScene, parent=None) -> None:
         super().__init__(scene, parent)
         self.setObjectName("teachingV2BenchView")
@@ -305,6 +310,8 @@ class BenchView(QGraphicsView):
         self.setMinimumSize(280, 120)
         self.setStyleSheet("QGraphicsView { border: 1px solid #d8e1eb; border-radius: 8px; background: #f8fafc; }")
         self.setAcceptDrops(True)
+        self._fitted_viewport = QSize()
+        self._user_scaled = False
 
     def _drop_kind(self, event) -> str:
         mime = event.mimeData()
@@ -340,14 +347,41 @@ class BenchView(QGraphicsView):
         else:
             rect = self.scene().sceneRect().adjusted(20, 20, -20, -20)
         self.fitInView(rect, Qt.AspectRatioMode.KeepAspectRatio)
+        self._fitted_viewport = self.viewport().size()
+        self._user_scaled = False
+        # 滚动条要等下一次布局才出现/消失并改变视口尺寸，所以排一次复查，
+        # 让"适配画面"落在最终视口上，而不是留一条滚动条。
+        QTimer.singleShot(0, self._refit_after_layout)
         self.fitRequested.emit()
 
+    def _refit_after_layout(self) -> None:
+        if self._user_scaled or not self.isVisible():
+            return
+        if self._fitted_viewport != self.viewport().size():
+            self.fit_scene()
+
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        # 二维视图在堆栈里被隐藏时，视口只有最小尺寸，那时算出的"适配画面"
+        # 比例没有意义；重新显示时按真实尺寸补一次。用户自己缩放过就不动他。
+        if not self._user_scaled and self._fitted_viewport != self.viewport().size():
+            QTimer.singleShot(0, self.fit_scene)
+
     def wheelEvent(self, event) -> None:
-        factor = 1.15 if event.angleDelta().y() > 0 else 1 / 1.15
-        current = float(self.transform().m11())
-        proposed = current * factor
-        if 0.22 <= proposed <= 6.0:
-            self.scale(factor, factor)
+        delta = event.angleDelta().y()
+        if not delta:
+            event.ignore()
+            return
+        current = max(float(self.transform().m11()), 1.0e-6)
+        factor = self.ZOOM_STEP if delta > 0 else 1.0 / self.ZOOM_STEP
+        # 先把目标比例夹到合法范围再比较：适配比例本来就可能落在范围之外
+        # （例如在隐藏状态下拟合过），旧写法会把两个方向一起挡掉，表现为
+        # "怎么滚都不动"。
+        target = min(self.MAX_SCALE, max(self.MIN_SCALE, current * factor))
+        if abs(target - current) > 1.0e-9:
+            self.scale(target / current, target / current)
+            self._user_scaled = True
+        event.accept()
 
 
 __all__ = ["BenchScene", "BenchView", "ComponentItem"]

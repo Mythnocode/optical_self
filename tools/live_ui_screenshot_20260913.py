@@ -94,19 +94,22 @@ def click_teaching_equipment(teaching, kind: str) -> None:
         wait(120)
 
 
-def click_teaching_analysis(teaching, analysis: str) -> tuple[object, str]:
-    """Open and run a teaching analysis using its visible calculate button."""
-    toolbar_key = "imaging" if analysis == "spot" else "coupling"
-    teaching._toolbar_action(toolbar_key)
-    wait(120)
-    popup = teaching.analysis_popups.get(analysis)
+def click_teaching_analysis(teaching) -> tuple[object, str]:
+    """Open 成像与耦合 and run its visible calculate button.
+
+    The merged window runs both formal analyses (spot, then coupling) from one
+    button, so the harness waits for the whole run instead of one analysis.
+    """
+    teaching._toolbar_action("analysis")
+    wait(150)
+    popup = teaching.analysis_popup
     if popup is None:
-        raise RuntimeError(f"teaching popup missing: {analysis}")
+        raise RuntimeError("teaching analysis popup missing")
     popup.run_button.click()
     # The first formal engine call in a fresh worker may spend tens of seconds
     # initializing numerical backends; keep the UI in its explicit running
     # state until a real result arrives.
-    deadline = 60000
+    deadline = 120000
     while deadline > 0:
         wait(250)
         status = str(popup.status.text() or "")
@@ -115,7 +118,7 @@ def click_teaching_analysis(teaching, analysis: str) -> tuple[object, str]:
         deadline -= 250
     status = str(popup.status.text() or "")
     if "正式计算完成" not in status:
-        raise RuntimeError(f"teaching {analysis} did not complete: {status}")
+        raise RuntimeError(f"teaching imaging/coupling did not complete: {status}")
     return popup, status
 
 
@@ -269,15 +272,15 @@ def main() -> int:
         wait(180)
         for kind in ("laser", "lens", "fiber", "ccd"):
             click_teaching_equipment(teaching, kind)
-        imaging_popup, imaging_status = click_teaching_analysis(teaching, "spot")
-        paths.append(shot(imaging_popup, out, "09_teaching_imaging"))
-        coupling_popup, coupling_status = click_teaching_analysis(teaching, "coupling")
-        paths.append(shot(coupling_popup, out, "10_teaching_coupling"))
+        analysis_popup, analysis_status = click_teaching_analysis(teaching)
+        paths.append(shot(analysis_popup, out, "09_teaching_imaging_coupling"))
         teaching_metrics = {
-            "imaging_status": imaging_status,
-            "imaging_summary": str(imaging_popup.summary.text() or ""),
-            "coupling_status": coupling_status,
-            "coupling_summary": str(coupling_popup.summary.text() or ""),
+            "analysis_status": analysis_status,
+            "imaging_summary": str(analysis_popup.imaging_summary.text() or ""),
+            "coupling_pills": {
+                key: str(label.text() or "") for key, label in analysis_popup.coupling_pills.items()
+            },
+            "coupling_detail": str(analysis_popup.coupling_detail.text() or ""),
             "component_kinds": [item.kind for item in teaching.store.components.values()],
         }
 

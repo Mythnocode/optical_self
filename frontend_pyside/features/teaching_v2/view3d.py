@@ -829,6 +829,14 @@ class View3DBridge(QObject):
     def selectedLabel(self) -> str:
         return str(self._selected_label)
 
+    @Property(str, notify=sceneChanged)
+    def selectedPosition(self) -> str:
+        """Selected component's bench coordinates (mm), shown in the name tag."""
+        if not self._selected_id:
+            return ""
+        x_mm, y_mm, z_mm = self._origin_teaching
+        return f"X {x_mm:.1f} · Y {y_mm:.1f} · Z {z_mm:.1f} mm"
+
     @Property(bool, constant=True)
     def readOnly(self) -> bool:
         return False
