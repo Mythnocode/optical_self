@@ -8,6 +8,7 @@ VIEW_ANALYSES: dict[str, frozenset[str]] = {
     "光路": frozenset({"raytrace"}),
     "3D光路": frozenset({"raytrace"}),
     "点列图": frozenset({"spot"}),
+    "光强": frozenset({"coupling"}),
     "PSF": frozenset({"psf"}),
     "焦面截面": frozenset({"psf"}),
     "光斑尺寸": frozenset({"psf"}),

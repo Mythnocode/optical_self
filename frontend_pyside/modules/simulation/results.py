@@ -196,6 +196,19 @@ class ResultDocument(QWidget):
             project = serialize_project(self.context.project.project)
         except Exception:
             project = {}
+        # The active calculation settings are stored in the submitted project
+        # snapshot.  Merge them back here because the result document is opened
+        # after submission and otherwise serialize_project() has no form state.
+        stored_payload = getattr(self.context.project, "simulation_project_payload", {})
+        if callable(stored_payload):
+            stored_payload = stored_payload()
+        if isinstance(stored_payload, dict):
+            stored_settings = stored_payload.get("analysis_settings")
+            if isinstance(stored_settings, dict):
+                project["analysis_settings"] = {
+                    **dict(project.get("analysis_settings") or {}),
+                    **stored_settings,
+                }
         # 结果适配器负责处理后端格式差异，本页面只指定需要的绘图类别。
         plots = formal_result_to_plots(result, project, requested_keys=set(keys))
         for key in keys:

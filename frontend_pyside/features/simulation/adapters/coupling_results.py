@@ -141,6 +141,8 @@ def _beam_match_view(
         },
         "x_label": x_label,
         "y_label": y_label,
+        "color_map": "energy",
+        "normalization": "energy",
         "source": source,
         "auto_display_frame": bool(auto_frame),
         "auto_crop_fraction": float(np.exp(-2.0)) if auto_frame else None,
@@ -315,6 +317,8 @@ def _coupling_plots(
         beam_match["metrics"]["system_efficiency_percent"] = (
             100.0 * system_efficiency if abs(system_efficiency) <= 1.000001 else system_efficiency
         )
+    settings = dict(project.get("analysis_settings", {}) or {}) if isinstance(project, Mapping) else {}
+    incident_intensity_only = bool(settings.get("incident_intensity_only", False))
     waist = _waist_position_view(beam_match, metrics=metrics, project=project, source=FORMAL_SOURCE)
     # 这里的 key 必须与 formal_results.py 和 results.py 中的请求名称一致。
     plots: dict[str, dict[str, Any]] = {
@@ -323,6 +327,15 @@ def _coupling_plots(
         
         "模式重叠": dict(beam_match),
         "耦合场": diagnostic_pair,
+        "光强": {
+            "kind": "heatmap", "title": "接收面光强图",
+            "x": display_x_preview.astype(float, copy=False), "y": display_y_preview.astype(float, copy=False),
+            "z": np.maximum(np.nan_to_num(field_preview, nan=0.0), 0.0).astype(np.float32, copy=False),
+            "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
+            "color_map": "energy", "normalization": "energy",
+            "equal_aspect": True,
+            "description": "接收面复光场的强度分布，单位为归一化强度。",
+        },
         "振幅": {
             "kind": "heatmap", "title": "正式接收面场振幅",
             "x": display_x_preview.astype(float, copy=False), "y": display_y_preview.astype(float, copy=False),
@@ -330,6 +343,15 @@ def _coupling_plots(
             "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
         },
     }
+    if incident_intensity_only:
+        # Replace the composite endpoint-matching view with a plain intensity
+        # heatmap.  This also makes ResultDocument export exactly this image,
+        # because the selected payload no longer contains overlay artists.
+        pure_intensity = dict(plots["光强"])
+        pure_intensity["title"] = "入射光光强"
+        pure_intensity["description"] = "仅显示入射光强度分布；未叠加光纤模式、剖面线、图例或中心标记。"
+        plots["端面匹配"] = pure_intensity
+        plots["模式重叠"] = dict(pure_intensity)
     # 相位数组可选；没有相位时不生成相位热图。
     if phase.size and phase.shape == field.shape:
         plots["相位"] = {
@@ -337,6 +359,7 @@ def _coupling_plots(
             "x": display_x_preview.astype(float, copy=False), "y": display_y_preview.astype(float, copy=False),
             "z": np.nan_to_num(phase_preview, nan=0.0).astype(np.float32, copy=False),
             "x_label": x_label, "y_label": y_label, "source": FORMAL_SOURCE,
+            "color_map": "phase", "normalization": "phase",
             "description": "相位单位：rad。",
         }
     plots["光纤基模"] = {

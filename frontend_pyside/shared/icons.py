@@ -146,9 +146,8 @@ def _alpha_bounds(image: QImage) -> QRect | None:
 def _png_source(path: Path) -> QImage:
     """位图源图；TRIM 打开时裁掉透明留白（``_trimmed`` 自带缓存）。
 
-    单独抽出来是为了让一次 ``icon_pixmaps`` 里的几个缩放比共用同一份解码结果：
-    原来 ``QImage(str(path))`` 写在按比例循环里面，一张图要重复解码 4 次，
-    而 1254×1254 的 PNG 解码一次就要 ~9ms。
+    单独抽出来是为了让一次 ``icon_pixmaps`` 里的多个缩放比共用同一份解码结果，
+    避免重复读取较大的 PNG 文件。
     """
     return _trimmed(str(path)) if TRIM_PNG_ICONS else QImage(str(path))
 

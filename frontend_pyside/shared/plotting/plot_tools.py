@@ -62,7 +62,7 @@ class PlotTools(QWidget):
         self.more_button.setMenu(menu)
         layout.addWidget(self.more_button)
 
-        # 兼容旧调用方属性；这些动作不再以独立大按钮显示。
+        # 这些属性指向统一的更多菜单，供外层控制图表操作。
         self.copy_button = self.save_button = self.export_button = self.more_button
 
     def copy_image(self) -> None:

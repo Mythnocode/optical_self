@@ -30,6 +30,7 @@ from frontend_pyside.shared.font_fallback import configure_qt_font
 from frontend_pyside.infrastructure.workers.worker import FunctionWorker
 from frontend_pyside.shared.plotting.fast_heatmap import prewarm_fast_heatmap
 from frontend_pyside.shared.components.safe_inputs import install_wheel_safety
+from frontend_pyside.shared.qt_zh import install_chinese_translators
 
 
 def main() -> int:
@@ -40,6 +41,7 @@ def main() -> int:
     QCoreApplication.setApplicationVersion(APP_VERSION)
 
     app = QApplication.instance() or QApplication(sys.argv)
+    install_chinese_translators(app)
     install_wheel_safety(app)
     install_exception_hook()
     try:

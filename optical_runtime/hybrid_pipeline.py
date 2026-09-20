@@ -32,6 +32,8 @@ class HybridPipeline:
         "apodization_factor",
         "apodization_factor_x",
         "apodization_factor_y",
+        "source_wavefront_radius_x_mm",
+        "source_wavefront_radius_y_mm",
         "include_source_to_pupil_opl",
         "start_z_mm",
         "field_x_deg",
@@ -233,6 +235,14 @@ class HybridPipeline:
             ),
             "apodization_factor_y": (
                 None if opts.get("apodization_factor_y", None) is None else float(opts.get("apodization_factor_y"))
+            ),
+            "source_wavefront_radius_x_mm": (
+                None if opts.get("source_wavefront_radius_x_mm", None) is None
+                else float(opts.get("source_wavefront_radius_x_mm"))
+            ),
+            "source_wavefront_radius_y_mm": (
+                None if opts.get("source_wavefront_radius_y_mm", None) is None
+                else float(opts.get("source_wavefront_radius_y_mm"))
             ),
             "include_source_to_pupil_opl": bool(opts.get("include_source_to_pupil_opl", False)),
         }

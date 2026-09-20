@@ -1,7 +1,7 @@
 """Context inspector: one selected object, compact parameters, explicit actions.
 
 默认只摆出位置（X/Y/Z 一行）和三个倾角，其余光学参数与基准线操作收在"更多"
-里：点击器件就自动打开的窗口不该一上来就把所有字段铺满。
+里：属性窗口由画布右侧的“属性”按钮打开，不因点击器件自动出现。
 """
 
 from __future__ import annotations
@@ -215,7 +215,7 @@ class Inspector(QWidget):
         if component is None:
             self._bound_id = None
             self._param_names = ()
-            empty = QLabel("未选择对象\n\n点击画布中的器件，\n这里显示它的坐标和参数。")
+            empty = QLabel("未选择对象\n\n先点击画布中的器件，再点右侧“属性”按钮，\n这里显示它的坐标和参数。")
             empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
             empty.setObjectName("teachingV2EmptyInspector")
             self.object_layout.addWidget(empty)

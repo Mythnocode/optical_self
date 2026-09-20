@@ -58,7 +58,7 @@ def _raytrace_plots(arrays: Mapping[str, Any], project: Mapping[str, Any]) -> di
     return {
         "光路": {
             "kind": "raytrace",
-            "title": "正式二维光路",
+            "title": "二维光路",
             "x_label": "z / mm",
             "y_label": "y / mm",
             **common,

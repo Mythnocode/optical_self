@@ -55,6 +55,12 @@ class Predictor:
         predictions = dict(
             zip(manifest["target_names"], [float(value) for value in values])
         )
+        # XGBoost 物理残差模型输出耦合损耗(dB)，附加转换为耦合效率，
+        # 与随机森林模型的输出口径一致（η = 10^(-loss_db/10)）。
+        if "coupling_loss_db" in predictions and "coupling_efficiency" not in predictions:
+            predictions["coupling_efficiency"] = float(
+                np.power(10.0, -predictions["coupling_loss_db"] / 10.0)
+            )
         return PredictionResult(
             model_id=request.model_id,
             predictions=predictions,

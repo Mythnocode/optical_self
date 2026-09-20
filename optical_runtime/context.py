@@ -174,12 +174,37 @@ class SimulationContext:
         if "gaussian" in str(source.source_type).lower() or source.waist_x_mm > 0.0 or source.waist_y_mm > 0.0:
             opts.setdefault("apodization_type", "gaussian_elliptical")
             radius = float(opts["pupil_radius_mm"])
-            waist_x = source.waist_x_mm if source.waist_x_mm > 0.0 else source.waist_y_mm
-            waist_y = source.waist_y_mm if source.waist_y_mm > 0.0 else source.waist_x_mm
-            if waist_x > 0.0:
-                opts.setdefault("apodization_factor_x", (radius / waist_x) ** 2)
-            if waist_y > 0.0:
-                opts.setdefault("apodization_factor_y", (radius / waist_y) ** 2)
+            wavelength_mm = float(source.wavelength_nm) * 1.0e-6
+            pupil_z_mm = float(opts.get("object_distance_mm", 0.0) or 0.0)
+
+            def beam_at_pupil(axis: str) -> tuple[float | None, float | None]:
+                waist = float(getattr(source, f"waist_{axis}_mm") or 0.0)
+                fallback = float(source.waist_y_mm if axis == "x" else source.waist_x_mm or 0.0)
+                waist = waist if waist > 0.0 else fallback
+                m2_value = getattr(source, f"beam_quality_m2_{axis}", None)
+                m2 = float(m2_value if m2_value is not None else source.beam_quality_m2)
+                if waist <= 0.0 or m2 <= 0.0 or wavelength_mm <= 0.0:
+                    return None, None
+                rayleigh = 3.141592653589793 * waist * waist / (m2 * wavelength_mm)
+                waist_position = float(getattr(source, f"waist_position_{axis}_mm", 0.0))
+                z_from_waist = pupil_z_mm - waist_position
+                beam_radius = waist * (1.0 + (z_from_waist / rayleigh) ** 2) ** 0.5
+                if abs(z_from_waist) <= 1.0e-15:
+                    wavefront_radius = None
+                else:
+                    wavefront_radius = z_from_waist * (1.0 + (rayleigh / z_from_waist) ** 2)
+                return beam_radius, wavefront_radius
+
+            beam_x, radius_x = beam_at_pupil("x")
+            beam_y, radius_y = beam_at_pupil("y")
+            if beam_x is not None:
+                opts.setdefault("apodization_factor_x", (radius / beam_x) ** 2)
+            if beam_y is not None:
+                opts.setdefault("apodization_factor_y", (radius / beam_y) ** 2)
+            if radius_x is not None:
+                opts.setdefault("source_wavefront_radius_x_mm", radius_x)
+            if radius_y is not None:
+                opts.setdefault("source_wavefront_radius_y_mm", radius_y)
         return opts
 
     def trace_key(self, options: dict[str, Any] | None = None) -> TraceKey:

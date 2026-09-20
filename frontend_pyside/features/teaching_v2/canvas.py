@@ -54,7 +54,7 @@ class ComponentItem(QGraphicsObject):
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
-        self.setToolTip(f"{component.label}\n在右侧面板编辑参数，或拖到台面位置")
+        self.setToolTip(f"{component.label}\n点击右侧“属性”按钮编辑参数，或拖到台面位置")
         self.update_component(component)
 
     def _to_point(self, pose: Pose) -> QPointF:

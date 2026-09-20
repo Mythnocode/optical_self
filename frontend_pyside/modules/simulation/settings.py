@@ -153,10 +153,14 @@ class EngineeringDialog(QDialog):
             self.sampling_convergence.setChecked(bool(self._calculation.sampling_convergence_enabled))
             self.save_arrays = QCheckBox("保存完整数组")
             self.save_arrays.setChecked(bool(self._calculation.save_large_arrays))
+            self.incident_intensity_only = QCheckBox("端面匹配只显示入射光光强")
+            self.incident_intensity_only.setToolTip("开启后，端面匹配图和导出图只保留入射光强度，不显示光纤模式、剖面线、图例和中心标记。")
+            self.incident_intensity_only.setChecked(bool(self._calculation.incident_intensity_only))
             form.addRow("", self.high_precision)
             form.addRow("", self.only_visible)
             form.addRow("", self.sampling_convergence)
             form.addRow("", self.save_arrays)
+            form.addRow("", self.incident_intensity_only)
             # 对准参数用于正式耦合计算的横向、轴向和倾角搜索。
             self.align_enabled = QCheckBox("光纤对准")
             self.align_enabled.setChecked(bool(self._alignment.enabled))
@@ -245,6 +249,7 @@ class EngineeringDialog(QDialog):
             sampling_convergence_enabled=self.sampling_convergence.isChecked(),
             save_large_arrays=self.save_arrays.isChecked(),
             high_precision_coupling_enabled=self.high_precision.isChecked(),
+            incident_intensity_only=self.incident_intensity_only.isChecked(),
         )
 
     def alignment_state(self) -> AlignmentFormState:
@@ -311,7 +316,7 @@ class SettingsDocument(EngineeringDialog):
         """按 compute 选择计算设置或环境设置，并可绑定运行回调。"""
         super().__init__("compute" if compute else "environment", context, parent)
         if on_run is not None:
-            # 保留旧 API 的运行回调，不改变当前设置页的生命周期。
+            # 通过设置页统一转发运行回调，不改变当前设置页的生命周期。
             self.runRequested.connect(on_run)
 
 __all__ = ["CombinedSettingsDialog","EngineeringDialog","SettingsDocument"]

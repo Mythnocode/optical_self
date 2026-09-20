@@ -75,7 +75,6 @@ SECONDARY_ICONS: dict[str, str] = {
     "scheme": "overview",
     "equipment": "toolbox",
     "display": "focus",
-    "measure": "measure",
     "analysis": "intensity",
     "calculate": "play",
     "sync_to_simulation": "next",

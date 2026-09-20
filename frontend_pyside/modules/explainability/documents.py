@@ -20,6 +20,44 @@ globals().update(
 # Rows the picker lays out before it starts scrolling internally.
 _PICKER_VISIBLE_ROWS = 8
 
+# 设计变量的英文紧凑记号（与后端 DESIGN_SHORT 一致）。用于「物理链路」
+# 单参数贡献图的横坐标与「当前系统验证」瀑布图的纵坐标。
+_DESIGN_SHORT = {
+    "surfaces[0].radius_mm": "L1-r",
+    "surfaces[0].distance_to_next_mm": "L1-d",
+    "surfaces[2].radius_mm": "L2-r",
+    "surfaces[2].distance_to_next_mm": "L2-d",
+    "surfaces[4].radius_mm": "L3-r",
+    "surfaces[4].distance_to_next_mm": "L3-d",
+    "surfaces[6].radius_mm": "L4-r",
+    "surfaces[6].distance_to_next_mm": "L4-d",
+}
+
+
+def _design_short_label(feature: object) -> str:
+    """把设计变量特征路径映射为 L1-r/L1-d 等英文记号；其余回退中文名。"""
+    key = str(feature or "")
+    if key == "__other_model_features__":
+        return "其他模型特征（合并）"
+    return _DESIGN_SHORT.get(key, display_feature_name(key))
+
+
+# 目标显示名：XGBoost 物理残差模型的输出已按 η 口径换算，与随机森林
+# 一致显示为「耦合效率」，而非「耦合损耗(dB)」。
+_TARGET_DISPLAY = {
+    "coupling_efficiency": "耦合效率",
+    "coupling_loss_db": "耦合效率",
+}
+
+
+def _target_display_label(target_name: object, target_unit: object = "") -> str:
+    """把目标名映射为中文显示名；已换算为效率的目标不附带 dB 单位。"""
+    name = str(target_name or "模型输出")
+    unit = str(target_unit or "").strip()
+    if name in _TARGET_DISPLAY:
+        return _TARGET_DISPLAY[name]
+    return f"{name}（{unit}）" if unit else name
+
 
 def _fixed_action_row(*widgets: QWidget) -> QWidget:
     """Build a top action row that hugs its content.
@@ -31,6 +69,15 @@ def _fixed_action_row(*widgets: QWidget) -> QWidget:
     host = _action_row(*widgets)
     host.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
     return host
+
+
+def _notation_hint() -> QLabel:
+    """图表记号说明（L-x/r/d），挂在模型选择行右侧，字号比「解释模型」小一号。"""
+    hint = QLabel("L-x：第几面透镜　r：曲率半径　d：厚度")
+    hint.setObjectName("ExplainNotationHint")
+    hint.setToolTip("L-x：第 x 面透镜；r：前表面曲率半径；d：透镜厚度")
+    hint.setStyleSheet("font-size: 11pt;")
+    return hint
 
 
 class AnalysisTextDocument(QWidget):
@@ -61,7 +108,16 @@ class AnalysisTextDocument(QWidget):
         self.feature_caption = QLabel(self._parameter_caption())
         if kind == "global_contrib":
             self.shap_chart = QComboBox()
-            self.shap_chart.addItems(["全局贡献图", "SHAP分布图"])
+            self.shap_chart.addItems(
+                [
+                    "全局特征重要性排名",
+                    "蜂群图",
+                    "特征依赖网格图",
+                    "单变量依赖趋势图",
+                    "物理一致性图",
+                    "瀑布图",
+                ]
+            )
             self.shap_chart.currentTextChanged.connect(self._render_cached_shap)
             root.addWidget(
                 _fixed_action_row(
@@ -70,9 +126,10 @@ class AnalysisTextDocument(QWidget):
                     QLabel("图表"),
                     self.shap_chart,
                     self.compute,
+                    _notation_hint(),
                 )
             )
-            message = "选择已训练模型后计算，这里显示该模型全部训练特征在数据集上的平均 |SHAP|。"
+            message = "选择已训练模型后计算，这里把 17 特征 SHAP 经数值雅可比回传到 8 个设计变量。"
         elif kind == "param_trend":
             for index, label in enumerate(("单参数贡献图", "物理链路")):
                 button = QToolButton()
@@ -91,11 +148,19 @@ class AnalysisTextDocument(QWidget):
                     self.model,
                     self.compute,
                     *self.param_view_buttons,
+                    _notation_hint(),
                 )
             )
             message = "暂无解释结果。"
         else:
-            root.addWidget(_fixed_action_row(QLabel("解释模型"), self.model, self.compute))
+            root.addWidget(
+                _fixed_action_row(
+                    QLabel("解释模型"),
+                    self.model,
+                    self.compute,
+                    _notation_hint(),
+                )
+            )
             message = "计算后把当前镜头当作一条样本，用瀑布图拆开各参数贡献。"
         self.workspace = LazyResultWorkspace(self)
         self.workspace.set_single_view_only(True)
@@ -234,9 +299,15 @@ class AnalysisTextDocument(QWidget):
             return
         record = self._current_record()
         model_id = str(record.get("id") or "")
-        body = dict(self._dataset_cache.get(model_id) or {})
-        if body:
-            self._render_shap(body)
+        key = self._design_cache_key(model_id)
+        body = dict(self._dataset_cache.get(key) or {})
+        if not body:
+            return
+        self._render_design_variable(body)
+
+    @staticmethod
+    def _design_cache_key(model_id: str) -> str:
+        return f"__design_variables__:{model_id}"
 
     def set_trained_models(self, models: list[dict[str, Any]]) -> None:
         previous = self.model.currentData()
@@ -315,6 +386,9 @@ class AnalysisTextDocument(QWidget):
         if not shap_supported(family):
             self._show(heading, "这一版不算 SHAP")
             return
+        if self.kind == "global_contrib":
+            self._compute_design_variables(heading, model_id)
+            return
         cache = self._current_cache if self.kind == "current_system" else self._dataset_cache
         cached = dict(cache.get(model_id) or {})
         if cached:
@@ -357,14 +431,189 @@ class AnalysisTextDocument(QWidget):
         record = self._current_record()
         model_id = str(record.get("id") or "")
         if model_id:
-            cache = self._current_cache if self.kind == "current_system" else self._dataset_cache
-            cache[model_id] = body
-        self._render_shap(body)
+            if self.kind == "global_contrib":
+                self._dataset_cache[self._design_cache_key(model_id)] = body
+            else:
+                cache = self._current_cache if self.kind == "current_system" else self._dataset_cache
+                cache[model_id] = body
+        if self.kind == "global_contrib":
+            self._render_design_variable(body)
+        else:
+            self._render_shap(body)
 
     def _on_explain_failed(self, key: str, message: str) -> None:
         if str(key) != getattr(self, "_token", ""):
             return
         self._show(self._heading(), explain_shap_failure(message))
+
+    def _compute_design_variables(self, heading: str, model_id: str) -> None:
+        cached = dict(self._dataset_cache.get(self._design_cache_key(model_id)) or {})
+        if cached:
+            self._render_design_variable(cached)
+            return
+        api = getattr(self.context, "api_client", None) if self.context is not None else None
+        if api is None:
+            self._show(heading, "后端不可用（无 API 连接）")
+            return
+        from uuid import uuid4
+
+        from frontend_pyside.infrastructure.api.clients import TrainingClient
+
+        payload: dict[str, Any] = {"max_samples": 80, "background_sample_count": 80}
+        self._token = f"workbench.explain.design.{uuid4().hex[:8]}"
+        self._show(heading, "计算中…")
+        if not getattr(self, "_api_bound", False):
+            api.completed.connect(self._on_explain_completed)
+            api.failed.connect(self._on_explain_failed)
+            self._api_bound = True
+        self._failure_text = explain_shap_failure
+        TrainingClient(api).explain_design_variables(self._token, model_id, payload)
+
+    def _render_design_variable(self, body: dict[str, Any]) -> None:
+        import numpy as np
+
+        design_paths = [str(p) for p in list(body.get("design_paths") or [])]
+        labels = [str(v) for v in list(body.get("design_labels") or [])]
+        importance = [dict(item) for item in list(body.get("importance") or []) if isinstance(item, dict)]
+        total = np.asarray(body.get("total") or [], dtype=float)
+        design_values = np.asarray(body.get("design_values") or [], dtype=float)
+        target_label = _TARGET_DISPLAY.get(
+            str(body.get("target_name") or ""), "模型输出"
+        )
+        if not design_paths or total.ndim != 2 or total.shape[1] != len(design_paths) or not importance:
+            self._show("贡献排序", "这次解释没有返回设计变量的贡献值。")
+            return
+        n = int(total.shape[0])
+        if not labels:
+            labels = design_paths
+        labels = labels[: len(design_paths)]
+        chart = str(self.shap_chart.currentText()) if self.shap_chart is not None else "全局特征重要性排名"
+
+        ranked_labels = [str(item.get("label") or item.get("feature") or "") for item in importance]
+        ranked_indices = [design_paths.index(str(item.get("feature") or "")) for item in importance if str(item.get("feature") or "") in design_paths]
+        ranked_values = [float(item.get("mean_abs") or 0.0) for item in importance]
+        total_ranked = total[:, ranked_indices]
+        design_ranked = design_values[:, ranked_indices]
+
+        if chart == "蜂群图":
+            points: list[dict[str, Any]] = []
+            for sample_index in range(n):
+                for j, col in enumerate(ranked_indices):
+                    column = design_values[:, col]
+                    low = float(column.min())
+                    high = float(column.max())
+                    raw = float(design_values[sample_index, col])
+                    scaled = (raw - low) / (high - low) if high > low else 0.5
+                    points.append(
+                        {
+                            "feature": ranked_labels[j],
+                            "value": float(total[sample_index, col]),
+                            "sample_index": sample_index,
+                            "color": "#dc2626" if scaled >= 0.5 else "#2563eb",
+                        }
+                    )
+            self.workspace.set_result(
+                0,
+                "蜂群图",
+                {
+                    "kind": "beeswarm",
+                    "labels": ranked_labels,
+                    "points": points,
+                    "importance": ranked_values,
+                    "sample_count": n,
+                    "x_label": "SHAP 值",
+                    "source": "模型解释",
+                    "summary": "红色表示该设计变量取值偏高，蓝色表示偏低；横轴为对模型输出的正负 SHAP 值。",
+                    "description": f"设计变量 SHAP 值分布 · {n} 个样本",
+                },
+            )
+            return
+        if chart == "特征依赖网格图" or chart == "单变量依赖趋势图":
+            corr = np.corrcoef(design_values.T) if n >= 2 and design_values.shape[1] >= 2 else np.eye(len(design_paths))
+            panels: list[dict[str, Any]] = []
+            for j, col in enumerate(range(len(design_paths))):
+                x = design_values[:, col]
+                y = total[:, col]
+                others = [k for k in range(len(design_paths)) if k != col]
+                jmax = max(others, key=lambda k: abs(float(corr[col, k]))) if others else col
+                panels.append(
+                    {
+                        "label": labels[col],
+                        "x": x.tolist(),
+                        "y": y.tolist(),
+                        "color": design_values[:, jmax].tolist(),
+                        "color_label": labels[jmax],
+                    }
+                )
+            if chart == "特征依赖网格图":
+                self.workspace.set_result(
+                    0,
+                    "特征依赖网格图",
+                    {"kind": "dependence_grid", "panels": panels, "title": "SHAP 特征依赖网格图", "y_label": "SHAP Value"},
+                )
+            else:
+                self.workspace.set_result(
+                    0,
+                    "单变量依赖趋势图",
+                    {"kind": "dependence_fit_ci", "panels": panels, "title": "SHAP 单变量依赖趋势图", "y_label": "SHAP Value"},
+                )
+            return
+        if chart == "物理一致性图":
+            consistency = dict(body.get("physics_consistency") or {})
+            x = [float(v) for v in list(consistency.get("shap_importance") or [])]
+            y = [float(v) for v in list(consistency.get("physics_elasticity") or [])]
+            self.workspace.set_result(
+                0,
+                "物理一致性图",
+                {
+                    "kind": "physics_consistency",
+                    "x": x,
+                    "y": y,
+                    "labels": labels,
+                    "pearson": consistency.get("pearson"),
+                    "spearman": consistency.get("spearman"),
+                    "x_label": "平均SHAP",
+                    "y_label": "物理解析重要性",
+                    "summary": "横轴为 ML 学到的变量重要性，纵轴为光学理论敏感度；二者共线说明模型与物理一致。",
+                },
+            )
+            return
+        if chart == "瀑布图":
+            waterfall = dict(body.get("waterfall") or {})
+            wf_values = [float(v) for v in list(waterfall.get("values") or [])]
+            if len(wf_values) != len(labels):
+                wf_values = total_ranked[0].tolist() if n > 0 else [0.0] * len(labels)
+                wf_labels = list(ranked_labels)
+            else:
+                wf_labels = list(labels)
+            order = sorted(range(len(wf_values)), key=lambda index: -abs(wf_values[index]))
+            self.workspace.set_result(
+                0,
+                "瀑布图",
+                {
+                    "kind": "waterfall",
+                    "labels": [wf_labels[i] for i in order],
+                    "values": [wf_values[i] for i in order],
+                    "base_value": float(waterfall.get("base_value") or 0.0),
+                    "x_label": "耦合效率",
+                    "summary": f"目标：{target_label}",
+                },
+            )
+            return
+        # 默认：全局特征重要性排名
+        self.workspace.set_result(
+            0,
+            "全局特征重要性排名",
+            {
+                "kind": "barh",
+                "labels": ranked_labels,
+                "values": ranked_values,
+                "show_values": True,
+                "source": "模型解释",
+                "x_label": "平均贡献",
+                "description": "数值越大表示模型越依赖该设计变量；不等同于物理因果。",
+            },
+        )
 
     def _set_summary_sections(
         self,
@@ -610,7 +859,7 @@ class AnalysisTextDocument(QWidget):
 
         target_name = str(body.get("target_name") or "模型输出")
         target_unit = str(body.get("target_unit") or "").strip()
-        target_label = f"{target_name}（{target_unit}）" if target_unit else target_name
+        target_label = _target_display_label(target_name, target_unit)
         self._target_label = target_label
         self._target_unit = target_unit
 
@@ -649,8 +898,8 @@ class AnalysisTextDocument(QWidget):
                         "kind": "scatter",
                         "x": xs,
                         "y": ys,
-                        "x_label": label_of(selected_feature),
-                        "y_label": f"SHAP 贡献 · {target_label}",
+                        "x_label": _design_short_label(selected_feature),
+                        "y_label": f"SHAP（{target_unit}）" if target_unit else "SHAP",
                         "zero_line": True,
                     },
                 )
@@ -699,10 +948,12 @@ class AnalysisTextDocument(QWidget):
                 "当前系统瀑布图",
                 {
                     "kind": "waterfall",
-                    "labels": [feature_label(label) for label in (values.keys() if isinstance(values, dict) and values else labels)],
+                    "labels": [_design_short_label(label) for label in (values.keys() if isinstance(values, dict) and values else labels)],
                     "values": shap_values,
                     "base_value": float((body.get("base_values") or {}).get(str(body.get("target_name") or ""), 0.0) or 0.0),
                     "summary": f"目标：{target_label}",
+                    "legend_loc": "lower right",
+                    "value_labels_right": True,
                 },
             )
             top_index = max(range(len(shap_values)), key=lambda index: abs(shap_values[index]))

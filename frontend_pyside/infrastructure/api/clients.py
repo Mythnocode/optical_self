@@ -87,6 +87,12 @@ class TrainingClient:
         body.setdefault("top_k", 6)
         self.api.post(key, f"/models/{model_id}/shap/explain", body)
 
+    def explain_design_variables(self, key: str, model_id: str, payload: dict | None = None) -> None:
+        body = dict(payload or {})
+        body.setdefault("max_samples", 80)
+        body.setdefault("background_sample_count", 80)
+        self.api.post(key, f"/models/{model_id}/shap/design-variables", body)
+
 
 class HealthClient:
 

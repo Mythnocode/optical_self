@@ -43,7 +43,7 @@ TABULAR_MODEL_CHOICES = ("随机森林", "XGBoost物理残差")
 SEQUENCE_MODEL_CHOICES = ("BiLSTM",)
 MODEL_TYPE_CHOICES = TABULAR_MODEL_CHOICES + SEQUENCE_MODEL_CHOICES
 TABULAR_DATASET_CHOICES = (
-    "内置演示·780 nm 四透镜耦合",
+    "内置演示·780 nm 四透镜八变量",
     "内置演示·物理残差样本",
 )
 SEQUENCE_DATASET_CHOICES = ("内置演示·结构序列（BiLSTM）",)

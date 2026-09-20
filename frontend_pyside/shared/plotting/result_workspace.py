@@ -82,8 +82,7 @@ class ResultPane(QFrame):
         self.plot_stack.setContentsMargins(0, 0, 0, 0)
         self.plot_stack.addWidget(self.canvas)
         self.plot_stack.addWidget(self.fast_heatmap)
-        # 图表工具固定在标题栏右侧。相同类型的结果页不再把
-        # “恢复/保存/导出”放在图下方，避免每页形成不同的阅读顺序。
+        # 图表工具统一放在结果标题栏右侧。
         self.plot_tools = PlotTools(
             self.canvas,
             prepare=self._prepare_matplotlib_export,
@@ -97,7 +96,7 @@ class ResultPane(QFrame):
         self.max_btn.setToolTip("弹出当前图")
         self.max_btn.clicked.connect(lambda: self.maximizeRequested.emit(self))
         head.addWidget(self.max_btn)
-        # 兼容旧调用方：tools_widget 仍可被统一显隐，但不再额外占一行。
+        # tools_widget 保留为统一控制图表工具可见性的别名。
         self.tools_widget = self.plot_tools
 
         layout.addWidget(self.plot_stack_widget, 1)
@@ -426,7 +425,7 @@ class ResultWorkspace(QWidget):
 
     @property
     def panes(self) -> _PaneAccessor:
-        """返回延迟面板访问器，兼容旧调用方的 ``workspace.panes``。"""
+        """返回延迟面板访问器，保持 ``workspace.panes`` 的统一访问方式。"""
         return self._pane_accessor
 
     def _created_panes(self) -> list[ResultPane]:

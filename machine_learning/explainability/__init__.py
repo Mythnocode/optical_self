@@ -25,6 +25,13 @@ from machine_learning.explainability.shap_service import (
     ShapDependencyError,
     ShapFormulaLinkageAnalyzer,
 )
+from machine_learning.explainability.design_variable_attribution import (
+    DESIGN_LABEL,
+    DESIGN_SHORT,
+    DesignVariableAttribution,
+    compute_design_variable_attribution,
+    physics_consistency,
+)
 from machine_learning.explainability.target_transforms import (
     TARGET_TRANSFORMS,
     TargetTransform,
@@ -53,4 +60,9 @@ __all__ = [
     "TARGET_TRANSFORMS",
     "TargetTransform",
     "get_target_transform",
+    "DESIGN_SHORT",
+    "DESIGN_LABEL",
+    "DesignVariableAttribution",
+    "compute_design_variable_attribution",
+    "physics_consistency",
 ]

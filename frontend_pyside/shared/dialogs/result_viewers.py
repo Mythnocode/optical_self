@@ -172,7 +172,7 @@ class ScientificPlotWindow(QMainWindow):
         self.setWindowTitle(self._window_title())
 
 
-# 旧名称保留，避免其他模块失效。
+# 保留 ImageViewerWindow 别名，供现有调用方继续使用。
 ImageViewerWindow = ScientificPlotWindow
 
 

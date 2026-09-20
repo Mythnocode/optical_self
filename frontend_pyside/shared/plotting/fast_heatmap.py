@@ -22,11 +22,33 @@ from PySide6.QtGui import QColor, QImage, QPainter, QPainterPath, QPen, QPixmap
 from PySide6.QtWidgets import QWidget
 from frontend_pyside.shared.performance import record_perf
 
-# 使用固定的 viridis 风格颜色查找表，避免每次重绘都创建 Matplotlib 色图。
+# 使用固定颜色查找表，避免每次重绘都创建 Matplotlib 色图。
 _ANCHOR_X = np.asarray([0.0, 0.25, 0.5, 0.75, 1.0])
 _ANCHOR_RGB = np.asarray([[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]], dtype=float)
 _LUT = np.stack([
     np.interp(np.linspace(0.0, 1.0, 256), _ANCHOR_X, _ANCHOR_RGB[:, i])
+    for i in range(3)
+], axis=1).astype(np.uint8)
+
+# 类似图2的能量分布色带：低能量为深蓝，高能量依次经过青、绿、黄、红。
+_ENERGY_ANCHOR_X = np.asarray([0.0, 0.16, 0.34, 0.52, 0.72, 0.88, 1.0])
+_ENERGY_ANCHOR_RGB = np.asarray(
+    [[5, 8, 72], [0, 45, 190], [0, 190, 255], [0, 220, 90], [255, 238, 0], [255, 65, 0], [145, 0, 0]],
+    dtype=float,
+)
+_ENERGY_LUT = np.stack([
+    np.interp(np.linspace(0.0, 1.0, 256), _ENERGY_ANCHOR_X, _ENERGY_ANCHOR_RGB[:, i])
+    for i in range(3)
+], axis=1).astype(np.uint8)
+
+# 相位使用首尾闭合的彩色环，避免把相位跳变误读成强度突变。
+_PHASE_ANCHOR_X = np.asarray([0.0, 0.25, 0.5, 0.75, 1.0])
+_PHASE_ANCHOR_RGB = np.asarray(
+    [[48, 0, 130], [0, 185, 255], [245, 245, 40], [245, 45, 20], [48, 0, 130]],
+    dtype=float,
+)
+_PHASE_LUT = np.stack([
+    np.interp(np.linspace(0.0, 1.0, 256), _PHASE_ANCHOR_X, _PHASE_ANCHOR_RGB[:, i])
     for i in range(3)
 ], axis=1).astype(np.uint8)
 
@@ -39,28 +61,48 @@ def _as_2d(value: Any) -> np.ndarray:
     return np.asarray(array, dtype=np.float32)
 
 
-def _qimage(value: Any) -> QImage:
+def _qimage(value: Any, *, color_map: str = "viridis", normalization: str = "linear") -> QImage:
     """将二维数值数组按稳健分位数拉伸后转换为 RGB QImage。
 
-    使用 0.5% 和 99.5% 分位数可以降低极少数异常值对整体颜色对比度的
-    影响；原始数据不会被修改。
+    普通图使用分位数拉伸；能量图使用对数增强，使弱能量环带也能显示；
+    相位图按 ``[-π, π]`` 周期映射。原始数据不会被修改。
     """
     array = _as_2d(value)
-    finite = array[np.isfinite(array)]
-    if finite.size:
-        
-        
-        # 大数组只抽样计算分位数，限制热图更新的额外开销。
-        sample = finite[::max(1, finite.size // 65536)]
-        lo = float(np.percentile(sample, 0.5)); hi = float(np.percentile(sample, 99.5))
+    mode = str(normalization or "linear").lower()
+    if mode == "phase":
+        wrapped = np.angle(np.exp(1j * np.nan_to_num(array, nan=0.0, posinf=0.0, neginf=0.0)))
+        scaled = (wrapped + np.pi) / (2.0 * np.pi)
+    elif mode in {"energy", "log"}:
+        positive = np.maximum(np.nan_to_num(array, nan=0.0, posinf=0.0, neginf=0.0), 0.0)
+        finite = positive[np.isfinite(positive)]
+        if finite.size:
+            sample = finite[::max(1, finite.size // 65536)]
+            positive_values = sample[sample > 0.0]
+            peak = float(np.percentile(positive_values, 99.5)) if positive_values.size else 1.0
+            peak = max(peak, float(np.max(positive)) * 1.0e-6, 1.0e-12)
+        else:
+            peak = 1.0
+        linear = np.clip(positive / peak, 0.0, 1.0)
+        scaled = np.log1p(linear * 1000.0) / np.log1p(1000.0)
     else:
-        lo, hi = 0.0, 1.0
-    if hi <= lo:
-        hi = lo + 1.0
-    # 非有限值映射到颜色表两端，避免 QImage 接收 NaN/Inf。
-    scaled = np.nan_to_num((array - lo)/(hi-lo), nan=0.0, posinf=1.0, neginf=0.0)
+        finite = array[np.isfinite(array)]
+        if finite.size:
+            # 大数组只抽样计算分位数，限制热图更新的额外开销。
+            sample = finite[::max(1, finite.size // 65536)]
+            lo = float(np.percentile(sample, 0.5)); hi = float(np.percentile(sample, 99.5))
+        else:
+            lo, hi = 0.0, 1.0
+        if hi <= lo:
+            hi = lo + 1.0
+        # 非有限值映射到颜色表两端，避免 QImage 接收 NaN/Inf。
+        scaled = np.nan_to_num((array - lo)/(hi-lo), nan=0.0, posinf=1.0, neginf=0.0)
     indices = np.clip(np.rint(scaled*255.0), 0, 255).astype(np.uint8)
-    rgb = np.ascontiguousarray(_LUT[indices])
+    palette = _LUT
+    if str(color_map).lower() in {"energy", "turbo", "jet"}:
+        palette = _ENERGY_LUT
+    elif str(color_map).lower() in {"phase", "twilight"}:
+        palette = _PHASE_LUT
+    rgb = np.ascontiguousarray(palette[indices])
     image = QImage(rgb.data, rgb.shape[1], rgb.shape[0], rgb.strides[0], QImage.Format.Format_RGB888)
     return image.copy()
 
@@ -131,12 +173,17 @@ class FastHeatmapWidget(QWidget):
         started = perf_counter()
         self._data = dict(data or {})
         kind = str(self._data.get("kind", "heatmap"))
+        color_map = str(self._data.get("color_map", "viridis"))
+        normalization = str(self._data.get("normalization", "linear"))
         if kind == "heatmap_pair":
             # 端面匹配通常同时显示入射场和目标模式两张热图。
-            self._images = [_qimage(self._data.get("z1", [])), _qimage(self._data.get("z2", []))]
+            self._images = [
+                _qimage(self._data.get("z1", []), color_map=color_map, normalization=normalization),
+                _qimage(self._data.get("z2", []), color_map=color_map, normalization=normalization),
+            ]
         else:
             # heatmap、beam_match 等单图类型使用 z 数组。
-            self._images = [_qimage(self._data.get("z", []))]
+            self._images = [_qimage(self._data.get("z", []), color_map=color_map, normalization=normalization)]
         self._render_key = str(self._data.get("render_key") or id(data))
         self.update()
         record_perf("plot_update", (perf_counter()-started)*1000.0, kind=kind, mode="qimage")

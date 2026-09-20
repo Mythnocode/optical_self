@@ -122,7 +122,7 @@ def build_ray_view_plots(
     return {
         "光路": {
             "kind": "raytrace_section",
-            "title": f"正式二维光路 · {section_name}",
+            "title": f"二维光路 · {section_name}",
             "x_label": "z / mm",
             "y_label": basis.transverse_label,
             "surfaces": [

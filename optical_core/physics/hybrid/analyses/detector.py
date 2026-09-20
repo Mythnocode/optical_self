@@ -16,6 +16,7 @@ from optical_core.physics.hybrid.solvers.coupling_options import CouplingOptions
 class DetectorAnalysisOptions:
     wavelength_nm: float = 550.0
     grid_size: int = 129
+    pupil_grid_size: int = 257
     field_extent_mm: float | None = None
     size_x_mm: float | None = None
     size_y_mm: float | None = None
@@ -23,6 +24,7 @@ class DetectorAnalysisOptions:
     propagation_model: str = "angular_spectrum"
     propagation_distance_mm: float | None = None
     axial_offset_z_mm: float = 0.0
+    zero_padding_factor: float = 2.0
 
 
 @dataclass(slots=True)
@@ -54,6 +56,7 @@ def evaluate_detector(trace: TraceBundle, options: DetectorAnalysisOptions | dic
         opts = DetectorAnalysisOptions(
             wavelength_nm=float(raw.get("wavelength_nm", 550.0)),
             grid_size=int(raw.get("grid_size", raw.get("pixels", 129))),
+            pupil_grid_size=int(raw.get("pupil_grid_size", 257)),
             field_extent_mm=raw.get("field_extent_mm", raw.get("extent_mm")),
             size_x_mm=raw.get("size_x_mm"),
             size_y_mm=raw.get("size_y_mm"),
@@ -61,6 +64,7 @@ def evaluate_detector(trace: TraceBundle, options: DetectorAnalysisOptions | dic
             propagation_model=str(raw.get("propagation_model", "angular_spectrum")),
             propagation_distance_mm=raw.get("propagation_distance_mm"),
             axial_offset_z_mm=float(raw.get("axial_offset_z_mm", 0.0) or 0.0),
+            zero_padding_factor=float(raw.get("zero_padding_factor", 2.0) or 2.0),
         )
     extent_x = 0.5 * float(opts.size_x_mm) if opts.size_x_mm else opts.field_extent_mm
     extent_y = 0.5 * float(opts.size_y_mm) if opts.size_y_mm else opts.field_extent_mm
@@ -75,6 +79,8 @@ def evaluate_detector(trace: TraceBundle, options: DetectorAnalysisOptions | dic
             output_extent_y_mm=extent_y,
             propagation_model=opts.propagation_model,
             propagation_distance_mm=opts.propagation_distance_mm,
+            pupil_grid_size=opts.pupil_grid_size,
+            zero_padding_factor=opts.zero_padding_factor,
             receiver_axial_offset_z_mm=opts.axial_offset_z_mm,
             sampling_convergence_enabled=False,
             include_breakdown=False,

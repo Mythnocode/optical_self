@@ -645,7 +645,7 @@ class ModelDocument(QWidget):
         # The packaged item below is an actual registered dataset ID.  Do not
         # offer decorative names that cannot be submitted to the training API.
         records = (
-            (("内置演示·780 nm 四透镜耦合", "dataset-880bdde6c292"),)
+            (("内置演示·780 nm 四透镜八变量", "dataset-880bdde6c292"),)
             if family == "tabular" else ()
         )
         active_id = self.selected_dataset_id()

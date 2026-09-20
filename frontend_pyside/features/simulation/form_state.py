@@ -44,6 +44,8 @@ class SourceFormState:
     waist_x_um: float = DEFAULT_WAIST_RADIUS_X_UM
     waist_y_um: float = DEFAULT_WAIST_RADIUS_Y_UM
     waist_position_mm: float = DEFAULT_WAIST_POSITION_MM
+    waist_position_x_mm: float = DEFAULT_WAIST_POSITION_MM
+    waist_position_y_mm: float = DEFAULT_WAIST_POSITION_MM
     beam_quality_m2_x: float = DEFAULT_BEAM_QUALITY_M2_X
     beam_quality_m2_y: float = DEFAULT_BEAM_QUALITY_M2_Y
     object_na_x: float = DEFAULT_SOURCE_NA
@@ -124,6 +126,7 @@ class CalculationFormState:
     sampling_convergence_enabled: bool = False
     save_large_arrays: bool = False
     high_precision_coupling_enabled: bool = DEFAULT_HIGH_PRECISION_COUPLING
+    incident_intensity_only: bool = False
 
 
 @dataclass(frozen=True, slots=True)

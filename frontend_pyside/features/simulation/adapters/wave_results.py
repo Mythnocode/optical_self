@@ -58,7 +58,7 @@ def _spot_plot(arrays: Mapping[str, Any], metrics: Mapping[str, Any] | None = No
         key_metrics.insert(1, {"label": "艾里斑半径", "value": f"{airy:.4g} μm"})
     result = {
         "kind": "scatter",
-        "title": "正式点列图",
+        "title": "点列图",
         "x": points[:, 0].astype(float).tolist(),
         "y": points[:, 1].astype(float).tolist(),
         "x_label": "x / μm",
@@ -116,6 +116,8 @@ def _psf_plot(arrays: Mapping[str, Any], project: Mapping[str, Any]) -> dict[str
         "z": np.nan_to_num(z, nan=0.0).astype(np.float32).tolist(),
         "x_label": "x / μm",
         "y_label": "y / μm",
+        "color_map": "energy",
+        "normalization": "energy",
         "source": FORMAL_SOURCE,
         "key_metrics": key_metrics,
         "auto_crop_fraction": float(np.exp(-2.0)) if auto_frame else None,

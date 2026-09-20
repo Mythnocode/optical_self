@@ -22,9 +22,16 @@ from machine_learning.explainability.linkage_metadata import (
     target_supports_additive_formula_comparison,
 )
 from machine_learning.explainability.physics_features import PHYSICS_FEATURES
+from machine_learning.explainability.design_variable_attribution import (
+    DESIGN_LABEL,
+    DESIGN_SHORT,
+    chain_rule_attribution_from_shap,
+    compute_design_variable_attribution,
+    physics_consistency,
+)
 
 _logger = logging.getLogger(__name__)
-_SHAP_CACHE_SCHEMA_VERSION = 5
+_SHAP_CACHE_SCHEMA_VERSION = 7
 
 
 def _default_display_feature_paths(
@@ -596,9 +603,25 @@ class ModelExtensionService:
         if features is not None:
             X_raw = _request_feature_array(features, feature_paths, model_id=model_id)
             sample_ids = ["request-sample-0"]
-            background_raw = X_raw.copy()
-            background_ids = list(sample_ids)
             data_source = "request_features"
+            if dataset_id is not None and self.dataset_store is not None:
+                # KernelExplainer 需要训练分布作背景；用单样本作背景会让每个
+                # coalition 都退化为同一个点，SHAP 全部变成 0（基值 == 预测值）。
+                try:
+                    _explain_raw, _explain_ids, background_raw, background_ids = self._load_registered_rows(
+                        dataset_id=dataset_id,
+                        feature_paths=feature_paths,
+                        sample_ids=[],
+                        max_samples=max_samples,
+                        background_sample_count=background_sample_count,
+                        random_seed=random_seed,
+                    )
+                except BackendApplicationError:
+                    background_raw = X_raw.copy()
+                    background_ids = list(sample_ids)
+            else:
+                background_raw = X_raw.copy()
+                background_ids = list(sample_ids)
         elif dataset_id is not None:
             X_raw, sample_ids, background_raw, background_ids = self._load_registered_rows(
                 dataset_id=dataset_id,
@@ -849,28 +872,51 @@ class ModelExtensionService:
                     )
 
             sample_shap_values = []
+            chain_total = None
+            chain_design_paths: list[str] = []
+            if features is not None:
+                try:
+                    chain_result = chain_rule_attribution_from_shap(
+                        manifest, matrix_original, X_raw
+                    )
+                    if chain_result is not None:
+                        chain_total, chain_design_paths = chain_result
+                except Exception:
+                    chain_total = None
             for sample_index, sample_id in enumerate(sample_ids):
                 visible_feature_values = {
                     feature: float(X_raw[sample_index, feature_index])
                     for feature_index, feature in enumerate(feature_paths)
                     if feature in display_feature_set
                 }
-                visible_shap_values = {
-                    feature: float(matrix_original[sample_index, feature_index])
-                    for feature_index, feature in enumerate(feature_paths)
-                    if feature in display_feature_set
-                }
-                hidden_feature_contribution = float(
-                    sum(
-                        float(matrix_original[sample_index, feature_index])
+                if chain_total is not None and chain_design_paths:
+                    # 链式法则：把 9 个物理失配特征的 SHAP 按弹性权重回传到 8 个
+                    # 设计变量，避免把贡献汇总到“其他模型特征”桶中。
+                    by_path = {
+                        path: float(chain_total[sample_index, j])
+                        for j, path in enumerate(chain_design_paths)
+                    }
+                    visible_shap_values = {
+                        path: by_path.get(path, 0.0) for path in display_feature_paths
+                    }
+                    hidden_feature_contribution = 0.0
+                else:
+                    visible_shap_values = {
+                        feature: float(matrix_original[sample_index, feature_index])
                         for feature_index, feature in enumerate(feature_paths)
-                        if feature not in display_feature_set
+                        if feature in display_feature_set
+                    }
+                    hidden_feature_contribution = float(
+                        sum(
+                            float(matrix_original[sample_index, feature_index])
+                            for feature_index, feature in enumerate(feature_paths)
+                            if feature not in display_feature_set
+                        )
                     )
-                )
-                if len(display_feature_paths) < len(feature_paths):
-                    # Keep the local waterfall additive without exposing every
-                    # derived physics input as if it were an adjustable variable.
-                    visible_shap_values["__other_model_features__"] = hidden_feature_contribution
+                    if len(display_feature_paths) < len(feature_paths):
+                        # Keep the local waterfall additive without exposing every
+                        # derived physics input as if it were an adjustable variable.
+                        visible_shap_values["__other_model_features__"] = hidden_feature_contribution
                 sample_shap_values.append(
                     {
                         "sample_id": sample_id,
@@ -931,3 +977,134 @@ class ModelExtensionService:
         }
         self._write_shap_cache(cache_key, response)
         return response
+
+    def explain_design_variables(self, model_id: str, request_body: Any) -> dict[str, Any]:
+
+        import time
+
+        import numpy as np
+
+        body = _to_dict(request_body)
+        started = time.perf_counter()
+
+        if self.dataset_store is None:
+            raise BackendApplicationError(
+                code="SHAP_DATASET_STORE_NOT_CONFIGURED",
+                stage="model.shap",
+                message="Design-variable attribution requires a configured dataset store",
+                context={"model_id": model_id},
+            )
+
+        try:
+            model, _preprocessing, manifest = self.model_registry.load(model_id)
+        except (FileNotFoundError, OSError, ValueError) as exc:
+            raise BackendApplicationError(
+                code="MODEL_NOT_FOUND",
+                stage="model.shap",
+                message=f"Model {model_id} could not be loaded",
+                context={"model_id": model_id, "error_type": type(exc).__name__},
+            ) from exc
+
+        design_paths = [str(p) for p in (manifest.get("design_variable_paths") or [])]
+        physics_paths = [str(p) for p in (manifest.get("physics_feature_paths") or [])]
+        if not design_paths or not physics_paths:
+            raise BackendApplicationError(
+                code="SHAP_DESIGN_PATHS_MISSING",
+                stage="model.shap",
+                message="The model manifest does not define design_variable_paths / physics_feature_paths",
+                context={
+                    "model_id": model_id,
+                    "design_variable_paths": design_paths,
+                    "physics_feature_paths": physics_paths,
+                },
+            )
+
+        try:
+            sample_ids = [str(item) for item in body.get("sample_ids", [])]
+            max_samples = int(body.get("max_samples", 80))
+            random_seed = int(body.get("random_seed", 42))
+        except (TypeError, ValueError) as exc:
+            raise BackendApplicationError(
+                code="SHAP_REQUEST_INVALID",
+                stage="model.shap",
+                message="Design-variable request limits must be integers",
+                context={"model_id": model_id},
+            ) from exc
+        if max_samples < 1:
+            raise BackendApplicationError(
+                code="SHAP_REQUEST_INVALID",
+                stage="model.shap",
+                message="max_samples must be positive",
+                context={"model_id": model_id},
+            )
+
+        try:
+            attr = compute_design_variable_attribution(
+                self.model_registry,
+                self.dataset_store,
+                model_id,
+                sample_ids=sample_ids or None,
+                max_samples=max_samples,
+            )
+            consistency = physics_consistency(attr)
+        except BackendApplicationError:
+            raise
+        except Exception as exc:
+            _logger.exception("Design-variable attribution failed for model %s", model_id)
+            raise BackendApplicationError(
+                code="SHAP_COMPUTATION_FAILED",
+                stage="model.shap",
+                message="Design-variable attribution failed for this model or dataset",
+                context={"model_id": model_id, "error_type": type(exc).__name__},
+            ) from exc
+
+        total = np.asarray(attr.total, dtype=float)
+        design_values = np.asarray(attr.Xmat, dtype=float)
+        base = np.asarray(attr.base, dtype=float)
+        targets = np.asarray(attr.targets, dtype=float)
+
+        mean_abs = np.abs(total).mean(axis=0)
+        mean_signed = total.mean(axis=0)
+        order = np.argsort(mean_abs)[::-1]
+        importance: list[dict[str, Any]] = []
+        for rank, index in enumerate(order, 1):
+            path = attr.design_paths[int(index)]
+            importance.append(
+                {
+                    "feature": path,
+                    "label": DESIGN_SHORT.get(path, path),
+                    "label_cn": DESIGN_LABEL.get(path, path),
+                    "mean_abs": float(mean_abs[int(index)]),
+                    "mean_signed": float(mean_signed[int(index)]),
+                    "rank": rank,
+                }
+            )
+
+        # 瀑布图基准样本：取预测值最高（base + Σ total）的样本
+        predicted = base + total.sum(axis=1)
+        waterfall_index = int(np.argmax(predicted))
+
+        elapsed_ms = (time.perf_counter() - started) * 1000.0
+        return {
+            "model_id": model_id,
+            "dataset_id": str(manifest.get("dataset_id") or ""),
+            "target_name": attr.target_name,
+            "design_paths": attr.design_paths,
+            "design_labels": [DESIGN_SHORT.get(p, p) for p in attr.design_paths],
+            "design_labels_cn": [DESIGN_LABEL.get(p, p) for p in attr.design_paths],
+            "sample_ids": attr.sample_ids,
+            "total": total.tolist(),
+            "design_values": design_values.tolist(),
+            "base": base.tolist(),
+            "targets": targets.tolist(),
+            "importance": importance,
+            "physics_consistency": consistency,
+            "waterfall": {
+                "sample_id": attr.sample_ids[waterfall_index],
+                "values": total[waterfall_index].tolist(),
+                "base_value": float(base[waterfall_index]),
+                "prediction": float(predicted[waterfall_index]),
+            },
+            "sample_count": attr.n,
+            "elapsed_ms": round(elapsed_ms, 1),
+        }

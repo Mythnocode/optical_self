@@ -24,7 +24,7 @@ _BUTTON_LABELS: dict[QDialogButtonBox.StandardButton, str] = {
     QDialogButtonBox.StandardButton.Ignore: "忽略",
     QDialogButtonBox.StandardButton.Save: "保存",
     QDialogButtonBox.StandardButton.Open: "打开",
-    QDialogButtonBox.StandardButton.Discard: "丢弃",
+    QDialogButtonBox.StandardButton.Discard: "不保存",
     QDialogButtonBox.StandardButton.Help: "帮助",
 }
 
@@ -41,7 +41,7 @@ _MESSAGE_BUTTON_LABELS: dict[QMessageBox.StandardButton, str] = {
     QMessageBox.StandardButton.Ignore: "忽略",
     QMessageBox.StandardButton.Save: "保存",
     QMessageBox.StandardButton.Open: "打开",
-    QMessageBox.StandardButton.Discard: "丢弃",
+    QMessageBox.StandardButton.Discard: "不保存",
     QMessageBox.StandardButton.Help: "帮助",
 }
 

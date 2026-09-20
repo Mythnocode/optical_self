@@ -2189,6 +2189,23 @@ QToolButton#TeachingQuickAction {
 }
 QToolButton#TeachingQuickAction:hover { background: #EEF4FF; border-color: #8FB3F4; }
 QToolButton#TeachingQuickAction:disabled { background: #F2F4F7; border-color: #EAECF0; color: #98A2B3; }
+QFrame#TeachingCanvasActions {
+    background: rgba(255, 255, 255, 235);
+    border: 1px solid #8FB3F4;
+    border-radius: 8px;
+}
+QToolButton#TeachingCanvasAction {
+    min-width: 38px;
+    max-width: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    padding: 7px;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    background: #FFFFFF;
+}
+QToolButton#TeachingCanvasAction:hover { background: #EEF4FF; border-color: #8FB3F4; }
+QToolButton#TeachingCanvasAction:pressed { background: #DCE9FF; border-color: #8FB3F4; }
 QLabel#ExplainFormulaCard {
     background: #F8FBFF;
     border: 1px solid #B8CCF3;

@@ -44,7 +44,7 @@ TEACHING_ANALYSIS_INFO: dict[str, dict[str, Any]] = {
     "spot": {
         "key": "imaging",
         "title": "成像分析",
-        "empty": "尚未进行成像计算。请先放置并启用 CCD 或光纤，再点击开始正式计算。",
+        "empty": "尚未进行成像计算。请先放置并启用 CCD 或光纤，再点击开始计算。",
         "metrics": (
             ("rms_spot_radius_um", "RMS 光斑半径", "μm"),
             ("centroid_x_mm", "光斑质心 X", "mm"),
@@ -56,7 +56,7 @@ TEACHING_ANALYSIS_INFO: dict[str, dict[str, Any]] = {
     "coupling": {
         "key": "coupling",
         "title": "耦合分析",
-        "empty": "尚未进行耦合计算。请先放置并启用光纤，再点击开始正式计算。",
+        "empty": "尚未进行耦合计算。请先放置并启用光纤，再点击开始计算。",
         "metrics": (
             ("coupling_efficiency", "模式耦合效率", "%"),
             ("mode_overlap_efficiency", "模式重叠效率", "%"),
@@ -137,7 +137,7 @@ class TeachingAnalysisVisual(QWidget):
             painter.drawText(rect.adjusted(0, -30, 0, 0), Qt.AlignmentFlag.AlignCenter, "尚无正式计算结果")
             painter.setPen(QColor("#98A2B3"))
             painter.drawText(rect.adjusted(0, 28, 0, 0), Qt.AlignmentFlag.AlignCenter,
-                             "点击上方“开始正式计算”获取当前指标")
+                             "点击上方“开始计算”获取当前指标")
             return
         if self.analysis == "spot":
             rms = self._number(self.metrics, "rms_spot_radius_um", "rms_um", default=0.0)
@@ -246,11 +246,13 @@ class TeachingImagingCouplingPopup(QFrame):
 
     calculateRequested = Signal()
 
+    START_BUTTON_TEXT = "开始计算"
+    BUSY_BUTTON_TEXT = "正在计算"
+    UPDATE_BUTTON_TEXT = "更新"
+
     # 效率口径取自教学引擎实际返回的量：仿真页那三项里的"系统效率/端面接收
     # 效率"在教学台上没有对应输出，硬摆上去只会永远是"—"。
     EFFICIENCY_PILLS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
-        ("coupling", "模式耦合效率", ("coupling_efficiency",)),
-        ("overlap", "模式重叠效率", ("mode_overlap_efficiency", "coupling_efficiency")),
         ("total", "总耦合效率", ("total_coupling_efficiency", "coupling_efficiency")),
     )
     # 其余耦合指标直接列成一行，避免为每个值再开一个控件。
@@ -266,6 +268,7 @@ class TeachingImagingCouplingPopup(QFrame):
         self.resize(500, 640)
         self._result_scene_revision: int | None = None
         self._scene_revision: int | None = None
+        self._has_completed_result = False
         self._coupling_metrics: dict[str, Any] = {}
         self._imaging_metrics: dict[str, Any] = {}
 
@@ -274,7 +277,7 @@ class TeachingImagingCouplingPopup(QFrame):
         root.setSpacing(8)
 
         action_row = QHBoxLayout()
-        self.run_button = QPushButton("开始正式计算")
+        self.run_button = QPushButton(self.START_BUTTON_TEXT)
         self.run_button.setObjectName("teachingV2PrimaryButton")
         self.run_button.setMinimumHeight(38)
         self.run_button.setMinimumWidth(156)
@@ -339,6 +342,13 @@ class TeachingImagingCouplingPopup(QFrame):
         root.addWidget(self.coupling_detail)
         root.addStretch(1)
 
+    def _idle_button_text(self) -> str:
+        return self.UPDATE_BUTTON_TEXT if self._has_completed_result else self.START_BUTTON_TEXT
+
+    def _set_run_button(self, text: str, *, enabled: bool) -> None:
+        self.run_button.setText(str(text))
+        self.run_button.setEnabled(bool(enabled))
+
     def _set_status(self, text: str, *, attention: bool = True) -> None:
         """写状态文字；只有需要人注意的状态才真的显示出来。"""
         self.status.setText(str(text or ""))
@@ -362,7 +372,7 @@ class TeachingImagingCouplingPopup(QFrame):
         if self._result_scene_revision is None or self._result_scene_revision == int(revision):
             return
         # 场景改了就不再摆着旧数字：清空结果并提示需要重算，避免把过期值当现状。
-        self.run_button.setEnabled(True)
+        self._set_run_button(self._idle_button_text(), enabled=True)
         self._result_scene_revision = None
         self._imaging_metrics = {}
         self._coupling_metrics = {}
@@ -371,21 +381,24 @@ class TeachingImagingCouplingPopup(QFrame):
         self.coupling_detail.clear()
         self.coupling_detail.hide()
         self._refresh_pills()
-        self._set_status("场景已修改，请重新计算")
+        action = "更新" if self._has_completed_result else "开始计算"
+        self._set_status(f"场景已修改，请点击{action}")
 
     def set_busy(self, busy: bool, message: str = "") -> None:
-        self.run_button.setEnabled(not bool(busy))
         if busy:
+            self._set_run_button(self.BUSY_BUTTON_TEXT, enabled=False)
             # 正在算：进度条 + 一句状态，除此之外没有别的提示文字。
             self._set_status(str(message or "正在计算，界面仍可操作"))
             self.progress.setRange(0, 0)
             self.progress.show()
         elif message:
+            self._set_run_button(self._idle_button_text(), enabled=True)
             self._set_status(str(message))
             self.progress.hide()
             self.progress.setRange(0, 100)
             self.progress.setValue(0)
         else:
+            self._set_run_button(self._idle_button_text(), enabled=True)
             self._set_status("", attention=False)
             self.progress.hide()
             self.progress.setRange(0, 100)
@@ -416,7 +429,7 @@ class TeachingImagingCouplingPopup(QFrame):
         self._result_scene_revision = (
             int(scene_revision) if scene_revision is not None else self._scene_revision
         )
-        self.run_button.setEnabled(True)
+        self._set_run_button(self._idle_button_text(), enabled=True)
         self.progress.hide()
         self.progress.setRange(0, 100)
         self.progress.setValue(100)
@@ -447,6 +460,8 @@ class TeachingImagingCouplingPopup(QFrame):
         errors = [str(item).strip() for item in (artifact.get("errors") or getattr(result, "errors", ()) or ())]
         errors = [item for item in errors if item]
         if completed:
+            self._has_completed_result = True
+            self._set_run_button(self.UPDATE_BUTTON_TEXT, enabled=True)
             elapsed = float(getattr(result, "elapsed_ms", 0.0) or 0.0)
             suffix = f" · {elapsed:.0f} ms" if elapsed > 0 else ""
             # 成功不显示提示词：填好的图和数据本身就是反馈。
@@ -642,9 +657,8 @@ class TeachingShell(QWidget):
         row = QHBoxLayout(toolbar)
         row.setContentsMargins(10, 5, 10, 5)
         row.setSpacing(5)
-        # 属性面板不再占一个按钮：点中器件就会自动弹出（见 _show_inspector_for_selection）；
-        # "结果"窗口也已去掉，成像与耦合那个窗口就是把结果摆给人看的地方。
-        for key, title in (("scheme", "方案"), ("equipment", "器材库"), ("display", "视角"), ("analysis", "成像与耦合"), ("measure", "测量"), ("calculate", "计算"), ("sync_to_simulation", "同步到仿真"), ("sync_from_simulation", "从仿真更新")):
+        # 属性和成像与耦合的快捷入口固定在画布右侧；结果直接在成像与耦合窗口呈现。
+        for key, title in (("scheme", "方案"), ("equipment", "器材库"), ("display", "视角"), ("analysis", "成像与耦合"), ("calculate", "计算"), ("sync_to_simulation", "同步到仿真"), ("sync_from_simulation", "从仿真更新")):
             button = QToolButton()
             button.setText(title)
             button.setObjectName("TeachingToolButton")
@@ -673,7 +687,6 @@ class TeachingShell(QWidget):
         root.addWidget(toolbar)
         self.scene = BenchScene(self.store, self)
         self.scene.moved.connect(self._scene_item_moved)
-        self.scene.activated.connect(self._open_selected_inspector)
         self.view = BenchView(self.scene, self)
         try:
             from PySide6.QtWidgets import QApplication
@@ -702,11 +715,11 @@ class TeachingShell(QWidget):
         self.controller.previewReady.connect(self._apply_preview_rays)
         self.controller.resultReady.connect(self._on_formal_result)
         root.addWidget(self.view_stack, 1)
+        self._create_canvas_actions()
         self._create_quick_actions()
         self._install_teaching_shortcuts()
         self.store.sceneChanged.connect(self._scene_changed)
-        # 属性面板没有工具栏按钮了：选中器件就自动弹出来。
-        self.store.selectionChanged.connect(self._show_inspector_for_selection)
+        # 选中器件只更新选择态、坐标轴和已打开的属性内容；窗口由画布右侧按钮打开。
         project_context = getattr(self.context, "project", None)
         project_changed = getattr(project_context, "project_changed", None)
         if project_changed is not None:
@@ -724,6 +737,32 @@ class TeachingShell(QWidget):
         bridge = getattr(self.view3d, "bridge", None)
         if bridge is not None and hasattr(bridge, "kindDropped"):
             bridge.kindDropped.connect(self._drop_component)
+
+    def _create_canvas_actions(self) -> None:
+        """Keep the two context windows reachable without crowding the toolbar."""
+        self.canvas_actions = QFrame(self)
+        self.canvas_actions.setObjectName("TeachingCanvasActions")
+        column = QVBoxLayout(self.canvas_actions)
+        column.setContentsMargins(5, 5, 5, 5)
+        column.setSpacing(6)
+        self._canvas_action_buttons: dict[str, QToolButton] = {}
+        for key, glyph, label, tip, callback in (
+            ("analysis", "intensity", "成像与耦合", "打开成像与耦合", self._show_analysis_popup),
+            ("inspector", "properties", "属性", "打开当前对象属性", self._open_current_inspector),
+        ):
+            button = QToolButton(self.canvas_actions)
+            button.setObjectName("TeachingCanvasAction")
+            button.setIcon(icon(glyph, "#155EEF", 22))
+            button.setIconSize(QSize(22, 22))
+            button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+            button.setToolTip(tip)
+            button.setAccessibleName(label)
+            button.setStatusTip(tip)
+            button.clicked.connect(callback)
+            column.addWidget(button)
+            self._canvas_action_buttons[key] = button
+        self.canvas_actions.adjustSize()
+        self.canvas_actions.show()
 
     def _create_quick_actions(self) -> None:
         """Visible, recoverable edit controls kept at the canvas lower-right."""
@@ -769,17 +808,25 @@ class TeachingShell(QWidget):
             self._teaching_shortcuts.append(shortcut)
 
     def _position_overlay_controls(self) -> None:
-        if not hasattr(self, "quick_actions") or not hasattr(self, "view_stack"):
+        if not hasattr(self, "view_stack"):
             return
-        self.quick_actions.adjustSize()
         view_origin = self.view_stack.mapTo(self, QPoint(0, 0))
         right = view_origin.x() + self.view_stack.width() - 18
-        bottom = view_origin.y() + self.view_stack.height() - 18
-        self.quick_actions.move(
-            max(10, right - self.quick_actions.width()),
-            max(view_origin.y() + 10, bottom - self.quick_actions.height()),
-        )
-        self.quick_actions.raise_()
+        if hasattr(self, "canvas_actions"):
+            self.canvas_actions.adjustSize()
+            self.canvas_actions.move(
+                max(10, right - self.canvas_actions.width()),
+                max(view_origin.y() + 10, view_origin.y() + 18),
+            )
+            self.canvas_actions.raise_()
+        if hasattr(self, "quick_actions"):
+            self.quick_actions.adjustSize()
+            bottom = view_origin.y() + self.view_stack.height() - 18
+            self.quick_actions.move(
+                max(10, right - self.quick_actions.width()),
+                max(view_origin.y() + 10, bottom - self.quick_actions.height()),
+            )
+            self.quick_actions.raise_()
 
     def _refresh_quick_actions(self) -> None:
         if not hasattr(self, "_quick_action_buttons"):
@@ -800,15 +847,8 @@ class TeachingShell(QWidget):
         if component is not None:
             self.status.setText(f"{component.label}：沿导轨 {x_mm:.1f} mm · 横向 {y_mm:.1f} mm")
 
-    def _show_inspector_for_selection(self, component_id: str | None) -> None:
-        """点中器件就把属性窗口摆出来：这一页现在只能这样打开。
-
-        取消选择（点空台面/删除器件）时保持窗口开着，内容会自己变成"未选择对象"，
-        不跟着一闪一隐。
-        """
-        self._open_selected_inspector(str(component_id or ""))
-
-    def _open_selected_inspector(self, _component_id: str) -> None:
+    def _open_current_inspector(self) -> None:
+        """Open the inspector explicitly from the canvas-side property button."""
         if not self.inspector.isVisible():
             self._place_tool_window(self.inspector, "", corner="right")
             self.inspector.show()
@@ -1211,8 +1251,6 @@ class TeachingShell(QWidget):
         kwargs = {"pose": pose} if pose is not None else {}
         self._last_equipment_id = self.store.add_component(resolved, **kwargs)
         self.status.setText(f"已添加 {dict(PLACEABLE_KINDS).get(resolved, resolved)}")
-        # 新器件会立即成为选中对象，属性窗口跟着弹出来给出可编辑的 X/Y/Z。
-        self._open_selected_inspector(self._last_equipment_id)
 
     def _apply_equipment_preset(self, kind: str, payload: object) -> None:
         component_id = self._last_equipment_id or self.store.selected_component_id

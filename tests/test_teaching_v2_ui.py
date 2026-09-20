@@ -63,12 +63,17 @@ def test_teaching_shell_has_no_legacy_page_tabs() -> None:
         assert not shell.store.components
         assert shell.inspector.objectName() == "teachingV2Inspector"
         assert not shell.inspector.isVisible()
-        # 属性不再占工具栏按钮：选中器件时才弹出来。
+        # 属性和成像入口固定在画布右侧，不占教学工具栏。
         assert "inspector" not in shell._tool_buttons
+        assert list(shell._canvas_action_buttons) == ["analysis", "inspector"]
+        assert shell._canvas_action_buttons["analysis"].toolTip() == "打开成像与耦合"
+        assert shell._canvas_action_buttons["inspector"].toolTip() == "打开当前对象属性"
         shell._toolbar_action("equipment")
         assert shell.equipment_popup is not None
         shell._add_component("lens")
         assert shell._last_equipment_id
+        assert not shell.inspector.isVisible()
+        shell._canvas_action_buttons["inspector"].click()
         assert shell.inspector.isVisible()
         shell._apply_scheme(4)
         assert len([item for item in shell.store.components.values() if item.kind == "lens"]) == 4
@@ -87,19 +92,23 @@ def test_teaching_shell_has_no_legacy_page_tabs() -> None:
         shell._toolbar_action("calculate")
         assert shell._teaching_result_origin == "近似计算"
         assert (shell.store.results.get("geometry") or {}).get("rays")
-        shell._toolbar_action("measure")
+        shell._measure_selected()
         assert "离台" in shell.status.text()
         assert "analysis" in shell._tool_buttons
         assert shell._tool_buttons["analysis"].text() == "成像与耦合"
         shell._toolbar_action("analysis")
         assert shell.analysis_popup is not None
         assert shell.analysis_popup.isVisible()
-        # 二级栏顺序与标题：方案 / 器材库 / 视角 / 成像与耦合 / 测量 / 计算 /
+        shell.analysis_popup.close()
+        shell._canvas_action_buttons["analysis"].click()
+        assert shell.analysis_popup.isVisible()
+        # 二级栏顺序与标题：方案 / 器材库 / 视角 / 成像与耦合 / 计算 /
         # 同步到仿真 / 从仿真更新；"属性"和"结果"都不再占按钮。
         assert [key for key in shell._tool_buttons] == [
             "scheme", "equipment", "display", "analysis",
-            "measure", "calculate", "sync_to_simulation", "sync_from_simulation",
+            "calculate", "sync_to_simulation", "sync_from_simulation",
         ]
+        assert "measure" not in shell._tool_buttons
         assert shell._tool_buttons["display"].text() == "视角"
         assert "result" not in shell._tool_buttons
         # 结果窗口已删除，结果只由成像与耦合窗口呈现。
@@ -244,6 +253,7 @@ def test_teaching_analysis_runs_imaging_then_coupling_from_one_button() -> None:
 
         popup.run_button.click()
         assert requested == ["spot"]
+        assert popup.run_button.text() == "正在计算"
         assert "成像" in popup.status.text()
 
         shell._on_formal_result("spot", SimpleNamespace(
@@ -272,6 +282,7 @@ def test_teaching_analysis_runs_imaging_then_coupling_from_one_button() -> None:
             },
         ))
         assert popup.coupling_pills["total"].text() == "总耦合效率：72%"
+        assert popup.run_button.text() == "更新"
         assert popup.status.text().startswith("正式计算完成")
         assert requested == ["spot", "coupling"]
     finally:
@@ -357,6 +368,8 @@ def test_teaching_controls_are_visible_shell_overlays_without_formula_card() -> 
     shell = TeachingShell(create_app_context())
     try:
         assert shell.quick_actions.parent() is shell
+        assert shell.canvas_actions.parent() is shell
+        assert list(shell._canvas_action_buttons) == ["analysis", "inspector"]
         assert not hasattr(shell, "formula_card")
         assert [shell._quick_action_buttons[key].text() for key in ("undo", "redo", "delete", "clear")] == [
             "撤销", "下一步", "删除", "清空"
@@ -366,7 +379,7 @@ def test_teaching_controls_are_visible_shell_overlays_without_formula_card() -> 
         app.processEvents()
 
 
-def test_teaching_equipment_opens_xyz_inspector_and_analysis_has_progress() -> None:
+def test_teaching_property_button_opens_xyz_inspector_and_analysis_has_progress() -> None:
     from frontend_pyside.features.teaching_v2.inspector import POSE_FIELDS
 
     app = _app()
@@ -382,8 +395,10 @@ def test_teaching_equipment_opens_xyz_inspector_and_analysis_has_progress() -> N
         assert not hasattr(shell.inspector, "tabs")
 
         shell._add_component("lens")
-        assert shell.inspector.isVisible()
+        assert not shell.inspector.isVisible()
         assert shell.store.selected_component_id == shell._last_equipment_id
+        shell._canvas_action_buttons["inspector"].click()
+        assert shell.inspector.isVisible()
         # 默认只摆坐标和倾角，其余参数收在"更多参数"后面。
         assert not shell.inspector._detail.isVisible()
         shell.inspector.detail_button.setChecked(True)
@@ -550,7 +565,7 @@ def test_teaching_analysis_popup_uses_one_user_facing_quality_message() -> None:
                 },
             )
         )
-        assert popup.run_button.text() == "开始正式计算"
+        assert popup.run_button.text() == "更新"
         # 成像预览在窗口上半部分，耦合数据用按钮式效率标签排在下面。
         # 窗口这时还没显示，用 isHidden 判断这一块已经放出来。
         assert not popup.imaging_block.isHidden()
@@ -562,9 +577,12 @@ def test_teaching_analysis_popup_uses_one_user_facing_quality_message() -> None:
         _wait(app)
         for label in popup.coupling_pills.values():
             assert label.width() >= label.sizeHint().width() - 2, label.text()
-        assert popup.coupling_pills["coupling"].text() == "模式耦合效率：0.031%"
-        assert popup.coupling_pills["overlap"].text() == "模式重叠效率：0.042%"
         assert popup.coupling_pills["total"].text() == "总耦合效率：0.005083%"
+        assert not any(
+            title in label.text()
+            for label in popup.findChildren(QLabel)
+            for title in ("模式耦合效率", "模式重叠效率")
+        )
         assert "耦合损耗 42.9 dB" in popup.coupling_detail.text()
         # 只留图和结果：成功不显示提示语，原始英文告警也不外泄。
         assert not popup.status.isVisible()
@@ -604,11 +622,12 @@ def test_teaching_analysis_popup_hides_placeholders_and_reports_failures() -> No
         popup.set_running("", done=True)
         assert popup.status.isHidden()
         assert popup.status.text() == "正式计算完成"
+        assert popup.run_button.text() == "开始计算"
 
         # 场景改动后旧数字必须清掉，而不是留着当现状。
         popup.set_scene_revision(2)
         assert popup.coupling_pills["total"].text() == "总耦合效率：—"
-        assert "重新计算" in popup.status.text()
+        assert "开始计算" in popup.status.text()
     finally:
         popup.close()
         app.processEvents()

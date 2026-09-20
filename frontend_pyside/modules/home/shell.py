@@ -17,10 +17,7 @@
       ``app/main_window.py`` 的 ``_open_workflow_node()`` 接住，转成
       ``open_document(module, kind)``；``module == "teaching"`` 时改走
       ``navigate("teaching")``（教学是独立的一套壳，没有文档页签）。
-    * ``homeActionRequested(action)`` —— 首页顶部的动作条。该动作条已移除，
-      这条信号目前没有发射方，保留是为了不动壳层那边的连接。
-
-    只要这两个信号的**名字和参数顺序不变**，首页怎么重画都不影响跳转。
+    只要 ``nodeRequested`` 的名字和参数顺序不变，首页怎么重画都不影响跳转。
     样式在 ``frontend_pyside/resources/qss/light.qss``（搜 ``WorkflowNode``
     那段），靠 objectName 匹配，改样式不用动 Python。
 """
@@ -204,7 +201,7 @@ HOME_SECTIONS: tuple[SectionSpec, ...] = (
             "物理因果仍要用正式光学计算复核。"
         ),
         nodes=(
-            NodeSpec("global_contrib", "explainability", "贡献排序", "平均 |SHAP| 排名", "explain_global"),
+            NodeSpec("global_contrib", "explainability", "贡献排序", "把 SHAP 回传到 8 个设计变量", "explain_global"),
             NodeSpec("param_trend", "explainability", "物理链路", "参数 → 公式 → 目标", "explain_trend"),
             NodeSpec("current_system", "explainability", "当前系统验证", "把当前镜头当作样本", "explain_current"),
         ),
@@ -462,14 +459,6 @@ class WorkflowHome(QWidget):
         root = QVBoxLayout(self)
         root.setContentsMargins(22, 14, 22, 22)
         root.setSpacing(10)
-
-        # 顶部原来有一条「快速开始 / 帮助」动作条，已按需求移除。
-        # 页面现在直接从主画布开始，画布因此拿到全部高度。
-        #
-        # homeActionRequested 信号、MainWindow._home_action() 处理函数、
-        # modules/home/catalog.py 里的 SECONDARY_ITEMS 都还保留着，但已经
-        # 没有地方会触发它们了。要把这条动作条加回来，就在下面重画一行并在
-        # 按钮的 clicked 里 emit(homeActionRequested)。
 
         # ---- 主画布：白底圆角卡片，里面装标题和五栏 ----
         canvas = QFrame()

@@ -290,8 +290,7 @@ class SecondaryBar(QFrame):
             button.setObjectName("SecondaryFunctionButton")
             button.setProperty("secondaryKey", key)
             button.setToolTip(hint)
-            # 「上图下字」：图标在上、文字在下。原来的 ToolButtonTextOnly 是
-            # _button() 的默认值，这里覆盖掉。
+            # 使用“上图下字”布局，保证二级功能按钮的图标和标题垂直排列。
             button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
             button.setIcon(_secondary_icon(key))
             button.setIconSize(QSize(SECONDARY_ICON_SIZE, SECONDARY_ICON_SIZE))
@@ -367,12 +366,17 @@ class SourceInspector(QFrame):
         gaussian_form = _rail_form()
         gaussian.setLayout(gaussian_form)
         self.waist = _spin(0.01, 1e6, 3, " μm", waist_x)
-        self.waist_pos = _spin(-1e6, 1e6, 3, " mm", _payload_float(payload, "waist_position_mm", "waist_position_x_mm", default=defaults.waist_position_mm))
+        waist_position = _payload_float(payload, "waist_position_mm", "waist_position_x_mm", default=defaults.waist_position_mm)
+        waist_position_x = _payload_float(payload, "waist_position_x_mm", "waist_position_mm", default=waist_position)
+        waist_position_y = _payload_float(payload, "waist_position_y_mm", "waist_position_mm", default=waist_position)
+        self.waist_pos = _spin(-1e6, 1e6, 3, " mm", waist_position)
         self.m2 = _spin(1.0, 100.0, 3, "", m2_x)
         self.split_axes = QCheckBox("分轴（椭圆光斑）")
         self.split_axes.setChecked(split)
         self.waist_x = _spin(0.01, 1e6, 3, " μm", waist_x)
         self.waist_y = _spin(0.01, 1e6, 3, " μm", waist_y)
+        self.waist_pos_x = _spin(-1e6, 1e6, 3, " mm", waist_position_x)
+        self.waist_pos_y = _spin(-1e6, 1e6, 3, " mm", waist_position_y)
         self.m2_x = _spin(1.0, 100.0, 3, "", m2_x)
         self.m2_y = _spin(1.0, 100.0, 3, "", m2_y)
         gaussian_form.addRow("束腰半径 ω₀", _spin_unit_row(self.waist))
@@ -380,7 +384,9 @@ class SourceInspector(QFrame):
         gaussian_form.addRow("光束质量 M²", _spin_unit_row(self.m2))
         gaussian_form.addRow(self.split_axes)
         gaussian_form.addRow("束腰半径 ωₓ", _spin_unit_row(self.waist_x))
+        gaussian_form.addRow("束腰位置 zₓ", _spin_unit_row(self.waist_pos_x))
         gaussian_form.addRow("束腰半径 ωᵧ", _spin_unit_row(self.waist_y))
+        gaussian_form.addRow("束腰位置 zᵧ", _spin_unit_row(self.waist_pos_y))
         gaussian_form.addRow("M²ₓ", _spin_unit_row(self.m2_x))
         gaussian_form.addRow("M²ᵧ", _spin_unit_row(self.m2_y))
         self._gaussian_form = gaussian_form
@@ -440,6 +446,8 @@ class SourceInspector(QFrame):
         self.m2.valueChanged.connect(self._m2_changed)
         self.waist_x.valueChanged.connect(lambda value: self._apply("source.waist_x_um", value, "束腰半径 ωₓ"))
         self.waist_y.valueChanged.connect(lambda value: self._apply("source.waist_y_um", value, "束腰半径 ωᵧ"))
+        self.waist_pos_x.valueChanged.connect(lambda value: self._apply("source.waist_position_x_mm", value, "X方向束腰位置"))
+        self.waist_pos_y.valueChanged.connect(lambda value: self._apply("source.waist_position_y_mm", value, "Y方向束腰位置"))
         self.m2_x.valueChanged.connect(lambda value: self._apply("source.beam_quality_m2_x", value, "M²ₓ"))
         self.m2_y.valueChanged.connect(lambda value: self._apply("source.beam_quality_m2_y", value, "M²ᵧ"))
         self.field_x.valueChanged.connect(lambda value: self._apply("source.field_x_deg", value, "视场角 X"))
@@ -459,9 +467,10 @@ class SourceInspector(QFrame):
         self.changed.emit()
 
     def _split_changed(self, checked: bool) -> None:
-        for widget in (self.waist_x, self.waist_y, self.m2_x, self.m2_y):
+        for widget in (self.waist_x, self.waist_pos_x, self.waist_y, self.waist_pos_y, self.m2_x, self.m2_y):
             _set_form_row_visible(self._gaussian_form, widget, checked)
         self.waist.setEnabled(not checked)
+        self.waist_pos.setEnabled(not checked)
         self.m2.setEnabled(not checked)
         if not checked:
             self._waist_changed(self.waist.value())
@@ -531,6 +540,8 @@ class SourceInspector(QFrame):
             waist_x_um=waist_x,
             waist_y_um=waist_y,
             waist_position_mm=float(self.waist_pos.value()),
+            waist_position_x_mm=float(self.waist_pos_x.value() if split else self.waist_pos.value()),
+            waist_position_y_mm=float(self.waist_pos_y.value() if split else self.waist_pos.value()),
             beam_quality_m2_x=m2_x,
             beam_quality_m2_y=m2_y,
             object_na_x=na_x,
@@ -2186,7 +2197,7 @@ class WorkbenchShell(QWidget):
         self._selected_optimization: set[str] = set()
         self._selected_explain = ""
         self._datasets = [
-            {"id": "dataset-880bdde6c292", "title": "内置演示·780 nm 四透镜耦合", "kind": "builtin", "family": "tabular"},
+            {"id": "dataset-880bdde6c292", "title": "内置演示·780 nm 四透镜八变量", "kind": "builtin", "family": "tabular"},
         ]
         self._trained_models: list[dict[str, Any]] = []
         self._normalizing_model_names = False
@@ -2704,6 +2715,24 @@ class WorkbenchShell(QWidget):
                     self._calculation_state,
                     analyses=tuple(self._calculation_state.analyses) + ("fiber_alignment",),
                 )
+            if not run:
+                # Display-only coupling preferences should also update an
+                # already completed result; they do not require a new solve.
+                stored = getattr(self.context.project, "simulation_project_payload", {})
+                if callable(stored):
+                    stored = stored()
+                if isinstance(stored, dict) and isinstance(stored.get("analysis_settings"), dict):
+                    updated = dict(stored)
+                    settings = dict(updated.get("analysis_settings") or {})
+                    settings["incident_intensity_only"] = bool(self._calculation_state.incident_intensity_only)
+                    updated["analysis_settings"] = settings
+                    self.context.project.set_simulation_project_payload(updated)
+                formal_result = getattr(self.context.project, "formal_result", None)
+                coupling = self._widgets.get("simulation:coupling")
+                if coupling is not None and isinstance(formal_result, dict) and formal_result:
+                    callback = getattr(coupling, "_result_changed", None)
+                    if callable(callback):
+                        callback(formal_result)
             if run:
                 self.run_formal_calculation()
                 closer = dialog

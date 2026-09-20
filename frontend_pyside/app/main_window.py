@@ -24,6 +24,7 @@ from frontend_pyside.features.assistant.dialog import AiAssistantDialog
 from frontend_pyside.features.assistant.floating import AssistantFloatingButton
 from frontend_pyside.modules.simulation.settings import CombinedSettingsDialog
 from frontend_pyside.shared.font_fallback import configure_qt_font
+from frontend_pyside.shared.qt_zh import ask_yes_no, localize_message_box
 from frontend_pyside.state.session_recovery import SessionRecoveryStore
 
 
@@ -277,14 +278,11 @@ class MainWindow(QMainWindow):
     def _offer_workspace_recovery(self) -> None:
         if _automated_ui() or not self.recovery_store.has_recovery():
             return
-        answer = QMessageBox.question(
+        if ask_yes_no(
             self,
             "恢复工作状态",
             "检测到上次未保存的工作状态。是否恢复？\n\n" + self.recovery_store.summary(),
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.Yes,
-        )
-        if answer == QMessageBox.StandardButton.Yes:
+        ):
             if self.recovery_store.restore():
                 self._notify("已恢复上次未保存的工作状态")
             else:
@@ -431,15 +429,18 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event) -> None:
         if bool(getattr(self.context.project, "dirty", False)) and not _automated_ui():
-            answer = QMessageBox.question(
-                self,
-                "保存当前工程",
-                "当前工程有未保存修改，是否保存后退出？",
+            box = QMessageBox(self)
+            box.setIcon(QMessageBox.Icon.Question)
+            box.setWindowTitle("保存当前工程")
+            box.setText("当前工程有未保存修改，是否保存后退出？")
+            box.setStandardButtons(
                 QMessageBox.StandardButton.Save
                 | QMessageBox.StandardButton.Discard
-                | QMessageBox.StandardButton.Cancel,
-                QMessageBox.StandardButton.Save,
+                | QMessageBox.StandardButton.Cancel
             )
+            box.setDefaultButton(QMessageBox.StandardButton.Save)
+            localize_message_box(box)
+            answer = box.exec()
             if answer == QMessageBox.StandardButton.Cancel:
                 event.ignore()
                 return

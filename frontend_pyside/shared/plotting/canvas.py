@@ -402,6 +402,12 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
         elif kind == "heatmap":
             if self._heatmap_image is None:
                 return False
+            # 色带或归一化方式变化时必须重建 artist，否则切换光强/相位页会沿用旧色彩。
+            if (
+                str(new_data.get("color_map", "viridis")) != str(self._data.get("color_map", "viridis"))
+                or str(new_data.get("normalization", "linear")) != str(self._data.get("normalization", "linear"))
+            ):
+                return False
             z, extent = self._prepare_heatmap_data(new_data)
             if not z.size:
                 return False
