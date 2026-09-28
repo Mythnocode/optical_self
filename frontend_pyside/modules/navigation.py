@@ -31,7 +31,12 @@ SECONDARY_ITEMS: dict[str, tuple[tuple[str, str, str], ...]] = {
     "home": HOME_SECONDARY_ITEMS,
     "teaching": TEACHING_SECONDARY_ITEMS,
     **{
-        module: tuple((page.key, page.menu_title, page.menu_hint) for page in pages)
+        module: tuple(
+            (page.key, page.menu_title, page.menu_hint)
+            for page in pages
+            # 当前系统验证仍保留为内部兼容页面，但不再显示为二级导航按钮。
+            if not (module == "explainability" and page.key == "current_system")
+        )
         for module, pages in _ENTRY_PAGES.items()
     },
 }

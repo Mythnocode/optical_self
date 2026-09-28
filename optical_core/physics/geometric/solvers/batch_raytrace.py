@@ -3,6 +3,8 @@
 # 紧凑批量路径：数组矢量化，速度更快，只返回必要结果
 from __future__ import annotations
 
+import os
+
 import numpy as np
 
 from optical_core.models.domain.system import SequentialOpticalSystem
@@ -76,6 +78,24 @@ def trace_ray_batch(
                 progress_callback=progress_callback,
             )
     n = rays.positions_mm.shape[0]
+    # 原生多线程内核：full 追迹语义的 C++ 移植（native/optical_native_core.cpp）。
+    # 仅接管原本会落入逐光线 full 循环的场景；compact 路径行为不变。
+    # OPTICAL_NATIVE=0 可强制关闭。
+    if str(os.environ.get("OPTICAL_NATIVE", "1")).strip().lower() not in {"0", "false", "off"}:
+        from optical_core.physics.geometric.solvers.native_trace import (
+            NativeTraceError,
+            native_supports,
+            trace_ray_batch_native,
+        )
+
+        if native_supports(system, options) is None:
+            try:
+                return trace_ray_batch_native(
+                    system, rays, options, progress_callback=progress_callback
+                )
+            except NativeTraceError:
+                pass  # 回退到下方 Python full 路径。
+
     final_positions = np.full((n, 3), np.nan, dtype=float)
     final_directions = np.full((n, 3), np.nan, dtype=float)
     optical_paths = np.asarray(rays.optical_paths_mm, dtype=float).copy()

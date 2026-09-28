@@ -75,12 +75,10 @@ def test_frozen_secondary_and_accordion_layout():
         assert [key for key, _title, _hint in SECONDARY_ITEMS["explainability"]] == [
             "global_contrib",
             "param_trend",
-            "current_system",
         ]
         assert [title for _key, title, _hint in SECONDARY_ITEMS["explainability"]] == [
             "贡献排序",
             "物理链路",
-            "当前系统验证",
         ]
         assert ("explainability", "reason") not in KIND_TITLES
         assert ("analysis", "param_effect") not in KIND_TITLES

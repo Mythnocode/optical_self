@@ -1,6 +1,0 @@
-FAIL
-PASS home: workflow map; primary bar is 首页/仿真/教学/模型/优化/解释
-PASS simulation: WorkbenchShell documents for lens table and coupling
-PASS ordinary modules: optimization and model stay on WorkbenchShell
-PASS teaching: TeachingShell canvas with floating tools; no legacy page tabs
-AssertionError: window minimum size blocks 900x650: actual PySide6.QtCore.QSize(980, 680)
