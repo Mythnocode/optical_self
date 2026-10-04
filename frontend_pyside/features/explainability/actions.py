@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -28,69 +29,21 @@ class ReportContentOptions:
         )
         return tuple(label for enabled, label in pairs if enabled)
 
-FORMULA_CATALOG: dict[str, dict[str, str]] = {
-    "总耦合效率": {
-        "复场重叠": r"\eta_{\mathrm{overlap}}=\frac{|\iint E_sE_f^*\,dA|^2}{\iint|E_s|^2dA\;\iint|E_f|^2dA}",
-        "系统传输": r"\eta_{\mathrm{total}}=\eta_{\mathrm{transmission}}\eta_{\mathrm{overlap}}\eta_{\mathrm{facet}}\eta_{\mathrm{propagation}}",
-        "端面效率": r"\eta_{\mathrm{facet}}=1-R_{\mathrm{facet}}",
-    },
-    "对准误差": {
-        "横向偏移": r"u_r=\frac{\sqrt{\Delta x^2+\Delta y^2}}{w_f},\quad \eta/\eta_0=\exp(-u_r^2)",
-        "角度偏移": r"u_\theta=\frac{\pi w_f\sqrt{\theta_x^2+\theta_y^2}}{\lambda},\quad \eta/\eta_0=\exp(-u_\theta^2)",
-        "轴向离焦": r"u_z=\frac{\Delta z}{z_R},\quad z_R=\frac{\pi w_f^2}{\lambda}",
-    },
-    "模式失配": {
-        "尺寸失配": r"\rho=\frac{w_b}{w_f},\quad \eta_{\mathrm{size}}=\left(\frac{2\rho}{1+\rho^2}\right)^2",
-        "曲率失配": r"u_R=\frac{k w_f^2}{4}\left(\frac{1}{R_b}-\frac{1}{R_f}\right),\quad \eta/\eta_0=\frac{1}{1+u_R^2}",
-    },
-    "波前质量": {
-        "OPD": r"\mathrm{OPD}(x,y)=W(x,y)-\overline{W}",
-        "Zernike": r"W(\rho,\phi)=\sum_j a_jZ_j(\rho,\phi)",
-        "Strehl": r"S\approx\exp[-(2\pi\sigma_W/\lambda)^2]",
-    },
-    "成像质量": {
-        "PSF": r"\mathrm{PSF}=|\mathcal{F}\{P\exp(i2\pi W/\lambda)\}|^2",
-        "MTF": r"\mathrm{MTF}=|\mathcal{F}\{\mathrm{PSF}\}|",
-        "Airy 半径": r"r_{\mathrm{Airy}}=1.22\lambda f/ D",
-    },
-    "结构参数": {
-        "曲率半径": r"\Phi_s\approx\frac{n_2-n_1}{R}",
-        "厚度与间隔": r"M_t=\begin{pmatrix}1&t/n\\0&1\end{pmatrix}",
-        "圆锥系数": r"z(r)=\frac{cr^2}{1+\sqrt{1-(1+k)c^2r^2}}",
-    },
-}
 
 
-def feature_display_name(feature_name: str) -> str:
-
-    from frontend_pyside.shared.feature_labels import display_feature_name
-
-    return display_feature_name(feature_name)
 
 
-def explain_shap_failure(message: str) -> str:
-    """Turn SHAP service errors into an actionable workbench message."""
-    text = str(message or "").strip()
-    lowered = text.lower()
-    if (
-        "schema" in lowered
-        or "missing_feature" in lowered
-        or "missing one or more trained features" in lowered
-    ):
-        return "当前镜头组参数和这个模型对不上。请用训练该模型时的镜头组再解释。"
-    if "model_not_found" in lowered or "could not be loaded" in lowered:
-        return "找不到这个已训练模型。请重新训练后再解释。"
-    if "not configured" in lowered or "shap_backend" in lowered:
-        return "本机还没装好解释组件，暂时无法计算参数贡献。"
-    if "dataset" in lowered and "mismatch" in lowered:
-        return "解释用的数据集和训练这个模型时不一致。请改用训练时的数据集。"
-    if "internal server error" in lowered:
-        return "解释失败：后端解释服务发生内部错误，请查看后端日志或重新训练模型。"
-    if not text:
-        return "解释失败，请稍后重试。"
-    if "学不成" in text or "数据管理" in text:
-        return text
-    return f"解释失败：{text}"
+from shared_presentation.explainability import explain_shap_failure
+from shared_presentation.explanation_formulas import (
+    FORMULA_CATALOG,
+    feature_display_name,
+    formula_binding_for_feature,
+    formula_chain_for_feature,
+    formula_latex,
+    formula_location_for_feature,
+    physical_mechanism_for_feature,
+    suggested_action_for_feature
+)
 
 
 PHYSICAL_MISMATCH_ORDER: tuple[str, ...] = (
@@ -194,87 +147,16 @@ def diagnosis_confidence(shap_data: dict[str, Any] | None) -> tuple[str, str]:
     return "较低", "训练域或完整仿真信息不足，建议补充正式仿真。"
 
 
-def formula_binding_for_feature(feature_name: str) -> tuple[str, str, str, str]:
-
-    text = str(feature_name).lower().replace(" ", "")
-    if any(token in text for token in ("lateral_mismatch", "offset_x", "offset_y", "decenter", "横向", "x偏移", "y偏移")):
-        return "对准误差", "横向偏移", "直接", "参数可直接构成横向失配无量纲量"
-    if any(token in text for token in ("angular_mismatch", "tilt", "angle", "倾角", "角度")):
-        return "对准误差", "角度偏移", "直接", "参数可直接构成角度失配无量纲量"
-    if any(token in text for token in ("axial_mismatch", "axial", "defocus", "receiver.distance", "接收面", "离焦")):
-        return "对准误差", "轴向离焦", "直接", "参数可直接构成轴向离焦无量纲量"
-    if any(token in text for token in ("size_ratio", "waist", "mode_field", "mfd", "束腰", "模场")):
-        return "模式失配", "尺寸失配", "直接", "参数直接决定光斑与模场尺寸比"
-    if "curvature_mismatch" in text or "wavefront_curvature" in text:
-        return "模式失配", "曲率失配", "直接", "参数直接描述二次相位曲率失配"
-    if any(token in text for token in ("conic", "圆锥系数")):
-        return "结构参数", "圆锥系数", "间接", "圆锥系数改变非球面面形和高阶像差"
-    if any(token in text for token in ("thickness", "厚度", "air_gap", "spacing", "间隔")):
-        return "结构参数", "厚度与间隔", "间接", "厚度和间隔改变群组传播距离与焦面位置"
-    if any(token in text for token in ("surfaces[", ".radius", "radius_mm", "curvature", "曲率半径")):
-        return "结构参数", "曲率半径", "间接", "曲率半径改变表面光焦度并影响后续焦面复场"
-    if any(token in text for token in ("material", "glass")):
-        return "总耦合效率", "复场重叠", "间接", "材料色散和折射率通过焦面振幅与相位间接影响耦合"
-    if any(token in text for token in ("strehl", "wavefront", "opd", "zernike")):
-        return "波前质量", "Strehl", "直接", "参数属于波前质量指标"
-    if any(token in text for token in ("psf", "spot")):
-        return "成像质量", "PSF", "直接", "参数属于焦面成像质量指标"
-    if "mtf" in text:
-        return "成像质量", "MTF", "直接", "参数属于调制传递指标"
-    return "", "", "未映射", "当前特征尚无可靠解析公式映射"
 
 
-def formula_location_for_feature(feature_name: str) -> tuple[str, str]:
-    category, item, _level, _note = formula_binding_for_feature(feature_name)
-    return category, item
 
 
-def physical_mechanism_for_feature(feature_name: str) -> str:
-    category, item, level, _note = formula_binding_for_feature(feature_name)
-    direct = {
-        ("对准误差", "横向偏移"): "入射场质心与光纤模式中心分离，使横截面复场投影减小。",
-        ("对准误差", "角度偏移"): "倾斜引入线性相位，积分时不同位置的复振幅发生抵消。",
-        ("对准误差", "轴向离焦"): "接收面偏离最佳焦面，同时改变光斑尺寸和波前曲率。",
-        ("模式失配", "尺寸失配"): "入射光斑半径与光纤模场半径不一致，降低模式重叠。",
-        ("模式失配", "曲率失配"): "强度轮廓相近时，二次相位曲率不一致仍会降低复场重叠。",
-        ("波前质量", "Strehl"): "波前均方误差增大使焦面能量从主峰扩散。",
-        ("成像质量", "PSF"): "焦面点扩散函数变化反映孔径和像差对聚焦场的共同影响。",
-        ("成像质量", "MTF"): "空间频率响应下降表示成像对细节调制的传递能力减弱。",
-        ("结构参数", "曲率半径"): "曲率半径改变折射面光焦度，进而改变焦点位置、光斑尺寸和焦面波前。",
-        ("结构参数", "厚度与间隔"): "厚度与空气间隔改变透镜组内传播距离，主要影响焦面位置和累计像差。",
-        ("结构参数", "圆锥系数"): "圆锥系数改变非球面偏离基准球面的程度，主要用于校正高阶球差并改善焦面复场。",
-    }
-    if (category, item) in direct:
-        return direct[(category, item)]
-    if level == "间接":
-        return "该镜头结构参数会改变光线传播、焦面振幅和相位，最终通过完整复场重叠影响耦合；不能归结为单一闭式损失项。"
-    return "当前特征尚未建立可靠的物理公式映射，需要通过参数扫描和正式仿真定位机制。"
 
 
-def suggested_action_for_feature(feature_name: str) -> str:
-    category, item, level, _note = formula_binding_for_feature(feature_name)
-    actions = {
-        ("对准误差", "横向偏移"): "打开五轴对准或横向偏移扫描",
-        ("对准误差", "角度偏移"): "检查倾角并运行角度参数扫描",
-        ("对准误差", "轴向离焦"): "运行焦面扫描并重新寻找最佳接收面",
-        ("模式失配", "尺寸失配"): "比较入射光斑半径与光纤模场半径",
-        ("模式失配", "曲率失配"): "检查焦面波前曲率和离焦状态",
-        ("波前质量", "Strehl"): "检查像差、波前RMS和光瞳采样",
-        ("成像质量", "PSF"): "打开PSF及焦面光场诊断",
-        ("成像质量", "MTF"): "打开MTF曲线并检查空间频率范围",
-        ("结构参数", "曲率半径"): "对该曲率半径做正式单变量扫描，并检查接收面光斑和模式重叠",
-        ("结构参数", "厚度与间隔"): "对该厚度或间隔做正式焦面扫描，再比较模式重叠",
-        ("结构参数", "圆锥系数"): "对该圆锥系数做小范围正式扫描，并检查波前 RMS 和耦合效率",
-    }
-    if (category, item) in actions:
-        return actions[(category, item)]
-    if level == "间接":
-        return "进入参数研究，对该结构参数做正式扫描并查看焦面复场变化"
-    return "补充特征物理映射后再作工程判断"
 
 
-def formula_latex(category: str, item: str) -> str:
-    return FORMULA_CATALOG.get(str(category), {}).get(str(item), "")
+
+
 
 
 def anomaly_rows(shap_data: dict[str, Any] | None, *, limit: int = 50) -> list[list[Any]]:
@@ -418,16 +300,28 @@ def build_markdown_report(
 
     if options.physical_formulas:
         lines.extend(["## 对应物理公式", ""])
-        used: set[tuple[str, str]] = set()
+        used_features: set[str] = set()
         for target in targets:
             for item in list(target.get("top_features", []) or [])[:8]:
-                location = formula_location_for_feature(str(item.get("name", "")))
-                if location in used:
+                feature = str(item.get("feature", item.get("name", "")))
+                if not feature or feature in used_features:
                     continue
-                used.add(location)
-                latex = formula_latex(*location)
-                lines.extend([f"- **{location[0]} / {location[1]}**：`{latex}`"])
-        if not used:
+                used_features.add(feature)
+                steps = formula_chain_for_feature(feature)
+                lines.extend([f"### {feature_display_name(feature)}", ""])
+                if not steps:
+                    lines.extend(["当前变量尚无可靠的专属解析公式映射。", ""])
+                    continue
+                for index, (stage, latex) in enumerate(steps, start=1):
+                    lines.extend([
+                        f"**公式 {index} · {stage}**",
+                        "",
+                        "$$",
+                        latex,
+                        "$$",
+                        "",
+                    ])
+        if not used_features:
             lines.append("- 当前尚无可定位的真实特征。")
         lines.append("")
 
@@ -484,8 +378,17 @@ def build_structured_report_html(
     confidence, confidence_note = diagnosis_confidence(data)
     top_feature = normalized_records[0]["feature"] if normalized_records else ""
     top_category = physical_mismatch_category(top_feature) if top_feature else "尚未形成诊断"
-    formula_category, formula_item, formula_level, formula_note = formula_binding_for_feature(top_feature)
-    formula = formula_latex(formula_category, formula_item) if formula_category and formula_item else ""
+
+    def formula_image_html(latex: str) -> str:
+        from base64 import b64encode
+
+        from frontend_pyside.features.explainability.formula_presentation import render_formula_png
+
+        encoded = b64encode(render_formula_png(latex)).decode("ascii")
+        return (
+            "<img class='formula-image' alt='物理公式' "
+            f"src='data:image/png;base64,{encoded}'>"
+        )
 
     css = """
     body { font-family: 'Microsoft YaHei','SimSun',sans-serif; color:#182235; margin:0; padding:12px; }
@@ -500,6 +403,7 @@ def build_structured_report_html(
     .note { color:#526177; line-height:1.55; }
     .warning { background:#fff7e8; border-color:#e8c77d; }
     .muted { color:#6b778c; }
+    .formula-image { display:block; max-width:100%; height:auto; margin:8px 0; }
     """
     parts = [f"<html><head><style>{css}</style></head><body>", "<h1>模型解释报告</h1>"]
 
@@ -565,19 +469,25 @@ def build_structured_report_html(
         parts.append("</div>")
 
     if options.physical_formulas:
-        parts.append("<div class='card'><h2>对应物理公式</h2><table class='grid'>")
-        if formula:
-            parts.append(
-                f"<tr><td class='key'>对应机制</td><td>{escape(formula_category)} / {escape(formula_item)}</td></tr>"
-                f"<tr><td class='key'>映射等级</td><td>{escape(formula_level)}</td></tr>"
-                f"<tr><td class='key'>适用说明</td><td>{escape(formula_note)}</td></tr>"
-                f"<tr><td class='key'>公式</td><td><code>{escape(formula)}</code></td></tr>"
-            )
+        parts.append("<div class='card'><h2>对应物理公式</h2>")
+        if normalized_records:
+            formula_features: set[str] = set()
+            for record in normalized_records[:8]:
+                feature = str(record.get("feature") or "")
+                if not feature or feature in formula_features:
+                    continue
+                formula_features.add(feature)
+                steps = formula_chain_for_feature(feature)
+                parts.append(f"<h3>{escape(feature_display_name(feature))}</h3>")
+                if not steps:
+                    parts.append("<div class='muted'>该变量尚无可靠的专属解析公式映射。</div>")
+                    continue
+                for index, (stage, latex) in enumerate(steps, start=1):
+                    parts.append(f"<div><b>公式 {index} · {escape(stage)}</b></div>")
+                    parts.append(formula_image_html(latex))
         else:
-            parts.append(
-                "<tr><td>当前主导特征尚无可直接使用的解析公式，应通过参数扫描和正式仿真复核。</td></tr>"
-            )
-        parts.append("</table></div>")
+            parts.append("<div class='muted'>当前尚无可定位的真实特征。</div>")
+        parts.append("</div>")
 
     if options.consistency_anomalies:
         additive = data.get("additivity_error", data.get("shap_additivity_error", "—"))
@@ -645,6 +555,7 @@ __all__ = [
     "explain_shap_failure",
     "formula_binding_for_feature",
     "formula_latex",
+    "formula_chain_for_feature",
     "formula_location_for_feature",
     "physical_mechanism_for_feature",
     "suggested_action_for_feature",

@@ -1,0 +1,23 @@
+{
+  "before-first-submission": {
+    "components": true,
+    "reference": true,
+    "baseline_enabled": true,
+    "baseline_x_mm": true,
+    "selected_component_id": true
+  },
+  "submitted-contract": {
+    "components": true,
+    "reference": true,
+    "baseline_enabled": true,
+    "baseline_x_mm": true,
+    "selected_component_id": true
+  },
+  "edited-source": {
+    "components": true,
+    "reference": true,
+    "baseline_enabled": true,
+    "baseline_x_mm": true,
+    "selected_component_id": true
+  }
+}

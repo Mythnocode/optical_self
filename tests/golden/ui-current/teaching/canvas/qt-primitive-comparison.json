@@ -1,0 +1,308 @@
+[
+  {
+    "kind": "laser",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "laser",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "laser",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "isolator",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "isolator",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "isolator",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "waveplate",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "waveplate",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "waveplate",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "lens",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "lens",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "lens",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "cylindrical_lens",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "cylindrical_lens",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "cylindrical_lens",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "beam_expander",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "beam_expander",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "beam_expander",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "aperture",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "aperture",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "aperture",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "pbs",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "pbs",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "pbs",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "splitter",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "splitter",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "splitter",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "beam_sampler",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "beam_sampler",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "beam_sampler",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "grating",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "grating",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "grating",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "mirror",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "mirror",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "mirror",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "fiber",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "fiber",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "fiber",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "ccd",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "ccd",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "ccd",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "power_meter",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "power_meter",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "power_meter",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "wavefront_sensor",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "wavefront_sensor",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "wavefront_sensor",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "oscilloscope",
+    "state": "normal",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "oscilloscope",
+    "state": "selected",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  },
+  {
+    "kind": "oscilloscope",
+    "state": "hover",
+    "differing_channels": 0,
+    "max_channel_difference": 0
+  }
+]

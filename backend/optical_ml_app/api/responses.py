@@ -20,6 +20,9 @@ def success(
     status_code: int = 200,
     message: str = "success",
 ) -> JSONResponse:
+    state = getattr(request, "state", None)
+    if state is not None and isinstance(data, dict) and isinstance(data.get("job_id"), str):
+        state.job_id = data["job_id"]
     return JSONResponse(
         status_code=status_code,
         content=jsonable_encoder(

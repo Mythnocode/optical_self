@@ -1,0 +1,74 @@
+- generic "浏览器预览通过 Vite 代理连接到本机后端。":
+  - navigation "主导航":
+    - link "首页":
+      - /url: "#/"
+    - link "教学":
+      - /url: "#/teaching-three"
+    - link "仿真":
+      - /url: "#/workbench/simulation/lens_data"
+    - link "模型":
+      - /url: "#/workbench/model/dataset"
+    - link "优化":
+      - /url: "#/workbench/optimization/opt_vars"
+    - link "解释":
+      - /url: "#/workbench/explainability/global_contrib"
+    - generic "常用操作":
+      - button "保存"
+      - button "开始计算"
+      - button "设置"
+    - generic: Python 后端：connected
+  - main:
+    - navigation "仿真功能":
+      - button "镜头数据":
+        - generic: 镜头数据
+      - button "光路图":
+        - generic: 光路图
+      - button "光斑图":
+        - generic: 光斑图
+      - button "光纤耦合":
+        - generic: 光纤耦合
+      - button "波前与衍射":
+        - generic: 波前与衍射
+    - complementary:
+      - heading "对象" [level=2]
+      - generic "光源"
+      - option "高斯光束" [selected]
+      - option "均匀光瞳"
+      - option "点光源"
+      - option "mW" [selected]
+      - option "W"
+      - option "μW"
+      - generic "材料"
+      - generic "光纤"
+      - option "单模光纤"
+      - option "多模光纤"
+      - option "用户模式" [selected]
+      - option "高斯近似"
+      - option "LP01"
+      - option "HE11"
+      - option "导入复场" [selected]
+      - generic "探测器"
+      - option "光学面" [selected]
+      - option "光纤模场"
+      - option "自定义位置"
+      - option "L1 前表面（面 0）" [selected]
+      - option "L1 后表面（面 1）"
+      - option "L2 前表面（面 2）"
+      - option "L2 后表面（面 3）"
+      - option "L3 前表面（面 4）"
+      - option "L3 后表面（面 5）"
+      - option "L4 前表面（面 6）"
+      - option "L4 后表面（面 7）"
+      - generic "环境"
+      - generic "视场"
+    - main:
+      - region "仿真结果":
+        - generic: 系统效率：100.00%
+        - generic: 端面接收效率：99.50%
+        - generic: 总耦合效率：56.75%
+        - status: 已计算
+        - img "端面匹配"
+        - button "文字"
+        - button "放大"
+        - button "导出"
+  - button "打开 AI 助手": AI

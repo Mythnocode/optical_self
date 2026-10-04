@@ -1,0 +1,1006 @@
+{
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "explanation_run_id": "shap-7be3f58cdf0f",
+    "model_id": "model-63d9d3ea55cf",
+    "dataset_id": "dataset-880bdde6c292",
+    "data_source": "request_features",
+    "synthetic_samples": false,
+    "explainer": "TreeExplainer",
+    "target_name": "coupling_efficiency",
+    "target_unit": "比例",
+    "target_names": [
+      "coupling_efficiency"
+    ],
+    "model_feature_paths": [
+      "surfaces[0].radius_mm",
+      "surfaces[0].distance_to_next_mm",
+      "surfaces[2].radius_mm",
+      "surfaces[2].distance_to_next_mm",
+      "surfaces[4].radius_mm",
+      "surfaces[4].distance_to_next_mm",
+      "surfaces[6].radius_mm",
+      "surfaces[6].distance_to_next_mm",
+      "size_log_mismatch",
+      "size_log_signed",
+      "size_ratio",
+      "fiber_mode_radius_um",
+      "beam_radius_at_receiver_um",
+      "lateral_mismatch",
+      "angular_mismatch",
+      "axial_mismatch",
+      "curvature_mismatch"
+    ],
+    "display_feature_paths": [
+      "surfaces[0].radius_mm",
+      "surfaces[0].distance_to_next_mm",
+      "surfaces[2].radius_mm",
+      "surfaces[2].distance_to_next_mm",
+      "surfaces[4].radius_mm",
+      "surfaces[4].distance_to_next_mm",
+      "surfaces[6].radius_mm",
+      "surfaces[6].distance_to_next_mm"
+    ],
+    "hidden_feature_count": 9,
+    "base_values": {
+      "coupling_efficiency": 0.2365907046687296
+    },
+    "feature_contributions": [
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[0].distance_to_next_mm",
+        "value": 3.0,
+        "shap_value": -0.006102028474972242,
+        "abs_shap_value": 0.006102028474972242,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第1表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{1},\\mathrm{out}}=y_{S_{1},\\mathrm{in}}+t_{S_{1}}\\theta_{S_{1}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[0].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{1},\\mathrm{out}}=y_{S_{1},\\mathrm{in}}+t_{S_{1}}\\theta_{S_{1}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{1}}=n_{S_{1}}t_{S_{1}},\\quad\\Delta\\phi_{S_{1}}=\\frac{2\\pi n_{S_{1}}t_{S_{1}}}{\\lambda_0}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[2].distance_to_next_mm",
+        "value": 4.0,
+        "shap_value": 0.0034399429052715098,
+        "abs_shap_value": 0.0034399429052715098,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第3表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{3},\\mathrm{out}}=y_{S_{3},\\mathrm{in}}+t_{S_{3}}\\theta_{S_{3}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[2].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{3},\\mathrm{out}}=y_{S_{3},\\mathrm{in}}+t_{S_{3}}\\theta_{S_{3}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{3}}=n_{S_{3}}t_{S_{3}},\\quad\\Delta\\phi_{S_{3}}=\\frac{2\\pi n_{S_{3}}t_{S_{3}}}{\\lambda_0}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[4].radius_mm",
+        "value": 25.55,
+        "shap_value": -0.0019789248424448083,
+        "abs_shap_value": 0.0019789248424448083,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第5表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{5}}=\\frac{n_{S_{5}}^+-n_{S_{5}}^-}{R_{S_{5}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[4].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{5}}=\\frac{n_{S_{5}}^+-n_{S_{5}}^-}{R_{S_{5}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{5}}^+=(n\\theta)_{S_{5}}^--\\Phi_{S_{5}}y_{S_{5}}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[2].radius_mm",
+        "value": 4.088,
+        "shap_value": -0.0006770680274690145,
+        "abs_shap_value": 0.0006770680274690145,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第3表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{3}}=\\frac{n_{S_{3}}^+-n_{S_{3}}^-}{R_{S_{3}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[2].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{3}}=\\frac{n_{S_{3}}^+-n_{S_{3}}^-}{R_{S_{3}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{3}}^+=(n\\theta)_{S_{3}}^--\\Phi_{S_{3}}y_{S_{3}}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[0].radius_mm",
+        "value": 5.11,
+        "shap_value": -0.0006631412786044965,
+        "abs_shap_value": 0.0006631412786044965,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第1表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{1}}=\\frac{n_{S_{1}}^+-n_{S_{1}}^-}{R_{S_{1}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[0].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{1}}=\\frac{n_{S_{1}}^+-n_{S_{1}}^-}{R_{S_{1}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{1}}^+=(n\\theta)_{S_{1}}^--\\Phi_{S_{1}}y_{S_{1}}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[4].distance_to_next_mm",
+        "value": 3.0,
+        "shap_value": 0.0005410877963441798,
+        "abs_shap_value": 0.0005410877963441798,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第5表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{5},\\mathrm{out}}=y_{S_{5},\\mathrm{in}}+t_{S_{5}}\\theta_{S_{5}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[4].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{5},\\mathrm{out}}=y_{S_{5},\\mathrm{in}}+t_{S_{5}}\\theta_{S_{5}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{5}}=n_{S_{5}}t_{S_{5}},\\quad\\Delta\\phi_{S_{5}}=\\frac{2\\pi n_{S_{5}}t_{S_{5}}}{\\lambda_0}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[6].distance_to_next_mm",
+        "value": 3.0,
+        "shap_value": 0.0004087935386351507,
+        "abs_shap_value": 0.0004087935386351507,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第7表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{7},\\mathrm{out}}=y_{S_{7},\\mathrm{in}}+t_{S_{7}}\\theta_{S_{7}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[6].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{7},\\mathrm{out}}=y_{S_{7},\\mathrm{in}}+t_{S_{7}}\\theta_{S_{7}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{7}}=n_{S_{7}}t_{S_{7}},\\quad\\Delta\\phi_{S_{7}}=\\frac{2\\pi n_{S_{7}}t_{S_{7}}}{\\lambda_0}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[6].radius_mm",
+        "value": 6.132,
+        "shap_value": 0.0003009689065876161,
+        "abs_shap_value": 0.0003009689065876161,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第7表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{7}}=\\frac{n_{S_{7}}^+-n_{S_{7}}^-}{R_{S_{7}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[6].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{7}}=\\frac{n_{S_{7}}^+-n_{S_{7}}^-}{R_{S_{7}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{7}}^+=(n\\theta)_{S_{7}}^--\\Phi_{S_{7}}y_{S_{7}}"
+          }
+        ],
+        "formula_comparison_status": "indirect_parameter"
+      }
+    ],
+    "top_features": [
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[0].distance_to_next_mm",
+        "mean_shap": -0.006102028474972242,
+        "mean_abs_shap": 0.006102028474972242,
+        "std_shap": 0.0,
+        "relative_importance": 0.43240133219535837,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第1表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{1},\\mathrm{out}}=y_{S_{1},\\mathrm{in}}+t_{S_{1}}\\theta_{S_{1}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[0].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{1},\\mathrm{out}}=y_{S_{1},\\mathrm{in}}+t_{S_{1}}\\theta_{S_{1}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{1}}=n_{S_{1}}t_{S_{1}},\\quad\\Delta\\phi_{S_{1}}=\\frac{2\\pi n_{S_{1}}t_{S_{1}}}{\\lambda_0}"
+          }
+        ]
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[2].distance_to_next_mm",
+        "mean_shap": 0.0034399429052715098,
+        "mean_abs_shap": 0.0034399429052715098,
+        "std_shap": 0.0,
+        "relative_importance": 0.2437608904999642,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第3表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{3},\\mathrm{out}}=y_{S_{3},\\mathrm{in}}+t_{S_{3}}\\theta_{S_{3}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[2].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{3},\\mathrm{out}}=y_{S_{3},\\mathrm{in}}+t_{S_{3}}\\theta_{S_{3}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{3}}=n_{S_{3}}t_{S_{3}},\\quad\\Delta\\phi_{S_{3}}=\\frac{2\\pi n_{S_{3}}t_{S_{3}}}{\\lambda_0}"
+          }
+        ]
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[4].radius_mm",
+        "mean_shap": -0.0019789248424448083,
+        "mean_abs_shap": 0.0019789248424448083,
+        "std_shap": 0.0,
+        "relative_importance": 0.14023037448895503,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第5表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{5}}=\\frac{n_{S_{5}}^+-n_{S_{5}}^-}{R_{S_{5}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[4].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{5}}=\\frac{n_{S_{5}}^+-n_{S_{5}}^-}{R_{S_{5}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{5}}^+=(n\\theta)_{S_{5}}^--\\Phi_{S_{5}}y_{S_{5}}"
+          }
+        ]
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[2].radius_mm",
+        "mean_shap": -0.0006770680274690145,
+        "mean_abs_shap": 0.0006770680274690145,
+        "std_shap": 0.0,
+        "relative_importance": 0.04797832692280531,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第3表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{3}}=\\frac{n_{S_{3}}^+-n_{S_{3}}^-}{R_{S_{3}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[2].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{3}}=\\frac{n_{S_{3}}^+-n_{S_{3}}^-}{R_{S_{3}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{3}}^+=(n\\theta)_{S_{3}}^--\\Phi_{S_{3}}y_{S_{3}}"
+          }
+        ]
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[0].radius_mm",
+        "mean_shap": -0.0006631412786044965,
+        "mean_abs_shap": 0.0006631412786044965,
+        "std_shap": 0.0,
+        "relative_importance": 0.04699145103606255,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第1表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{1}}=\\frac{n_{S_{1}}^+-n_{S_{1}}^-}{R_{S_{1}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[0].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{1}}=\\frac{n_{S_{1}}^+-n_{S_{1}}^-}{R_{S_{1}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{1}}^+=(n\\theta)_{S_{1}}^--\\Phi_{S_{1}}y_{S_{1}}"
+          }
+        ]
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[4].distance_to_next_mm",
+        "mean_shap": 0.0005410877963441798,
+        "mean_abs_shap": 0.0005410877963441798,
+        "std_shap": 0.0,
+        "relative_importance": 0.038342509369384485,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第5表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{5},\\mathrm{out}}=y_{S_{5},\\mathrm{in}}+t_{S_{5}}\\theta_{S_{5}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[4].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{5},\\mathrm{out}}=y_{S_{5},\\mathrm{in}}+t_{S_{5}}\\theta_{S_{5}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{5}}=n_{S_{5}}t_{S_{5}},\\quad\\Delta\\phi_{S_{5}}=\\frac{2\\pi n_{S_{5}}t_{S_{5}}}{\\lambda_0}"
+          }
+        ]
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[6].distance_to_next_mm",
+        "mean_shap": 0.0004087935386351507,
+        "mean_abs_shap": 0.0004087935386351507,
+        "std_shap": 0.0,
+        "relative_importance": 0.028967886895922418,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "厚度与间隔",
+        "mapping_level": "间接",
+        "mapping_note": "第7表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "y_{S_{7},\\mathrm{out}}=y_{S_{7},\\mathrm{in}}+t_{S_{7}}\\theta_{S_{7}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[6].distance_to_next_mm"
+        ],
+        "description": "该面后的介质厚度决定传播矩阵与光程",
+        "formula_steps": [
+          {
+            "stage": "介质内传播",
+            "latex": "y_{S_{7},\\mathrm{out}}=y_{S_{7},\\mathrm{in}}+t_{S_{7}}\\theta_{S_{7}}"
+          },
+          {
+            "stage": "光程与相位",
+            "latex": "\\mathrm{OPL}_{S_{7}}=n_{S_{7}}t_{S_{7}},\\quad\\Delta\\phi_{S_{7}}=\\frac{2\\pi n_{S_{7}}t_{S_{7}}}{\\lambda_0}"
+          }
+        ]
+      },
+      {
+        "target": "coupling_efficiency",
+        "feature": "surfaces[6].radius_mm",
+        "mean_shap": 0.0003009689065876161,
+        "mean_abs_shap": 0.0003009689065876161,
+        "std_shap": 0.0,
+        "relative_importance": 0.021327228591547596,
+        "sample_count": 1,
+        "physical_category": "焦面与曲率失配",
+        "formula_category": "结构参数",
+        "formula_item": "曲率半径",
+        "mapping_level": "间接",
+        "mapping_note": "第7表面的参数通过专属公式影响后续焦面场",
+        "formula_latex": "\\Phi_{S_{7}}=\\frac{n_{S_{7}}^+-n_{S_{7}}^-}{R_{S_{7}}}",
+        "efficiency_formula_latex": "",
+        "source_parameters": [
+          "surfaces[6].radius_mm"
+        ],
+        "description": "曲率半径改变该表面的折射光焦度",
+        "formula_steps": [
+          {
+            "stage": "表面光焦度",
+            "latex": "\\Phi_{S_{7}}=\\frac{n_{S_{7}}^+-n_{S_{7}}^-}{R_{S_{7}}}"
+          },
+          {
+            "stage": "近轴折射",
+            "latex": "(n\\theta)_{S_{7}}^+=(n\\theta)_{S_{7}}^--\\Phi_{S_{7}}y_{S_{7}}"
+          }
+        ]
+      }
+    ],
+    "formula_consistency": [],
+    "formula_dependence": {},
+    "shap_dependence": {
+      "surfaces[0].radius_mm": {
+        "feature": "surfaces[0].radius_mm",
+        "x": [
+          5.11
+        ],
+        "feature_value": [
+          5.11
+        ],
+        "y": [
+          -0.0006631412786044965
+        ],
+        "shap_value": [
+          -0.0006631412786044965
+        ]
+      },
+      "surfaces[0].distance_to_next_mm": {
+        "feature": "surfaces[0].distance_to_next_mm",
+        "x": [
+          3.0
+        ],
+        "feature_value": [
+          3.0
+        ],
+        "y": [
+          -0.006102028474972242
+        ],
+        "shap_value": [
+          -0.006102028474972242
+        ]
+      },
+      "surfaces[2].radius_mm": {
+        "feature": "surfaces[2].radius_mm",
+        "x": [
+          4.088
+        ],
+        "feature_value": [
+          4.088
+        ],
+        "y": [
+          -0.0006770680274690145
+        ],
+        "shap_value": [
+          -0.0006770680274690145
+        ]
+      },
+      "surfaces[2].distance_to_next_mm": {
+        "feature": "surfaces[2].distance_to_next_mm",
+        "x": [
+          4.0
+        ],
+        "feature_value": [
+          4.0
+        ],
+        "y": [
+          0.0034399429052715098
+        ],
+        "shap_value": [
+          0.0034399429052715098
+        ]
+      },
+      "surfaces[4].radius_mm": {
+        "feature": "surfaces[4].radius_mm",
+        "x": [
+          25.55
+        ],
+        "feature_value": [
+          25.55
+        ],
+        "y": [
+          -0.0019789248424448083
+        ],
+        "shap_value": [
+          -0.0019789248424448083
+        ]
+      },
+      "surfaces[4].distance_to_next_mm": {
+        "feature": "surfaces[4].distance_to_next_mm",
+        "x": [
+          3.0
+        ],
+        "feature_value": [
+          3.0
+        ],
+        "y": [
+          0.0005410877963441798
+        ],
+        "shap_value": [
+          0.0005410877963441798
+        ]
+      },
+      "surfaces[6].radius_mm": {
+        "feature": "surfaces[6].radius_mm",
+        "x": [
+          6.132
+        ],
+        "feature_value": [
+          6.132
+        ],
+        "y": [
+          0.0003009689065876161
+        ],
+        "shap_value": [
+          0.0003009689065876161
+        ]
+      },
+      "surfaces[6].distance_to_next_mm": {
+        "feature": "surfaces[6].distance_to_next_mm",
+        "x": [
+          3.0
+        ],
+        "feature_value": [
+          3.0
+        ],
+        "y": [
+          0.0004087935386351507
+        ],
+        "shap_value": [
+          0.0004087935386351507
+        ]
+      }
+    },
+    "formula_comparison_enabled": false,
+    "formula_comparison_domain": "仅展示公式",
+    "additivity_error": 2.220446049250313e-16,
+    "warnings": [
+      "当前输出不是dB损失，解析公式可以显示，但不与SHAP贡献作加性残差比较。"
+    ],
+    "targets": [
+      {
+        "target": "coupling_efficiency",
+        "target_name": "coupling_efficiency",
+        "target_unit": "比例",
+        "base_value": 0.2365907046687296,
+        "top_features": [
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[0].distance_to_next_mm",
+            "mean_shap": -0.006102028474972242,
+            "mean_abs_shap": 0.006102028474972242,
+            "std_shap": 0.0,
+            "relative_importance": 0.43240133219535837,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "厚度与间隔",
+            "mapping_level": "间接",
+            "mapping_note": "第1表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "y_{S_{1},\\mathrm{out}}=y_{S_{1},\\mathrm{in}}+t_{S_{1}}\\theta_{S_{1}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[0].distance_to_next_mm"
+            ],
+            "description": "该面后的介质厚度决定传播矩阵与光程",
+            "formula_steps": [
+              {
+                "stage": "介质内传播",
+                "latex": "y_{S_{1},\\mathrm{out}}=y_{S_{1},\\mathrm{in}}+t_{S_{1}}\\theta_{S_{1}}"
+              },
+              {
+                "stage": "光程与相位",
+                "latex": "\\mathrm{OPL}_{S_{1}}=n_{S_{1}}t_{S_{1}},\\quad\\Delta\\phi_{S_{1}}=\\frac{2\\pi n_{S_{1}}t_{S_{1}}}{\\lambda_0}"
+              }
+            ]
+          },
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[2].distance_to_next_mm",
+            "mean_shap": 0.0034399429052715098,
+            "mean_abs_shap": 0.0034399429052715098,
+            "std_shap": 0.0,
+            "relative_importance": 0.2437608904999642,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "厚度与间隔",
+            "mapping_level": "间接",
+            "mapping_note": "第3表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "y_{S_{3},\\mathrm{out}}=y_{S_{3},\\mathrm{in}}+t_{S_{3}}\\theta_{S_{3}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[2].distance_to_next_mm"
+            ],
+            "description": "该面后的介质厚度决定传播矩阵与光程",
+            "formula_steps": [
+              {
+                "stage": "介质内传播",
+                "latex": "y_{S_{3},\\mathrm{out}}=y_{S_{3},\\mathrm{in}}+t_{S_{3}}\\theta_{S_{3}}"
+              },
+              {
+                "stage": "光程与相位",
+                "latex": "\\mathrm{OPL}_{S_{3}}=n_{S_{3}}t_{S_{3}},\\quad\\Delta\\phi_{S_{3}}=\\frac{2\\pi n_{S_{3}}t_{S_{3}}}{\\lambda_0}"
+              }
+            ]
+          },
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[4].radius_mm",
+            "mean_shap": -0.0019789248424448083,
+            "mean_abs_shap": 0.0019789248424448083,
+            "std_shap": 0.0,
+            "relative_importance": 0.14023037448895503,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "曲率半径",
+            "mapping_level": "间接",
+            "mapping_note": "第5表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "\\Phi_{S_{5}}=\\frac{n_{S_{5}}^+-n_{S_{5}}^-}{R_{S_{5}}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[4].radius_mm"
+            ],
+            "description": "曲率半径改变该表面的折射光焦度",
+            "formula_steps": [
+              {
+                "stage": "表面光焦度",
+                "latex": "\\Phi_{S_{5}}=\\frac{n_{S_{5}}^+-n_{S_{5}}^-}{R_{S_{5}}}"
+              },
+              {
+                "stage": "近轴折射",
+                "latex": "(n\\theta)_{S_{5}}^+=(n\\theta)_{S_{5}}^--\\Phi_{S_{5}}y_{S_{5}}"
+              }
+            ]
+          },
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[2].radius_mm",
+            "mean_shap": -0.0006770680274690145,
+            "mean_abs_shap": 0.0006770680274690145,
+            "std_shap": 0.0,
+            "relative_importance": 0.04797832692280531,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "曲率半径",
+            "mapping_level": "间接",
+            "mapping_note": "第3表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "\\Phi_{S_{3}}=\\frac{n_{S_{3}}^+-n_{S_{3}}^-}{R_{S_{3}}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[2].radius_mm"
+            ],
+            "description": "曲率半径改变该表面的折射光焦度",
+            "formula_steps": [
+              {
+                "stage": "表面光焦度",
+                "latex": "\\Phi_{S_{3}}=\\frac{n_{S_{3}}^+-n_{S_{3}}^-}{R_{S_{3}}}"
+              },
+              {
+                "stage": "近轴折射",
+                "latex": "(n\\theta)_{S_{3}}^+=(n\\theta)_{S_{3}}^--\\Phi_{S_{3}}y_{S_{3}}"
+              }
+            ]
+          },
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[0].radius_mm",
+            "mean_shap": -0.0006631412786044965,
+            "mean_abs_shap": 0.0006631412786044965,
+            "std_shap": 0.0,
+            "relative_importance": 0.04699145103606255,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "曲率半径",
+            "mapping_level": "间接",
+            "mapping_note": "第1表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "\\Phi_{S_{1}}=\\frac{n_{S_{1}}^+-n_{S_{1}}^-}{R_{S_{1}}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[0].radius_mm"
+            ],
+            "description": "曲率半径改变该表面的折射光焦度",
+            "formula_steps": [
+              {
+                "stage": "表面光焦度",
+                "latex": "\\Phi_{S_{1}}=\\frac{n_{S_{1}}^+-n_{S_{1}}^-}{R_{S_{1}}}"
+              },
+              {
+                "stage": "近轴折射",
+                "latex": "(n\\theta)_{S_{1}}^+=(n\\theta)_{S_{1}}^--\\Phi_{S_{1}}y_{S_{1}}"
+              }
+            ]
+          },
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[4].distance_to_next_mm",
+            "mean_shap": 0.0005410877963441798,
+            "mean_abs_shap": 0.0005410877963441798,
+            "std_shap": 0.0,
+            "relative_importance": 0.038342509369384485,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "厚度与间隔",
+            "mapping_level": "间接",
+            "mapping_note": "第5表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "y_{S_{5},\\mathrm{out}}=y_{S_{5},\\mathrm{in}}+t_{S_{5}}\\theta_{S_{5}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[4].distance_to_next_mm"
+            ],
+            "description": "该面后的介质厚度决定传播矩阵与光程",
+            "formula_steps": [
+              {
+                "stage": "介质内传播",
+                "latex": "y_{S_{5},\\mathrm{out}}=y_{S_{5},\\mathrm{in}}+t_{S_{5}}\\theta_{S_{5}}"
+              },
+              {
+                "stage": "光程与相位",
+                "latex": "\\mathrm{OPL}_{S_{5}}=n_{S_{5}}t_{S_{5}},\\quad\\Delta\\phi_{S_{5}}=\\frac{2\\pi n_{S_{5}}t_{S_{5}}}{\\lambda_0}"
+              }
+            ]
+          },
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[6].distance_to_next_mm",
+            "mean_shap": 0.0004087935386351507,
+            "mean_abs_shap": 0.0004087935386351507,
+            "std_shap": 0.0,
+            "relative_importance": 0.028967886895922418,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "厚度与间隔",
+            "mapping_level": "间接",
+            "mapping_note": "第7表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "y_{S_{7},\\mathrm{out}}=y_{S_{7},\\mathrm{in}}+t_{S_{7}}\\theta_{S_{7}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[6].distance_to_next_mm"
+            ],
+            "description": "该面后的介质厚度决定传播矩阵与光程",
+            "formula_steps": [
+              {
+                "stage": "介质内传播",
+                "latex": "y_{S_{7},\\mathrm{out}}=y_{S_{7},\\mathrm{in}}+t_{S_{7}}\\theta_{S_{7}}"
+              },
+              {
+                "stage": "光程与相位",
+                "latex": "\\mathrm{OPL}_{S_{7}}=n_{S_{7}}t_{S_{7}},\\quad\\Delta\\phi_{S_{7}}=\\frac{2\\pi n_{S_{7}}t_{S_{7}}}{\\lambda_0}"
+              }
+            ]
+          },
+          {
+            "target": "coupling_efficiency",
+            "feature": "surfaces[6].radius_mm",
+            "mean_shap": 0.0003009689065876161,
+            "mean_abs_shap": 0.0003009689065876161,
+            "std_shap": 0.0,
+            "relative_importance": 0.021327228591547596,
+            "sample_count": 1,
+            "physical_category": "焦面与曲率失配",
+            "formula_category": "结构参数",
+            "formula_item": "曲率半径",
+            "mapping_level": "间接",
+            "mapping_note": "第7表面的参数通过专属公式影响后续焦面场",
+            "formula_latex": "\\Phi_{S_{7}}=\\frac{n_{S_{7}}^+-n_{S_{7}}^-}{R_{S_{7}}}",
+            "efficiency_formula_latex": "",
+            "source_parameters": [
+              "surfaces[6].radius_mm"
+            ],
+            "description": "曲率半径改变该表面的折射光焦度",
+            "formula_steps": [
+              {
+                "stage": "表面光焦度",
+                "latex": "\\Phi_{S_{7}}=\\frac{n_{S_{7}}^+-n_{S_{7}}^-}{R_{S_{7}}}"
+              },
+              {
+                "stage": "近轴折射",
+                "latex": "(n\\theta)_{S_{7}}^+=(n\\theta)_{S_{7}}^--\\Phi_{S_{7}}y_{S_{7}}"
+              }
+            ]
+          }
+        ],
+        "sample_shap_values": [
+          {
+            "sample_id": "request-sample-0",
+            "prediction": 0.7511448150341795,
+            "feature_values": {
+              "surfaces[0].radius_mm": 5.11,
+              "surfaces[0].distance_to_next_mm": 3.0,
+              "surfaces[2].radius_mm": 4.088,
+              "surfaces[2].distance_to_next_mm": 4.0,
+              "surfaces[4].radius_mm": 25.55,
+              "surfaces[4].distance_to_next_mm": 3.0,
+              "surfaces[6].radius_mm": 6.132,
+              "surfaces[6].distance_to_next_mm": 3.0
+            },
+            "shap_values": {
+              "surfaces[0].radius_mm": 0.1733398894590073,
+              "surfaces[0].distance_to_next_mm": 0.028938097530348077,
+              "surfaces[2].radius_mm": 0.10432320663946369,
+              "surfaces[2].distance_to_next_mm": 0.004317387124978733,
+              "surfaces[4].radius_mm": 0.04091309148332598,
+              "surfaces[4].distance_to_next_mm": 0.0007823131003701334,
+              "surfaces[6].radius_mm": 0.13443198807428405,
+              "surfaces[6].distance_to_next_mm": 0.02750813695367221
+            },
+            "hidden_feature_contribution": 0.0,
+            "additivity_error": 2.220446049250313e-16
+          }
+        ]
+      }
+    ],
+    "sample_ids": [
+      "request-sample-0"
+    ],
+    "background_sample_ids": [
+      "sample-000151",
+      "sample-000117",
+      "sample-000199",
+      "sample-000005",
+      "sample-000061",
+      "sample-000109",
+      "sample-000009",
+      "sample-000189",
+      "sample-000159",
+      "sample-000035",
+      "sample-000075",
+      "sample-000086",
+      "sample-000157",
+      "sample-000091",
+      "sample-000067",
+      "sample-000089",
+      "sample-000014",
+      "sample-000131",
+      "sample-000125",
+      "sample-000170",
+      "sample-000001",
+      "sample-000104",
+      "sample-000052",
+      "sample-000054",
+      "sample-000193",
+      "sample-000066",
+      "sample-000043",
+      "sample-000145",
+      "sample-000149",
+      "sample-000082",
+      "sample-000019",
+      "sample-000059",
+      "sample-000034",
+      "sample-000174",
+      "sample-000106",
+      "sample-000011",
+      "sample-000118",
+      "sample-000002",
+      "sample-000087",
+      "sample-000130",
+      "sample-000119",
+      "sample-000156",
+      "sample-000188",
+      "sample-000038",
+      "sample-000198",
+      "sample-000093",
+      "sample-000196",
+      "sample-000074",
+      "sample-000150",
+      "sample-000051",
+      "sample-000194",
+      "sample-000123",
+      "sample-000032",
+      "sample-000126",
+      "sample-000096",
+      "sample-000017",
+      "sample-000069",
+      "sample-000006",
+      "sample-000181",
+      "sample-000033",
+      "sample-000094"
+    ],
+    "sample_count": 1,
+    "background_sample_count": 61,
+    "elapsed_ms": 0.0,
+    "cache_hit": true
+  },
+  "error": null,
+  "request_id": "req-7e09335f715746d5952c8336133151e1"
+}

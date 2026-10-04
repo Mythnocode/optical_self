@@ -1,0 +1,19 @@
+{
+  "health": "healthy",
+  "jobs": 96,
+  "active": 0,
+  "backend": {
+    "ProcessId": 40336,
+    "CommandLine": "\"D:\\python\\python3.12\\python.exe\" -B -X utf8 desktop/backend_bootstrap.py"
+  },
+  "listeners": [
+    {
+      "LocalPort": 8000,
+      "OwningProcess": 40336
+    },
+    {
+      "LocalPort": 5173,
+      "OwningProcess": 24784
+    }
+  ]
+}

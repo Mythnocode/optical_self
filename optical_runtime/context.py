@@ -29,7 +29,7 @@ TRACE_AFFECTING_OPTION_KEYS = frozenset({
     "include_source_to_pupil_opl", "record_surfaces",
     "propagate_to_image", "evaluate_apertures",
     "max_intersection_iterations", "sampling_role", "trace_output_level",
-    "polarization_sensitive", "vector_coupling_enabled",
+    "polarization_sensitive", "vector_coupling_enabled", "prefer_native_trace",
 })
 
 
@@ -293,6 +293,7 @@ class SimulationContext:
                 evaluate_apertures=bool(opts.get("evaluate_apertures", True)),
                 max_intersection_iterations=int(opts["max_intersection_iterations"]),
                 output_level=str(opts.get("trace_output_level", "planes")),
+                prefer_native=bool(opts.get("prefer_native_trace", False)),
                 polarization_sensitive=bool(opts.get("polarization_sensitive", False) or opts.get("vector_coupling_enabled", False)),
             ),
             progress_callback=self.trace_progress_callback,

@@ -1,0 +1,140 @@
+{
+  "unknown": {
+    "status": 404,
+    "body": {
+      "code": "JOB_NOT_FOUND",
+      "message": "解释任务不存在。",
+      "data": null,
+      "error": {
+        "code": "JOB_NOT_FOUND",
+        "stage": "model.shap",
+        "message": "解释任务不存在。",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-76302c77b1e9463c8d6601621bf06aab"
+    }
+  },
+  "wrong-family": {
+    "status": 409,
+    "body": {
+      "code": "EXPLANATION_NOT_READY",
+      "message": "解释任务尚未完成。",
+      "data": null,
+      "error": {
+        "code": "EXPLANATION_NOT_READY",
+        "stage": "model.shap",
+        "message": "解释任务尚未完成。",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-0dffa25eb9b04668b2a4556e0d8baef0"
+    }
+  },
+  "dataset-kind": {
+    "status": 422,
+    "body": {
+      "code": "EXPLANATION_KIND_INVALID",
+      "message": "该任务没有当前系统解释结果。",
+      "data": null,
+      "error": {
+        "code": "EXPLANATION_KIND_INVALID",
+        "stage": "model.shap",
+        "message": "该任务没有当前系统解释结果。",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-f362dd9e7fb64d53be45f22d353a1cc2"
+    }
+  },
+  "design-kind": {
+    "status": 422,
+    "body": {
+      "code": "EXPLANATION_KIND_INVALID",
+      "message": "该任务没有当前系统解释结果。",
+      "data": null,
+      "error": {
+        "code": "EXPLANATION_KIND_INVALID",
+        "stage": "model.shap",
+        "message": "该任务没有当前系统解释结果。",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-324b88e0e7ec4457ad0dfd7556473b41"
+    }
+  },
+  "invalid-size": {
+    "status": 422,
+    "body": {
+      "code": "INVALID_REQUEST",
+      "message": "request parameters are invalid",
+      "data": null,
+      "error": {
+        "code": "INVALID_REQUEST",
+        "stage": "api.validation",
+        "message": "request parameters are invalid",
+        "retryable": false,
+        "context": {
+          "errors": [
+            {
+              "type": "greater_than_equal",
+              "loc": [
+                "query",
+                "width"
+              ],
+              "msg": "Input should be greater than or equal to 160",
+              "input": "0",
+              "ctx": {
+                "ge": 160
+              }
+            }
+          ]
+        }
+      },
+      "request_id": "req-ceb1571791594b96943dbb8dbcf44a96"
+    }
+  },
+  "manual-additivity-guard": {
+    "kind": "empty",
+    "message": "SHAP贡献无法闭合当前预测（加性误差 1），已停止绘图。",
+    "interpretation": {
+      "model_text": "解释结果无效：基准值与各变量贡献之和不等于模型预测值。",
+      "physics_html": "当前没有可用的物理联系。",
+      "next_text": "请检查模型特征与当前镜头组是否匹配后重试。",
+      "formula_steps": [],
+      "formula_title": "物理联系"
+    }
+  },
+  "unknown-model": {
+    "status": 404,
+    "body": {
+      "code": "MODEL_NOT_FOUND",
+      "message": "解释模型不存在。",
+      "data": null,
+      "error": {
+        "code": "MODEL_NOT_FOUND",
+        "stage": "model.shap",
+        "message": "解释模型不存在。",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-7a1a2d05ad0242a49ae02a6b8457508c"
+    }
+  },
+  "missing-features": {
+    "status": 422,
+    "body": {
+      "code": "MODEL_FEATURE_MISSING",
+      "message": "当前镜头无法构造模型特征：当前项目缺少特征：surfaces[2].radius_mm",
+      "data": null,
+      "error": {
+        "code": "MODEL_FEATURE_MISSING",
+        "stage": "model.shap",
+        "message": "当前镜头无法构造模型特征：当前项目缺少特征：surfaces[2].radius_mm",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-2b358741b08e4abc8a301caf4464f9ca"
+    }
+  }
+}

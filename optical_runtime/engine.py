@@ -530,6 +530,7 @@ class OpticalSimulationEngine(SimulationPort):
                     "task_graph_order": [node.node_id for node in ordered],
                     "analysis_registry": "DEFAULT_ANALYSIS_REGISTRY",
                     "shared_trace_build_count": context.trace_build_count,
+                    "trace_backends": sorted({trace.backend for trace in context._trace_cache.values()}),
                     "formal_complex_field_chain": "cartesian_exit_pupil",
                     "engine_trace_cache": self._shared_trace_cache.info(),
                     "stage_timings_ms": dict(stage_timings_ms),

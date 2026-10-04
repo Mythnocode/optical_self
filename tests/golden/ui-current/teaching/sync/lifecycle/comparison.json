@@ -1,0 +1,14 @@
+{
+  "before-first-submission": {
+    "full_scene_equal": true,
+    "status_equal": true,
+    "native_contract_inherited": false,
+    "components": 6
+  },
+  "submitted-contract": {
+    "full_scene_equal": true,
+    "status_equal": true,
+    "native_contract_inherited": true,
+    "components": 6
+  }
+}

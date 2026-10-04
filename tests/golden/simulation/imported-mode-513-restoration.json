@@ -1,0 +1,14 @@
+{
+  "job_id": "job-26c22bd6effc",
+  "grid": 513,
+  "submitted_arrays_equal_original_loader": true,
+  "source": "imported-mode-513.npz",
+  "analyses": [
+    "coupling",
+    "psf",
+    "raytrace",
+    "spot",
+    "wavefront_quality"
+  ],
+  "cache_restore": "Observed 513x513 loaded in browser after reload, then submitted through UI."
+}

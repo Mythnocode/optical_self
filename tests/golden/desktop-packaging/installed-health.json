@@ -1,0 +1,10 @@
+{
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "status": "healthy",
+    "default_engine": "headless"
+  },
+  "error": null,
+  "request_id": "req-ed3b5ed74bc7489499973e95d6fea7ef"
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "job_id": "missing",
+    "query": "",
+    "status": 404,
+    "code": "JOB_NOT_FOUND"
+  },
+  {
+    "job_id": "job-ac85dbf643e5",
+    "query": "",
+    "status": 422,
+    "code": "EXPLANATION_KIND_INVALID"
+  },
+  {
+    "job_id": "job-b23b04de0a68",
+    "query": "",
+    "status": 409,
+    "code": "EXPLANATION_NOT_READY"
+  },
+  {
+    "job_id": "job-bcb80a1e76d6",
+    "query": "?feature=not-a-model-feature",
+    "status": 422,
+    "code": "EXPLANATION_FEATURE_INVALID"
+  }
+]

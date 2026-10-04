@@ -1,0 +1,48 @@
+{
+  "source": "frontend_pyside/features/teaching_v2/coordinates.py",
+  "tolerance": 1e-9,
+  "cases": [
+    {
+      "id": "GC-C01-axis",
+      "kind": "lens",
+      "pose": {
+        "x_mm": 100.0,
+        "y_mm": -20.0,
+        "z_mm": 45.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "render_position": [100.0, 45.0, 20.0],
+      "render_quaternion_xyzw": [-0.7071067811865475, 0.0, 0.0, 0.7071067811865476]
+    },
+    {
+      "id": "GC-C02-oblique",
+      "kind": "lens",
+      "pose": {
+        "x_mm": 72.5,
+        "y_mm": 8.25,
+        "z_mm": 31.0,
+        "yaw_rad": 0.5235987755982988,
+        "pitch_rad": -0.2617993877991494,
+        "roll_rad": 0.17453292519943295
+      },
+      "render_position": [72.5, 31.0, -8.25],
+      "render_quaternion_xyzw": [-0.641452416821182, 0.2776124653633041, 0.06836056762494251, 0.7118967262343385]
+    },
+    {
+      "id": "GC-C03-mirror-fold",
+      "kind": "mirror",
+      "pose": {
+        "x_mm": 210.0,
+        "y_mm": -4.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "render_position": [210.0, 25.0, 4.0],
+      "render_quaternion_xyzw": [-0.6532814824381882, 0.2705980500730985, 0.2705980500730985, 0.6532814824381883]
+    }
+  ]
+}

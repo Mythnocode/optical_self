@@ -167,50 +167,8 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
 
     @staticmethod
     def _apply_high_contrast_axes(figure: Figure) -> None:
-        """统一设置坐标轴、标题、图例和网格的可读性样式。"""
-        from matplotlib.ticker import ScalarFormatter
-
-        axes = list(figure.axes)
-        for axis in axes:
-            axes.extend(child for child in axis.child_axes if child not in axes)
-        for axis in axes:
-            try:
-                compact = bool(getattr(axis, "_compact_diagnostic_inset", False))
-                
-                axis.tick_params(
-                    axis="both",
-                    colors="#111827",
-                    width=0.9 if compact else 1.3,
-                    length=3 if compact else 5,
-                    labelsize=7 if compact else 11,
-                )
-                axis.xaxis.label.set_color("#111827")
-                axis.yaxis.label.set_color("#111827")
-                axis.xaxis.label.set_fontsize(8 if compact else 13)
-                axis.yaxis.label.set_fontsize(8 if compact else 13)
-                axis.title.set_color("#111827")
-                panel_title_size = getattr(axis, "_panel_title_size", None)
-                axis.title.set_fontsize(panel_title_size or (9 if compact else 16))
-                axis.title.set_fontweight("semibold")
-                for spine in axis.spines.values():
-                    spine.set_color("#111827")
-                    spine.set_linewidth(1.35)
-                for current_axis in (axis.xaxis, axis.yaxis):
-                    formatter = current_axis.get_major_formatter()
-                    if isinstance(formatter, ScalarFormatter):
-                        formatter.set_useOffset(False)
-                        formatter.set_scientific(False)
-                legend = axis.get_legend()
-                if legend is not None:
-                    for text in legend.get_texts():
-                        text.set_fontsize(11)
-                        text.set_color("#111827")
-                    legend.get_frame().set_edgecolor("#111827")
-                    legend.get_frame().set_linewidth(0.9)
-                    legend.get_frame().set_alpha(1.0)
-                axis.grid(True, color=theme.CHART_GRID, alpha=0.48, linewidth=0.65)
-            except Exception:
-                continue
+        from shared_presentation.plotting.basic_charts import apply_high_contrast_axes
+        apply_high_contrast_axes(figure)
 
     def set_plot(self, data) -> None:
         """接收结构化绘图载荷并按 ``kind`` 创建或更新图形。
@@ -339,44 +297,8 @@ class PlotCanvas(Canvas2DMixin, Canvas3DMixin, CanvasInteractionMixin, FigureCan
 
 
     def _apply_safe_plot_margins(self, kind: str) -> None:
-        """为嵌入式结果工作区预留稳定的标题和坐标轴标签空间。
-
-        Embedded plots have a fixed visual slot.  A chart must adapt to that slot rather
-        than draw labels outside it and rely on clipping.  Composite plots keep their
-        own hand-tuned layouts; ordinary 2-D charts use a shared safe margin.
-        """
-        if kind in {"heatmap_pair", "phase_comparison", "multi_plane_evolution", "before_after", "profile_pair", "adjustment_trajectory", "teaching_scan"}:
-            return
-        if kind in {"optical_scene_3d", "raytrace3d"}:
-            return
-        try:
-            custom_bottom = self._data.get("plot_bottom_margin") if isinstance(self._data, dict) else None
-            # Embedded Qt canvases need *inside-the-figure* safety space.  Using
-            # tight_layout alone is not enough because the surrounding result card
-            # can clip the title/axis labels before Matplotlib gets another resize.
-            # Keep a deliberately larger title band and x/y label band instead of
-            # shrinking fonts.  This is shared by training diagnostics, research
-            # plots, validation plots and ordinary result charts.
-            if custom_bottom is not None:
-                bottom = min(0.42, max(0.18, float(custom_bottom)))
-                self.figure.subplots_adjust(left=0.15, right=0.965, bottom=bottom, top=0.86)
-                return
-            if kind == "research_preview":
-                self.figure.subplots_adjust(left=0.145, right=0.965, bottom=0.23, top=0.87)
-            elif kind == "correlation_heatmap":
-                self.figure.subplots_adjust(left=0.27, right=0.90, bottom=0.19, top=0.86)
-            elif kind in {"candidate_compare", "bar", "bar_grouped", "target_achievement"}:
-                self.figure.subplots_adjust(left=0.15, right=0.965, bottom=0.20, top=0.86)
-            elif kind == "histogram":
-                self.figure.subplots_adjust(left=0.14, right=0.965, bottom=0.22, top=0.86)
-            elif kind in {"parameter_response", "validation_scatter", "residual", "scatter_formula", "convergence_curve", "line", "line_multi", "scatter"}:
-                self.figure.subplots_adjust(left=0.15, right=0.965, bottom=0.24, top=0.86)
-            elif kind in {"beeswarm", "mismatch_budget", "waterfall", "barh"}:
-                self.figure.subplots_adjust(left=0.235, right=0.965, bottom=0.22, top=0.86)
-            else:
-                self.figure.subplots_adjust(left=0.155, right=0.96, bottom=0.22, top=0.86)
-        except Exception:
-            pass
+        from shared_presentation.plotting.margins import apply_safe_plot_margins
+        apply_safe_plot_margins(self.figure, self._data, kind)
 
     def _try_update_reusable_2d(self, new_data: dict) -> bool:
         """尝试原地更新同类型 2D artist；无法复用时返回 False。"""

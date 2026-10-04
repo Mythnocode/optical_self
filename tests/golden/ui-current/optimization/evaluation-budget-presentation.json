@@ -1,0 +1,4 @@
+{
+  "opt_max_iterations": 5000,
+  "opt_max_evaluations": 100000
+}

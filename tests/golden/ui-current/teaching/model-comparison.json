@@ -1,0 +1,33 @@
+{
+  "schemes": [
+    {
+      "lens_count": 1,
+      "original_shared_equal": true,
+      "original_qt_equal": true,
+      "components": 3
+    },
+    {
+      "lens_count": 2,
+      "original_shared_equal": true,
+      "original_qt_equal": true,
+      "components": 4
+    },
+    {
+      "lens_count": 3,
+      "original_shared_equal": true,
+      "original_qt_equal": true,
+      "components": 5
+    },
+    {
+      "lens_count": 4,
+      "original_shared_equal": true,
+      "original_qt_equal": true,
+      "components": 6
+    }
+  ],
+  "qt_is_qobject": true,
+  "qt_signal_observed": [
+    "清空教学台"
+  ],
+  "qt_modules_loaded_by_shared_import": []
+}

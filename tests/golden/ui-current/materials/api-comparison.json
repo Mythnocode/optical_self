@@ -1,0 +1,54 @@
+{
+  "default_status": 200,
+  "catalog_count": 162,
+  "default_records_equal": true,
+  "default_used_equal": true,
+  "780": {
+    "status": 200,
+    "records_equal": true,
+    "used_equal": true,
+    "custom_indexes": [
+      [
+        "QA-Constant",
+        "1.6"
+      ],
+      [
+        "QA-Cauchy",
+        "1.45684"
+      ],
+      [
+        "QA-Sellmeier",
+        "1.51118"
+      ]
+    ],
+    "unknown_index": "—"
+  },
+  "850": {
+    "status": 200,
+    "records_equal": true,
+    "used_equal": true,
+    "custom_indexes": [
+      [
+        "QA-Constant",
+        "1.6"
+      ],
+      [
+        "QA-Cauchy",
+        "1.45573"
+      ],
+      [
+        "QA-Sellmeier",
+        "1.50984"
+      ]
+    ],
+    "unknown_index": "—"
+  },
+  "invalid_statuses": {
+    "zero_wavelength": 422,
+    "invalid_model": 422,
+    "invalid_n": 422,
+    "nan_wavelength": 422,
+    "infinite_parameter": 422
+  },
+  "qt_imported": false
+}

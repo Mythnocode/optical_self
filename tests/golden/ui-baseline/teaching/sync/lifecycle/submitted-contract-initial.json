@@ -1,0 +1,30 @@
+{
+  "schema_version": 2,
+  "scene_id": "scene-lifecycle-submitted-contract",
+  "revision": 1,
+  "reference": {
+    "name": "实验台坐标系",
+    "origin": "bench",
+    "axial_axis": "+X_t → +Z_engine",
+    "lateral_axis": "+Y_t → +X_engine",
+    "vertical_axis": "+Z_t → +Y_engine",
+    "view_frame": "view3d_render",
+    "view_up": "+Z_t → +Y_render",
+    "view_depth": "+Y_t → −Z_render",
+    "unit": "mm",
+    "axis_height_mm": 25.0,
+    "origin_teaching_mm": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pixels_per_mm": 8.0,
+    "render_units_per_mm": 1.0
+  },
+  "components": [],
+  "baseline_enabled": true,
+  "baseline_x_mm": 0.0,
+  "selected_component_id": null,
+  "active_result_revision": null,
+  "results": {}
+}

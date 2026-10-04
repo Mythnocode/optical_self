@@ -1,0 +1,79 @@
+[
+  {
+    "name": "PrimaryModuleButton",
+    "text": "首页",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "PrimaryModuleButton",
+    "text": "教学",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "PrimaryModuleButton",
+    "text": "仿真",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "PrimaryModuleButton",
+    "text": "模型",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "PrimaryModuleButton",
+    "text": "优化",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "PrimaryModuleButton",
+    "text": "解释",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "SecondaryFunctionButton",
+    "text": "镜头数据",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "SecondaryFunctionButton",
+    "text": "光路图",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "SecondaryFunctionButton",
+    "text": "光斑图",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "SecondaryFunctionButton",
+    "text": "光纤耦合",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  },
+  {
+    "name": "SecondaryFunctionButton",
+    "text": "波前与衍射",
+    "family": "Microsoft YaHei UI",
+    "weight": 650,
+    "point_size": 12.5
+  }
+]

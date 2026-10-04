@@ -1,0 +1,109 @@
+
+--- backend start 2026-10-02T13:52:53.912Z ---
+[2026-10-02T13:52:56.706Z] [stderr] INFO:     Started server process [51784]
+INFO:     Waiting for application startup.
+[2026-10-02T13:52:56.729Z] [stderr] INFO:     Application startup complete.
+[2026-10-02T13:52:56.739Z] [stderr] 2026-10-02 21:52:56,739 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=3.503 request_id=req-09bfca2dbf44483ca5d36b2a8f1fa7df job_id=-
+[2026-10-02T13:52:56.739Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:52:56.768Z] [stderr] 2026-10-02 21:52:56,768 INFO backend.optical_ml_app.http HTTP GET /api/v1/jobs status=200 elapsed_ms=20.318 request_id=fb0a8056-1a3f-4df5-8161-9f925fdd8d62 job_id=-
+[2026-10-02T13:52:56.768Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/jobs?limit=40&offset=0 HTTP/1.1" 200 OK
+[2026-10-02T13:52:57.111Z] [stderr] 2026-10-02 21:52:57,110 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.843 request_id=a95cdb3e-738c-45e6-be0c-8025b1a48a2a job_id=-
+[2026-10-02T13:52:57.111Z] [stdout] INFO:     127.0.0.1:63021 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:52:57.124Z] [stderr] 2026-10-02 21:52:57,124 INFO backend.optical_ml_app.http HTTP GET /api/v1/jobs status=200 elapsed_ms=1.918 request_id=de5990de-82c3-4c78-9ba4-cfcd8384ae38 job_id=-
+[2026-10-02T13:52:57.124Z] [stdout] INFO:     127.0.0.1:49181 - "GET /api/v1/jobs?limit=40&offset=0 HTTP/1.1" 200 OK
+[2026-10-02T13:52:57.136Z] [stderr] 2026-10-02 21:52:57,137 INFO backend.optical_ml_app.http HTTP POST /api/v1/simulation/surfaces/serialize status=200 elapsed_ms=3.72 request_id=9b25f233-06db-4b63-a3d9-51f0bcbfb0ac job_id=-
+[2026-10-02T13:52:57.136Z] [stdout] INFO:     127.0.0.1:55794 - "POST /api/v1/simulation/surfaces/serialize HTTP/1.1" 200 OK
+[2026-10-02T13:52:57.139Z] [stderr] 2026-10-02 21:52:57,139 INFO backend.optical_ml_app.http HTTP GET /api/v1/headless-datasets status=200 elapsed_ms=13.035 request_id=9207e2ad-a1a6-42ce-b6a6-746b16a55f50 job_id=-
+[2026-10-02T13:52:57.139Z] [stdout] INFO:     127.0.0.1:61702 - "GET /api/v1/headless-datasets?limit=200&offset=0 HTTP/1.1" 200 OK
+[2026-10-02T13:52:57.150Z] [stderr] 2026-10-02 21:52:57,150 INFO backend.optical_ml_app.http HTTP POST /api/v1/datasets/generation/presentation status=200 elapsed_ms=4.438 request_id=f63f4872-c12d-4dc2-b880-25a7f5eda635 job_id=-
+[2026-10-02T13:52:57.150Z] [stdout] INFO:     127.0.0.1:62926 - "POST /api/v1/datasets/generation/presentation HTTP/1.1" 200 OK
+[2026-10-02T13:52:57.925Z] [stderr] 2026-10-02 21:52:57,926 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: simulation-0 (simulation), prewarm=1136.6 ms
+[2026-10-02T13:52:57.928Z] [stderr] 2026-10-02 21:52:57,929 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: simulation-1 (simulation), prewarm=1128.3 ms
+[2026-10-02T13:52:58.755Z] [stderr] 2026-10-02 21:52:58,755 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.799 request_id=req-b033bdab0fb9472388e73921f69077b1 job_id=-
+[2026-10-02T13:52:58.755Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:00.765Z] [stderr] 2026-10-02 21:53:00,765 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.865 request_id=req-41009c1287d64501a8d9e76d3912f17c job_id=-
+[2026-10-02T13:53:00.765Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:02.108Z] [stderr] 2026-10-02 21:53:02,108 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.492 request_id=a26124a4-2479-4108-965b-22125393fffa job_id=-
+[2026-10-02T13:53:02.108Z] [stdout] INFO:     127.0.0.1:52277 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:02.777Z] [stderr] 2026-10-02 21:53:02,777 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.609 request_id=req-f4bf0b08cece4858a22ac91d92b86b8d job_id=-
+[2026-10-02T13:53:02.777Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:04.790Z] [stderr] 2026-10-02 21:53:04,789 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.727 request_id=req-f3ed361fadb344508b2c301800d0bd6c job_id=-
+[2026-10-02T13:53:04.790Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:06.796Z] [stderr] 2026-10-02 21:53:06,795 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.526 request_id=req-c20b6490037840959dc87c08bea83334 job_id=-
+[2026-10-02T13:53:06.796Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:07.111Z] [stderr] 2026-10-02 21:53:07,112 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.508 request_id=babbddea-1a68-4692-8e5a-f310aca40f1d job_id=-
+[2026-10-02T13:53:07.111Z] [stdout] INFO:     127.0.0.1:50622 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:08.805Z] [stderr] 2026-10-02 21:53:08,804 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.724 request_id=req-6f3fa45738ac441cad04c7f97a25964b job_id=-
+[2026-10-02T13:53:08.805Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:10.816Z] [stderr] 2026-10-02 21:53:10,816 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.688 request_id=req-aa80ea43a1074b509c292b1ab785c170 job_id=-
+[2026-10-02T13:53:10.817Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:12.108Z] [stderr] 2026-10-02 21:53:12,108 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.542 request_id=36fc319b-7dc2-44e9-bb4f-cca53e54eaae job_id=-
+[2026-10-02T13:53:12.108Z] [stdout] INFO:     127.0.0.1:58512 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:12.826Z] [stderr] 2026-10-02 21:53:12,826 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.548 request_id=req-56cc7ff2b77f4a42abcaa16b74facb49 job_id=-
+[2026-10-02T13:53:12.826Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:14.842Z] [stderr] 2026-10-02 21:53:14,841 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.356 request_id=req-78ad8a9678044cc0bd829bae1182dfcb job_id=-
+[2026-10-02T13:53:14.842Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:16.849Z] [stderr] 2026-10-02 21:53:16,849 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.29 request_id=req-19bfcc0740fc48eb80ae3592d945f8e6 job_id=-
+[2026-10-02T13:53:16.849Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:17.115Z] [stderr] 2026-10-02 21:53:17,116 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.656 request_id=89c30d45-a3e9-42c5-ba83-830980eab3b9 job_id=-
+[2026-10-02T13:53:17.116Z] [stdout] INFO:     127.0.0.1:54810 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:18.863Z] [stderr] 2026-10-02 21:53:18,862 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.065 request_id=req-552cd757c2b9406f8c2d48197f5e6c96 job_id=-
+[2026-10-02T13:53:18.863Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:20.870Z] [stderr] 2026-10-02 21:53:20,870 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.75 request_id=req-41adb860932a4caca1f28327e87318a5 job_id=-
+[2026-10-02T13:53:20.870Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:22.118Z] [stderr] 2026-10-02 21:53:22,118 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.78 request_id=72e6e23a-acdd-470e-8311-893aa3e2b554 job_id=-
+[2026-10-02T13:53:22.119Z] [stdout] INFO:     127.0.0.1:64081 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:22.880Z] [stderr] 2026-10-02 21:53:22,880 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.705 request_id=req-8e3b5fff67074411a3c31ea30139ce95 job_id=-
+[2026-10-02T13:53:22.880Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:24.892Z] [stderr] 2026-10-02 21:53:24,892 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.077 request_id=req-8b393be4a8c54dd28e87f70648c0bc70 job_id=-
+[2026-10-02T13:53:24.892Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:26.904Z] [stderr] 2026-10-02 21:53:26,904 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.031 request_id=req-f844732c92df4966814c6fdec0acf7f7 job_id=-
+[2026-10-02T13:53:26.904Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:27.109Z] [stderr] 2026-10-02 21:53:27,109 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.539 request_id=957b813d-555e-494b-9a83-26eaf2c9355e job_id=-
+[2026-10-02T13:53:27.109Z] [stdout] INFO:     127.0.0.1:64827 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:28.904Z] [stderr] 2026-10-02 21:53:28,904 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.559 request_id=req-f822b9fdb28e4078ad467dc5fee5c134 job_id=-
+[2026-10-02T13:53:28.904Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:30.916Z] [stderr] 2026-10-02 21:53:30,917 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.56 request_id=req-8017101c252047afb186d9a9193add27 job_id=-
+[2026-10-02T13:53:30.917Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:32.121Z] [stderr] 2026-10-02 21:53:32,121 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.622 request_id=3fc9ec1f-4c08-49de-addd-e9b2fee92be3 job_id=-
+[2026-10-02T13:53:32.121Z] [stdout] INFO:     127.0.0.1:55099 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:32.925Z] [stderr] 2026-10-02 21:53:32,925 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.497 request_id=req-b75faecfc2694256a633837cb095fa81 job_id=-
+[2026-10-02T13:53:32.925Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:34.932Z] [stderr] 2026-10-02 21:53:34,932 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.001 request_id=req-ad0e7d52ecec4ff6b9bb3528075cca0f job_id=-
+[2026-10-02T13:53:34.933Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:36.941Z] [stderr] 2026-10-02 21:53:36,941 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.421 request_id=req-a4a0eb8d177346acbfb44fd9c6fe448f job_id=-
+[2026-10-02T13:53:36.942Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:37.110Z] [stderr] 2026-10-02 21:53:37,110 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.555 request_id=603a2854-805c-49f3-9409-c5ab879b6392 job_id=-
+[2026-10-02T13:53:37.110Z] [stdout] INFO:     127.0.0.1:57353 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:38.944Z] [stderr] 2026-10-02 21:53:38,944 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.867 request_id=req-23d6fd0c31734158816354a5f72006da job_id=-
+[2026-10-02T13:53:38.945Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:40.953Z] [stderr] 2026-10-02 21:53:40,953 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.954 request_id=req-3536d5a7d6d64b07afe4cf67f9b87b51 job_id=-
+[2026-10-02T13:53:40.954Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:42.122Z] [stderr] 2026-10-02 21:53:42,122 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.659 request_id=f1d21ecd-bf0f-4beb-b14b-2c09ad064b4a job_id=-
+[2026-10-02T13:53:42.123Z] [stdout] INFO:     127.0.0.1:63483 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:42.961Z] [stderr] 2026-10-02 21:53:42,961 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.828 request_id=req-7a2838ececf8497fb861166f8b8e708a job_id=-
+[2026-10-02T13:53:42.961Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:44.974Z] [stderr] 2026-10-02 21:53:44,973 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.432 request_id=req-53cedd3e2cdd4d81b6c14d4f71325aef job_id=-
+[2026-10-02T13:53:44.974Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:46.985Z] [stderr] 2026-10-02 21:53:46,985 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.851 request_id=req-06fdc9776eda441fbeec94fa2ff5e1be job_id=-
+[2026-10-02T13:53:46.985Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:47.111Z] [stderr] 2026-10-02 21:53:47,111 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.509 request_id=e49ed817-fc75-4b07-9c5a-a4332af068d2 job_id=-
+[2026-10-02T13:53:47.111Z] [stdout] INFO:     127.0.0.1:49923 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:49.000Z] [stderr] 2026-10-02 21:53:49,000 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.223 request_id=req-86be4d44bb294e18831a34f2fc12e9b4 job_id=-
+[2026-10-02T13:53:49.000Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:51.013Z] [stderr] 2026-10-02 21:53:51,013 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.072 request_id=req-41d0cb88ee044458a22667cfe23e7a7c job_id=-
+[2026-10-02T13:53:51.013Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:52.120Z] [stderr] 2026-10-02 21:53:52,120 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.907 request_id=81d55dc9-e546-41fc-9ce2-4824c0562cc7 job_id=-
+[2026-10-02T13:53:52.120Z] [stdout] INFO:     127.0.0.1:64837 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:53.025Z] [stderr] 2026-10-02 21:53:53,024 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.422 request_id=req-1a5ee06468664be0bebc407cac13ff12 job_id=-
+[2026-10-02T13:53:53.026Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:55.032Z] [stderr] 2026-10-02 21:53:55,032 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=1.665 request_id=req-89c2d942b8734c5baeab64bd61d4959a job_id=-
+[2026-10-02T13:53:55.032Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:57.034Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:57.035Z] [stderr] 2026-10-02 21:53:57,033 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.65 request_id=req-74df950cbeef4209a28f82e2b432e75a job_id=-
+[2026-10-02T13:53:57.113Z] [stderr] 2026-10-02 21:53:57,113 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.482 request_id=f9cf136e-d6c4-4ade-af19-06fc7efa2842 job_id=-
+[2026-10-02T13:53:57.113Z] [stdout] INFO:     127.0.0.1:57112 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:53:59.037Z] [stderr] 2026-10-02 21:53:59,037 INFO backend.optical_ml_app.http HTTP GET /api/v1/health status=200 elapsed_ms=0.53 request_id=req-6bc338dbdd3b45bc862d82b7bd6854be job_id=-
+[2026-10-02T13:53:59.038Z] [stdout] INFO:     127.0.0.1:63018 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T13:54:00.078Z] [stderr] 2026-10-02 21:54:00,079 INFO backend.optical_ml_app.http HTTP GET /api/v1/jobs status=200 elapsed_ms=1.526 request_id=req-2d6ebc6e88cc4ba6b05e7457fa743760 job_id=-
+[2026-10-02T13:54:00.078Z] [stdout] INFO:     127.0.0.1:57119 - "GET /api/v1/jobs?limit=200 HTTP/1.1" 200 OK

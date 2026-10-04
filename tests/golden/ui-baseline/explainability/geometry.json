@@ -1,0 +1,2420 @@
+{
+  "empty": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "全局特征重要性排名",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "请先在模型页训练，再选择该模型。",
+      "bounds": [
+        323,
+        489,
+        926,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "selected": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "全局特征重要性排名",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "请先在模型页训练，再选择该模型。",
+      "bounds": [
+        323,
+        489,
+        926,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "chart-0": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "全局特征重要性排名",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        537
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "数值越大表示模型越依赖该设计变量；不等同于物理因果。",
+      "bounds": [
+        315,
+        760,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "chart-1": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "蜂群图",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        537
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "设计变量 SHAP 值分布 · 80 个样本",
+      "bounds": [
+        315,
+        760,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "chart-2": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "特征依赖网格图",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        562
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "chart-3": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "单变量依赖趋势图",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        562
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "chart-4": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "物理一致性图",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        562
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "chart-5": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "瀑布图",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        537
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "bounds": [
+        315,
+        760,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ],
+  "xgboost-waterfall": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "图表",
+      "bounds": [
+        496,
+        162,
+        34,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "瀑布图",
+      "bounds": [
+        538,
+        162,
+        204,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        750,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        886,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        537
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "bounds": [
+        315,
+        760,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "layout:GlobalContributionTab",
+      "text": "",
+      "bounds": [
+        293,
+        152,
+        986,
+        647
+      ]
+    },
+    {
+      "kind": "layout:ObjectRail",
+      "text": "ObjectRail",
+      "bounds": [
+        0,
+        152,
+        292,
+        648
+      ]
+    },
+    {
+      "kind": "layout:SecondaryBar",
+      "text": "SecondaryBar",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ]
+    },
+    {
+      "kind": "layout:LazyResultWorkspace",
+      "text": "",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ]
+    }
+  ]
+}

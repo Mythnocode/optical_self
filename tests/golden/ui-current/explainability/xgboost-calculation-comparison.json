@@ -1,0 +1,5 @@
+{
+  "native_sync_vs_web_job_equal": true,
+  "target_name": "coupling_loss_db",
+  "sample_count": 80
+}

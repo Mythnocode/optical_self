@@ -1,0 +1,400 @@
+{
+  "box": {
+    "height": 720,
+    "width": 621,
+    "x": 581,
+    "y": 128
+  },
+  "controls": [
+    {
+      "bounds": [
+        24,
+        22,
+        561,
+        21
+      ],
+      "class": "teaching-inspector-title",
+      "text": "当前对象"
+    },
+    {
+      "bounds": [
+        24,
+        50,
+        561,
+        43
+      ],
+      "class": "teaching-inspector-object",
+      "text": "工程光源激光器"
+    },
+    {
+      "bounds": [
+        24,
+        100,
+        561,
+        30
+      ],
+      "class": "teaching-inspector-check",
+      "text": "启用"
+    },
+    {
+      "bounds": [
+        24,
+        160,
+        561,
+        21
+      ],
+      "class": "teaching-inspector-title",
+      "text": "位置与朝向"
+    },
+    {
+      "bounds": [
+        24,
+        188,
+        26,
+        45
+      ],
+      "class": "",
+      "text": "X"
+    },
+    {
+      "bounds": [
+        54,
+        188,
+        97,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "50.00"
+    },
+    {
+      "bounds": [
+        155,
+        188,
+        46,
+        45
+      ],
+      "class": "teaching-inspector-unit",
+      "text": "mm"
+    },
+    {
+      "bounds": [
+        209,
+        188,
+        26,
+        45
+      ],
+      "class": "",
+      "text": "Y"
+    },
+    {
+      "bounds": [
+        239,
+        188,
+        98,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "0.00"
+    },
+    {
+      "bounds": [
+        341,
+        188,
+        46,
+        45
+      ],
+      "class": "teaching-inspector-unit",
+      "text": "mm"
+    },
+    {
+      "bounds": [
+        395,
+        188,
+        26,
+        45
+      ],
+      "class": "",
+      "text": "Z"
+    },
+    {
+      "bounds": [
+        425,
+        188,
+        100,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "25.00"
+    },
+    {
+      "bounds": [
+        529,
+        188,
+        46,
+        45
+      ],
+      "class": "teaching-inspector-unit",
+      "text": "mm"
+    },
+    {
+      "bounds": [
+        24,
+        239,
+        28,
+        45
+      ],
+      "class": "",
+      "text": "绕Z"
+    },
+    {
+      "bounds": [
+        56,
+        239,
+        100,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "0.0"
+    },
+    {
+      "bounds": [
+        160,
+        239,
+        34,
+        45
+      ],
+      "class": "teaching-inspector-unit angle-unit",
+      "text": "°"
+    },
+    {
+      "bounds": [
+        209,
+        239,
+        28,
+        45
+      ],
+      "class": "",
+      "text": "绕Y"
+    },
+    {
+      "bounds": [
+        241,
+        239,
+        100,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "0.0"
+    },
+    {
+      "bounds": [
+        345,
+        239,
+        34,
+        45
+      ],
+      "class": "teaching-inspector-unit angle-unit",
+      "text": "°"
+    },
+    {
+      "bounds": [
+        395,
+        239,
+        49,
+        45
+      ],
+      "class": "",
+      "text": "绕光轴"
+    },
+    {
+      "bounds": [
+        448,
+        239,
+        99,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "0.0"
+    },
+    {
+      "bounds": [
+        551,
+        239,
+        34,
+        45
+      ],
+      "class": "teaching-inspector-unit angle-unit",
+      "text": "°"
+    },
+    {
+      "bounds": [
+        12,
+        304,
+        115,
+        38
+      ],
+      "class": "teaching-inspector-more",
+      "text": "⌄收起参数"
+    },
+    {
+      "bounds": [
+        24,
+        362,
+        561,
+        21
+      ],
+      "class": "teaching-inspector-title",
+      "text": "光学参数"
+    },
+    {
+      "bounds": [
+        24,
+        390,
+        68,
+        45
+      ],
+      "class": "",
+      "text": "波长"
+    },
+    {
+      "bounds": [
+        100,
+        390,
+        186,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "850.0"
+    },
+    {
+      "bounds": [
+        294,
+        390,
+        40,
+        45
+      ],
+      "class": "teaching-inspector-unit",
+      "text": "nm"
+    },
+    {
+      "bounds": [
+        24,
+        441,
+        68,
+        45
+      ],
+      "class": "",
+      "text": "功率"
+    },
+    {
+      "bounds": [
+        100,
+        441,
+        186,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "100.00"
+    },
+    {
+      "bounds": [
+        294,
+        441,
+        47,
+        45
+      ],
+      "class": "teaching-inspector-unit",
+      "text": "mW"
+    },
+    {
+      "bounds": [
+        24,
+        492,
+        68,
+        45
+      ],
+      "class": "",
+      "text": "束腰半径"
+    },
+    {
+      "bounds": [
+        100,
+        492,
+        186,
+        45
+      ],
+      "class": "teaching-number",
+      "text": "0.50"
+    },
+    {
+      "bounds": [
+        294,
+        492,
+        46,
+        45
+      ],
+      "class": "teaching-inspector-unit",
+      "text": "mm"
+    },
+    {
+      "bounds": [
+        24,
+        544,
+        561,
+        42
+      ],
+      "class": "teaching-laser-preset",
+      "text": "选择工业常用激光器规格…"
+    },
+    {
+      "bounds": [
+        24,
+        616,
+        561,
+        21
+      ],
+      "class": "teaching-inspector-title",
+      "text": "基准线"
+    },
+    {
+      "bounds": [
+        24,
+        644,
+        561,
+        38
+      ],
+      "class": "",
+      "text": "设置当前对象为基准位置"
+    },
+    {
+      "bounds": [
+        24,
+        689,
+        561,
+        30
+      ],
+      "class": "teaching-inspector-check",
+      "text": "显示基准线"
+    },
+    {
+      "bounds": [
+        24,
+        749,
+        561,
+        21
+      ],
+      "class": "teaching-inspector-title",
+      "text": "下一步"
+    },
+    {
+      "bounds": [
+        24,
+        777,
+        561,
+        54
+      ],
+      "class": "",
+      "text": "同步到仿真"
+    }
+  ]
+}

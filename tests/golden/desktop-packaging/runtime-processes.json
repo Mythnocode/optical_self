@@ -1,0 +1,26 @@
+[
+  {
+    "ProcessId": 6040,
+    "ParentProcessId": 28484,
+    "ExecutablePath": "D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\Optical ML Platform.exe",
+    "CommandLine": "\"D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\Optical ML Platform.exe\" "
+  },
+  {
+    "ProcessId": 29788,
+    "ParentProcessId": 6040,
+    "ExecutablePath": "D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe",
+    "CommandLine": "D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe -I -B D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\backend\\desktop\\backend_bootstrap.py"
+  },
+  {
+    "ProcessId": 21484,
+    "ParentProcessId": 29788,
+    "ExecutablePath": "D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe",
+    "CommandLine": "\"D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe\" \"-B\" \"-I\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=29788, pipe_handle=1640)\" \"--multiprocessing-fork\""
+  },
+  {
+    "ProcessId": 28896,
+    "ParentProcessId": 29788,
+    "ExecutablePath": "D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe",
+    "CommandLine": "\"D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe\" \"-B\" \"-I\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=29788, pipe_handle=2684)\" \"--multiprocessing-fork\""
+  }
+]

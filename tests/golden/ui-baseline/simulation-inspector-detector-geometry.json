@@ -1,0 +1,226 @@
+[
+  {
+    "kind": "QComboBox",
+    "text": "光学面",
+    "bounds": [
+      28,
+      480,
+      125,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "QComboBox",
+    "text": "L1 前表面（面 0）",
+    "bounds": [
+      28,
+      545,
+      178,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      610,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "5.00",
+    "bounds": [
+      28,
+      677,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "1024",
+    "bounds": [
+      28,
+      744,
+      78,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "1024",
+    "bounds": [
+      28,
+      809,
+      78,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "观察",
+    "bounds": [
+      28,
+      392,
+      222,
+      19
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 10.5,
+    "font_weight": 700
+  },
+  {
+    "kind": "QLabel",
+    "text": "观察方式",
+    "bounds": [
+      28,
+      451,
+      68,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "光学面",
+    "bounds": [
+      28,
+      516,
+      51,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "相对最后一面",
+    "bounds": [
+      28,
+      581,
+      102,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "mm",
+    "bounds": [
+      112,
+      610,
+      46,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "像元尺寸",
+    "bounds": [
+      28,
+      648,
+      68,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "μm",
+    "bounds": [
+      112,
+      677,
+      40,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "X 像元数",
+    "bounds": [
+      28,
+      715,
+      64,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "Y 像元数",
+    "bounds": [
+      28,
+      780,
+      64,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QCheckBox",
+    "text": "启用探测器",
+    "bounds": [
+      28,
+      415,
+      222,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  }
+]

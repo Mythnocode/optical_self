@@ -1,0 +1,9 @@
+{
+  "missing": [
+    "python/Lib/site-packages/setuptools/cli-arm64.exe",
+    "python/Lib/site-packages/setuptools/gui-arm64.exe"
+  ],
+  "wrong_size": [],
+  "accepted": false,
+  "resolution": "Omit the two unused ARM64 setuptools launchers when staging the x64 bundle; rebuild and revalidate the installed files."
+}

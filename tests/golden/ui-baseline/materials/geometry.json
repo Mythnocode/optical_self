@@ -1,0 +1,3692 @@
+{
+  "used": {
+    "size": [
+      1280,
+      800
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "对象",
+        "bounds": [
+          10,
+          162,
+          272,
+          24
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.5,
+        "font_weight": 750,
+        "coefficient_width": 370
+      }
+    ]
+  },
+  "detail-builtin": {
+    "size": [
+      420,
+      420
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "材料名",
+        "bounds": [
+          11,
+          11,
+          51,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "N-BK7",
+        "bounds": [
+          91,
+          11,
+          318,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "折射率",
+        "bounds": [
+          11,
+          40,
+          51,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "1.51118",
+        "bounds": [
+          91,
+          40,
+          318,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "波长",
+        "bounds": [
+          11,
+          69,
+          34,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "780 nm",
+        "bounds": [
+          91,
+          69,
+          318,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "来源",
+        "bounds": [
+          11,
+          98,
+          34,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "Schott",
+        "bounds": [
+          91,
+          98,
+          318,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "模型",
+        "bounds": [
+          11,
+          127,
+          34,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "formula1",
+        "bounds": [
+          91,
+          127,
+          318,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "有效波段",
+        "bounds": [
+          11,
+          156,
+          68,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "0.3–2.5 μm",
+        "bounds": [
+          91,
+          156,
+          318,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "色散系数",
+        "bounds": [
+          11,
+          185,
+          68,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "1.03961, 0.0774642, 0.231792, 0.141485, 1.01047, 10.1765",
+        "bounds": [
+          91,
+          185,
+          318,
+          45
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "说明",
+        "bounds": [
+          11,
+          236,
+          34,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "N-BK7. n_d = 1.51680, v_d = 64.17. Schott catalog data, supplementary.",
+        "bounds": [
+          91,
+          236,
+          318,
+          45
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QPushButton",
+        "text": "Close",
+        "bounds": [
+          340,
+          371,
+          69,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      }
+    ]
+  },
+  "library": {
+    "size": [
+      1280,
+      800
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "对象",
+        "bounds": [
+          10,
+          162,
+          272,
+          24
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.5,
+        "font_weight": 750,
+        "coefficient_width": 370
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          303,
+          164,
+          827,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "自定义材料",
+        "bounds": [
+          1138,
+          167,
+          129,
+          36
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 700,
+        "coefficient_width": 370
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          258,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          288,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          318,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          348,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          378,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          408,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          438,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          468,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          498,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          528,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          558,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          588,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          618,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          648,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          678,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          708,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          738,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          768,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          798,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          828,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          858,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          888,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          918,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          948,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          978,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1008,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1038,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1068,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1098,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1128,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1158,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1188,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1218,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1248,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1278,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1308,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1338,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1368,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1398,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1428,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1458,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1488,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1518,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1548,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1578,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1608,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1638,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1668,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1698,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1728,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1758,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1788,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1818,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1848,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1878,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1908,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1938,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1968,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          1998,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2028,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2058,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2088,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2118,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2148,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2178,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2208,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2238,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2268,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2298,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2328,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2358,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2388,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2418,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2448,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2478,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2508,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2538,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2568,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2598,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2628,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2658,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2688,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2718,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2748,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2778,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2808,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2838,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2868,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2898,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2928,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2958,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          2988,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3018,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3048,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3078,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3108,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3138,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3168,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3198,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3228,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3258,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3288,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3318,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3348,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3378,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3408,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3438,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3468,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3498,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3528,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3558,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3588,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3618,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3648,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3678,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3708,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3738,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3768,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3798,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3828,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3858,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3888,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3918,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3948,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          3978,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4008,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4038,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4068,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4098,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4128,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4158,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4188,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4218,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4248,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4278,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4308,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4338,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4368,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4398,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4428,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4458,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4488,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4518,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4548,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4578,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4608,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4638,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4668,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4698,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4728,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4758,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4788,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4818,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4848,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4878,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4908,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4938,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4968,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          4998,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          5028,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          5058,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1172,
+          5088,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      }
+    ],
+    "table": [
+      303,
+      214,
+      964,
+      575
+    ],
+    "columns": [
+      710,
+      78,
+      74,
+      88
+    ],
+    "header_height": 40,
+    "row_height": 30
+  },
+  "library-filtered": {
+    "size": [
+      1280,
+      800
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "对象",
+        "bounds": [
+          10,
+          162,
+          272,
+          24
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.5,
+        "font_weight": 750,
+        "coefficient_width": 370
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "N-BK7",
+        "bounds": [
+          303,
+          164,
+          827,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "自定义材料",
+        "bounds": [
+          1138,
+          167,
+          129,
+          36
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 700,
+        "coefficient_width": 370
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1184,
+          258,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1184,
+          288,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1184,
+          318,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "更多",
+        "bounds": [
+          1184,
+          348,
+          75,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      }
+    ]
+  },
+  "custom-constant": {
+    "size": [
+      420,
+      462
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "材料名",
+        "bounds": [
+          11,
+          11,
+          51,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          74,
+          11,
+          335,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "模型",
+        "bounds": [
+          11,
+          59,
+          34,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QComboBox",
+        "text": "常数折射率",
+        "bounds": [
+          74,
+          59,
+          335,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "折射率 n",
+        "bounds": [
+          20,
+          116,
+          64,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "1.500000",
+        "bounds": [
+          107,
+          116,
+          293,
+          45
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "1.500000",
+        "bounds": [
+          115,
+          118,
+          263,
+          41
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "消光系数 k",
+        "bounds": [
+          20,
+          167,
+          81,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.000000",
+        "bounds": [
+          107,
+          167,
+          293,
+          45
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.000000",
+        "bounds": [
+          115,
+          169,
+          263,
+          41
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "OK",
+        "bounds": [
+          278,
+          413,
+          48,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "Cancel",
+        "bounds": [
+          332,
+          413,
+          77,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      }
+    ]
+  },
+  "custom-cauchy": {
+    "size": [
+      420,
+      462
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "材料名",
+        "bounds": [
+          11,
+          11,
+          51,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          74,
+          11,
+          335,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "模型",
+        "bounds": [
+          11,
+          59,
+          34,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QComboBox",
+        "text": "Cauchy",
+        "bounds": [
+          74,
+          59,
+          335,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "A",
+        "bounds": [
+          20,
+          116,
+          11,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "1.50000000",
+        "bounds": [
+          91,
+          116,
+          309,
+          45
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "1.50000000",
+        "bounds": [
+          99,
+          118,
+          279,
+          41
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "B / μm²",
+        "bounds": [
+          20,
+          167,
+          55,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          91,
+          167,
+          309,
+          45
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          99,
+          169,
+          279,
+          41
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "C / μm⁴",
+        "bounds": [
+          20,
+          218,
+          65,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          91,
+          218,
+          309,
+          45
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          99,
+          220,
+          279,
+          41
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "OK",
+        "bounds": [
+          278,
+          413,
+          48,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "Cancel",
+        "bounds": [
+          332,
+          413,
+          77,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      }
+    ]
+  },
+  "custom-sellmeier": {
+    "size": [
+      420,
+      462
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "材料名",
+        "bounds": [
+          11,
+          11,
+          51,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          74,
+          11,
+          335,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "模型",
+        "bounds": [
+          11,
+          59,
+          34,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QComboBox",
+        "text": "Sellmeier",
+        "bounds": [
+          74,
+          59,
+          335,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "B1",
+        "bounds": [
+          20,
+          116,
+          20,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          89,
+          116,
+          311,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          97,
+          118,
+          281,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "C1 / μm²",
+        "bounds": [
+          20,
+          164,
+          63,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          89,
+          164,
+          311,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          97,
+          166,
+          281,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "B2",
+        "bounds": [
+          20,
+          212,
+          20,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          89,
+          212,
+          311,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          97,
+          214,
+          281,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "C2 / μm²",
+        "bounds": [
+          20,
+          260,
+          63,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          89,
+          260,
+          311,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          97,
+          262,
+          281,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "B3",
+        "bounds": [
+          20,
+          308,
+          20,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          89,
+          308,
+          311,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          97,
+          310,
+          281,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLabel",
+        "text": "C3 / μm²",
+        "bounds": [
+          20,
+          356,
+          63,
+          40
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "0.00000000",
+        "bounds": [
+          89,
+          356,
+          311,
+          42
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "0.00000000",
+        "bounds": [
+          97,
+          358,
+          281,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "OK",
+        "bounds": [
+          278,
+          413,
+          48,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      },
+      {
+        "kind": "QPushButton",
+        "text": "Cancel",
+        "bounds": [
+          332,
+          413,
+          77,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      }
+    ]
+  },
+  "detail-custom": {
+    "size": [
+      420,
+      420
+    ],
+    "widgets": [
+      {
+        "kind": "QLabel",
+        "text": "材料名",
+        "bounds": [
+          11,
+          11,
+          51,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "QA-Cauchy",
+        "bounds": [
+          88,
+          11,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "折射率",
+        "bounds": [
+          11,
+          40,
+          51,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "1.45684",
+        "bounds": [
+          88,
+          40,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "波长",
+        "bounds": [
+          11,
+          69,
+          34,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "780 nm",
+        "bounds": [
+          88,
+          69,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "来源",
+        "bounds": [
+          11,
+          98,
+          34,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "自定义",
+        "bounds": [
+          88,
+          98,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "模型",
+        "bounds": [
+          11,
+          127,
+          34,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "cauchy",
+        "bounds": [
+          88,
+          127,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "A",
+        "bounds": [
+          11,
+          156,
+          11,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "1.45",
+        "bounds": [
+          88,
+          156,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "B / μm²",
+        "bounds": [
+          11,
+          185,
+          55,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "0.004",
+        "bounds": [
+          88,
+          185,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "C / μm⁴",
+        "bounds": [
+          11,
+          214,
+          65,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QLabel",
+        "text": "0.0001",
+        "bounds": [
+          88,
+          214,
+          321,
+          23
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 12.5,
+        "font_weight": 400,
+        "coefficient_width": 296
+      },
+      {
+        "kind": "QPushButton",
+        "text": "Close",
+        "bounds": [
+          340,
+          371,
+          69,
+          38
+        ],
+        "font_family": "Microsoft YaHei UI",
+        "font_size": 13.25,
+        "font_weight": 400,
+        "coefficient_width": 331
+      }
+    ]
+  }
+}

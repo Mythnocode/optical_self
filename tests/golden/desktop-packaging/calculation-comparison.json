@@ -1,0 +1,24 @@
+{
+  "reference_dataset": "dataset-0077c0bb0956",
+  "packaged_dataset": "dataset-e5a6836a6838",
+  "reference_count": 17,
+  "packaged_count": 17,
+  "compared_fields": [
+    "sample_id",
+    "split",
+    "feature_values",
+    "target_values",
+    "valid",
+    "failure_code",
+    "failure_message",
+    "converged"
+  ],
+  "mismatches": [],
+  "trace_backend_sample_counts": {
+    "cpp_native": 17
+  },
+  "valid_count": 8,
+  "failure_counts": {
+    "OPTICAL_ENERGY_CHECK_FAILED": 9
+  }
+}

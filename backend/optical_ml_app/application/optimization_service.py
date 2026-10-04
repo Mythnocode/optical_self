@@ -109,25 +109,32 @@ def _apply_engineering_constraints(project, metrics: dict[str, Any], options: di
     if not cfg:
         return metrics, 0.0, True, []
     surfaces = list(getattr(project, "surfaces", ()) or ())
+    def distance(item) -> float:
+        return float(getattr(item, "thickness_mm", getattr(item, "distance_to_next_mm", 0.0)) or 0.0)
+
+    def material(item) -> str:
+        return str(getattr(item, "material", getattr(item, "material_after", ""))).upper()
     violations: dict[str, float] = {}
-    length = sum(max(0.0, float(getattr(item, "thickness_mm", getattr(item, "distance_to_next_mm", 0.0)) or 0.0)) for item in surfaces)
+    length = sum(max(0.0, distance(item)) for item in surfaces)
     maximum = cfg.get("max_system_length_mm")
     if maximum is not None and length > float(maximum):
         violations["max_system_length_mm"] = length - float(maximum)
     min_center = cfg.get("min_center_thickness_mm")
     if min_center is not None:
-        values = [float(getattr(item, "thickness_mm", 0.0) or 0.0) for item in surfaces if str(getattr(item, "material", "")).upper() not in {"", "AIR"}]
+        values = [distance(item) for item in surfaces[:-1] if material(item) not in {"", "AIR"}]
         if values and min(values) < float(min_center):
             violations["min_center_thickness_mm"] = float(min_center) - min(values)
     min_air = cfg.get("min_air_gap_mm")
     if min_air is not None:
-        values = [float(getattr(item, "thickness_mm", 0.0) or 0.0) for item in surfaces if str(getattr(item, "material", "")).upper() in {"", "AIR"}]
+        # A row describes propagation to the following surface. The terminal
+        # surface has no following segment; its zero distance is not an air gap.
+        values = [distance(item) for item in surfaces[:-1] if material(item) in {"", "AIR"}]
         if values and min(values) < float(min_air):
             violations["min_air_gap_mm"] = float(min_air) - min(values)
     if bool(cfg.get("aperture_within_mechanical", False)):
         for index, item in enumerate(surfaces):
             mechanical = getattr(item, "mechanical_diameter_mm", None)
-            aperture = float(getattr(item, "semi_aperture_mm", 0.0) or 0.0)
+            aperture = float(getattr(item, "semi_aperture_mm", getattr(item, "clear_aperture_mm", 0.0)) or 0.0)
             if mechanical is not None and aperture > float(mechanical) * 0.5:
                 violations[f"aperture_surface_{index + 1}"] = aperture - float(mechanical) * 0.5
     enriched = dict(metrics)

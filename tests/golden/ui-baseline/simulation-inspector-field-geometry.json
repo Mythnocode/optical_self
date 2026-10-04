@@ -1,0 +1,142 @@
+[
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "3.00",
+    "bounds": [
+      28,
+      558,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      625,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      692,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "入瞳与视场",
+    "bounds": [
+      28,
+      506,
+      234,
+      19
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 10.5,
+    "font_weight": 700
+  },
+  {
+    "kind": "QLabel",
+    "text": "入瞳半径",
+    "bounds": [
+      28,
+      529,
+      68,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "mm",
+    "bounds": [
+      112,
+      558,
+      46,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "视场角 X",
+    "bounds": [
+      28,
+      596,
+      65,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "°",
+    "bounds": [
+      112,
+      625,
+      24,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "视场角 Y",
+    "bounds": [
+      28,
+      663,
+      65,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "°",
+    "bounds": [
+      112,
+      692,
+      24,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "cases": [
+    {
+      "text": "500 μm",
+      "unit": "mm",
+      "status": 200,
+      "value": 0.5,
+      "original_equal": true
+    },
+    {
+      "text": "2 mrad",
+      "unit": "°",
+      "status": 200,
+      "value": 0.11459155902616465,
+      "original_equal": true
+    },
+    {
+      "text": "1e-3 m",
+      "unit": "mm",
+      "status": 200,
+      "value": 1.0,
+      "original_equal": true
+    },
+    {
+      "text": "0.025 cm",
+      "unit": "mm",
+      "status": 200,
+      "value": 0.25,
+      "original_equal": true
+    },
+    {
+      "text": "100 %",
+      "unit": "% 光斑半径",
+      "status": 200,
+      "value": 100.0,
+      "original_equal": true
+    },
+    {
+      "text": "2 mm",
+      "unit": "°",
+      "status": 422,
+      "value": null,
+      "original_equal": null
+    },
+    {
+      "text": "1e309",
+      "unit": "mm",
+      "status": 422,
+      "value": null,
+      "original_equal": null
+    }
+  ],
+  "qt_modules_loaded": []
+}

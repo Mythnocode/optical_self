@@ -14,31 +14,11 @@ from .data_utils import _remove_artists, _scene_static_signature
 
 class Canvas3DMixin:
     def _optical_scene_3d(self, ax, data: dict) -> None:
-        ax.set_proj_type("ortho")
-        ax.set_axis_off()
-        self.figure.subplots_adjust(left=0.0, right=1.0, bottom=0.0, top=1.0)
-        ax.set_position([0.0, 0.0, 1.0, 1.0])
-        ax.set_facecolor(theme.SCENE_BACKGROUND)
-
-        static = render_static_scene(ax, data)
-        dynamic = render_dynamic_scene(ax, data)
+        from shared_presentation.plotting.scene_drawing import draw_optical_scene_3d
+        static, dynamic = draw_optical_scene_3d(ax, data)
         self._scene_static_signature = _scene_static_signature(data)
         self._static_scene_artists = static
         self._dynamic_scene_artists = dynamic
-        fit_optical_scene_3d(ax, data)
-        ax.view_init(elev=17, azim=-72)
-        title = str(data.get("title", ""))
-        if title:
-            ax.text2D(
-                0.018, 0.972, title, transform=ax.transAxes,
-                fontsize=13.0, fontweight="semibold", color=theme.TEXT_PRIMARY,
-            )
-        scale_label = str(data.get("scale_label", ""))
-        if scale_label:
-            ax.text2D(
-                0.982, 0.025, scale_label, transform=ax.transAxes,
-                ha="right", fontsize=8.5, color=theme.TEXT_MUTED,
-            )
 
         self._interaction.update_artists(
             high_quality=[*static.high_quality, *dynamic.high_quality],

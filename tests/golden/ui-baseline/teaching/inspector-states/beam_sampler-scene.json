@@ -1,0 +1,200 @@
+{
+  "schema_version": 2,
+  "scene_id": "scene-lifecycle-before-first-submission",
+  "revision": 3,
+  "reference": {
+    "name": "实验台坐标系",
+    "origin": "bench",
+    "axial_axis": "+X_t → +Z_engine",
+    "lateral_axis": "+Y_t → +X_engine",
+    "vertical_axis": "+Z_t → +Y_engine",
+    "view_frame": "view3d_render",
+    "view_up": "+Z_t → +Y_render",
+    "view_depth": "+Y_t → −Z_render",
+    "unit": "mm",
+    "axis_height_mm": 25.0,
+    "origin_teaching_mm": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pixels_per_mm": 8.0,
+    "render_units_per_mm": 1.0
+  },
+  "components": [
+    {
+      "component_id": "laser-001",
+      "kind": "laser",
+      "label": "工程光源",
+      "pose": {
+        "x_mm": 50.0,
+        "y_mm": 0.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "params": {
+        "wavelength_nm": 850.0,
+        "power_mw": 100.0,
+        "beam_radius_mm": 0.5
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "laser"
+    },
+    {
+      "component_id": "lens-002",
+      "kind": "lens",
+      "label": "L1 透镜",
+      "pose": {
+        "x_mm": 58.0,
+        "y_mm": 0.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "params": {
+        "focal_length_mm": 25.0,
+        "focal_mm": 25.0,
+        "diameter_mm": 6.0,
+        "material": "N-BK7",
+        "radius1_mm": 5.11,
+        "radius2_mm": 0.0,
+        "center_thickness_mm": 3.0,
+        "clear_aperture_mm": 3.0,
+        "conic": -1.068158491228596
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "lens-003",
+      "kind": "lens",
+      "label": "L2 透镜",
+      "pose": {
+        "x_mm": 69.84357605356347,
+        "y_mm": 0.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "params": {
+        "focal_length_mm": 25.0,
+        "focal_mm": 25.0,
+        "diameter_mm": 6.0,
+        "material": "N-BK7",
+        "radius1_mm": 4.088,
+        "radius2_mm": 0.0,
+        "center_thickness_mm": 4.0,
+        "clear_aperture_mm": 3.0,
+        "conic": -1.0118
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "lens-004",
+      "kind": "lens",
+      "label": "L3 透镜",
+      "pose": {
+        "x_mm": 100.71795229357063,
+        "y_mm": 0.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "params": {
+        "focal_length_mm": 25.0,
+        "focal_mm": 25.0,
+        "diameter_mm": 6.0,
+        "material": "N-BK7",
+        "radius1_mm": 25.55,
+        "radius2_mm": 0.0,
+        "center_thickness_mm": 3.0,
+        "clear_aperture_mm": 3.0,
+        "conic": -1.0118
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "lens-005",
+      "kind": "lens",
+      "label": "L4 透镜",
+      "pose": {
+        "x_mm": 119.39204407257958,
+        "y_mm": 0.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "params": {
+        "focal_length_mm": 25.0,
+        "focal_mm": 25.0,
+        "diameter_mm": 6.0,
+        "material": "N-BK7",
+        "radius1_mm": 6.132,
+        "radius2_mm": 0.0,
+        "center_thickness_mm": 3.0,
+        "clear_aperture_mm": 3.0,
+        "conic": -0.8385398893571219
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "fiber-006",
+      "kind": "fiber",
+      "label": "工程光纤接收端",
+      "pose": {
+        "x_mm": 124.89204407257958,
+        "y_mm": 0.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "params": {
+        "mfd_um": 9.0,
+        "na": 0.12
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "fiber"
+    },
+    {
+      "component_id": "beam_sampler-007",
+      "kind": "beam_sampler",
+      "label": "取样镜",
+      "pose": {
+        "x_mm": 180.0,
+        "y_mm": 40.0,
+        "z_mm": 25.0,
+        "yaw_rad": 0.0,
+        "pitch_rad": 0.0,
+        "roll_rad": 0.0
+      },
+      "params": {
+        "split_ratio": 0.05,
+        "diameter_mm": 12.7
+      },
+      "enabled": true,
+      "category": "实验对象",
+      "asset_key": "beam_sampler"
+    }
+  ],
+  "baseline_enabled": true,
+  "baseline_x_mm": 50.0,
+  "selected_component_id": "beam_sampler-007",
+  "active_result_revision": null,
+  "results": {}
+}

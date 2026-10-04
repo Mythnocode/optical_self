@@ -1,0 +1,174 @@
+{
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "request_id": "93e69490-b441-434f-b6b2-7a77a1d72291:scan",
+    "status": "completed",
+    "mode": "grid_2d",
+    "parameter_paths": [
+      "surfaces[0].radius_mm",
+      "surfaces[0].distance_to_next_mm"
+    ],
+    "parameter_labels": [
+      "L1 / L1 前表面 / 曲率",
+      "L1 / L1 前表面 / 厚度"
+    ],
+    "parameter_units": [
+      "mm",
+      "mm"
+    ],
+    "parameter_grid": [
+      [
+        4.599,
+        2.7
+      ],
+      [
+        4.599,
+        2.85
+      ],
+      [
+        4.599,
+        3.0
+      ],
+      [
+        4.599,
+        3.15
+      ],
+      [
+        4.599,
+        3.3
+      ],
+      [
+        4.8545,
+        2.7
+      ],
+      [
+        4.8545,
+        2.85
+      ],
+      [
+        4.8545,
+        3.0
+      ],
+      [
+        4.8545,
+        3.15
+      ],
+      [
+        4.8545,
+        3.3
+      ],
+      [
+        5.11,
+        2.7
+      ],
+      [
+        5.11,
+        2.85
+      ],
+      [
+        5.11,
+        3.0
+      ],
+      [
+        5.11,
+        3.15
+      ],
+      [
+        5.11,
+        3.3
+      ],
+      [
+        5.365500000000001,
+        2.7
+      ],
+      [
+        5.365500000000001,
+        2.85
+      ],
+      [
+        5.365500000000001,
+        3.0
+      ],
+      [
+        5.365500000000001,
+        3.15
+      ],
+      [
+        5.365500000000001,
+        3.3
+      ],
+      [
+        5.621,
+        2.7
+      ],
+      [
+        5.621,
+        2.85
+      ],
+      [
+        5.621,
+        3.0
+      ],
+      [
+        5.621,
+        3.15
+      ],
+      [
+        5.621,
+        3.3
+      ]
+    ],
+    "response_metrics": [
+      "coupling_efficiency"
+    ],
+    "response_values": {
+      "coupling_efficiency": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.5710385847388167,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "warnings": [
+      "24 of 25 simulation(s) failed."
+    ],
+    "errors": [],
+    "metadata": {
+      "total_points": 25,
+      "completed_points": 25,
+      "successful_points": 1,
+      "failed_points": 24,
+      "job_timings_ms": {
+        "queue_wait": 117.659,
+        "process_startup": 0.0,
+        "worker_ready_to_first_progress": 9.357,
+        "worker_compute": 43562.081
+      },
+      "result_delivery": "summary_then_lazy_bundle"
+    }
+  },
+  "error": null,
+  "request_id": "req-7273d17765524b12a44e53fec8d68681"
+}

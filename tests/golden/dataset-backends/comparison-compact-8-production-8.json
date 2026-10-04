@@ -1,0 +1,9 @@
+{
+  "left": "compact-8",
+  "right": "production-8",
+  "differences": [],
+  "max_target_absolute_difference": 8.195666367782906e-13,
+  "max_target_relative_difference": 7.783178287890038e-13,
+  "elapsed_speedup": 11.411488916207958,
+  "trace_speedup": 106.33580858525482
+}

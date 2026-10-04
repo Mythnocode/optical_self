@@ -1,0 +1,9 @@
+{
+  "left": "compact-8-uncoated",
+  "right": "production-8-uncoated",
+  "differences": [],
+  "max_target_absolute_difference": 1.0972245334528452e-10,
+  "max_target_relative_difference": 4.6050216402263807e-11,
+  "elapsed_speedup": 0.8804540200936851,
+  "trace_speedup": 1.488998958073398
+}

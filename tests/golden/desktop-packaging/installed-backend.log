@@ -1,0 +1,18 @@
+
+--- backend start 2026-10-02T10:57:34.445Z ---
+[2026-10-02T10:57:41.941Z] [stderr] INFO:     Started server process [20256]
+INFO:     Waiting for application startup.
+[2026-10-02T10:57:41.957Z] [stderr] INFO:     Application startup complete.
+[2026-10-02T10:57:41.990Z] [stdout] INFO:     127.0.0.1:60713 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T10:57:42.018Z] [stdout] INFO:     127.0.0.1:60713 - "GET /api/v1/jobs?limit=40&offset=0 HTTP/1.1" 200 OK
+[2026-10-02T10:57:44.321Z] [stderr] 2026-10-02 18:57:44,321 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: simulation-0 (simulation), prewarm=2103.6 ms
+[2026-10-02T10:57:44.321Z] [stderr] 2026-10-02 18:57:44,321 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: simulation-1 (simulation), prewarm=2101.1 ms
+[2026-10-02T10:58:36.717Z] [stdout] INFO:     127.0.0.1:60719 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T10:59:06.383Z] [stdout] INFO:     127.0.0.1:60726 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T10:59:06.652Z] [stdout] INFO:     127.0.0.1:60727 - "POST /api/v1/dataset/jobs HTTP/1.1" 202 Accepted
+[2026-10-02T10:59:06.937Z] [stderr] 2026-10-02 18:59:06,936 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: dataset-0 (dataset), prewarm=0.0 ms
+[2026-10-02T11:00:16.378Z] [stdout] INFO:     127.0.0.1:52251 - "GET /api/v1/jobs/job-1e69eeb75777 HTTP/1.1" 200 OK
+[2026-10-02T11:00:55.370Z] [stdout] INFO:     127.0.0.1:54311 - "GET /api/v1/jobs/job-1e69eeb75777 HTTP/1.1" 200 OK
+[2026-10-02T11:00:55.574Z] [stdout] INFO:     127.0.0.1:54312 - "GET /api/v1/jobs/job-1e69eeb75777/result HTTP/1.1" 200 OK
+[2026-10-02T11:00:55.593Z] [stdout] INFO:     127.0.0.1:54313 - "GET /api/v1/headless-datasets/dataset-06ce4efcb92a/files/manifest HTTP/1.1" 200 OK
+[2026-10-02T11:00:55.601Z] [stdout] INFO:     127.0.0.1:54314 - "GET /api/v1/headless-datasets/dataset-06ce4efcb92a/files/samples-jsonl HTTP/1.1" 200 OK

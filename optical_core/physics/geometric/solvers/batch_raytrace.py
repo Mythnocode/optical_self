@@ -54,6 +54,22 @@ def _plane_record(
     )
 
 
+def _try_native_trace(system, rays, options, progress_callback):
+    if str(os.environ.get("OPTICAL_NATIVE", "1")).strip().lower() in {"0", "false", "off"}:
+        return None
+    from optical_core.physics.geometric.solvers.native_trace import (
+        NativeTraceError, native_supports, trace_ray_batch_native,
+    )
+    if native_supports(system, options) is not None:
+        return None
+    try:
+        trace = trace_ray_batch_native(system, rays, options, progress_callback=progress_callback)
+        trace.backend = "cpp_native"
+        return trace
+    except NativeTraceError:
+        return None
+
+
 def trace_ray_batch(
     system: SequentialOpticalSystem,
     rays: RayBundle,
@@ -66,35 +82,30 @@ def trace_ray_batch(
     output_level = str(options.output_level).strip().lower()
     if output_level not in {"full", "planes", "final"}:
         raise ValueError("TraceOptions.output_level must be full, planes, or final")
+    # Repeated dataset labels explicitly prefer the existing C++ kernel.
+    # Unsupported/disabled native execution retains the original fallback.
+    if options.prefer_native:
+        native = _try_native_trace(system, rays, options, progress_callback)
+        if native is not None:
+            return native
     if output_level != "full":
         from optical_core.physics.geometric.solvers.compact_batch_raytrace import (
             compact_trace_support, trace_ray_batch_compact,
         )
         support = compact_trace_support(system, options)
         if support.supported:
-            return trace_ray_batch_compact(
+            trace = trace_ray_batch_compact(
                 system, rays, options,
                 output_level="planes" if output_level == "planes" else "final",
                 progress_callback=progress_callback,
             )
+            trace.backend = "numpy_compact"
+            return trace
     n = rays.positions_mm.shape[0]
-    # 原生多线程内核：full 追迹语义的 C++ 移植（native/optical_native_core.cpp）。
-    # 仅接管原本会落入逐光线 full 循环的场景；compact 路径行为不变。
-    # OPTICAL_NATIVE=0 可强制关闭。
-    if str(os.environ.get("OPTICAL_NATIVE", "1")).strip().lower() not in {"0", "false", "off"}:
-        from optical_core.physics.geometric.solvers.native_trace import (
-            NativeTraceError,
-            native_supports,
-            trace_ray_batch_native,
-        )
-
-        if native_supports(system, options) is None:
-            try:
-                return trace_ray_batch_native(
-                    system, rays, options, progress_callback=progress_callback
-                )
-            except NativeTraceError:
-                pass  # 回退到下方 Python full 路径。
+    if not options.prefer_native:
+        native = _try_native_trace(system, rays, options, progress_callback)
+        if native is not None:
+            return native
 
     final_positions = np.full((n, 3), np.nan, dtype=float)
     final_directions = np.full((n, 3), np.nan, dtype=float)

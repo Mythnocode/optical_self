@@ -1,0 +1,15 @@
+{
+  "top_k": 8,
+  "max_samples": 80,
+  "background_sample_count": 80,
+  "display_feature_paths": [
+    "surfaces[0].radius_mm",
+    "surfaces[0].distance_to_next_mm",
+    "surfaces[2].radius_mm",
+    "surfaces[2].distance_to_next_mm",
+    "surfaces[4].radius_mm",
+    "surfaces[4].distance_to_next_mm",
+    "surfaces[6].radius_mm",
+    "surfaces[6].distance_to_next_mm"
+  ]
+}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, List, Literal, Optional
+from math import isfinite
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -51,6 +52,16 @@ class ScanRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_scan_shape(self) -> "ScanRequest":
+        strategy = self.options.get('sampling_strategy', 'linear')
+        if strategy not in {'linear', 'log'}:
+            raise ValueError('自适应加密尚未实现，请选择线性采样或对数采样。')
+        for parameter in self.parameters:
+            if not all(isfinite(v) for v in (parameter.start, parameter.stop)) or parameter.start >= parameter.stop:
+                raise ValueError('扫描范围必须是有限数值，且最小值小于最大值。')
+            if strategy == 'log' and parameter.start * parameter.stop <= 0:
+                raise ValueError('对数采样要求范围两端非零且同号。')
+        if not 1 <= int(self.options.get('max_samples', 4096)) <= 50000:
+            raise ValueError('采样数量必须在 1～50000 之间。')
         if self.mode == "line_1d" and len(self.parameters) != 1:
             raise ValueError("line_1d scan requires exactly one parameter")
         if self.mode == "grid_2d" and len(self.parameters) != 2:

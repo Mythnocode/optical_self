@@ -560,7 +560,13 @@ def trace_ray_batch_native(
             )
 
     surface_interaction_records: list[list[dict[str, Any]]] = [[] for _ in range(n)]
-    if options.apply_surface_physics:
+    # Match the existing compact output contract for ordinary uncoated
+    # systems. Dataset labels need the computed powers/fields, but creating
+    # thousands of Python audit dictionaries adds avoidable overhead.
+    # Full output, coatings and posed systems retain all audit records.
+    from optical_core.physics.geometric.solvers.compact_batch_raytrace import compact_trace_support
+    include_interaction_records = options.output_level == "full" or not compact_trace_support(system, options).supported
+    if options.apply_surface_physics and include_interaction_records:
         for i in range(n):
             count = int(out_diag_counts[i])
             if not count:

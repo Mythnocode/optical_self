@@ -1,0 +1,122 @@
+{
+  "model_id": "bilstm-a5731ab91eec",
+  "model_type": "bilstm_structure_sequence",
+  "metrics": {
+    "coupling_efficiency": {
+      "r2": 0.40842610597610474,
+      "mae": 0.041105616837739944,
+      "rmse": 0.04334556825866331
+    }
+  },
+  "split_counts": {
+    "train": 21,
+    "validation": 4,
+    "test": 5
+  },
+  "evaluation": {
+    "sample_ids": [
+      "qa-17",
+      "qa-12",
+      "qa-28",
+      "qa-24",
+      "qa-23"
+    ],
+    "actual": [
+      [
+        0.5699999928474426
+      ],
+      [
+        0.5199999809265137
+      ],
+      [
+        0.6799999475479126
+      ],
+      [
+        0.6399999856948853
+      ],
+      [
+        0.6299999952316284
+      ]
+    ],
+    "predicted": [
+      [
+        0.6166321635246277
+      ],
+      [
+        0.48612797260284424
+      ],
+      [
+        0.6485942602157593
+      ],
+      [
+        0.5744316577911377
+      ],
+      [
+        0.6580498814582825
+      ]
+    ],
+    "residual": [
+      [
+        0.04663217067718506
+      ],
+      [
+        -0.033872008323669434
+      ],
+      [
+        -0.03140568733215332
+      ],
+      [
+        -0.06556832790374756
+      ],
+      [
+        0.028049886226654053
+      ]
+    ]
+  },
+  "training_curve_label": "验证 MSE（标准化）",
+  "research_scope": "different_lens_counts_and_element_orderings",
+  "metadata": {
+    "job_timings_ms": {
+      "queue_wait": 8493.123,
+      "process_startup": 0.0,
+      "worker_ready_to_first_progress": 10.265,
+      "worker_compute": 3882.996,
+      "local_result_transport": 1.991
+    },
+    "result_delivery": "summary_then_lazy_bundle"
+  },
+  "training_history": [
+    {
+      "epoch": 1.0,
+      "train_loss": 0.4603370825449626,
+      "validation_mse_scaled": 0.5808618664741516
+    },
+    {
+      "epoch": 2.0,
+      "train_loss": 0.25090456505616504,
+      "validation_mse_scaled": 0.5819158554077148
+    },
+    {
+      "epoch": 3.0,
+      "train_loss": 0.18357899288336435,
+      "validation_mse_scaled": 0.32635265588760376
+    },
+    {
+      "epoch": 4.0,
+      "train_loss": 0.1107621043920517,
+      "validation_mse_scaled": 0.5697242021560669
+    },
+    {
+      "epoch": 5.0,
+      "train_loss": 0.11213384196162224,
+      "validation_mse_scaled": 0.41507813334465027
+    }
+  ],
+  "numeric_feature_names": [
+    "radius_mm",
+    "thickness_mm"
+  ],
+  "target_names": [
+    "coupling_efficiency"
+  ]
+}

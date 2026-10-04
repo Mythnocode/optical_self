@@ -1,0 +1,166 @@
+{
+  "model-training-options": {
+    "training_parameters_host": [
+      312,
+      377,
+      946,
+      325
+    ],
+    "training_more_button": [
+      1005,
+      706,
+      117,
+      42
+    ],
+    "train_button": [
+      1130,
+      709,
+      128,
+      36
+    ]
+  },
+  "model-sequence-options": {
+    "training_parameters_host": [
+      312,
+      377,
+      946,
+      84
+    ],
+    "training_more_button": [
+      1005,
+      465,
+      117,
+      42
+    ],
+    "train_button": [
+      1130,
+      468,
+      128,
+      36
+    ]
+  },
+  "model-training-empty": {
+    "chart": [
+      303,
+      164,
+      482,
+      42
+    ],
+    "train_summary": [
+      303,
+      212,
+      964,
+      39
+    ],
+    "workspace": [
+      303,
+      257,
+      964,
+      532
+    ]
+  },
+  "model-training-chart-0": {
+    "chart": [
+      303,
+      164,
+      482,
+      42
+    ],
+    "train_summary": [
+      303,
+      212,
+      964,
+      39
+    ],
+    "train_progress_host": [
+      303,
+      257,
+      964,
+      24
+    ],
+    "workspace": [
+      303,
+      287,
+      964,
+      502
+    ]
+  },
+  "model-training-chart-1": {
+    "chart": [
+      303,
+      164,
+      482,
+      42
+    ],
+    "train_summary": [
+      303,
+      212,
+      964,
+      39
+    ],
+    "train_progress_host": [
+      303,
+      257,
+      964,
+      24
+    ],
+    "workspace": [
+      303,
+      287,
+      964,
+      502
+    ]
+  },
+  "model-training-chart-2": {
+    "chart": [
+      303,
+      164,
+      482,
+      42
+    ],
+    "train_summary": [
+      303,
+      212,
+      964,
+      39
+    ],
+    "train_progress_host": [
+      303,
+      257,
+      964,
+      24
+    ],
+    "workspace": [
+      303,
+      287,
+      964,
+      502
+    ]
+  },
+  "model-training-chart-3": {
+    "chart": [
+      303,
+      164,
+      482,
+      42
+    ],
+    "train_summary": [
+      303,
+      212,
+      964,
+      39
+    ],
+    "train_progress_host": [
+      303,
+      257,
+      964,
+      24
+    ],
+    "workspace": [
+      303,
+      287,
+      964,
+      502
+    ]
+  }
+}

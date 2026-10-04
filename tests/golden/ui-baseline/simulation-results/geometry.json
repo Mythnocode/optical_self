@@ -1,0 +1,782 @@
+{
+  "ray_layout-empty": {
+    "widgets": {
+      "workspace": [
+        301,
+        202,
+        968,
+        545
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        433,
+        162,
+        126,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1052,
+        162,
+        134,
+        33
+      ],
+      "QLabel:plotLazyPlaceholder": [
+        319,
+        463,
+        932,
+        23
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "光线数量：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "聚焦位置：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "等待计算结果",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "提交计算后，这里显示对应结果。",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 400
+      }
+    ]
+  },
+  "spot-empty": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        433,
+        162,
+        126,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1135,
+        162,
+        134,
+        33
+      ],
+      "QLabel:plotLazyPlaceholder": [
+        319,
+        463,
+        932,
+        23
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "光斑半径：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "峰值位置：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "等待计算结果",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "提交计算后，这里显示对应结果。",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 400
+      }
+    ]
+  },
+  "coupling-empty": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        601,
+        162,
+        144,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1135,
+        162,
+        134,
+        33
+      ],
+      "QLabel:plotLazyPlaceholder": [
+        319,
+        463,
+        932,
+        23
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "系统效率：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "端面接收效率：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "总耦合效率：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "等待计算结果",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "提交计算后，这里显示对应结果。",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 400
+      }
+    ]
+  },
+  "wavefront-empty": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        439,
+        162,
+        126,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1135,
+        162,
+        134,
+        33
+      ],
+      "QLabel:plotLazyPlaceholder": [
+        319,
+        463,
+        932,
+        23
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "波前 RMS：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "斯特列尔：—",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "等待计算结果",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "提交计算后，这里显示对应结果。",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 400
+      }
+    ]
+  },
+  "layout_3d-empty": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        301,
+        162,
+        90,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1135,
+        162,
+        134,
+        33
+      ],
+      "QLabel:plotLazyPlaceholder": [
+        319,
+        463,
+        932,
+        23
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "三维视图",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "等待计算结果",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "提交计算后，这里显示对应结果。",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 400
+      }
+    ]
+  },
+  "ray_layout-completed": {
+    "widgets": {
+      "workspace": [
+        301,
+        202,
+        968,
+        545
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        455,
+        162,
+        210,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1106,
+        162,
+        80,
+        33
+      ],
+      "ResultPane:resultPane": [
+        301,
+        202,
+        968,
+        545
+      ],
+      "PlotCanvas:": [
+        311,
+        210,
+        948,
+        528
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "光线数量：1793",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "聚焦位置：z=79.87 mm",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "已计算",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      }
+    ]
+  },
+  "spot-completed": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        481,
+        162,
+        325,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1189,
+        162,
+        80,
+        33
+      ],
+      "ResultPane:resultPane": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "PlotCanvas:": [
+        311,
+        209,
+        948,
+        529
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "光斑半径：2.19 μm",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "峰值位置：x=-19.03 μm, y=-24.00 μm",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "已计算",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      }
+    ]
+  },
+  "coupling-completed": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        695,
+        162,
+        186,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1189,
+        162,
+        80,
+        33
+      ],
+      "ResultPane:resultPane": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "FastHeatmapWidget:": [
+        311,
+        209,
+        948,
+        529
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "系统效率：100.00%",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "端面接收效率：99.50%",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "总耦合效率：62.54%",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "已计算",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      }
+    ]
+  },
+  "wavefront-completed": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        497,
+        162,
+        143,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1189,
+        162,
+        80,
+        33
+      ],
+      "ResultPane:resultPane": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "FastHeatmapWidget:": [
+        311,
+        209,
+        948,
+        529
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "波前 RMS：55.09 nm",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "斯特列尔：0.82",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "已计算",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      }
+    ]
+  },
+  "layout_3d-completed": {
+    "widgets": {
+      "workspace": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "text_button": [
+        1077,
+        753,
+        60,
+        38
+      ],
+      "zoom_button": [
+        1143,
+        753,
+        60,
+        38
+      ],
+      "export_button": [
+        1209,
+        753,
+        60,
+        38
+      ],
+      "QLabel:coup": [
+        301,
+        162,
+        90,
+        33
+      ],
+      "QLabel:ResultSource": [
+        1189,
+        162,
+        80,
+        33
+      ],
+      "ResultPane:resultPane": [
+        301,
+        201,
+        968,
+        546
+      ],
+      "PlotCanvas:": [
+        311,
+        209,
+        948,
+        529
+      ],
+      "QPushButton:": [
+        1209,
+        753,
+        60,
+        38
+      ]
+    },
+    "fonts": [
+      {
+        "text": "三维视图",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      },
+      {
+        "text": "已计算",
+        "family": "Microsoft YaHei UI",
+        "size": 12.5,
+        "weight": 700
+      }
+    ]
+  }
+}

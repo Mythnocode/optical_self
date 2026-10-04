@@ -1,0 +1,256 @@
+{
+  "default-table": [
+    {
+      "text": "面号",
+      "width": 72
+    },
+    {
+      "text": "表面名称",
+      "width": 120
+    },
+    {
+      "text": "表面类型",
+      "width": 108
+    },
+    {
+      "text": "曲率半径 R / mm",
+      "width": 135
+    },
+    {
+      "text": "厚度 / mm",
+      "width": 150
+    },
+    {
+      "text": "材料/介质",
+      "width": 110
+    },
+    {
+      "text": "半口径 / mm",
+      "width": 112
+    },
+    {
+      "text": "非球面 A6",
+      "width": 120
+    },
+    {
+      "text": "非球面 A8",
+      "width": 120
+    },
+    {
+      "text": "归一化半径 / mm",
+      "width": 150
+    }
+  ],
+  "new-cylindrical-table": [
+    {
+      "text": "面号",
+      "width": 72
+    },
+    {
+      "text": "表面名称",
+      "width": 120
+    },
+    {
+      "text": "表面类型",
+      "width": 108
+    },
+    {
+      "text": "曲率半径 R / mm",
+      "width": 135
+    },
+    {
+      "text": "厚度 / mm",
+      "width": 150
+    },
+    {
+      "text": "材料/介质",
+      "width": 110
+    },
+    {
+      "text": "半口径 / mm",
+      "width": 112
+    },
+    {
+      "text": "非球面 A6",
+      "width": 120
+    },
+    {
+      "text": "非球面 A8",
+      "width": 120
+    },
+    {
+      "text": "归一化半径 / mm",
+      "width": 150
+    }
+  ],
+  "new-grating-table": [
+    {
+      "text": "面号",
+      "width": 72
+    },
+    {
+      "text": "表面名称",
+      "width": 120
+    },
+    {
+      "text": "表面类型",
+      "width": 108
+    },
+    {
+      "text": "曲率半径 R / mm",
+      "width": 135
+    },
+    {
+      "text": "厚度 / mm",
+      "width": 150
+    },
+    {
+      "text": "材料/介质",
+      "width": 110
+    },
+    {
+      "text": "半口径 / mm",
+      "width": 112
+    },
+    {
+      "text": "非球面 A6",
+      "width": 120
+    },
+    {
+      "text": "非球面 A8",
+      "width": 120
+    },
+    {
+      "text": "归一化半径 / mm",
+      "width": 150
+    },
+    {
+      "text": "沟槽密度 / 线/mm",
+      "width": 156
+    },
+    {
+      "text": "衍射级次 m",
+      "width": 120
+    },
+    {
+      "text": "沟槽方向角 / °",
+      "width": 129
+    },
+    {
+      "text": "闪耀角 / °",
+      "width": 120
+    },
+    {
+      "text": "效率模型",
+      "width": 120
+    }
+  ],
+  "new-coordinate_break-table": [
+    {
+      "text": "面号",
+      "width": 72
+    },
+    {
+      "text": "表面名称",
+      "width": 120
+    },
+    {
+      "text": "表面类型",
+      "width": 108
+    },
+    {
+      "text": "曲率半径 R / mm",
+      "width": 135
+    },
+    {
+      "text": "厚度 / mm",
+      "width": 150
+    },
+    {
+      "text": "材料/介质",
+      "width": 110
+    },
+    {
+      "text": "半口径 / mm",
+      "width": 112
+    },
+    {
+      "text": "非球面 A6",
+      "width": 120
+    },
+    {
+      "text": "非球面 A8",
+      "width": 120
+    },
+    {
+      "text": "归一化半径 / mm",
+      "width": 150
+    },
+    {
+      "text": "Y 偏心 / mm",
+      "width": 120
+    },
+    {
+      "text": "X 倾斜 / °",
+      "width": 120
+    },
+    {
+      "text": "Y 倾斜 / °",
+      "width": 120
+    },
+    {
+      "text": "Z 旋转 / °",
+      "width": 120
+    },
+    {
+      "text": "后续恢复原坐标",
+      "width": 140
+    }
+  ],
+  "new-user_defined-table": [
+    {
+      "text": "面号",
+      "width": 72
+    },
+    {
+      "text": "表面名称",
+      "width": 120
+    },
+    {
+      "text": "表面类型",
+      "width": 108
+    },
+    {
+      "text": "曲率半径 R / mm",
+      "width": 135
+    },
+    {
+      "text": "厚度 / mm",
+      "width": 150
+    },
+    {
+      "text": "材料/介质",
+      "width": 110
+    },
+    {
+      "text": "半口径 / mm",
+      "width": 112
+    },
+    {
+      "text": "非球面 A6",
+      "width": 120
+    },
+    {
+      "text": "非球面 A8",
+      "width": 120
+    },
+    {
+      "text": "归一化半径 / mm",
+      "width": 150
+    },
+    {
+      "text": "扩展参数说明",
+      "width": 124
+    }
+  ]
+}

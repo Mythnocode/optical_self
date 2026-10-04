@@ -114,7 +114,9 @@ def test_chain_view_scrolls_on_a_short_window():
     shell.show()
     try:
         document = _open_chain_document(shell)
-        assert document.chain_view.verticalScrollBar().maximum() == 0
+        # Each selected feature now has its own rendered formula card, so the
+        # full chain can exceed the height even on a large window.
+        large_window_scroll = document.chain_view.verticalScrollBar().maximum()
 
         shell.resize(1000, 520)
         _wait(300)
@@ -123,6 +125,7 @@ def test_chain_view_scrolls_on_a_short_window():
         assert document.chain_view.height() <= document.height()
         scroll_bar = document.chain_view.verticalScrollBar()
         assert scroll_bar.maximum() > 0
+        assert scroll_bar.maximum() > large_window_scroll
         assert document.chain_view.widget().height() > document.chain_view.viewport().height()
     finally:
         shell.close()

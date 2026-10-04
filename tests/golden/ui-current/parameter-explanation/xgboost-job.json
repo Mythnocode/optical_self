@@ -1,0 +1,17 @@
+{
+  "job_id": "job-7ed7bac4d440",
+  "job_type": "explainability",
+  "status": "completed",
+  "progress": 1.0,
+  "stage": "completed",
+  "completed_items": 1,
+  "total_items": 1,
+  "created_at": "2026-10-01T19:49:12.848663+00:00",
+  "started_at": "2026-10-01T19:49:12.960893+00:00",
+  "finished_at": "2026-10-01T19:49:15.125111+00:00",
+  "result_available": true,
+  "error": null,
+  "retry_available": true,
+  "retry_of": null,
+  "last_activity_at": "2026-10-01T19:49:15.052112+00:00"
+}

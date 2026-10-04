@@ -1,0 +1,37 @@
+
+--- backend start 2026-10-02T09:56:02.822Z ---
+[2026-10-02T09:56:04.141Z] [stderr] Traceback (most recent call last):
+  File "D:\AAAWorkspace\optical_self\dist\desktop\win-unpacked\resources\backend\desktop\backend_bootstrap.py", line 32, in <module>
+[2026-10-02T09:56:04.141Z] [stderr]     main()
+  File "D:\AAAWorkspace\optical_self\dist\desktop\win-unpacked\resources\backend\desktop\backend_bootstrap.py", line 28, in main
+    run_backend()
+  File "D:\AAAWorkspace\optical_self\dist\desktop\win-unpacked\resources\backend\run_backend.py", line 16, in main
+    import uvicorn
+ModuleNotFoundError: No module named 'uvicorn'
+
+--- backend start 2026-10-02T10:24:05.789Z ---
+[2026-10-02T10:24:22.198Z] [stderr] INFO:     Started server process [29788]
+INFO:     Waiting for application startup.
+[2026-10-02T10:24:22.241Z] [stderr] INFO:     Application startup complete.
+[2026-10-02T10:24:22.476Z] [stdout] INFO:     127.0.0.1:58872 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T10:24:22.545Z] [stdout] INFO:     127.0.0.1:58872 - "GET /api/v1/jobs?limit=40&offset=0 HTTP/1.1" 200 OK
+[2026-10-02T10:24:26.500Z] [stderr] 2026-10-02 18:24:26,499 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: simulation-0 (simulation), prewarm=3867.7 ms
+[2026-10-02T10:24:26.502Z] [stderr] 2026-10-02 18:24:26,502 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: simulation-1 (simulation), prewarm=3843.3 ms
+[2026-10-02T10:24:33.513Z] [stdout] INFO:     127.0.0.1:54209 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T10:24:55.683Z] [stdout] INFO:     127.0.0.1:54678 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026-10-02T10:24:56.117Z] [stdout] INFO:     127.0.0.1:54679 - "POST /api/v1/dataset/jobs HTTP/1.1" 202 Accepted
+[2026-10-02T10:24:56.497Z] [stderr] 2026-10-02 18:24:56,497 INFO backend.optical_ml_app.jobs.task_manager persistent worker ready: dataset-0 (dataset), prewarm=0.0 ms
+[2026-10-02T10:25:14.079Z] [stdout] INFO:     127.0.0.1:51125 - "GET /api/v1/jobs/job-9afc30c91d29 HTTP/1.1" 200 OK
+[2026-10-02T10:25:33.035Z] [stdout] INFO:     127.0.0.1:51134 - "GET /api/v1/jobs/job-9afc30c91d29 HTTP/1.1" 200 OK
+[2026-10-02T10:26:01.726Z] [stdout] INFO:     127.0.0.1:49379 - "GET /api/v1/jobs/job-9afc30c91d29 HTTP/1.1" 200 OK
+[2026-10-02T10:26:21.820Z] [stdout] INFO:     127.0.0.1:49386 - "GET /api/v1/jobs/job-9afc30c91d29 HTTP/1.1" 200 OK
+[2026-10-02T10:26:22.071Z] [stdout] INFO:     127.0.0.1:49387 - "GET /api/v1/jobs/job-9afc30c91d29/result HTTP/1.1" 200 OK
+[2026-10-02T10:26:48.868Z] [stdout] INFO:     127.0.0.1:58925 - "GET /api/v1/headless-datasets/dataset-848ce4ff7858/files/manifest HTTP/1.1" 200 OK
+[2026-10-02T10:26:48.924Z] [stdout] INFO:     127.0.0.1:58926 - "GET /api/v1/headless-datasets/dataset-848ce4ff7858/files/samples-jsonl HTTP/1.1" 200 OK
+[2026-10-02T10:27:49.846Z] [stdout] INFO:     127.0.0.1:58132 - "POST /api/v1/dataset/jobs HTTP/1.1" 202 Accepted
+[2026-10-02T10:28:07.470Z] [stdout] INFO:     127.0.0.1:58139 - "GET /api/v1/jobs/job-ccb892e4ec47 HTTP/1.1" 200 OK
+[2026-10-02T10:28:28.356Z] [stdout] INFO:     127.0.0.1:58146 - "GET /api/v1/jobs/job-ccb892e4ec47 HTTP/1.1" 200 OK
+[2026-10-02T10:28:57.237Z] [stdout] INFO:     127.0.0.1:55432 - "GET /api/v1/jobs/job-ccb892e4ec47 HTTP/1.1" 200 OK
+[2026-10-02T10:28:57.375Z] [stdout] INFO:     127.0.0.1:55433 - "GET /api/v1/jobs/job-ccb892e4ec47/result HTTP/1.1" 200 OK
+[2026-10-02T10:28:57.415Z] [stdout] INFO:     127.0.0.1:55434 - "GET /api/v1/headless-datasets/dataset-e5a6836a6838/files/manifest HTTP/1.1" 200 OK
+[2026-10-02T10:28:57.442Z] [stdout] INFO:     127.0.0.1:55435 - "GET /api/v1/headless-datasets/dataset-e5a6836a6838/files/samples-jsonl HTTP/1.1" 200 OK

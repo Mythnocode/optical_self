@@ -1,0 +1,72 @@
+{
+  "states": {
+    "default": {
+      "control_count": 26,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "search-lens": {
+      "control_count": 11,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "search-empty": {
+      "control_count": 9,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-laser": {
+      "control_count": 30,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-laser-custom": {
+      "control_count": 30,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-lens": {
+      "control_count": 29,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-mirror": {
+      "control_count": 29,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-aperture": {
+      "control_count": 29,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-fiber": {
+      "control_count": 29,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-ccd": {
+      "control_count": 26,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    },
+    "preset-oscilloscope": {
+      "control_count": 26,
+      "counts_equal": true,
+      "max_difference_px": 0,
+      "window_equal": true
+    }
+  },
+  "controls": 274,
+  "max_difference_px": 0
+}

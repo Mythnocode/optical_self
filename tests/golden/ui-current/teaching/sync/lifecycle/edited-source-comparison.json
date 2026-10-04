@@ -1,0 +1,8 @@
+{
+  "full_scene_equal": true,
+  "status_equal": true,
+  "editor_wavelength_nm": 940.0,
+  "mapped_wavelength_nm": 850.0,
+  "mapped_first_radius_mm": 6.2,
+  "contract_grid_size": 129
+}

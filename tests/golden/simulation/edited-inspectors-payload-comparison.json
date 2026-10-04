@@ -1,0 +1,17 @@
+{
+  "js_job": "job-97bf63d7e5db",
+  "original_job": "job-e125ac689bbc",
+  "sections": {
+    "source": {
+      "equal": true
+    },
+    "receiver": {
+      "equal": true
+    },
+    "analysis_settings": {
+      "equal": true
+    }
+  },
+  "options_equal": true,
+  "system_equal": true
+}

@@ -3,9 +3,26 @@ from fastapi import APIRouter, Request
 from backend.optical_ml_app.api.responses import failure, success
 from backend.optical_ml_app.domain.errors import BackendApplicationError
 from shared_contracts.prediction import PredictionRequest
+from shared_contracts.project import ProjectSnapshot
+from pydantic import BaseModel, Field
 
 
 router = APIRouter()
+
+
+class ProjectFeaturesRequest(BaseModel):
+    project: ProjectSnapshot
+    feature_paths: list[str] = Field(min_length=1, max_length=256)
+
+
+@router.post("/models/project-features")
+def read_project_features(payload: ProjectFeaturesRequest, request: Request):
+    from backend.optical_ml_app.application.project_features import project_features
+    try:
+        features = project_features(payload.project, payload.feature_paths)
+    except (TypeError, ValueError) as exc:
+        return failure(request, status_code=422, code="MODEL_FEATURE_MISSING", stage="model.project_features", message=str(exc))
+    return success(request, {"features": features})
 
 
 @router.get("/models")

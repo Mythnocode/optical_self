@@ -41,6 +41,7 @@ class HybridPipeline:
         "sampling_role",
         "polarization_sensitive",
         "vector_coupling_enabled",
+        "prefer_native_trace",
     }
 
     def __init__(self, *, prepared_coupling_cache_entries: int = 8) -> None:

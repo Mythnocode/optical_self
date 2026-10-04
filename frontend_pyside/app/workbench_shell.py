@@ -2892,6 +2892,14 @@ class WorkbenchShell(QWidget):
         state = self.collect_simulation_state()
         project_payload = serialize_project(self.context.project.project, state)
         family = dataset.current_family()
+        from shared_presentation.dataset_generation import imported_dataset_mode
+        try:
+            from dataclasses import replace
+            runtime_state = replace(state, calculation=replace(state.calculation, analyses=("coupling",)))
+            imported_mode = imported_dataset_mode(project_payload, runtime_state.request_options())
+        except ValueError as exc:
+            self.taskRequested.emit(str(exc))
+            return
         scheme_id = None
         lens_count = None
         if family == "sequence":
@@ -2944,6 +2952,8 @@ class WorkbenchShell(QWidget):
             "design_variable_paths": list(paths),
             "dataset_layout": "sequence_long" if family == "sequence" else "tabular",
         }
+        if imported_mode is not None:
+            payload["imported_mode"] = imported_mode
         self._pending_generated_dataset_id = f"pending-dataset-{uuid4().hex[:10]}"
         self._register_pending_generated_dataset(
             self._pending_generated_dataset_id,

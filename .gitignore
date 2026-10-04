@@ -15,6 +15,10 @@ build/
 dist/
 *.egg-info/
 .eggs/
+node_modules/
+desktop-dist/
+frontend_web/dist/
+frontend_web/.vite/
 
 # ===== 虚拟环境 =====
 .venv/

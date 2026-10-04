@@ -1,0 +1,26 @@
+{
+  "new-cylindrical-table": {
+    "headers_equal": true,
+    "max_width_delta": 0,
+    "original_columns": 10,
+    "current_columns": 10
+  },
+  "new-grating-table": {
+    "headers_equal": true,
+    "max_width_delta": 0,
+    "original_columns": 15,
+    "current_columns": 15
+  },
+  "new-coordinate_break-table": {
+    "headers_equal": true,
+    "max_width_delta": 0,
+    "original_columns": 15,
+    "current_columns": 15
+  },
+  "new-user_defined-table": {
+    "headers_equal": true,
+    "max_width_delta": 0,
+    "original_columns": 11,
+    "current_columns": 11
+  }
+}

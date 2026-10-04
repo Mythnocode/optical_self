@@ -1,0 +1,576 @@
+[
+  {
+    "kind": "QComboBox",
+    "text": "高斯光束",
+    "bounds": [
+      28,
+      300,
+      109,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "QComboBox",
+    "text": "mW",
+    "bounds": [
+      112,
+      432,
+      69,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "780.00",
+    "bounds": [
+      28,
+      365,
+      84,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "1.00",
+    "bounds": [
+      28,
+      432,
+      78,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      536,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": false,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      507,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": false,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "893.00",
+    "bounds": [
+      28,
+      536,
+      78,
+      32
+    ],
+    "enabled": false,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      603,
+      78,
+      32
+    ],
+    "enabled": false,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "3.05",
+    "bounds": [
+      28,
+      670,
+      78,
+      30
+    ],
+    "enabled": false,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "893.00",
+    "bounds": [
+      28,
+      771,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      838,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "1050.00",
+    "bounds": [
+      28,
+      905,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "0.00",
+    "bounds": [
+      28,
+      972,
+      78,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "3.05",
+    "bounds": [
+      28,
+      1039,
+      78,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "UnitAwareDoubleSpinBox",
+    "text": "1.33",
+    "bounds": [
+      28,
+      1104,
+      78,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 13.25,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "基本参数",
+    "bounds": [
+      28,
+      248,
+      222,
+      19
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 10.5,
+    "font_weight": 700
+  },
+  {
+    "kind": "QLabel",
+    "text": "光源类型",
+    "bounds": [
+      28,
+      271,
+      68,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "波长",
+    "bounds": [
+      28,
+      336,
+      34,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "nm",
+    "bounds": [
+      118,
+      365,
+      40,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "总功率",
+    "bounds": [
+      28,
+      403,
+      51,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "光束参数",
+    "bounds": [
+      28,
+      484,
+      222,
+      19
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 10.5,
+    "font_weight": 700
+  },
+  {
+    "kind": "QLabel",
+    "text": "数值孔径 NA",
+    "bounds": [
+      28,
+      507,
+      96,
+      23
+    ],
+    "enabled": true,
+    "visible": false,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "NAᵧ",
+    "bounds": [
+      28,
+      507,
+      640,
+      480
+    ],
+    "enabled": true,
+    "visible": false,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "束腰半径 ω₀",
+    "bounds": [
+      28,
+      507,
+      101,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "μm",
+    "bounds": [
+      112,
+      536,
+      40,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "束腰位置",
+    "bounds": [
+      28,
+      574,
+      68,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "mm",
+    "bounds": [
+      112,
+      603,
+      46,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "光束质量 M²",
+    "bounds": [
+      28,
+      641,
+      93,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "束腰半径 ωₓ",
+    "bounds": [
+      28,
+      742,
+      101,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "μm",
+    "bounds": [
+      112,
+      771,
+      40,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "束腰位置 zₓ",
+    "bounds": [
+      28,
+      809,
+      97,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "mm",
+    "bounds": [
+      112,
+      838,
+      46,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "束腰半径 ωᵧ",
+    "bounds": [
+      28,
+      876,
+      101,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "μm",
+    "bounds": [
+      112,
+      905,
+      40,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "束腰位置 zᵧ",
+    "bounds": [
+      28,
+      943,
+      97,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "mm",
+    "bounds": [
+      112,
+      972,
+      46,
+      32
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "M²ₓ",
+    "bounds": [
+      28,
+      1010,
+      38,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "M²ᵧ",
+    "bounds": [
+      28,
+      1075,
+      38,
+      23
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QLabel",
+    "text": "辅助波长",
+    "bounds": [
+      17,
+      239,
+      68,
+      23
+    ],
+    "enabled": true,
+    "visible": false,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QCheckBox",
+    "text": "分轴",
+    "bounds": [
+      28,
+      574,
+      640,
+      30
+    ],
+    "enabled": true,
+    "visible": false,
+    "font_size": 12.5,
+    "font_weight": 400
+  },
+  {
+    "kind": "QCheckBox",
+    "text": "分轴（椭圆光斑）",
+    "bounds": [
+      28,
+      706,
+      222,
+      30
+    ],
+    "enabled": true,
+    "visible": true,
+    "font_size": 12.5,
+    "font_weight": 400
+  }
+]

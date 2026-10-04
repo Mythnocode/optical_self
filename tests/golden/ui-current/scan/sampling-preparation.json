@@ -1,0 +1,116 @@
+[
+  {
+    "mode": "一维扫描",
+    "scale": "对数采样",
+    "status": 200,
+    "actual_mode": "line_1d",
+    "points": [
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          1.0
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          2.0
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          4.0
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          7.999999999999999
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          16.0
+        ]
+      }
+    ]
+  },
+  {
+    "mode": "多参数采样",
+    "scale": "线性采样",
+    "status": 200,
+    "actual_mode": "lhs",
+    "points": [
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          1.67813185433211
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          8.683364680743843
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          10.424206240265853
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          4.907895912821909
+        ]
+      },
+      {
+        "paths": [
+          "surfaces[0].radius_mm"
+        ],
+        "values": [
+          15.717467956337051
+        ]
+      }
+    ]
+  },
+  {
+    "mode": "一维扫描",
+    "scale": "自适应加密",
+    "status": 422,
+    "body": {
+      "code": "SCAN_PARAMETERS_INVALID",
+      "message": "1 validation error for ScanJobRequest\n  Value error, 自适应加密尚未实现，请选择线性采样或对数采样。 [type=value_error, input_value={'request_id': 'sim-6e344..._strategy': 'adaptive'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+      "data": null,
+      "error": {
+        "code": "SCAN_PARAMETERS_INVALID",
+        "stage": "scan.prepare",
+        "message": "1 validation error for ScanJobRequest\n  Value error, 自适应加密尚未实现，请选择线性采样或对数采样。 [type=value_error, input_value={'request_id': 'sim-6e344..._strategy': 'adaptive'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-8103d5b5118141c0ae28330703f2cfb7"
+    }
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "equal": true,
+  "differences": [],
+  "excluded_fields": [
+    "cache_hit",
+    "elapsed_ms",
+    "explanation_kind",
+    "status"
+  ]
+}

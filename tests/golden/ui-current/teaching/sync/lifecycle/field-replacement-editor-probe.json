@@ -1,0 +1,12 @@
+{
+  "reference": {
+    "id": "71860a63-18a6-4cbc-83ff-1c40a8cbb7e2",
+    "path": "imported-mode-513-replacement.npz",
+    "shape": [
+      513,
+      513
+    ],
+    "wavelength_nm": 780
+  },
+  "grid": 513
+}

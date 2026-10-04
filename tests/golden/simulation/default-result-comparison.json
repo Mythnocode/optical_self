@@ -1,0 +1,47 @@
+{
+  "js_job": "job-1bdce32cb1f5",
+  "legacy_request_job": "job-e308ba2c305b",
+  "js_fingerprint": "web-27cd89123b0d8006",
+  "legacy_fingerprint": "frontend-f0946273d8a10abb",
+  "metrics": {
+    "coupling_efficiency": {
+      "js": 0.9518450969477794,
+      "legacy": 0.9518450969477794,
+      "difference": 0.0
+    },
+    "total_coupling_efficiency": {
+      "js": 0.9470498589270048,
+      "legacy": 0.9470498589270048,
+      "difference": 0.0
+    },
+    "transmission_efficiency": {
+      "js": 0.999961975426811,
+      "legacy": 0.999961975426811,
+      "difference": 0.0
+    },
+    "coupling_field_rms_x_um": {
+      "js": 1.6485943606264717,
+      "legacy": 1.6485943606264717,
+      "difference": 0.0
+    },
+    "coupling_field_rms_y_um": {
+      "js": 1.4359410648204272,
+      "legacy": 1.4359410648204272,
+      "difference": 0.0
+    },
+    "trace_valid_fraction": {
+      "js": 1.0,
+      "legacy": 1.0,
+      "difference": 0.0
+    }
+  },
+  "warnings": [
+    "scaled Fresnel Nyquist 余量 0.117 小于要求 1。",
+    "估算 NA=0.213，scaled Fresnel 近轴误差可能不可忽略。",
+    "Sampling pre-flight: input field spectrum approaches or exceeds input Nyquist frequency",
+    "Sampling pre-flight: Fresnel quadratic phase changes too rapidly at a sampled edge",
+    "Sampling pre-flight: angular-spectrum maximum propagation angle exceeds sampling support",
+    "Sampling pre-flight: configured zero padding is below the estimated no-wrap requirement"
+  ],
+  "note": "Same existing engine and source defaults. Arrays are retained by the isolated backend job repository."
+}

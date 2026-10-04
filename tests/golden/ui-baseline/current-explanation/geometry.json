@@ -1,0 +1,2876 @@
+{
+  "empty": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "请先在模型页训练，再选择该模型。",
+      "name": "plotLazyPlaceholder",
+      "bounds": [
+        323,
+        489,
+        926,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    }
+  ],
+  "selected": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "请先在模型页训练，再选择该模型。",
+      "name": "plotLazyPlaceholder",
+      "bounds": [
+        323,
+        489,
+        926,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "selected-uncomputed": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林2",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "请先在模型页训练，再选择该模型。",
+      "name": "plotLazyPlaceholder",
+      "bounds": [
+        323,
+        489,
+        926,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "rf-analysis": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "name": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        244
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "name": "helperText",
+      "bounds": [
+        315,
+        467,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSummaryPanel",
+      "name": "ExplainSummaryPanel",
+      "bounds": [
+        305,
+        502,
+        962,
+        287
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "模型分析",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        467,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理联系",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        741,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "下一步",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        1015,
+        503,
+        90,
+        44
+      ]
+    },
+    {
+      "kind": "QStackedWidget",
+      "text": "ExplainSummaryStack",
+      "name": "ExplainSummaryStack",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "第1表面曲率半径（mm） 的平均 |SHAP| 为 0.1733 比例。\n该变量在当前样本中提高模型输出。",
+      "name": "ExplainSummaryBody",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "rf-physics": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "name": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        244
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "name": "helperText",
+      "bounds": [
+        315,
+        467,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSummaryPanel",
+      "name": "ExplainSummaryPanel",
+      "bounds": [
+        305,
+        502,
+        962,
+        287
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "模型分析",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        467,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理联系",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        741,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "下一步",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        1015,
+        503,
+        90,
+        44
+      ]
+    },
+    {
+      "kind": "QStackedWidget",
+      "text": "ExplainSummaryStack",
+      "name": "ExplainSummaryStack",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainFormulaCard",
+      "name": "ExplainFormulaCard",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "第1表面曲率半径（mm） · 物理公式",
+      "name": "ExplainSectionTitle",
+      "bounds": [
+        314,
+        559,
+        944,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "<div style='padding:0 2px 4px; color:#465467;'>特征映射：结构参数 · 曲率半径<br>物理联系：曲率半径改变折射面光焦度，进而改变焦点位置、光斑尺寸和焦面波前。<br>关联方式：间接。该表面曲率半径改变折射光焦度<br>SHAP 仅用于模型贡献排序，箭头表示光学计算依赖，结论须由正式仿真验证。</div>",
+      "name": "",
+      "bounds": [
+        314,
+        694,
+        944,
+        88
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "name": "ExplainFormulaStage",
+      "bounds": [
+        314,
+        584,
+        944,
+        21
+      ]
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "name": "",
+      "bounds": [
+        314,
+        607,
+        944,
+        29
+      ],
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "name": "ExplainFormulaStage",
+      "bounds": [
+        314,
+        638,
+        944,
+        21
+      ]
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "name": "",
+      "bounds": [
+        314,
+        661,
+        944,
+        29
+      ],
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "rf-next": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "name": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        244
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "name": "helperText",
+      "bounds": [
+        315,
+        467,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSummaryPanel",
+      "name": "ExplainSummaryPanel",
+      "bounds": [
+        305,
+        502,
+        962,
+        287
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "模型分析",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        467,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理联系",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        741,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "下一步",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        1015,
+        503,
+        90,
+        44
+      ]
+    },
+    {
+      "kind": "QStackedWidget",
+      "text": "ExplainSummaryStack",
+      "name": "ExplainSummaryStack",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "对该曲率半径做正式单变量扫描，并检查接收面光斑和模式重叠，再用正式光学计算复核。 当前结论仍是模型线索，尚未由本次正式仿真确认。",
+      "name": "ExplainSummaryBody",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "xgboost-analysis": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "XGBoost物理残差1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "name": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        244
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "name": "helperText",
+      "bounds": [
+        315,
+        467,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSummaryPanel",
+      "name": "ExplainSummaryPanel",
+      "bounds": [
+        305,
+        502,
+        962,
+        287
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "模型分析",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        467,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理联系",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        741,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "下一步",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        1015,
+        503,
+        90,
+        44
+      ]
+    },
+    {
+      "kind": "QStackedWidget",
+      "text": "ExplainSummaryStack",
+      "name": "ExplainSummaryStack",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "第1表面曲率半径（mm） 的平均 |SHAP| 为 3.146 dB。\n该变量在当前样本中降低模型输出。",
+      "name": "ExplainSummaryBody",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "xgboost-physics": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "XGBoost物理残差1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "name": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        244
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "name": "helperText",
+      "bounds": [
+        315,
+        467,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSummaryPanel",
+      "name": "ExplainSummaryPanel",
+      "bounds": [
+        305,
+        502,
+        962,
+        287
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "模型分析",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        467,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理联系",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        741,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "下一步",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        1015,
+        503,
+        90,
+        44
+      ]
+    },
+    {
+      "kind": "QStackedWidget",
+      "text": "ExplainSummaryStack",
+      "name": "ExplainSummaryStack",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainFormulaCard",
+      "name": "ExplainFormulaCard",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "第1表面曲率半径（mm） · 物理公式",
+      "name": "ExplainSectionTitle",
+      "bounds": [
+        314,
+        559,
+        944,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "<div style='padding:0 2px 4px; color:#465467;'>特征映射：结构参数 · 曲率半径<br>物理联系：曲率半径改变折射面光焦度，进而改变焦点位置、光斑尺寸和焦面波前。<br>关联方式：间接。该表面曲率半径改变折射光焦度<br>SHAP 仅用于模型贡献排序，箭头表示光学计算依赖，结论须由正式仿真验证。</div>",
+      "name": "",
+      "bounds": [
+        314,
+        694,
+        944,
+        88
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "name": "ExplainFormulaStage",
+      "bounds": [
+        314,
+        584,
+        944,
+        21
+      ]
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "name": "",
+      "bounds": [
+        314,
+        607,
+        944,
+        29
+      ],
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "name": "ExplainFormulaStage",
+      "bounds": [
+        314,
+        638,
+        944,
+        21
+      ]
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "name": "",
+      "bounds": [
+        314,
+        661,
+        944,
+        29
+      ],
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "xgboost-next": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "XGBoost物理残差1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "name": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        244
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+      "name": "helperText",
+      "bounds": [
+        315,
+        467,
+        942,
+        20
+      ]
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSummaryPanel",
+      "name": "ExplainSummaryPanel",
+      "bounds": [
+        305,
+        502,
+        962,
+        287
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "模型分析",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        467,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理联系",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        741,
+        503,
+        107,
+        44
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "下一步",
+      "name": "ExplainSummaryButton",
+      "bounds": [
+        1015,
+        503,
+        90,
+        44
+      ]
+    },
+    {
+      "kind": "QStackedWidget",
+      "text": "ExplainSummaryStack",
+      "name": "ExplainSummaryStack",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "对该曲率半径做正式单变量扫描，并检查接收面光斑和模式重叠，再用正式光学计算复核。 当前结论仍是模型线索，尚未由本次正式仿真确认。",
+      "name": "ExplainSummaryBody",
+      "bounds": [
+        306,
+        553,
+        960,
+        235
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ],
+  "bilstm-compute-guard": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "name": "",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "BiLSTM1",
+      "name": "",
+      "bounds": [
+        381,
+        162,
+        232,
+        42
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "name": "",
+      "bounds": [
+        621,
+        165,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "name": "ExplainNotationHint",
+      "bounds": [
+        757,
+        162,
+        278,
+        42
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "name": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        562
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "name": "RailTitle",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        203,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        235,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        267,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        299,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        331,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        363,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        395,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差3",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        427,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        459,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差4",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        491,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林7",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        523,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差5",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        555,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "随机森林8",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        587,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "XGBoost物理残差6",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        619,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM1",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        651,
+        242,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "BiLSTM2",
+      "name": "datasetRailTitle",
+      "bounds": [
+        26,
+        683,
+        242,
+        19
+      ]
+    }
+  ]
+}

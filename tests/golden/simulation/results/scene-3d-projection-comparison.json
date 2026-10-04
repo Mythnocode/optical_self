@@ -1,0 +1,17 @@
+{
+  "ray_vertices": 150,
+  "projection_max_difference_px": 1.0231815394945443e-12,
+  "current_layout_max_difference_px": 0.26214402955372407,
+  "original_canvas": [
+    311,
+    209,
+    948,
+    529
+  ],
+  "current_canvas": [
+    310.66668701171875,
+    208.6666717529297,
+    948.6666870117188,
+    529.6666870117188
+  ]
+}

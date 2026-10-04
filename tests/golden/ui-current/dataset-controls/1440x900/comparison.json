@@ -1,0 +1,1163 @@
+{
+  "import-collapsed": {
+    "native_controls": 13,
+    "web_controls": 13,
+    "maximum_rectangle_difference_px": 0.0208740234375,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 2.4106725823045267,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          344,
+          1122,
+          80
+        ],
+        "web": [
+          305,
+          344,
+          1122,
+          80
+        ],
+        "error": 0
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      424
+    ],
+    "form_mean_absolute_rgb_difference": 4.25350723217809,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "import-expanded": {
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0.041748046875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 3.4591525205761315,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          344,
+          1122,
+          407
+        ],
+        "web": [
+          305,
+          344,
+          1122,
+          406.9791870117187
+        ],
+        "error": 0.020812988281306843
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      751
+    ],
+    "form_mean_absolute_rgb_difference": 4.134690054444373,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "sequence-import": {
+    "native_controls": 13,
+    "web_controls": 13,
+    "maximum_rectangle_difference_px": 0.0208740234375,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 1.9640185185185184,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          344,
+          1122,
+          80
+        ],
+        "web": [
+          305,
+          344,
+          1122,
+          80
+        ],
+        "error": 0
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      424
+    ],
+    "form_mean_absolute_rgb_difference": 4.26141522998281,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "sequence-training-expanded": {
+    "native_controls": 18,
+    "web_controls": 18,
+    "maximum_rectangle_difference_px": 0.041748046875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 2.186184156378601,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          344,
+          1122,
+          167
+        ],
+        "web": [
+          305,
+          344,
+          1122,
+          166.9791717529297
+        ],
+        "error": 0.0208282470703125
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      511
+    ],
+    "form_mean_absolute_rgb_difference": 4.023209509557057,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "sequence-generation-collapsed": {
+    "native_controls": 20,
+    "web_controls": 20,
+    "maximum_rectangle_difference_px": 0.041748046875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 2.1782572016460904,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          254
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          253.9791717529297
+        ],
+        "error": 0.0208282470703125
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          424,
+          1122,
+          167
+        ],
+        "web": [
+          305,
+          423.9791870117187,
+          1122,
+          166.9791717529297
+        ],
+        "error": 0.0208282470703125
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      591
+    ],
+    "form_mean_absolute_rgb_difference": 3.312514283102518,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "sequence-generation-expanded": {
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0.041748046875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 3.026097479423868,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          429
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          428.9791870117187
+        ],
+        "error": 0.020812988281306843
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          599,
+          1122,
+          167
+        ],
+        "web": [
+          305,
+          598.9791870117188,
+          1122,
+          166.9791717529297
+        ],
+        "error": 0.0208282470703125
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      766
+    ],
+    "form_mean_absolute_rgb_difference": 4.067551734721583,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "sequence-variables-expanded": {
+    "native_controls": 52,
+    "web_controls": 52,
+    "maximum_rectangle_difference_px": 0.041748046875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 6.198002314814815,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1110,
+          756
+        ],
+        "web": [
+          305,
+          162,
+          1110,
+          755.9791870117188
+        ],
+        "error": 0.02081298828125
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          926,
+          1110,
+          164
+        ],
+        "web": [
+          305,
+          925.9791870117188,
+          1110,
+          163.9791717529297
+        ],
+        "error": 0.0208282470703125
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1415,
+      900
+    ],
+    "form_mean_absolute_rgb_difference": 8.451910853943374,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "fixed-generation-expanded": {
+    "native_controls": 27,
+    "web_controls": 27,
+    "maximum_rectangle_difference_px": 0.03125,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 3.157800154320988,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          407
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          406.9791870117187
+        ],
+        "error": 0.020812988281306843
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          577,
+          1122,
+          80
+        ],
+        "web": [
+          305,
+          576.9791870117188,
+          1122,
+          80
+        ],
+        "error": 0.02081298828125
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      657
+    ],
+    "form_mean_absolute_rgb_difference": 4.14909282966324,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  },
+  "fixed-generation-collapsed": {
+    "native_controls": 15,
+    "web_controls": 15,
+    "maximum_rectangle_difference_px": 0.03125,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "font_differences": [],
+    "mean_absolute_rgb_difference": 2.4149560185185184,
+    "frame_differences": [
+      {
+        "name": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "error": 0
+      },
+      {
+        "name": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "error": 0
+      },
+      {
+        "name": "DatasetTab",
+        "native": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "web": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "error": 0
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          162,
+          1122,
+          254
+        ],
+        "web": [
+          305,
+          162,
+          1122,
+          253.9791717529297
+        ],
+        "error": 0.0208282470703125
+      },
+      {
+        "name": "FieldGroup",
+        "native": [
+          305,
+          424,
+          1122,
+          80
+        ],
+        "web": [
+          305,
+          423.9791870117187,
+          1122,
+          80
+        ],
+        "error": 0.020812988281306843
+      },
+      {
+        "name": "ObjectRail",
+        "native": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "web": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "error": 0
+      }
+    ],
+    "form_box": [
+      305,
+      162,
+      1427,
+      504
+    ],
+    "form_mean_absolute_rgb_difference": 3.349390012960704,
+    "image_comparison": {
+      "native_png_size": [
+        2160,
+        1350
+      ],
+      "web_png_size": [
+        1440,
+        900
+      ],
+      "native_dpr": 1.5,
+      "web_dpr": 1.0000000298023224,
+      "resampling": "native LANCZOS to web PNG size",
+      "limitation": "Resampled raster diagnostic only; not pixel identity. Full image includes different dataset lists."
+    }
+  }
+}

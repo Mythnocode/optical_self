@@ -1,0 +1,376 @@
+{
+  "optimization": [
+    {
+      "name": "PrimaryBar",
+      "text": "PrimaryBar",
+      "tooltip": "",
+      "checked": false,
+      "bounds": [
+        0,
+        0,
+        1280,
+        58
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 400,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": null,
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryModuleButton",
+      "text": "首页",
+      "tooltip": "",
+      "checked": false,
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        16,
+        16
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryModuleButton",
+      "text": "教学",
+      "tooltip": "",
+      "checked": false,
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        16,
+        16
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryModuleButton",
+      "text": "仿真",
+      "tooltip": "",
+      "checked": false,
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        16,
+        16
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryModuleButton",
+      "text": "模型",
+      "tooltip": "",
+      "checked": false,
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        16,
+        16
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryModuleButton",
+      "text": "优化",
+      "tooltip": "",
+      "checked": true,
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        16,
+        16
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryModuleButton",
+      "text": "解释",
+      "tooltip": "",
+      "checked": false,
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        16,
+        16
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryActionButton",
+      "text": "",
+      "tooltip": "保存",
+      "checked": false,
+      "bounds": [
+        1102,
+        9,
+        54,
+        50
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        24,
+        24
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryActionButton",
+      "text": "",
+      "tooltip": "开始计算",
+      "checked": false,
+      "bounds": [
+        1159,
+        9,
+        54,
+        50
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        24,
+        24
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "PrimaryActionButton",
+      "text": "",
+      "tooltip": "设置",
+      "checked": false,
+      "bounds": [
+        1216,
+        9,
+        54,
+        50
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        24,
+        24
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "SecondaryBar",
+      "text": "SecondaryBar",
+      "tooltip": "",
+      "checked": false,
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 400,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": null,
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "SecondaryFunctionButton",
+      "text": "扫描",
+      "tooltip": "最多两个已选变量的响应曲线",
+      "checked": false,
+      "bounds": [
+        10,
+        60,
+        97,
+        90
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        50,
+        50
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "SecondaryFunctionButton",
+      "text": "优化",
+      "tooltip": "目标、变量范围并开始优化",
+      "checked": true,
+      "bounds": [
+        111,
+        60,
+        97,
+        90
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        50,
+        50
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    },
+    {
+      "name": "SecondaryFunctionButton",
+      "text": "优化结果",
+      "tooltip": "候选方案、过程曲线和对照图",
+      "checked": false,
+      "bounds": [
+        212,
+        60,
+        103,
+        90
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.75,
+        "pixel_size": 17,
+        "weight": 650,
+        "height": 21,
+        "ascent": 17,
+        "descent": 4
+      },
+      "icon_size": [
+        50,
+        50
+      ],
+      "logical_dpi": 96,
+      "device_pixel_ratio": 1.0
+    }
+  ]
+}

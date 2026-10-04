@@ -42,21 +42,8 @@ def _design_short_label(feature: object) -> str:
     return _DESIGN_SHORT.get(key, display_feature_name(key))
 
 
-# 目标显示名：XGBoost 物理残差模型的输出已按 η 口径换算，与随机森林
-# 一致显示为「耦合效率」，而非「耦合损耗(dB)」。
-_TARGET_DISPLAY = {
-    "coupling_efficiency": "耦合效率",
-    "coupling_loss_db": "耦合效率",
-}
-
-
-def _target_display_label(target_name: object, target_unit: object = "") -> str:
-    """把目标名映射为中文显示名；已换算为效率的目标不附带 dB 单位。"""
-    name = str(target_name or "模型输出")
-    unit = str(target_unit or "").strip()
-    if name in _TARGET_DISPLAY:
-        return _TARGET_DISPLAY[name]
-    return f"{name}（{unit}）" if unit else name
+# 以实际目标单位展示，SHAP 结果仍保持原始模型输出口径。
+from shared_presentation.parameter_explanation import target_display_label as _target_display_label
 
 
 def _fixed_action_row(*widgets: QWidget) -> QWidget:
@@ -269,11 +256,22 @@ class AnalysisTextDocument(QWidget):
         self.analysis_text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.summary_stack.addWidget(self.analysis_text)
 
-        self.formula_text = QLabel()
+        self.formula_text = QFrame()
         self.formula_text.setObjectName("ExplainFormulaCard")
-        self.formula_text.setWordWrap(True)
-        self.formula_text.setTextFormat(Qt.TextFormat.RichText)
-        self.formula_text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        formula_layout = QVBoxLayout(self.formula_text)
+        formula_layout.setContentsMargins(8, 6, 8, 6)
+        formula_layout.setSpacing(4)
+        self.formula_heading = QLabel("物理联系")
+        self.formula_heading.setObjectName("ExplainSectionTitle")
+        formula_layout.addWidget(self.formula_heading)
+        self.formula_equations = QVBoxLayout()
+        self.formula_equations.setSpacing(2)
+        formula_layout.addLayout(self.formula_equations)
+        self.formula_details = QLabel()
+        self.formula_details.setWordWrap(True)
+        self.formula_details.setTextFormat(Qt.TextFormat.RichText)
+        self.formula_details.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        formula_layout.addWidget(self.formula_details)
         self.summary_stack.addWidget(self.formula_text)
 
         self.next_step_text = QLabel()
@@ -470,150 +468,13 @@ class AnalysisTextDocument(QWidget):
         TrainingClient(api).explain_design_variables(self._token, model_id, payload)
 
     def _render_design_variable(self, body: dict[str, Any]) -> None:
-        import numpy as np
-
-        design_paths = [str(p) for p in list(body.get("design_paths") or [])]
-        labels = [str(v) for v in list(body.get("design_labels") or [])]
-        importance = [dict(item) for item in list(body.get("importance") or []) if isinstance(item, dict)]
-        total = np.asarray(body.get("total") or [], dtype=float)
-        design_values = np.asarray(body.get("design_values") or [], dtype=float)
-        target_label = _TARGET_DISPLAY.get(
-            str(body.get("target_name") or ""), "模型输出"
-        )
-        if not design_paths or total.ndim != 2 or total.shape[1] != len(design_paths) or not importance:
-            self._show("贡献排序", "这次解释没有返回设计变量的贡献值。")
-            return
-        n = int(total.shape[0])
-        if not labels:
-            labels = design_paths
-        labels = labels[: len(design_paths)]
+        from shared_presentation.explainability import design_variable_plot
         chart = str(self.shap_chart.currentText()) if self.shap_chart is not None else "全局特征重要性排名"
-
-        ranked_labels = [str(item.get("label") or item.get("feature") or "") for item in importance]
-        ranked_indices = [design_paths.index(str(item.get("feature") or "")) for item in importance if str(item.get("feature") or "") in design_paths]
-        ranked_values = [float(item.get("mean_abs") or 0.0) for item in importance]
-        total_ranked = total[:, ranked_indices]
-        design_ranked = design_values[:, ranked_indices]
-
-        if chart == "蜂群图":
-            points: list[dict[str, Any]] = []
-            for sample_index in range(n):
-                for j, col in enumerate(ranked_indices):
-                    column = design_values[:, col]
-                    low = float(column.min())
-                    high = float(column.max())
-                    raw = float(design_values[sample_index, col])
-                    scaled = (raw - low) / (high - low) if high > low else 0.5
-                    points.append(
-                        {
-                            "feature": ranked_labels[j],
-                            "value": float(total[sample_index, col]),
-                            "sample_index": sample_index,
-                            "color": "#dc2626" if scaled >= 0.5 else "#2563eb",
-                        }
-                    )
-            self.workspace.set_result(
-                0,
-                "蜂群图",
-                {
-                    "kind": "beeswarm",
-                    "labels": ranked_labels,
-                    "points": points,
-                    "importance": ranked_values,
-                    "sample_count": n,
-                    "x_label": "SHAP 值",
-                    "source": "模型解释",
-                    "summary": "红色表示该设计变量取值偏高，蓝色表示偏低；横轴为对模型输出的正负 SHAP 值。",
-                    "description": f"设计变量 SHAP 值分布 · {n} 个样本",
-                },
-            )
-            return
-        if chart == "特征依赖网格图" or chart == "单变量依赖趋势图":
-            corr = np.corrcoef(design_values.T) if n >= 2 and design_values.shape[1] >= 2 else np.eye(len(design_paths))
-            panels: list[dict[str, Any]] = []
-            for j, col in enumerate(range(len(design_paths))):
-                x = design_values[:, col]
-                y = total[:, col]
-                others = [k for k in range(len(design_paths)) if k != col]
-                jmax = max(others, key=lambda k: abs(float(corr[col, k]))) if others else col
-                panels.append(
-                    {
-                        "label": labels[col],
-                        "x": x.tolist(),
-                        "y": y.tolist(),
-                        "color": design_values[:, jmax].tolist(),
-                        "color_label": labels[jmax],
-                    }
-                )
-            if chart == "特征依赖网格图":
-                self.workspace.set_result(
-                    0,
-                    "特征依赖网格图",
-                    {"kind": "dependence_grid", "panels": panels, "title": "SHAP 特征依赖网格图", "y_label": "SHAP Value"},
-                )
-            else:
-                self.workspace.set_result(
-                    0,
-                    "单变量依赖趋势图",
-                    {"kind": "dependence_fit_ci", "panels": panels, "title": "SHAP 单变量依赖趋势图", "y_label": "SHAP Value"},
-                )
-            return
-        if chart == "物理一致性图":
-            consistency = dict(body.get("physics_consistency") or {})
-            x = [float(v) for v in list(consistency.get("shap_importance") or [])]
-            y = [float(v) for v in list(consistency.get("physics_elasticity") or [])]
-            self.workspace.set_result(
-                0,
-                "物理一致性图",
-                {
-                    "kind": "physics_consistency",
-                    "x": x,
-                    "y": y,
-                    "labels": labels,
-                    "pearson": consistency.get("pearson"),
-                    "spearman": consistency.get("spearman"),
-                    "x_label": "平均SHAP",
-                    "y_label": "物理解析重要性",
-                    "summary": "横轴为 ML 学到的变量重要性，纵轴为光学理论敏感度；二者共线说明模型与物理一致。",
-                },
-            )
-            return
-        if chart == "瀑布图":
-            waterfall = dict(body.get("waterfall") or {})
-            wf_values = [float(v) for v in list(waterfall.get("values") or [])]
-            if len(wf_values) != len(labels):
-                wf_values = total_ranked[0].tolist() if n > 0 else [0.0] * len(labels)
-                wf_labels = list(ranked_labels)
-            else:
-                wf_labels = list(labels)
-            order = sorted(range(len(wf_values)), key=lambda index: -abs(wf_values[index]))
-            self.workspace.set_result(
-                0,
-                "瀑布图",
-                {
-                    "kind": "waterfall",
-                    "labels": [wf_labels[i] for i in order],
-                    "values": [wf_values[i] for i in order],
-                    "base_value": float(waterfall.get("base_value") or 0.0),
-                    "x_label": "耦合效率",
-                    "summary": f"目标：{target_label}",
-                },
-            )
-            return
-        # 默认：全局特征重要性排名
-        self.workspace.set_result(
-            0,
-            "全局特征重要性排名",
-            {
-                "kind": "barh",
-                "labels": ranked_labels,
-                "values": ranked_values,
-                "show_values": True,
-                "source": "模型解释",
-                "x_label": "平均贡献",
-                "description": "数值越大表示模型越依赖该设计变量；不等同于物理因果。",
-            },
-        )
+        plot = design_variable_plot(body, chart)
+        if plot.get("kind") == "empty":
+            self._show("贡献排序", plot["message"])
+        else:
+            self.workspace.set_result(0, chart, plot)
 
     def _set_summary_sections(
         self,
@@ -622,6 +483,8 @@ class AnalysisTextDocument(QWidget):
         next_text: str,
         *,
         active: int = 0,
+        formula_steps: tuple[tuple[str, str], ...] = (),
+        formula_title: str = "物理联系",
     ) -> None:
         """Show the three compact interpretation sections.
 
@@ -630,7 +493,23 @@ class AnalysisTextDocument(QWidget):
         order explicit without making the result page vertically noisy.
         """
         self.analysis_text.setText(str(model_text or ""))
-        self.formula_text.setText(str(physics_html or "暂无可靠的物理公式映射。"))
+        self.formula_heading.setText(str(formula_title or "物理联系"))
+        while self.formula_equations.count():
+            child = self.formula_equations.takeAt(0)
+            widget = child.widget()
+            if widget is not None:
+                widget.deleteLater()
+        if formula_steps:
+            from frontend_pyside.features.explainability.formula_presentation import FormulaImageLabel
+
+            for index, (stage, latex) in enumerate(formula_steps, start=1):
+                heading = QLabel(f"公式 {index} · {stage}")
+                heading.setObjectName("ExplainFormulaStage")
+                self.formula_equations.addWidget(heading)
+                equation = FormulaImageLabel()
+                equation.set_formula(latex)
+                self.formula_equations.addWidget(equation)
+        self.formula_details.setText(str(physics_html or "暂无可靠的物理公式映射。"))
         self.next_step_text.setText(str(next_text or "暂无下一步建议。"))
         index = max(0, min(int(active), self.summary_stack.count() - 1))
         self.summary_stack.setCurrentIndex(index)
@@ -647,47 +526,17 @@ class AnalysisTextDocument(QWidget):
         verified: bool = False,
         target_unit: str = "",
     ) -> None:
-        from frontend_pyside.features.explainability.actions import (
-            formula_binding_for_feature,
-            formula_latex,
-            physical_mechanism_for_feature,
-            suggested_action_for_feature,
-        )
-        from frontend_pyside.features.explainability.formula_presentation import formula_html
-
-        if not feature:
+        from shared_presentation.current_explanation import feature_summary
+        summary = feature_summary(feature, importance, direction, verified=verified, target_unit=target_unit)
+        if summary is None:
             self.summary_panel.hide()
             return
-        name = self._feature_label(feature)
-        category, item, level, note = formula_binding_for_feature(feature)
-        mechanism = physical_mechanism_for_feature(feature)
-        action = suggested_action_for_feature(feature)
-        unit = f" {target_unit}" if target_unit else ""
-        model_text = f"{name} 的平均 |SHAP| 为 {float(importance):.4g}{unit}。"
-        if direction:
-            model_text += f"\n{direction}"
-        if category and item:
-            relation = formula_html(category, item, formula_latex(category, item))
-            physics_html = (
-                f"<b>公式：{category} · {item}</b>{relation}"
-                f"<div style='padding:0 8px 8px; color:#465467;'>"
-                f"物理联系：{mechanism}<br>关联方式：{level}。{note}<br>"
-                "SHAP 仅用于模型贡献排序，箭头表示光学计算依赖，结论须由正式仿真验证。"
-                "</div>"
-            )
-        else:
-            physics_html = (
-                f"<b>物理联系</b><div style='padding:8px; color:#465467;'>"
-                f"{mechanism}<br>当前特征尚无可靠的闭式公式映射，建议通过参数扫描定位。"
-                "<br>SHAP 仅用于模型贡献排序，不能单独证明物理因果。</div>"
-            )
-        next_text = f"{action}，再用正式光学计算复核。"
-        if verified:
-            next_text += " 当前项目已有正式仿真结果，可继续做数值对照。"
-        else:
-            next_text += " 当前结论仍是模型线索，尚未由本次正式仿真确认。"
         if self.kind == "current_system":
-            self._set_summary_sections(model_text, physics_html, next_text)
+            self._set_summary_sections(
+                summary['model_text'], summary['physics_html'], summary['next_text'],
+                formula_steps=tuple((step['stage'], step['latex']) for step in summary['formula_steps']),
+                formula_title=summary['formula_title'],
+            )
 
     @staticmethod
     def _feature_label(feature: object) -> str:
@@ -734,12 +583,10 @@ class AnalysisTextDocument(QWidget):
         self._global_items = [dict(item) for item in items if isinstance(item, dict)]
         self.feature_picker.blockSignals(True)
         self.feature_picker.clear()
-        for index, record in enumerate(self._global_items):
-            feature = str(record.get("feature") or record.get("name") or "")
-            value = float(
-                record.get("mean_abs_shap", abs(float(record.get("mean_shap", 0.0) or 0.0))) or 0.0
-            )
-            item = QListWidgetItem(f"{index + 1}. {feature_label(feature)}    |SHAP| {value:.4g}")
+        from shared_presentation.parameter_explanation import feature_picker_rows
+        for index, row in enumerate(feature_picker_rows(self._global_items)):
+            feature = row['feature']
+            item = QListWidgetItem(row['text'])
             item.setData(Qt.ItemDataRole.UserRole, feature)
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
             item.setCheckState(Qt.CheckState.Checked if index < 3 else Qt.CheckState.Unchecked)
@@ -767,18 +614,6 @@ class AnalysisTextDocument(QWidget):
             min(content, _PICKER_VISIBLE_ROWS * row_height + frame)
         )
 
-    @staticmethod
-    def _physical_path(category: str, item: str, target_label: str) -> tuple[str, str]:
-        paths = {
-            "结构参数": ("设计参数", "表面光焦度 / 传播矩阵", "焦面复场"),
-            "对准误差": ("对准参数", "失配无量纲量", "复场重叠"),
-            "模式失配": ("模式参数", "尺寸 / 曲率失配", "复场重叠"),
-            "波前质量": ("波前特征", "波前误差 / Strehl", "焦面复场"),
-            "成像质量": ("成像特征", "PSF / MTF", "焦面复场"),
-        }
-        source, middle, output = paths.get(category, ("模型特征", "内部物理量", "模型输出"))
-        return f"{source} → {category} · {item} → {middle} → {output} → {target_label}", output
-
     def _clear_chain_rows(self) -> None:
         while self.chain_rows.count():
             child = self.chain_rows.takeAt(0)
@@ -791,8 +626,8 @@ class AnalysisTextDocument(QWidget):
             return
         from html import escape
 
-        from frontend_pyside.features.explainability.actions import formula_binding_for_feature, formula_latex
-        from frontend_pyside.features.explainability.formula_presentation import formula_html
+        from shared_presentation.parameter_explanation import physical_chain_items
+        from frontend_pyside.features.explainability.formula_presentation import FormulaImageLabel
 
         self._clear_chain_rows()
         selected_keys = self._selected_feature_keys()
@@ -801,58 +636,66 @@ class AnalysisTextDocument(QWidget):
             self.chain_title.setText("物理链路")
             return
 
-        self.chain_title.setText(f"物理链路（已选择 {len(selected_keys)} 个参数）")
-        feature_names = [self._feature_label(feature) for feature in selected_keys]
-        formula_steps: list[tuple[str, str]] = []
-        seen_steps: set[tuple[str, str]] = set()
-        for feature in selected_keys:
-            category, item, _level, _note = formula_binding_for_feature(feature)
-            step = (str(category), str(item))
-            if category and item and step not in seen_steps:
-                seen_steps.add(step)
-                formula_steps.append(step)
+        chain = physical_chain_items(selected_keys, self._target_label)
+        self.chain_title.setText(chain['title'])
+        for row in chain['rows']:
+            feature_name = row['name']
+            steps = [(step['stage'], step['latex']) for step in row['steps']]
+            path = row['path']
 
-        # All selected optical factors ultimately enter the same overlap
-        # calculation. Add that downstream node once so the display is a
-        # formula chain rather than several independent copies of one formula.
-        output_step = ("总耦合效率", "复场重叠")
-        if output_step not in seen_steps:
-            formula_steps.append(output_step)
+            card = QFrame()
+            card.setObjectName("ExplainChainRow")
+            card_layout = QVBoxLayout(card)
+            card_layout.setContentsMargins(10, 8, 10, 8)
+            card_layout.setSpacing(3)
+            title = QLabel(f"参数：{escape(feature_name)}")
+            title.setTextFormat(Qt.TextFormat.RichText)
+            title.setObjectName("ExplainSectionTitle")
+            card_layout.addWidget(title)
+            path_label = QLabel(escape(path))
+            path_label.setWordWrap(True)
+            path_label.setTextFormat(Qt.TextFormat.RichText)
+            path_label.setStyleSheet("color:#155EEF; font-size:12pt;")
+            card_layout.addWidget(path_label)
 
-        if not formula_steps:
-            row = QLabel(
-                f"<b>输入参数：{escape('、'.join(feature_names))}</b><br>"
-                f"<span style='color:#155EEF; font-size:16px;'>参数输入 → {escape(self._target_label)}</span>"
-            )
-            row.setObjectName("ExplainChainRow")
-            row.setWordWrap(True)
-            row.setTextFormat(Qt.TextFormat.RichText)
-            self.chain_rows.addWidget(row)
-            return
+            if steps:
+                for index, (stage, latex) in enumerate(steps, start=1):
+                    stage_label = QLabel(f"公式 {index} · {escape(stage)}")
+                    stage_label.setTextFormat(Qt.TextFormat.RichText)
+                    stage_label.setObjectName("ExplainFormulaStage")
+                    card_layout.addWidget(stage_label)
+                    equation = FormulaImageLabel()
+                    equation.set_formula(latex)
+                    card_layout.addWidget(equation)
+                    if index < len(steps):
+                        arrow = QLabel("↓")
+                        arrow.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                        arrow.setObjectName("ExplainChainArrow")
+                        card_layout.addWidget(arrow)
+            else:
+                note = QLabel("该变量尚无可靠的解析公式映射，建议通过正式参数扫描和仿真定位。")
+                note.setWordWrap(True)
+                card_layout.addWidget(note)
+            self.chain_rows.addWidget(card)
 
-        path = "参数输入 → " + " → ".join(
-            f"{category} · {item}" for category, item in formula_steps
-        ) + f" → {self._target_label}"
-        for index, (category, item) in enumerate(formula_steps, start=1):
-            if index > 1:
-                arrow = QLabel("↓")
-                arrow.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                arrow.setObjectName("ExplainChainArrow")
-                self.chain_rows.addWidget(arrow)
-            formula = formula_html(category, item, formula_latex(category, item))
-            lead = (
-                f"<b>输入参数：{escape('、'.join(feature_names))}</b><br>"
-                f"<span style='color:#155EEF; font-size:16px;'>{escape(path)}</span><br>"
-                if index == 1
-                else ""
-            )
-            row = QLabel(
-                f"{lead}<b>公式 {index}：{escape(category)} · {escape(item)}</b>{formula}"
-            )
-            row.setObjectName("ExplainChainRow")
-            row.setWordWrap(True)
-            row.setTextFormat(Qt.TextFormat.RichText)
-            self.chain_rows.addWidget(row)
+        # Every valid feature-specific route terminates at the same normalized
+        # complex-field overlap; keep this shared equation visibly separate
+        # from the parameter-dependent formula steps above.
+        overlap_formula = chain['overlap_formula']
+        if overlap_formula:
+            output = QFrame()
+            output.setObjectName("ExplainChainRow")
+            output_layout = QVBoxLayout(output)
+            output_layout.setContentsMargins(10, 8, 10, 8)
+            output_layout.setSpacing(3)
+            heading = QLabel("共同输出公式 · 归一化复场重叠")
+            heading.setObjectName("ExplainFormulaStage")
+            output_layout.addWidget(heading)
+            equation = FormulaImageLabel()
+            equation.set_formula(overlap_formula)
+            output_layout.addWidget(equation)
+            output_layout.addWidget(QLabel("复场重叠结果进入当前模型解释的目标输出。"))
+            self.chain_rows.addWidget(output)
 
     def _render_shap(self, body: dict[str, Any]) -> None:
         from frontend_pyside.shared.feature_labels import display_feature_name as label_of
@@ -867,111 +710,33 @@ class AnalysisTextDocument(QWidget):
             key = str(value or "")
             return "其他模型特征（合并）" if key == "__other_model_features__" else label_of(key)
 
-        def show_analysis(feature: str, importance: float, direction: str, *, verified: bool = False) -> None:
-            self._set_feature_summary(
-                feature,
-                importance,
-                direction,
-                verified=verified,
-                target_unit=target_unit,
-            )
-
         items = list(body.get("top_features") or body.get("feature_contributions") or body.get("global_importance") or [])
         if self.kind == "param_trend":
             if not items:
                 self._show("物理链路", "这次解释没有返回可用的 SHAP 参数排名。")
                 return
-            selected_feature = self.selected or str(items[0].get("feature") or items[0].get("name") or "")
-            item = shap_dependence_item(body, selected_feature)
-            if not item and selected_feature:
-                for feature, data in dict(body.get("shap_dependence") or {}).items():
-                    if _shap_feature_key(str(feature), [selected_feature]) == selected_feature:
-                        item = dict(data)
-                        break
-            xs = list(item.get("feature_value") or item.get("x") or []) if item else []
-            ys = list(item.get("shap_value") or item.get("y") or []) if item else []
-            if xs and ys:
-                self.workspace.set_result(
-                    0,
-                    "辅助：单参数 SHAP 依赖",
-                    {
-                        "kind": "scatter",
-                        "x": xs,
-                        "y": ys,
-                        "x_label": _design_short_label(selected_feature),
-                        "y_label": f"SHAP（{target_unit}）" if target_unit else "SHAP",
-                        "zero_line": True,
-                    },
-                )
-            else:
-                self.workspace.set_result(
-                    0,
-                    "物理链路",
-                    {"kind": "empty", "message": "已生成物理链路；当前没有返回该参数的单参数依赖曲线。"},
-                )
+            from shared_presentation.parameter_explanation import parameter_plot
+            plot = parameter_plot(body, self.selected)
+            self.workspace.set_result(
+                0, "辅助：单参数 SHAP 依赖" if plot['kind'] == 'scatter' else "物理链路", plot,
+            )
             self._populate_feature_picker(items, feature_label)
             return
         if self.kind == "current_system":
-            targets = list(body.get("targets") or [])
-            sample = {}
-            if targets:
-                rows = list(targets[0].get("sample_shap_values") or [])
-                sample = dict(rows[0]) if rows else {}
-            values = sample.get("shap_values") or sample.get("values") or {}
-            if not isinstance(values, dict) or not values:
-                contrib = list(body.get("feature_contributions") or body.get("top_features") or [])
-                labels = [label_of(item.get("feature")) for item in contrib]
-                shap_values = [float(item.get("shap_value", item.get("mean_shap", 0.0)) or 0.0) for item in contrib]
+            from shared_presentation.current_explanation import current_explanation
+            formal_result = getattr(getattr(self.context, "project", None), "formal_result", None)
+            presentation = current_explanation(body, verified=isinstance(formal_result, dict) and bool(formal_result))
+            plot = presentation['plot']
+            if plot['kind'] == 'empty':
+                self._show("当前系统瀑布图", plot['message'])
             else:
-                labels = [label_of(name) for name in values]
-                shap_values = [float(values[name] or 0.0) for name in values]
-            if not labels:
-                self._show("当前系统瀑布图", "这次解释没有返回当前样本的贡献。")
-                return
-            additivity_error = sample.get("additivity_error", body.get("additivity_error"))
-            prediction = sample.get("prediction")
-            if additivity_error is not None:
-                tolerance = 1.0e-6 * max(1.0, abs(float(prediction or 0.0)))
-                if abs(float(additivity_error)) > tolerance:
-                    self._show(
-                        "当前系统瀑布图",
-                        f"SHAP贡献无法闭合当前预测（加性误差 {float(additivity_error):.4g}），已停止绘图。",
-                    )
-                    self._set_summary_sections(
-                        "解释结果无效：基准值与各变量贡献之和不等于模型预测值。",
-                        "当前没有可用的物理联系。",
-                        "请检查模型特征与当前镜头组是否匹配后重试。",
-                    )
-                    return
-            self.workspace.set_result(
-                0,
-                "当前系统瀑布图",
-                {
-                    "kind": "waterfall",
-                    "labels": [_design_short_label(label) for label in (values.keys() if isinstance(values, dict) and values else labels)],
-                    "values": shap_values,
-                    "base_value": float((body.get("base_values") or {}).get(str(body.get("target_name") or ""), 0.0) or 0.0),
-                    "summary": f"目标：{target_label}",
-                    "legend_loc": "lower right",
-                    "value_labels_right": True,
-                },
-            )
-            top_index = max(range(len(shap_values)), key=lambda index: abs(shap_values[index]))
-            raw_features = list(values.keys()) if isinstance(values, dict) and values else labels
-            top_feature = str(raw_features[top_index])
-            if top_feature == "__other_model_features__":
+                self.workspace.set_result(0, "当前系统瀑布图", plot)
+            summary = presentation['interpretation']
+            if summary:
                 self._set_summary_sections(
-                    "当前样本主要受内部物理特征的合并贡献影响，不能直接当作一个可调整参数。",
-                    "这些量由设计变量和正式光学计算共同产生，当前没有可靠的一对一闭式公式。",
-                    "返回贡献排序或物理链路，选择曲率半径、厚度或圆锥系数继续验证。",
-                )
-            else:
-                formal_result = getattr(getattr(self.context, "project", None), "formal_result", None)
-                show_analysis(
-                    top_feature,
-                    abs(shap_values[top_index]),
-                    "该变量在当前样本中提高模型输出。" if shap_values[top_index] >= 0 else "该变量在当前样本中降低模型输出。",
-                    verified=isinstance(formal_result, dict) and bool(formal_result),
+                    summary['model_text'], summary['physics_html'], summary['next_text'],
+                    formula_steps=tuple((step['stage'], step['latex']) for step in summary['formula_steps']),
+                    formula_title=summary['formula_title'],
                 )
             return
         if not items:

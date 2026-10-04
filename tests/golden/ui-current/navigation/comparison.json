@@ -1,0 +1,2118 @@
+{
+  "1280x800/model": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1280,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1280,
+          94
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:数据集",
+        "native": [
+          10,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          10,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:模型预测",
+        "native": [
+          218,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          218,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:训练结果",
+        "native": [
+          111,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          111,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 14,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  },
+  "1280x800/simulation": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1280,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1280,
+          94
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:光斑图",
+        "native": [
+          218,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          218,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:光纤耦合",
+        "native": [
+          319,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          319,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:光路图",
+        "native": [
+          117,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          117,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:波前与衍射",
+        "native": [
+          426,
+          60,
+          120,
+          90
+        ],
+        "web": [
+          426,
+          60,
+          120,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:镜头数据",
+        "native": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 16,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  },
+  "1280x800/optimization": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1280,
+          90
+        ],
+        "web": [
+          0,
+          58,
+          1280,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:优化",
+        "native": [
+          111,
+          60,
+          97,
+          86
+        ],
+        "web": [
+          111,
+          60,
+          97,
+          86
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:优化结果",
+        "native": [
+          212,
+          60,
+          103,
+          86
+        ],
+        "web": [
+          212,
+          60,
+          103,
+          86
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:扫描",
+        "native": [
+          10,
+          60,
+          97,
+          86
+        ],
+        "web": [
+          10,
+          60,
+          97,
+          86
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 14,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  },
+  "1280x800/explainability": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1102,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1159,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1216,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1280,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1280,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1280,
+          94
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:物理链路",
+        "native": [
+          117,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          117,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:贡献排序",
+        "native": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 13,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  },
+  "1440x900/model": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:数据集",
+        "native": [
+          10,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          10,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:模型预测",
+        "native": [
+          218,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          218,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:训练结果",
+        "native": [
+          111,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          111,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 14,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  },
+  "1440x900/simulation": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:光斑图",
+        "native": [
+          218,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          218,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:光纤耦合",
+        "native": [
+          319,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          319,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:光路图",
+        "native": [
+          117,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          117,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:波前与衍射",
+        "native": [
+          426,
+          60,
+          120,
+          90
+        ],
+        "web": [
+          426,
+          60,
+          120,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:镜头数据",
+        "native": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 16,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  },
+  "1440x900/optimization": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:优化",
+        "native": [
+          111,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          111,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:优化结果",
+        "native": [
+          212,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          212,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:扫描",
+        "native": [
+          10,
+          60,
+          97,
+          90
+        ],
+        "web": [
+          10,
+          60,
+          97,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 14,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  },
+  "1440x900/explainability": {
+    "controls": [
+      {
+        "control": "PrimaryActionButton:保存",
+        "native": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1262,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:开始计算",
+        "native": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1319,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryActionButton:设置",
+        "native": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "web": [
+          1376,
+          9,
+          54,
+          50
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "PrimaryBar",
+        "native": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "web": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:仿真",
+        "native": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          154,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:优化",
+        "native": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          298,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:教学",
+        "native": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          82,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:模型",
+        "native": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          226,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:解释",
+        "native": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          370,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "PrimaryModuleButton:首页",
+        "native": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "web": [
+          10,
+          6,
+          69,
+          45
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryBar",
+        "native": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "web": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": null
+      },
+      {
+        "control": "SecondaryFunctionButton:物理链路",
+        "native": [
+          117,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          117,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      },
+      {
+        "control": "SecondaryFunctionButton:贡献排序",
+        "native": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "web": [
+          10,
+          60,
+          103,
+          90
+        ],
+        "max_difference_px": 0,
+        "selected_equal": true,
+        "icon_size_equal": true
+      }
+    ],
+    "count": 13,
+    "max_difference_px": 0,
+    "missing": [],
+    "extra": []
+  }
+}

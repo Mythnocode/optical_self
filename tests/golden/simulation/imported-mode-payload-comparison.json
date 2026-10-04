@@ -1,0 +1,20 @@
+{
+  "source": {
+    "equal": true,
+    "differences": {}
+  },
+  "receiver": {
+    "equal": true,
+    "differences": {}
+  },
+  "analysis_settings": {
+    "equal": true,
+    "differences": {}
+  },
+  "options_except_import_source_label": {
+    "equal": true
+  },
+  "analyses": {
+    "equal": true
+  }
+}

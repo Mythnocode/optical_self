@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+from shared_presentation.plotting.surface_tooltip import surface_tooltip
 from PySide6.QtCore import QTimer
 from PySide6.QtGui import QCursor
 from PySide6.QtWidgets import QToolTip
@@ -60,13 +61,7 @@ class SurfaceHoverController:
         item = self.surface_data.get(self._candidate or -1)
         if not item:
             return
-        text = (
-            f"S{int(item.get('surface_index', -1)) + 1} · {item.get('name', '')}\n"
-            f"类型：{item.get('type', '—')}　材料：{item.get('material', '—')}\n"
-            f"曲率半径：{float(item.get('radius', 0.0) or 0.0):.6g} mm\n"
-            f"半口径：{float(item.get('aperture', 0.0) or 0.0):.6g} mm　"
-            f"圆锥系数：{float(item.get('conic', 0.0) or 0.0):.6g}"
-        )
+        text = surface_tooltip(item)
         QToolTip.showText(QCursor.pos(), text, self.canvas)
 
 

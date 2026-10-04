@@ -1,0 +1,42 @@
+[
+  {
+    "label": "780 nm 外腔二极管 · 50 mW · 0.70 mm",
+    "params": {
+      "wavelength_nm": 780.0,
+      "power_mw": 50.0,
+      "beam_radius_mm": 0.7
+    }
+  },
+  {
+    "label": "850 nm VCSEL · 10 mW · 0.35 mm",
+    "params": {
+      "wavelength_nm": 850.0,
+      "power_mw": 10.0,
+      "beam_radius_mm": 0.35
+    }
+  },
+  {
+    "label": "1064 nm DPSS · 100 mW · 0.80 mm",
+    "params": {
+      "wavelength_nm": 1064.0,
+      "power_mw": 100.0,
+      "beam_radius_mm": 0.8
+    }
+  },
+  {
+    "label": "1310 nm DFB · 10 mW · 0.45 mm",
+    "params": {
+      "wavelength_nm": 1310.0,
+      "power_mw": 10.0,
+      "beam_radius_mm": 0.45
+    }
+  },
+  {
+    "label": "1550 nm DFB · 10 mW · 0.50 mm",
+    "params": {
+      "wavelength_nm": 1550.0,
+      "power_mw": 10.0,
+      "beam_radius_mm": 0.5
+    }
+  }
+]

@@ -1,0 +1,10 @@
+
+--- backend start 2026-10-02T09:56:02.822Z ---
+[2026-10-02T09:56:04.141Z] [stderr] Traceback (most recent call last):
+  File "D:\AAAWorkspace\optical_self\dist\desktop\win-unpacked\resources\backend\desktop\backend_bootstrap.py", line 32, in <module>
+[2026-10-02T09:56:04.141Z] [stderr]     main()
+  File "D:\AAAWorkspace\optical_self\dist\desktop\win-unpacked\resources\backend\desktop\backend_bootstrap.py", line 28, in main
+    run_backend()
+  File "D:\AAAWorkspace\optical_self\dist\desktop\win-unpacked\resources\backend\run_backend.py", line 16, in main
+    import uvicorn
+ModuleNotFoundError: No module named 'uvicorn'

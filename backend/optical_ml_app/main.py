@@ -1,5 +1,6 @@
 import logging
 import threading
+import time
 import uuid
 from contextlib import asynccontextmanager
 
@@ -18,6 +19,7 @@ from backend.optical_ml_app.api import (
     routes_optimization,
     routes_scan,
     routes_simulation,
+    routes_teaching,
     routes_structure_models,
     routes_tolerance,
     routes_training,
@@ -116,14 +118,29 @@ def create_app() -> FastAPI:
     async def attach_request_context(request: Request, call_next):
         request_id = request.headers.get("X-Request-ID") or f"req-{uuid.uuid4().hex}"
         request.state.request_id = request_id
+        started = time.perf_counter()
+        status_code = 500
         with log_context(request_id=request_id):
-            response = await call_next(request)
+            try:
+                response = await call_next(request)
+                status_code = response.status_code
+            finally:
+                elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+                job_id = getattr(request.state, "job_id", "") or request.path_params.get("job_id", "")
+                logging.getLogger("backend.optical_ml_app.http").info(
+                    "HTTP %s %s status=%s elapsed_ms=%s request_id=%s job_id=%s",
+                    request.method, request.url.path, status_code, elapsed_ms, request_id, job_id or "-",
+                    extra={"event": "http.request", "method": request.method, "route": request.url.path,
+                           "status": status_code, "elapsed_ms": elapsed_ms, "request_id": request_id,
+                           "job_id": str(job_id)},
+                )
         response.headers["X-Request-ID"] = request_id
         return response
 
     for router in (
         routes_health.router,
         routes_simulation.router,
+        routes_teaching.router,
         routes_jobs.router,
         routes_datasets.router,
         routes_headless_datasets.router,

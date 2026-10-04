@@ -1,0 +1,10 @@
+{
+  "native_sync_vs_web_job_equal": true,
+  "excluded_fields": [
+    "status",
+    "explanation_kind",
+    "elapsed_ms"
+  ],
+  "model_id": "model-63d9d3ea55cf",
+  "sample_count": 80
+}

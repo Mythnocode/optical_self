@@ -1,0 +1,43 @@
+{
+  "publish": {
+    "source": true,
+    "receiver": true,
+    "surfaces": true
+  },
+  "research_profile_equal": true,
+  "from_simulation": {
+    "status": 200,
+    "full_native_scene_equal": true
+  },
+  "apply": {
+    "same": {
+      "status": 200,
+      "error": null
+    },
+    "missing_engineering": {
+      "status": 409,
+      "error": {
+        "code": "TEACHING_RESULT_STALE",
+        "stage": "teaching.result",
+        "message": "仿真工程或数值配置已修改，旧的教学分析结果已丢弃。",
+        "retryable": false,
+        "context": {}
+      }
+    },
+    "changed_precision": {
+      "status": 409,
+      "error": {
+        "code": "TEACHING_RESULT_STALE",
+        "stage": "teaching.result",
+        "message": "仿真工程或数值配置已修改，旧的教学分析结果已丢弃。",
+        "retryable": false,
+        "context": {}
+      }
+    },
+    "selection_only": {
+      "status": 200,
+      "error": null
+    }
+  },
+  "geometry_preserved_on_formal_apply": true
+}

@@ -1,0 +1,247 @@
+{
+  "laser": {
+    "label": "激光器",
+    "asset": "laser.glb",
+    "housingMm": [
+      40.0,
+      11.0,
+      11.0
+    ],
+    "anchor": "output_face",
+    "defaultParams": {
+      "wavelength_nm": 780.0,
+      "power_mw": 100.0,
+      "beam_radius_mm": 0.72
+    }
+  },
+  "isolator": {
+    "label": "隔离器",
+    "asset": "isolator.glb",
+    "housingMm": [
+      36.0,
+      25.0,
+      25.0
+    ],
+    "anchor": "center",
+    "defaultParams": {
+      "isolation_db": 38.0,
+      "insertion_loss_db": 0.4,
+      "clear_aperture_mm": 1.8,
+      "diameter_mm": 25.0
+    }
+  },
+  "waveplate": {
+    "label": "波片",
+    "asset": "waveplate.glb",
+    "housingMm": [
+      6.0,
+      12.7,
+      12.7
+    ],
+    "anchor": "center",
+    "defaultParams": {
+      "plate_type": "hwp",
+      "retardance_waves": 0.5,
+      "diameter_mm": 12.7
+    }
+  },
+  "lens": {
+    "label": "透镜",
+    "asset": "lens.glb",
+    "housingMm": [
+      2.0,
+      12.7,
+      12.7
+    ],
+    "anchor": "center",
+    "defaultParams": {
+      "focal_length_mm": 25.0,
+      "focal_mm": 25.0,
+      "diameter_mm": 12.7,
+      "material": "N-BK7",
+      "radius1_mm": 0.0,
+      "radius2_mm": 0.0,
+      "center_thickness_mm": 2.0,
+      "clear_aperture_mm": 0.0
+    }
+  },
+  "cylindrical_lens": {
+    "label": "柱面镜",
+    "asset": "cylindrical_lens.glb",
+    "housingMm": [
+      2.0,
+      12.7,
+      12.7
+    ],
+    "anchor": "center",
+    "defaultParams": {
+      "focal_length_mm": 50.0,
+      "focal_mm": 50.0,
+      "diameter_mm": 12.7,
+      "center_thickness_mm": 2.0
+    }
+  },
+  "beam_expander": {
+    "label": "扩束器",
+    "asset": "beam_expander.glb",
+    "housingMm": [
+      45.0,
+      25.0,
+      25.0
+    ],
+    "anchor": "center",
+    "defaultParams": {
+      "magnification": 2.0,
+      "diameter_mm": 25.0
+    }
+  },
+  "aperture": {
+    "label": "光阑",
+    "asset": "aperture.glb",
+    "housingMm": [
+      0.5,
+      5.0,
+      5.0
+    ],
+    "anchor": "center",
+    "defaultParams": {
+      "diameter_mm": 5.0,
+      "shape": "circle"
+    }
+  },
+  "pbs": {
+    "label": "PBS",
+    "asset": "pbs.glb",
+    "housingMm": [
+      12.7,
+      12.7,
+      12.7
+    ],
+    "anchor": "center",
+    "defaultParams": {
+      "split_ratio": 0.5,
+      "diameter_mm": 12.7
+    }
+  },
+  "splitter": {
+    "label": "分束镜",
+    "asset": "splitter.glb",
+    "housingMm": [
+      3.0,
+      12.7,
+      12.7
+    ],
+    "anchor": "output_face",
+    "defaultParams": {
+      "split_ratio": 0.5,
+      "diameter_mm": 12.7
+    }
+  },
+  "beam_sampler": {
+    "label": "取样镜",
+    "asset": "beam_sampler.glb",
+    "housingMm": [
+      1.0,
+      12.7,
+      12.7
+    ],
+    "anchor": "output_face",
+    "defaultParams": {
+      "split_ratio": 0.05,
+      "diameter_mm": 12.7
+    }
+  },
+  "grating": {
+    "label": "光栅",
+    "asset": "grating.glb",
+    "housingMm": [
+      6.0,
+      12.7,
+      12.7
+    ],
+    "anchor": "output_face",
+    "defaultParams": {
+      "groove_density_mm": 600.0,
+      "diameter_mm": 12.7
+    }
+  },
+  "mirror": {
+    "label": "反射镜",
+    "asset": "mirror.glb",
+    "housingMm": [
+      6.0,
+      12.7,
+      12.7
+    ],
+    "anchor": "output_face",
+    "defaultParams": {
+      "diameter_mm": 12.7
+    }
+  },
+  "fiber": {
+    "label": "光纤架",
+    "asset": "fiber.glb",
+    "housingMm": [
+      18.0,
+      11.0,
+      11.0
+    ],
+    "anchor": "input_face",
+    "defaultParams": {
+      "mfd_um": 5.6,
+      "na": 0.12
+    }
+  },
+  "ccd": {
+    "label": "CCD 相机",
+    "asset": "ccd.glb",
+    "housingMm": [
+      21.8,
+      30.0,
+      30.0
+    ],
+    "anchor": "input_face",
+    "defaultParams": {
+      "sensor_width_mm": 4.968,
+      "sensor_height_mm": 3.726
+    }
+  },
+  "power_meter": {
+    "label": "功率计",
+    "asset": "power_meter.glb",
+    "housingMm": [
+      22.0,
+      30.0,
+      30.0
+    ],
+    "anchor": "input_face",
+    "defaultParams": {
+      "diameter_mm": 9.5
+    }
+  },
+  "wavefront_sensor": {
+    "label": "波前传感器",
+    "asset": "wavefront_sensor.glb",
+    "housingMm": [
+      32.0,
+      40.0,
+      40.0
+    ],
+    "anchor": "input_face",
+    "defaultParams": {
+      "sensor_width_mm": 4.968,
+      "sensor_height_mm": 3.726
+    }
+  },
+  "oscilloscope": {
+    "label": "示波器",
+    "asset": "oscilloscope.glb",
+    "housingMm": [
+      120.0,
+      80.0,
+      50.0
+    ],
+    "anchor": "bottom",
+    "defaultParams": {}
+  }
+}

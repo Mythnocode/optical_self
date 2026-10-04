@@ -49,6 +49,24 @@ class DatasetGenerator:
         failed = 0
         engine_name = "unknown"
         engine_version = "unknown"
+        trace_backend_sample_counts: dict[str, int] = {}
+        imported_mode_model = getattr(request, "imported_mode", None)
+        # Serialize once; all samples and precision retries share these arrays.
+        imported_mode = imported_mode_model.model_dump() if imported_mode_model is not None else None
+        imported_mode_provenance = None
+        if imported_mode is not None:
+            import numpy as np
+            numeric = np.asarray([imported_mode["real"], imported_mode["imag"]], dtype="<f8")
+            numeric[numeric == 0] = 0.0
+            imported_mode_provenance = {
+                "source": imported_mode["source"],
+                "grid_size": len(imported_mode["real"]),
+                "sha256": hashlib.sha256(numeric.tobytes()).hexdigest(),
+                "hash_encoding": "little-endian float64 [real,imag], signed zero normalized",
+                "output_extent_x_mm": imported_mode["output_extent_x_mm"],
+                "output_extent_y_mm": imported_mode["output_extent_y_mm"],
+                "auto_expand_output": False,
+            }
 
         def prepare_attempts(values, start_index: int):
             prepared_batch: list[
@@ -78,7 +96,7 @@ class DatasetGenerator:
                     random_seed=request.random_seed + index,
                     engine=request.engine,
                     options=dataset_simulation_options(
-                        changed_project, precision=request.precision
+                        changed_project, precision=request.precision, imported_mode=imported_mode
                     ),
                 )
                 prepared_batch.append(
@@ -200,7 +218,7 @@ class DatasetGenerator:
                     update={
                         "precision": "high",
                         "options": dataset_simulation_options(
-                            changed_project, precision="high"
+                            changed_project, precision="high", imported_mode=imported_mode
                         ),
                     }
                 )
@@ -411,8 +429,11 @@ class DatasetGenerator:
                     "random_seed": sim_request.random_seed,
                     "precision": sim_request.precision,
                     "coupling_physics_features": physics_features,
+                    "trace_backends": list(result.metadata.get("trace_backends", [])),
                 },
             )
+            for backend in set(result.metadata.get("trace_backends", [])):
+                trace_backend_sample_counts[backend] = trace_backend_sample_counts.get(backend, 0) + 1
             self.store.append_sample(dataset_id, record.model_dump())
             if progress is not None:
                 progress.update(
@@ -483,6 +504,8 @@ class DatasetGenerator:
                 "analytic_coupling_baseline": bool(include_coupling_physics),
                 "source_project": request.base_project.model_dump(),
                 "batch_workers": max(1, int(max_workers)),
+                "trace_backend_sample_counts": trace_backend_sample_counts,
+                "imported_mode": imported_mode_provenance,
                 "target_valid_sample_count": target_valid_count,
                 "max_sample_attempts": max_attempts,
                 "high_precision_retry_count": high_precision_retry_count,
@@ -573,9 +596,9 @@ _DATASET_PRECISION_PROFILES: dict[str, dict[str, object]] = {
 
 
 def dataset_simulation_options(
-    project: ProjectSnapshot, precision: str = "standard"
+    project: ProjectSnapshot, precision: str = "standard", *, imported_mode: dict | None = None
 ) -> dict:
-    options = {"source": "dataset_generation"}
+    options = {"source": "dataset_generation", "geometric": {"prefer_native_trace": True}}
 
     if project.receiver is not None:
         precision_key = str(precision or "standard").strip().lower()
@@ -587,6 +610,7 @@ def dataset_simulation_options(
             )
         )
         options["hybrid"] = {
+            "prefer_native_trace": True,
             "wavelength_nm": project.source.wavelength_nm,
             "pupil_radius_mm": project.pupil_radius_mm,
             "output_extent_x_mm": 0.024,
@@ -619,6 +643,19 @@ def dataset_simulation_options(
             "include_breakdown": True,
             **profile,
         }
+        if project.receiver.mode_model == "imported":
+            if imported_mode is None:
+                raise ValueError("导入复场模式缺少已校验的复场数据")
+            options["hybrid"].update({
+                "imported_mode_values": {"real": imported_mode["real"], "imag": imported_mode["imag"]},
+                "imported_mode_source": imported_mode.get("source", ""),
+                "output_grid_size": len(imported_mode["real"]),
+                "output_extent_x_mm": imported_mode["output_extent_x_mm"],
+                "output_extent_y_mm": imported_mode["output_extent_y_mm"],
+                # The solver requires an exact receiver grid. Expanding its
+                # window would change the meaning/shape of the sampled mode.
+                "auto_expand_output": False,
+            })
 
     return options
 

@@ -19,3 +19,4 @@ class TraceOptions:
     environment_temperature_c: float = 20.0
     include_group_delay: bool = False
     output_level: Literal["full", "planes", "final"] = "full"
+    prefer_native: bool = False

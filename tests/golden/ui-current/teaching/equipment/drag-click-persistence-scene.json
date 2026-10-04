@@ -1,0 +1,223 @@
+{
+  "schema_version": 2,
+  "scene_id": "teaching-v2-scene",
+  "revision": 5,
+  "reference": {
+    "name": "实验台坐标系",
+    "origin": "bench",
+    "axial_axis": "+X_t → +Z_engine",
+    "lateral_axis": "+Y_t → +X_engine",
+    "vertical_axis": "+Z_t → +Y_engine",
+    "view_frame": "view3d_render",
+    "view_up": "+Z_t → +Y_render",
+    "view_depth": "+Y_t → −Z_render",
+    "unit": "mm",
+    "axis_height_mm": 25,
+    "origin_teaching_mm": [
+      0,
+      0,
+      0
+    ],
+    "pixels_per_mm": 8,
+    "render_units_per_mm": 1
+  },
+  "components": [
+    {
+      "component_id": "laser-001",
+      "kind": "laser",
+      "label": "780 nm 半导体激光器",
+      "pose": {
+        "x_mm": 50,
+        "y_mm": 0,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "wavelength_nm": 780,
+        "power_mw": 100,
+        "beam_radius_mm": 0.5
+      },
+      "enabled": true,
+      "category": "实验对象",
+      "asset_key": "laser"
+    },
+    {
+      "component_id": "lens-002",
+      "kind": "lens",
+      "label": "L1 透镜",
+      "pose": {
+        "x_mm": 70,
+        "y_mm": 0,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "focal_length_mm": 50,
+        "focal_mm": 50,
+        "diameter_mm": 12.7,
+        "material": "N-BK7",
+        "radius1_mm": 6.425,
+        "radius2_mm": -9.892,
+        "center_thickness_mm": 5.36,
+        "clear_aperture_mm": 6.35
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "lens-003",
+      "kind": "lens",
+      "label": "L2 透镜",
+      "pose": {
+        "x_mm": 92,
+        "y_mm": 0,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "focal_length_mm": 35,
+        "focal_mm": 35,
+        "diameter_mm": 12.7,
+        "material": "N-BK7",
+        "radius1_mm": 4.593,
+        "radius2_mm": 29.948,
+        "center_thickness_mm": 2.426,
+        "clear_aperture_mm": 6.35
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "lens-004",
+      "kind": "lens",
+      "label": "L3 透镜",
+      "pose": {
+        "x_mm": 116,
+        "y_mm": 0,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "focal_length_mm": 25,
+        "focal_mm": 25,
+        "diameter_mm": 12.7,
+        "material": "N-BK7",
+        "radius1_mm": 36.204,
+        "radius2_mm": -4.098,
+        "center_thickness_mm": 2.61,
+        "clear_aperture_mm": 6.35
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "lens-005",
+      "kind": "lens",
+      "label": "L4 透镜",
+      "pose": {
+        "x_mm": 140,
+        "y_mm": 0,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "focal_length_mm": 18,
+        "focal_mm": 18,
+        "diameter_mm": 12.7,
+        "material": "N-BK7",
+        "radius1_mm": 20.383,
+        "radius2_mm": -5.443,
+        "center_thickness_mm": 5.36,
+        "clear_aperture_mm": 6.35
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "fiber-006",
+      "kind": "fiber",
+      "label": "单模光纤接收端",
+      "pose": {
+        "x_mm": 170,
+        "y_mm": 0,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "mfd_um": 5.6,
+        "na": 0.12
+      },
+      "enabled": true,
+      "category": "实验对象",
+      "asset_key": "fiber"
+    },
+    {
+      "component_id": "lens-007",
+      "kind": "lens",
+      "label": "透镜",
+      "pose": {
+        "x_mm": 103.46196513470682,
+        "y_mm": 10.054754358161649,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "focal_length_mm": 25,
+        "focal_mm": 25,
+        "diameter_mm": 12.7,
+        "material": "N-BK7",
+        "radius1_mm": 0,
+        "radius2_mm": 0,
+        "center_thickness_mm": 2,
+        "clear_aperture_mm": 0
+      },
+      "enabled": true,
+      "category": "光学器件",
+      "asset_key": "lens"
+    },
+    {
+      "component_id": "laser-008",
+      "kind": "laser",
+      "label": "激光器",
+      "pose": {
+        "x_mm": 182,
+        "y_mm": 0,
+        "z_mm": 25,
+        "yaw_rad": 0,
+        "pitch_rad": 0,
+        "roll_rad": 0
+      },
+      "params": {
+        "wavelength_nm": 1030.125,
+        "power_mw": 100,
+        "beam_radius_mm": 0.72
+      },
+      "enabled": true,
+      "category": "实验对象",
+      "asset_key": "laser"
+    }
+  ],
+  "baseline_enabled": true,
+  "baseline_x_mm": 50,
+  "selected_component_id": "laser-008",
+  "active_result_revision": null,
+  "results": {}
+}

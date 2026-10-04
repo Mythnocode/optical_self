@@ -1,0 +1,2256 @@
+{
+  "model-before": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1280,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        19,
+        19
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        3,
+        67,
+        54.33333587646485
+      ],
+      "checked": false,
+      "font": "650 16.6667px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        80,
+        3,
+        67,
+        54.33333587646485
+      ],
+      "checked": false,
+      "font": "650 16.6667px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        150,
+        3,
+        67,
+        54.33333587646485
+      ],
+      "checked": false,
+      "font": "650 16.6667px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        220,
+        3,
+        67,
+        54.33333587646485
+      ],
+      "checked": true,
+      "font": "800 16.6667px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        290,
+        3,
+        67,
+        54.33333587646485
+      ],
+      "checked": false,
+      "font": "650 16.6667px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        360,
+        3,
+        67,
+        54.33333587646485
+      ],
+      "checked": false,
+      "font": "650 16.6667px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1102,
+        10.166666984558104,
+        52,
+        40
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        19,
+        19
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1160,
+        10.166666984558104,
+        52,
+        40
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        19,
+        19
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1218,
+        10.166666984558104,
+        52,
+        40
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        19,
+        19
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1280,
+        95
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "数据集\n训练结果\n模型预测"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        60,
+        97,
+        92
+      ],
+      "checked": true,
+      "font": "800 16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "数据集"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        111,
+        60,
+        101,
+        92
+      ],
+      "checked": false,
+      "font": "650 16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "训练结果"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        216,
+        60,
+        101,
+        92
+      ],
+      "checked": false,
+      "font": "650 16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "模型预测"
+    }
+  ],
+  "model-after": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1280,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1102,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1159,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1216,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "数据集\n训练结果\n模型预测"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        10,
+        60,
+        97,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "数据集"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        111,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "训练结果"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        218,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "模型预测"
+    }
+  ],
+  "simulation-after": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1280,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1102,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1159,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1216,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "镜头数据\n光路图\n光斑图\n光纤耦合\n波前与衍射"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        10,
+        60,
+        103,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "镜头数据"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        117,
+        60,
+        97,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "光路图"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        218,
+        60,
+        97,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "光斑图"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        319,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "光纤耦合"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        426,
+        60,
+        120,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "波前与衍射"
+    }
+  ],
+  "optimization-after": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1280,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1102,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1159,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1216,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1280,
+        90
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "扫描\n优化\n优化结果"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        60,
+        97,
+        86
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "扫描"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        111,
+        60,
+        97,
+        86
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "优化"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        212,
+        60,
+        103,
+        86
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "优化结果"
+    }
+  ],
+  "explainability-after": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1280,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1102,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1159,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1216,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "贡献排序\n物理链路"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        10,
+        60,
+        103,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "贡献排序"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        117,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "物理链路"
+    }
+  ],
+  "optimization-1440": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1440,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1262,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1319,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1376,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1440,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "扫描\n优化\n优化结果"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        60,
+        97,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "扫描"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        111,
+        60,
+        97,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "优化"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        212,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "优化结果"
+    }
+  ],
+  "model-1440": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1440,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1262,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1319,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1376,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1440,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "数据集\n训练结果\n模型预测"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        10,
+        60,
+        97,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "数据集"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        111,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "训练结果"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        218,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "模型预测"
+    }
+  ],
+  "simulation-1440": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1440,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1262,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1319,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1376,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1440,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "镜头数据\n光路图\n光斑图\n光纤耦合\n波前与衍射"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        10,
+        60,
+        103,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "镜头数据"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        117,
+        60,
+        97,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "光路图"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        218,
+        60,
+        97,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "光斑图"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        319,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "光纤耦合"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        426,
+        60,
+        120,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "波前与衍射"
+    }
+  ],
+  "explainability-1440": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1440,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1262,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1319,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1376,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1440,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "贡献排序\n物理链路"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        10,
+        60,
+        103,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "贡献排序"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        117,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "物理链路"
+    }
+  ],
+  "final-model": [
+    {
+      "border": "0.666667px solid rgb(199, 205, 214)",
+      "bounds": [
+        0,
+        0,
+        1280,
+        58
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryBar",
+      "text": "首页\n教学\n仿真\n模型\n优化\n解释\nPython 后端：connected"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        10,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "首页"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        82,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "教学"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        154,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "仿真"
+    },
+    {
+      "border": "2.66667px solid rgb(21, 94, 239)",
+      "bounds": [
+        226,
+        6,
+        69,
+        45
+      ],
+      "checked": true,
+      "font": "800 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "模型"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        298,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "优化"
+    },
+    {
+      "border": "2.66667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        370,
+        6,
+        69,
+        45
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": null,
+      "name": "PrimaryModuleButton",
+      "text": "解释"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1102,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "保存"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1159,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "开始计算"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        1216,
+        9,
+        54,
+        50
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        24,
+        24
+      ],
+      "name": "PrimaryActionButton",
+      "text": "设置"
+    },
+    {
+      "border": "0.666667px solid rgb(208, 213, 221)",
+      "bounds": [
+        0,
+        58,
+        1280,
+        94
+      ],
+      "checked": false,
+      "font": "16px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryBar",
+      "text": "数据集\n训练结果\n模型预测"
+    },
+    {
+      "border": "0.666667px solid rgb(143, 179, 244)",
+      "bounds": [
+        10,
+        60,
+        97,
+        90
+      ],
+      "checked": true,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "数据集"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        111,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "训练结果"
+    },
+    {
+      "border": "0.666667px solid rgba(0, 0, 0, 0)",
+      "bounds": [
+        218,
+        60,
+        103,
+        90
+      ],
+      "checked": false,
+      "font": "650 17px / 21px \"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+      "icon_size": [
+        50,
+        50
+      ],
+      "name": "SecondaryFunctionButton",
+      "text": "模型预测"
+    }
+  ]
+}

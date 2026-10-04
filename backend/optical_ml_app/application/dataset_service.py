@@ -26,6 +26,10 @@ def _run_dataset_task(context, request, dataset_root: str):
         context.progress,
         max_workers=configured_batch_worker_count(),
     )
+    # A cancelled generation may have no valid systems. Let the job worker
+    # finish cancellation before sequence export applies its training gate.
+    if context.cancellation.is_cancelled or manifest.status == "cancelled":
+        return manifest
     if getattr(request, "dataset_layout", "tabular") == "sequence_long":
         from machine_learning.datasets.sequence_export import export_sequence_long_table
 

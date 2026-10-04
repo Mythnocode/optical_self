@@ -1,0 +1,41 @@
+- generic "浏览器预览通过 Vite 代理连接到本机后端。":
+  - navigation "主导航":
+    - link "首页":
+      - /url: "#/"
+    - link "教学":
+      - /url: "#/teaching-three"
+    - link "仿真":
+      - /url: "#/workbench/simulation/lens_data"
+    - link "模型":
+      - /url: "#/workbench/model/dataset"
+    - link "优化":
+      - /url: "#/workbench/optimization/opt_vars"
+    - link "解释":
+      - /url: "#/workbench/explainability/global_contrib"
+    - generic "常用操作":
+      - button "保存"
+      - button "开始计算"
+      - button "设置"
+    - generic: Python 后端：connected
+  - main:
+    - button "方案⌄"
+    - button "器材库"
+    - button "视角"
+    - button "成像与耦合"
+    - button "计算"
+    - button "同步到仿真"
+    - button "从仿真更新" [active]
+    - generic: 已从仿真更新 4 片透镜、波长和光纤模场；已载入工程处方；请先在仿真页完成一次正式计算，再更新教学台以继承数值配置。
+    - generic: 画布
+    - combobox "画布":
+      - option "二维"
+      - option "三维" [selected]
+    - generic "Teaching Three.js optical bench"
+    - button "成像与耦合"
+    - button "属性"
+    - generic "画布编辑操作":
+      - button "撤销" [disabled]
+      - button "下一步" [disabled]
+      - button "删除"
+      - button "清空"
+  - button "打开 AI 助手": AI

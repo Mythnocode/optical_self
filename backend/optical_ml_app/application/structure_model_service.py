@@ -114,6 +114,38 @@ class StructureModelApplicationService:
             })
         return records
 
+    def model_details(self, model_id: str) -> dict[str, Any]:
+        """Read saved training diagnostics without loading the torch model."""
+        import json
+        import re
+
+        from backend.optical_ml_app.domain.errors import BackendApplicationError
+
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", model_id):
+            raise BackendApplicationError(code="MODEL_NOT_FOUND", stage="structure_model.details", message="模型不存在")
+        model_dir = (self.model_root / model_id).resolve()
+        if model_dir.parent != self.model_root.resolve():
+            raise BackendApplicationError(code="MODEL_NOT_FOUND", stage="structure_model.details", message="模型不存在")
+        try:
+            manifest = json.loads((model_dir / "manifest.json").read_text(encoding="utf-8"))
+        except FileNotFoundError as exc:
+            raise BackendApplicationError(code="MODEL_NOT_FOUND", stage="structure_model.details", message="模型不存在") from exc
+        except (OSError, json.JSONDecodeError) as exc:
+            raise BackendApplicationError(code="INVALID_MODEL_MANIFEST", stage="structure_model.details", message="模型记录无法读取") from exc
+        if not isinstance(manifest, dict):
+            raise BackendApplicationError(code="INVALID_MODEL_MANIFEST", stage="structure_model.details", message="模型记录不是有效对象")
+        return {
+            "model_id": model_id,
+            "model_type": "bilstm_structure_sequence",
+            "metrics": manifest.get("metrics", {}),
+            "target_names": manifest.get("target_names", []),
+            "numeric_feature_names": manifest.get("numeric_feature_names", []),
+            "split_counts": manifest.get("split_counts", {}),
+            "evaluation": manifest.get("evaluation", {}),
+            "training_history": manifest.get("history", []),
+            "training_curve_label": "验证 MSE（标准化）",
+        }
+
 
 def _target_quality(artifact: dict[str, Any], target_name: str) -> dict[str, float]:
     block = artifact.get("metrics", {})

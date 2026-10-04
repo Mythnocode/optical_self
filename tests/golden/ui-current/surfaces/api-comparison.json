@@ -1,0 +1,69 @@
+{
+  "surface_count": 12,
+  "original_project_equal": true,
+  "shared_surfaces_equal": true,
+  "api_surfaces_equal": true,
+  "qt_modules_loaded": [],
+  "transforms": [
+    {
+      "surface_type": "spherical",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "cylindrical",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "aspheric",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "plane",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "stop",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "mirror",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "grating",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "coordinate_break",
+      "decenter_x_mm": 2.25,
+      "tilt_y_deg": -12.5
+    },
+    {
+      "surface_type": "binary_diffractive",
+      "decenter_x_mm": 2.25,
+      "tilt_y_deg": -12.5
+    },
+    {
+      "surface_type": "coordinate_break",
+      "decenter_x_mm": 1.5,
+      "tilt_y_deg": -9.5
+    },
+    {
+      "surface_type": "detector",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    },
+    {
+      "surface_type": "user_defined",
+      "decenter_x_mm": 0.0,
+      "tilt_y_deg": 0.0
+    }
+  ]
+}

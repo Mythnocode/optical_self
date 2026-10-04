@@ -1,0 +1,9 @@
+{
+  "full_scene_equal": true,
+  "component_count": 6,
+  "native_status": [
+    "已从仿真更新 4 片透镜、波长和光纤模场；后续不修改教学台时，成像和耦合将与仿真工程同处方、同数值配置。",
+    "已载入四非球面 · 780 nm 高效耦合演示；教学与仿真共用同一计算处方"
+  ],
+  "engineering_contract_inherited": true
+}

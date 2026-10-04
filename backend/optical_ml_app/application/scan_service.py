@@ -20,18 +20,19 @@ def _build_sweep_points(request: ScanRequest) -> list[dict]:
     params = list(request.parameters or [])
     if not params:
         raise ValueError("扫描至少需要一个有效参数")
+    spacing = np.geomspace if request.options.get('sampling_strategy') == 'log' else np.linspace
 
     if request.mode == "line_1d":
         param = params[0]
-        xs = np.linspace(param.start, param.stop, param.points).tolist()
+        xs = spacing(param.start, param.stop, param.points).tolist()
         return [{"paths": [param.path], "values": [float(x)]} for x in xs]
 
     if request.mode == "grid_2d":
         if len(params) < 2:
             raise ValueError("二维扫描至少需要两个有效参数")
         p0, p1 = params[:2]
-        xs = np.linspace(p0.start, p0.stop, p0.points).tolist()
-        ys = np.linspace(p1.start, p1.stop, p1.points).tolist()
+        xs = spacing(p0.start, p0.stop, p0.points).tolist()
+        ys = spacing(p1.start, p1.stop, p1.points).tolist()
         return [
             {"paths": [p0.path, p1.path], "values": [float(x), float(y)]}
             for x in xs
@@ -57,7 +58,10 @@ def _build_sweep_points(request: ScanRequest) -> list[dict]:
     for row in uniforms:
         values = []
         for col, param in enumerate(params):
-            value = float(param.start + row[col] * (param.stop - param.start))
+            if request.options.get('sampling_strategy') == 'log':
+                value = float(np.sign(param.start) * np.exp(np.log(abs(param.start)) + row[col] * (np.log(abs(param.stop)) - np.log(abs(param.start)))))
+            else:
+                value = float(param.start + row[col] * (param.stop - param.start))
             values.append(value)
         points.append({"paths": [p.path for p in params], "values": values})
     return points
@@ -111,6 +115,7 @@ def _run_scan_task(
     parameter_grid: list[list[float]] = []
     failed = 0
     succeeded = 0
+    failure_examples: list[dict] = []
 
     # A coupling SimulationResult can own multiple dense 2-D arrays. Holding
     # hundreds of complete results until the end of a long scan can therefore
@@ -141,6 +146,8 @@ def _run_scan_task(
                 succeeded += 1
             else:
                 failed += 1
+                if len(failure_examples) < 8:
+                    failure_examples.append({'point': list(point['values']), 'errors': [error.model_dump(mode='python') for error in result.errors]})
             for metric in scan_request.response_metrics:
                 value = result.metrics.get(metric)
                 if isinstance(value, (int, float)):
@@ -217,6 +224,7 @@ def _run_scan_task(
             "completed_points": len(parameter_grid),
             "successful_points": succeeded,
             "failed_points": failed,
+            "failure_examples": failure_examples,
         },
     )
 

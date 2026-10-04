@@ -1,0 +1,1595 @@
+{
+  "chart-0": {
+    "controls": 24,
+    "unmatched": 0,
+    "max_rectangle_difference": 0.66668701171875,
+    "comparisons": [
+      {
+        "kind": "QLabel",
+        "text": "随机森林1",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林2",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差1",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差2",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林5",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林6",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林7",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差5",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林8",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差6",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM1",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM2",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "解释模型",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "随机森林1",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "图表",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "全局特征重要性排名",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QPushButton",
+        "text": "计算解释",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "PlotCanvas",
+        "text": "",
+        "delta": [
+          -0.33331298828125,
+          -0.3333282470703125,
+          0.66668701171875,
+          0.66668701171875
+        ],
+        "max_absolute_difference": 0.66668701171875
+      },
+      {
+        "kind": "QLabel",
+        "text": "数值越大表示模型越依赖该设计变量；不等同于物理因果。",
+        "delta": [
+          -0.33331298828125,
+          0.3333740234375,
+          0.66668701171875,
+          0.0
+        ],
+        "max_absolute_difference": 0.66668701171875
+      }
+    ]
+  },
+  "chart-1": {
+    "controls": 24,
+    "unmatched": 0,
+    "max_rectangle_difference": 0.66668701171875,
+    "comparisons": [
+      {
+        "kind": "QLabel",
+        "text": "随机森林1",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林2",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差1",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差2",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林5",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林6",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林7",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差5",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林8",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差6",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM1",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM2",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "解释模型",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "随机森林1",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "图表",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "蜂群图",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QPushButton",
+        "text": "计算解释",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "PlotCanvas",
+        "text": "",
+        "delta": [
+          -0.33331298828125,
+          -0.3333282470703125,
+          0.66668701171875,
+          0.66668701171875
+        ],
+        "max_absolute_difference": 0.66668701171875
+      },
+      {
+        "kind": "QLabel",
+        "text": "设计变量 SHAP 值分布 · 80 个样本",
+        "delta": [
+          -0.33331298828125,
+          0.3333740234375,
+          0.66668701171875,
+          0.0
+        ],
+        "max_absolute_difference": 0.66668701171875
+      }
+    ]
+  },
+  "chart-2": {
+    "controls": 23,
+    "unmatched": 0,
+    "max_rectangle_difference": 0.66668701171875,
+    "comparisons": [
+      {
+        "kind": "QLabel",
+        "text": "随机森林1",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林2",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差1",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差2",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林5",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林6",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林7",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差5",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林8",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差6",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM1",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM2",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "解释模型",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "随机森林1",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "图表",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "特征依赖网格图",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QPushButton",
+        "text": "计算解释",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "PlotCanvas",
+        "text": "",
+        "delta": [
+          -0.33331298828125,
+          -0.3333282470703125,
+          0.66668701171875,
+          0.66668701171875
+        ],
+        "max_absolute_difference": 0.66668701171875
+      }
+    ]
+  },
+  "chart-3": {
+    "controls": 23,
+    "unmatched": 0,
+    "max_rectangle_difference": 0.66668701171875,
+    "comparisons": [
+      {
+        "kind": "QLabel",
+        "text": "随机森林1",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林2",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差1",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差2",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林5",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林6",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林7",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差5",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林8",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差6",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM1",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM2",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "解释模型",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "随机森林1",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "图表",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "单变量依赖趋势图",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QPushButton",
+        "text": "计算解释",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "PlotCanvas",
+        "text": "",
+        "delta": [
+          -0.33331298828125,
+          -0.3333282470703125,
+          0.66668701171875,
+          0.66668701171875
+        ],
+        "max_absolute_difference": 0.66668701171875
+      }
+    ]
+  },
+  "chart-4": {
+    "controls": 23,
+    "unmatched": 0,
+    "max_rectangle_difference": 0.66668701171875,
+    "comparisons": [
+      {
+        "kind": "QLabel",
+        "text": "随机森林1",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林2",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差1",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差2",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林5",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林6",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林7",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差5",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林8",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差6",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM1",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM2",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "解释模型",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "随机森林1",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "图表",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "物理一致性图",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QPushButton",
+        "text": "计算解释",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "PlotCanvas",
+        "text": "",
+        "delta": [
+          -0.33331298828125,
+          -0.3333282470703125,
+          0.66668701171875,
+          0.66668701171875
+        ],
+        "max_absolute_difference": 0.66668701171875
+      }
+    ]
+  },
+  "chart-5": {
+    "controls": 24,
+    "unmatched": 0,
+    "max_rectangle_difference": 0.66668701171875,
+    "comparisons": [
+      {
+        "kind": "QLabel",
+        "text": "随机森林1",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林2",
+        "delta": [
+          -0.3333320617675746,
+          -0.16665649414065342,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差1",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差2",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林5",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差3",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林6",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差4",
+        "delta": [
+          -0.3333320617675746,
+          -0.166656494140625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林7",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差5",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林8",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost物理残差6",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM1",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM2",
+        "delta": [
+          -0.3333320617675746,
+          -0.1666259765625,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.3333320617675746
+      },
+      {
+        "kind": "QLabel",
+        "text": "解释模型",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "随机森林1",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "图表",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QComboBox",
+        "text": "瀑布图",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QPushButton",
+        "text": "计算解释",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "QLabel",
+        "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+        "delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_absolute_difference": 0.0
+      },
+      {
+        "kind": "PlotCanvas",
+        "text": "",
+        "delta": [
+          -0.33331298828125,
+          -0.3333282470703125,
+          0.66668701171875,
+          0.66668701171875
+        ],
+        "max_absolute_difference": 0.66668701171875
+      },
+      {
+        "kind": "QLabel",
+        "text": "解释特征：8　｜　从模型平均基准累加至当前预测值",
+        "delta": [
+          -0.33331298828125,
+          0.3333740234375,
+          0.66668701171875,
+          0.0
+        ],
+        "max_absolute_difference": 0.66668701171875
+      }
+    ]
+  }
+}

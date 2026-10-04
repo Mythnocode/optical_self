@@ -1,0 +1,5493 @@
+{
+  "import-collapsed": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "导入",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "采样方式",
+        "bounds": [
+          314,
+          237,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "按照镜头",
+        "bounds": [
+          390,
+          237,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          314,
+          285,
+          860,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "选择文件",
+        "bounds": [
+          1182,
+          287,
+          96,
+          38
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "导入",
+        "bounds": [
+          1286,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": false,
+        "foreground": "#8a94a3"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "内置",
+        "bounds": [
+          1356,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#0a327a"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          351,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "固定镜头数",
+        "bounds": [
+          1023,
+          374,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          373,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          376,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      },
+      {
+        "kind": "QLabel",
+        "text": "内置演示·780 nm 四透镜八变量",
+        "bounds": [
+          26,
+          203,
+          242,
+          19
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          344,
+          1122,
+          80
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "import-expanded": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "导入",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "采样方式",
+        "bounds": [
+          314,
+          237,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "按照镜头",
+        "bounds": [
+          390,
+          237,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          314,
+          285,
+          860,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "选择文件",
+        "bounds": [
+          1182,
+          287,
+          96,
+          38
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "导入",
+        "bounds": [
+          1286,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": false,
+        "foreground": "#8a94a3"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "内置",
+        "bounds": [
+          1356,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#0a327a"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          351,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机森林 · 直接效率基准",
+        "bounds": [
+          323,
+          380,
+          1086,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "树数量",
+        "bounds": [
+          323,
+          402,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "300",
+        "bounds": [
+          782,
+          402,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "最大深度（0=自动）",
+        "bounds": [
+          872,
+          402,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "0",
+        "bounds": [
+          1331,
+          402,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "叶节点最小样本",
+        "bounds": [
+          323,
+          453,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "1",
+        "bounds": [
+          782,
+          453,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "最大特征",
+        "bounds": [
+          872,
+          453,
+          72,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "sqrt",
+        "bounds": [
+          952,
+          454,
+          457,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "XGBoost · 物理公式残差主模型",
+        "bounds": [
+          323,
+          518,
+          1086,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "迭代轮数",
+        "bounds": [
+          323,
+          540,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "300",
+        "bounds": [
+          782,
+          540,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "学习率",
+        "bounds": [
+          872,
+          540,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "0.05",
+        "bounds": [
+          1331,
+          540,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "最大深度",
+        "bounds": [
+          323,
+          591,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "4",
+        "bounds": [
+          782,
+          591,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "样本采样率",
+        "bounds": [
+          872,
+          591,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "0.90",
+        "bounds": [
+          1331,
+          591,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "特征采样率",
+        "bounds": [
+          323,
+          642,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "0.95",
+        "bounds": [
+          782,
+          642,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "固定镜头数",
+        "bounds": [
+          1023,
+          701,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          700,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          703,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      },
+      {
+        "kind": "QLabel",
+        "text": "内置演示·780 nm 四透镜八变量",
+        "bounds": [
+          26,
+          203,
+          242,
+          19
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          344,
+          1122,
+          407
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-import": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "导入",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "采样方式",
+        "bounds": [
+          314,
+          237,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "按照元件",
+        "bounds": [
+          390,
+          237,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          314,
+          285,
+          860,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "选择文件",
+        "bounds": [
+          1182,
+          287,
+          96,
+          38
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "导入",
+        "bounds": [
+          1286,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": false,
+        "foreground": "#8a94a3"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "内置",
+        "bounds": [
+          1356,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": false,
+        "foreground": "#8a94a3"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          351,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          1023,
+          374,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          373,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          376,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          344,
+          1122,
+          80
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-training-expanded": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "导入",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "采样方式",
+        "bounds": [
+          314,
+          237,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "按照元件",
+        "bounds": [
+          390,
+          237,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "bounds": [
+          314,
+          285,
+          860,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "选择文件",
+        "bounds": [
+          1182,
+          287,
+          96,
+          38
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "导入",
+        "bounds": [
+          1286,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": false,
+        "foreground": "#8a94a3"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "内置",
+        "bounds": [
+          1356,
+          286,
+          62,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": false,
+        "foreground": "#8a94a3"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          351,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型",
+        "bounds": [
+          323,
+          380,
+          1086,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "最大轮数",
+        "bounds": [
+          323,
+          402,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "200",
+        "bounds": [
+          782,
+          402,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "批大小",
+        "bounds": [
+          872,
+          402,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "32",
+        "bounds": [
+          1331,
+          402,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          1023,
+          461,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          460,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          463,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          344,
+          1122,
+          167
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-generation-collapsed": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "生成",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "样本数",
+        "bounds": [
+          314,
+          237,
+          51,
+          43
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "50",
+        "bounds": [
+          377,
+          237,
+          78,
+          43
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "目标变量",
+        "bounds": [
+          467,
+          237,
+          68,
+          43
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)",
+        "bounds": [
+          547,
+          237,
+          871,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "镜头结构",
+        "bounds": [
+          314,
+          286,
+          68,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          390,
+          286,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1317,
+          332,
+          101,
+          33
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 700,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "生成数据集",
+        "bounds": [
+          314,
+          371,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          431,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型",
+        "bounds": [
+          323,
+          460,
+          1086,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "最大轮数",
+        "bounds": [
+          323,
+          482,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "200",
+        "bounds": [
+          782,
+          482,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "批大小",
+        "bounds": [
+          872,
+          482,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "32",
+        "bounds": [
+          1331,
+          482,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          1023,
+          541,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          540,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          543,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          254
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          424,
+          1122,
+          167
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-generation-expanded": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "生成",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "样本数",
+        "bounds": [
+          314,
+          237,
+          51,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "50",
+        "bounds": [
+          377,
+          237,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "目标变量",
+        "bounds": [
+          467,
+          237,
+          68,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)",
+        "bounds": [
+          547,
+          238,
+          871,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "镜头结构",
+        "bounds": [
+          314,
+          288,
+          68,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          390,
+          288,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1317,
+          334,
+          101,
+          34
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 700,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "当前系统镜头数",
+        "bounds": [
+          314,
+          374,
+          119,
+          21
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "已识别 4 个实体镜片（每个系统样本保留此序列长度）",
+        "bounds": [
+          445,
+          374,
+          973,
+          21
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#667085"
+      },
+      {
+        "kind": "QLabel",
+        "text": "变量方案",
+        "bounds": [
+          314,
+          401,
+          68,
+          37
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "已选择 12 个变量",
+        "bounds": [
+          390,
+          401,
+          903,
+          37
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#667085"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "选择变量",
+        "bounds": [
+          1301,
+          401,
+          117,
+          37
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "采样方法",
+        "bounds": [
+          314,
+          444,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "Latin Hypercube",
+        "bounds": [
+          708,
+          445,
+          185,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "验证集比例",
+        "bounds": [
+          903,
+          444,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "0.15",
+        "bounds": [
+          1297,
+          444,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机种子",
+        "bounds": [
+          314,
+          495,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "42",
+        "bounds": [
+          708,
+          495,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "计算精度",
+        "bounds": [
+          903,
+          495,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "257×257",
+        "bounds": [
+          1297,
+          496,
+          121,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "生成数据集",
+        "bounds": [
+          314,
+          546,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          606,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型",
+        "bounds": [
+          323,
+          635,
+          1086,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "最大轮数",
+        "bounds": [
+          323,
+          657,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "200",
+        "bounds": [
+          782,
+          657,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "批大小",
+        "bounds": [
+          872,
+          657,
+          451,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "32",
+        "bounds": [
+          1331,
+          657,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          1023,
+          716,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          715,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          718,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          429
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          599,
+          1122,
+          167
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-variables-expanded": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1092,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "生成",
+        "bounds": [
+          390,
+          191,
+          1016,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "样本数",
+        "bounds": [
+          314,
+          237,
+          51,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "50",
+        "bounds": [
+          377,
+          237,
+          78,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "目标变量",
+        "bounds": [
+          467,
+          237,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)",
+        "bounds": [
+          547,
+          237,
+          859,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "镜头结构",
+        "bounds": [
+          314,
+          285,
+          68,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          390,
+          285,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1305,
+          331,
+          101,
+          31
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 700,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "当前系统镜头数",
+        "bounds": [
+          314,
+          368,
+          119,
+          21
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "已识别 4 个实体镜片（每个系统样本保留此序列长度）",
+        "bounds": [
+          445,
+          368,
+          961,
+          21
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#667085"
+      },
+      {
+        "kind": "QLabel",
+        "text": "变量方案",
+        "bounds": [
+          314,
+          395,
+          68,
+          34
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "已选择 12 个变量",
+        "bounds": [
+          390,
+          395,
+          891,
+          34
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#667085"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "选择变量",
+        "bounds": [
+          1289,
+          395,
+          117,
+          34
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L1 / L1 前表面 / 曲率",
+        "bounds": [
+          314,
+          435,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L1 / L1 前表面 / 圆锥系数",
+        "bounds": [
+          866,
+          435,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L1 / L1 前表面 / 厚度",
+        "bounds": [
+          314,
+          469,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L1 / L1 后表面 / 厚度",
+        "bounds": [
+          866,
+          469,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L2 / L2 前表面 / 曲率",
+        "bounds": [
+          314,
+          503,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L2 / L2 前表面 / 圆锥系数",
+        "bounds": [
+          866,
+          503,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L2 / L2 前表面 / 厚度",
+        "bounds": [
+          314,
+          537,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L2 / L2 后表面 / 厚度",
+        "bounds": [
+          866,
+          537,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L3 / L3 前表面 / 曲率",
+        "bounds": [
+          314,
+          571,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L3 / L3 前表面 / 圆锥系数",
+        "bounds": [
+          866,
+          571,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L3 / L3 前表面 / 厚度",
+        "bounds": [
+          314,
+          605,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L3 / L3 后表面 / 厚度",
+        "bounds": [
+          866,
+          605,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L4 / L4 前表面 / 曲率",
+        "bounds": [
+          314,
+          639,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L4 / L4 前表面 / 圆锥系数",
+        "bounds": [
+          866,
+          639,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L4 / L4 前表面 / 厚度",
+        "bounds": [
+          314,
+          673,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "L4 / L4 后表面 / 厚度",
+        "bounds": [
+          866,
+          673,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "光纤 / 接收端 / 轴向位置",
+        "bounds": [
+          314,
+          707,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "光纤 / 接收端 / X 偏移",
+        "bounds": [
+          866,
+          707,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QCheckBox",
+        "text": "光纤 / 接收端 / Y 偏移",
+        "bounds": [
+          314,
+          741,
+          540,
+          30
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "采样方法",
+        "bounds": [
+          314,
+          777,
+          378,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "Latin Hypercube",
+        "bounds": [
+          702,
+          777,
+          185,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "验证集比例",
+        "bounds": [
+          897,
+          777,
+          378,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "0.15",
+        "bounds": [
+          1285,
+          777,
+          78,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机种子",
+        "bounds": [
+          314,
+          825,
+          378,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "42",
+        "bounds": [
+          702,
+          825,
+          78,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "计算精度",
+        "bounds": [
+          897,
+          825,
+          378,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "257×257",
+        "bounds": [
+          1285,
+          825,
+          121,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "生成数据集",
+        "bounds": [
+          314,
+          873,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          933,
+          1092,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型",
+        "bounds": [
+          323,
+          962,
+          1074,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "最大轮数",
+        "bounds": [
+          323,
+          984,
+          445,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "200",
+        "bounds": [
+          776,
+          984,
+          78,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "批大小",
+        "bounds": [
+          866,
+          984,
+          445,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "32",
+        "bounds": [
+          1319,
+          984,
+          78,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "任意镜头数",
+        "bounds": [
+          1011,
+          1040,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1151,
+          1039,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1278,
+          1042,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1110,
+          756
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          926,
+          1110,
+          164
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "fixed-generation-expanded": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "生成",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "样本数",
+        "bounds": [
+          314,
+          237,
+          51,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "50",
+        "bounds": [
+          377,
+          237,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "目标变量",
+        "bounds": [
+          467,
+          237,
+          68,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)",
+        "bounds": [
+          547,
+          238,
+          871,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "镜头结构",
+        "bounds": [
+          314,
+          288,
+          68,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "固定镜头数",
+        "bounds": [
+          390,
+          288,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1317,
+          334,
+          101,
+          34
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 700,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "研究对象",
+        "bounds": [
+          314,
+          374,
+          92,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "四透镜",
+        "bounds": [
+          418,
+          374,
+          442,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "变量方案",
+        "bounds": [
+          872,
+          374,
+          92,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "曲率半径 + 厚度",
+        "bounds": [
+          976,
+          374,
+          442,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "采样方法",
+        "bounds": [
+          314,
+          422,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "Latin Hypercube",
+        "bounds": [
+          708,
+          423,
+          185,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "验证集比例",
+        "bounds": [
+          903,
+          422,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "0.15",
+        "bounds": [
+          1297,
+          422,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "随机种子",
+        "bounds": [
+          314,
+          473,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "42",
+        "bounds": [
+          708,
+          473,
+          78,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "计算精度",
+        "bounds": [
+          903,
+          473,
+          384,
+          45
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "257×257",
+        "bounds": [
+          1297,
+          474,
+          121,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "生成数据集",
+        "bounds": [
+          314,
+          524,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          584,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "固定镜头数",
+        "bounds": [
+          1023,
+          607,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          606,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          609,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      },
+      {
+        "kind": "QLabel",
+        "text": "内置演示·780 nm 四透镜八变量",
+        "bounds": [
+          26,
+          203,
+          242,
+          19
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          407
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          577,
+          1122,
+          80
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "fixed-generation-collapsed": {
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "1. 数据",
+        "bounds": [
+          314,
+          169,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QLabel",
+        "text": "数据来源",
+        "bounds": [
+          314,
+          191,
+          68,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "生成",
+        "bounds": [
+          390,
+          191,
+          1028,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "样本数",
+        "bounds": [
+          314,
+          237,
+          51,
+          43
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "UnitAwareDoubleSpinBox",
+        "text": "50",
+        "bounds": [
+          377,
+          237,
+          78,
+          43
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "目标变量",
+        "bounds": [
+          467,
+          237,
+          68,
+          43
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)",
+        "bounds": [
+          547,
+          237,
+          871,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 400,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QLabel",
+        "text": "镜头结构",
+        "bounds": [
+          314,
+          286,
+          68,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 400,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "固定镜头数",
+        "bounds": [
+          390,
+          286,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1317,
+          332,
+          101,
+          33
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 700,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#101828"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "生成数据集",
+        "bounds": [
+          314,
+          371,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QLabel",
+        "text": "2. 训练",
+        "bounds": [
+          314,
+          431,
+          1104,
+          18
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 14,
+          "point_size": 10.5,
+          "weight": 700,
+          "height": 18,
+          "ascent": 14,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "固定镜头数",
+        "bounds": [
+          1023,
+          454,
+          132,
+          40
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      },
+      {
+        "kind": "QToolButton",
+        "text": "更多参数",
+        "bounds": [
+          1163,
+          453,
+          119,
+          42
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 17,
+          "point_size": 12.75,
+          "weight": 650,
+          "height": 21,
+          "ascent": 17,
+          "descent": 4
+        },
+        "enabled": true,
+        "foreground": "#344054"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "开始训练",
+        "bounds": [
+          1290,
+          456,
+          128,
+          36
+        ],
+        "font": {
+          "family": "Microsoft YaHei UI",
+          "pixel_size": 18,
+          "point_size": 13.5,
+          "weight": 700,
+          "height": 23,
+          "ascent": 18,
+          "descent": 5
+        },
+        "enabled": true,
+        "foreground": "#ffffff"
+      }
+    ],
+    "rail": [
+      {
+        "kind": "QLabel",
+        "text": "数据集",
+        "bounds": [
+          10,
+          160,
+          274,
+          23
+        ]
+      },
+      {
+        "kind": "QLabel",
+        "text": "内置演示·780 nm 四透镜八变量",
+        "bounds": [
+          26,
+          203,
+          242,
+          19
+        ]
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274,
+      703
+    ],
+    "frames": [
+      {
+        "name": "PrimaryBar",
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ]
+      },
+      {
+        "name": "SecondaryBar",
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ]
+      },
+      {
+        "name": "DatasetTab",
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          162,
+          1122,
+          254
+        ]
+      },
+      {
+        "name": "FieldGroup",
+        "bounds": [
+          305,
+          424,
+          1122,
+          80
+        ]
+      },
+      {
+        "name": "ObjectRail",
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ]
+      }
+    ],
+    "device_pixel_ratio": 1.5,
+    "window_size": [
+      1440,
+      900
+    ]
+  }
+}

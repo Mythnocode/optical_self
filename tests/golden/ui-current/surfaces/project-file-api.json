@@ -1,0 +1,49 @@
+[
+  {
+    "case": "default",
+    "status": 200,
+    "body": {
+      "code": "OK",
+      "message": "success",
+      "data": {
+        "valid": true
+      },
+      "error": null,
+      "request_id": "req-6632754862284be88e5c73fc05cb7748"
+    }
+  },
+  {
+    "case": "invalid-surface",
+    "status": 422,
+    "body": {
+      "code": "SURFACE_EDITOR_INVALID",
+      "message": "表面参数必须为有限数值",
+      "data": null,
+      "error": {
+        "code": "SURFACE_EDITOR_INVALID",
+        "stage": "surfaces.serialize",
+        "message": "表面参数必须为有限数值",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-99d31354adf44db583c316fe2fce5468"
+    }
+  },
+  {
+    "case": "invalid-field",
+    "status": 422,
+    "body": {
+      "code": "PROJECT_FILE_INVALID",
+      "message": "项目复场数组与网格不一致",
+      "data": null,
+      "error": {
+        "code": "PROJECT_FILE_INVALID",
+        "stage": "projects.open",
+        "message": "项目复场数组与网格不一致",
+        "retryable": false,
+        "context": {}
+      },
+      "request_id": "req-fefd2d0d0b3443faadeedcdb52a556cb"
+    }
+  }
+]

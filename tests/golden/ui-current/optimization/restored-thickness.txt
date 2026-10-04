@@ -1,0 +1,179 @@
+- generic "浏览器预览通过 Vite 代理连接到本机后端。":
+  - navigation "主导航":
+    - link "首页":
+      - /url: "#/"
+    - link "教学":
+      - /url: "#/teaching-three"
+    - link "仿真":
+      - /url: "#/workbench/simulation/lens_data"
+    - link "模型":
+      - /url: "#/workbench/model/dataset"
+    - link "优化":
+      - /url: "#/workbench/optimization/opt_vars"
+    - link "解释":
+      - /url: "#/workbench/explainability/global_contrib"
+    - generic "常用操作":
+      - button "保存"
+      - button "开始计算"
+      - button "设置"
+    - generic: Python 后端：connected
+    - generic: 已复制项目参数。
+  - main:
+    - navigation "仿真功能":
+      - button "镜头数据":
+        - generic: 镜头数据
+      - button "光路图":
+        - generic: 光路图
+      - button "光斑图":
+        - generic: 光斑图
+      - button "光纤耦合":
+        - generic: 光纤耦合
+      - button "波前与衍射":
+        - generic: 波前与衍射
+    - complementary:
+      - heading "对象" [level=2]
+      - generic "光源"
+      - option "高斯光束" [selected]
+      - option "均匀光瞳"
+      - option "点光源"
+      - option "mW" [selected]
+      - option "W"
+      - option "μW"
+      - generic "材料"
+      - generic "光纤"
+      - option "单模光纤"
+      - option "多模光纤"
+      - option "用户模式" [selected]
+      - option "高斯近似"
+      - option "LP01"
+      - option "HE11"
+      - option "导入复场" [selected]
+      - generic "探测器"
+      - option "光学面" [selected]
+      - option "光纤模场"
+      - option "自定义位置"
+      - option "L1 前表面（面 0）" [selected]
+      - option "L1 后表面（面 1）"
+      - option "L2 前表面（面 2）"
+      - option "L2 后表面（面 3）"
+      - option "L3 前表面（面 4）"
+      - option "L3 后表面（面 5）"
+      - option "L4 前表面（面 6）"
+      - option "L4 后表面（面 7）"
+      - generic "环境"
+      - generic "视场"
+    - main:
+      - button "新增 ⌄":
+        - text: 新增
+        - generic: ⌄
+      - button "删除面":
+        - text: 删除面
+      - button "列设置 ⌄":
+        - text: 列设置
+        - generic: ⌄
+      - button "表面属性…"
+      - region "镜头数据表":
+        - table:
+          - rowgroup:
+            - row "面号 表面名称 表面类型 曲率半径 R / mm 厚度 / mm 材料/介质 半口径 / mm 非球面 A6 非球面 A8 归一化半径 / mm":
+              - columnheader "面号"
+              - columnheader "表面名称"
+              - columnheader "表面类型"
+              - columnheader "曲率半径 R / mm"
+              - columnheader "厚度 / mm"
+              - columnheader "材料/介质"
+              - columnheader "半口径 / mm"
+              - columnheader "非球面 A6"
+              - columnheader "非球面 A8"
+              - columnheader "归一化半径 / mm"
+          - rowgroup:
+            - row "1 L1 前表面 表面名称 L1 前表面 表面类型 L1 前表面 曲率半径 R / mm L1 前表面 厚度 / mm L1 前表面 材料/介质 L1 前表面 半口径 / mm L1 前表面 非球面 A6 L1 前表面 非球面 A8 L1 前表面 归一化半径 / mm":
+              - cell "1"
+              - cell "L1 前表面 表面名称": L1 前表面
+              - cell "L1 前表面 表面类型": 非球面
+              - cell "L1 前表面 曲率半径 R / mm": "5.11"
+              - cell "L1 前表面 厚度 / mm": "3.00"
+              - cell "L1 前表面 材料/介质": N-BK7
+              - cell "L1 前表面 半口径 / mm": "3.00"
+              - cell "L1 前表面 非球面 A6": "0.00"
+              - cell "L1 前表面 非球面 A8": "0.00"
+              - cell "L1 前表面 归一化半径 / mm": "1.00"
+            - row "2 L1 后表面 表面名称 L1 后表面 表面类型 L1 后表面 曲率半径 R / mm L1 后表面 厚度 / mm L1 后表面 材料/介质 L1 后表面 半口径 / mm L1 后表面 非球面 A6 L1 后表面 非球面 A8 L1 后表面 归一化半径 / mm":
+              - cell "2"
+              - cell "L1 后表面 表面名称": L1 后表面
+              - cell "L1 后表面 表面类型": 平面
+              - cell "L1 后表面 曲率半径 R / mm": "0.00"
+              - cell "L1 后表面 厚度 / mm":
+                - textbox "编辑 厚度 / mm" [active]: "14.843576053563464"
+              - cell "L1 后表面 材料/介质": AIR
+              - cell "L1 后表面 半口径 / mm": "3.00"
+              - cell "L1 后表面 非球面 A6": 未使用
+              - cell "L1 后表面 非球面 A8": 未使用
+              - cell "L1 后表面 归一化半径 / mm": 未使用
+            - row "3 L2 前表面 表面名称 L2 前表面 表面类型 L2 前表面 曲率半径 R / mm L2 前表面 厚度 / mm L2 前表面 材料/介质 L2 前表面 半口径 / mm L2 前表面 非球面 A6 L2 前表面 非球面 A8 L2 前表面 归一化半径 / mm":
+              - cell "3"
+              - cell "L2 前表面 表面名称": L2 前表面
+              - cell "L2 前表面 表面类型": 非球面
+              - cell "L2 前表面 曲率半径 R / mm": "4.09"
+              - cell "L2 前表面 厚度 / mm": "4.00"
+              - cell "L2 前表面 材料/介质": N-BK7
+              - cell "L2 前表面 半口径 / mm": "3.00"
+              - cell "L2 前表面 非球面 A6": "0.00"
+              - cell "L2 前表面 非球面 A8": "0.00"
+              - cell "L2 前表面 归一化半径 / mm": "1.00"
+            - row "4 L2 后表面 表面名称 L2 后表面 表面类型 L2 后表面 曲率半径 R / mm L2 后表面 厚度 / mm L2 后表面 材料/介质 L2 后表面 半口径 / mm L2 后表面 非球面 A6 L2 后表面 非球面 A8 L2 后表面 归一化半径 / mm":
+              - cell "4"
+              - cell "L2 后表面 表面名称": L2 后表面
+              - cell "L2 后表面 表面类型": 平面
+              - cell "L2 后表面 曲率半径 R / mm": "0.00"
+              - cell "L2 后表面 厚度 / mm": "27.37"
+              - cell "L2 后表面 材料/介质": AIR
+              - cell "L2 后表面 半口径 / mm": "3.00"
+              - cell "L2 后表面 非球面 A6": 未使用
+              - cell "L2 后表面 非球面 A8": 未使用
+              - cell "L2 后表面 归一化半径 / mm": 未使用
+            - row "5 L3 前表面 表面名称 L3 前表面 表面类型 L3 前表面 曲率半径 R / mm L3 前表面 厚度 / mm L3 前表面 材料/介质 L3 前表面 半口径 / mm L3 前表面 非球面 A6 L3 前表面 非球面 A8 L3 前表面 归一化半径 / mm":
+              - cell "5"
+              - cell "L3 前表面 表面名称": L3 前表面
+              - cell "L3 前表面 表面类型": 非球面
+              - cell "L3 前表面 曲率半径 R / mm": "25.55"
+              - cell "L3 前表面 厚度 / mm": "3.00"
+              - cell "L3 前表面 材料/介质": N-BK7
+              - cell "L3 前表面 半口径 / mm": "3.00"
+              - cell "L3 前表面 非球面 A6": "0.00"
+              - cell "L3 前表面 非球面 A8": "0.00"
+              - cell "L3 前表面 归一化半径 / mm": "1.00"
+            - row "6 L3 后表面 表面名称 L3 后表面 表面类型 L3 后表面 曲率半径 R / mm L3 后表面 厚度 / mm L3 后表面 材料/介质 L3 后表面 半口径 / mm L3 后表面 非球面 A6 L3 后表面 非球面 A8 L3 后表面 归一化半径 / mm":
+              - cell "6"
+              - cell "L3 后表面 表面名称": L3 后表面
+              - cell "L3 后表面 表面类型": 平面
+              - cell "L3 后表面 曲率半径 R / mm": "0.00"
+              - cell "L3 后表面 厚度 / mm": "15.67"
+              - cell "L3 后表面 材料/介质": AIR
+              - cell "L3 后表面 半口径 / mm": "3.00"
+              - cell "L3 后表面 非球面 A6": 未使用
+              - cell "L3 后表面 非球面 A8": 未使用
+              - cell "L3 后表面 归一化半径 / mm": 未使用
+            - row "7 L4 前表面 表面名称 L4 前表面 表面类型 L4 前表面 曲率半径 R / mm L4 前表面 厚度 / mm L4 前表面 材料/介质 L4 前表面 半口径 / mm L4 前表面 非球面 A6 L4 前表面 非球面 A8 L4 前表面 归一化半径 / mm":
+              - cell "7"
+              - cell "L4 前表面 表面名称": L4 前表面
+              - cell "L4 前表面 表面类型": 非球面
+              - cell "L4 前表面 曲率半径 R / mm": "6.13"
+              - cell "L4 前表面 厚度 / mm": "3.00"
+              - cell "L4 前表面 材料/介质": N-BK7
+              - cell "L4 前表面 半口径 / mm": "3.00"
+              - cell "L4 前表面 非球面 A6": "0.00"
+              - cell "L4 前表面 非球面 A8": "0.00"
+              - cell "L4 前表面 归一化半径 / mm": "1.00"
+            - row "8 L4 后表面 表面名称 L4 后表面 表面类型 L4 后表面 曲率半径 R / mm L4 后表面 厚度 / mm L4 后表面 材料/介质 L4 后表面 半口径 / mm L4 后表面 非球面 A6 L4 后表面 非球面 A8 L4 后表面 归一化半径 / mm":
+              - cell "8"
+              - cell "L4 后表面 表面名称": L4 后表面
+              - cell "L4 后表面 表面类型": 平面
+              - cell "L4 后表面 曲率半径 R / mm": "0.00"
+              - cell "L4 后表面 厚度 / mm": "0.00"
+              - cell "L4 后表面 材料/介质": AIR
+              - cell "L4 后表面 半口径 / mm": "3.00"
+              - cell "L4 后表面 非球面 A6": 未使用
+              - cell "L4 后表面 非球面 A8": 未使用
+              - cell "L4 后表面 归一化半径 / mm": 未使用
+  - button "打开 AI 助手": AI

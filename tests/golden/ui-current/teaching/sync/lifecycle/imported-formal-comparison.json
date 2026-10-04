@@ -1,0 +1,412 @@
+{
+  "spot": {
+    "job_id": "job-55fae3ffe5f8",
+    "request_checks": {
+      "real_equals_original_loader": true,
+      "imag_equals_original_loader": true,
+      "options_equal": true,
+      "precision_equal": true,
+      "project_equal_except_fingerprint": false
+    },
+    "physics_equal_excluding_runtime_diagnostics": true,
+    "metrics_equal": true,
+    "metrics": {
+      "rms_spot_radius_um": 2.185795883339617,
+      "rms_um": 2.185795883339617,
+      "valid_ray_count": 197.0,
+      "raw_metric_count": 20
+    },
+    "grid_size": 513,
+    "field_sha256": "1df82975e8c638aff4d3fbdbf2e860f94121009c1f0227284d641f4f08934d7f",
+    "request_differences": [
+      {
+        "path": "project/fingerprint",
+        "expected": "frontend-f69d729258300fe0",
+        "actual": "web-ae87ecab5d0c07b1"
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      }
+    ],
+    "excluded_runtime_diagnostics": [
+      "GlobalFiberModeCache_misses",
+      "GlobalFiberModeCache_size",
+      "coupling_output_window_plan_cache_hit",
+      "elapsed_ms"
+    ],
+    "job": {
+      "job_id": "job-55fae3ffe5f8",
+      "job_type": "teaching",
+      "status": "completed",
+      "progress": 1.0,
+      "stage": "completed",
+      "completed_items": 0,
+      "total_items": 1,
+      "created_at": "2026-10-01T06:24:39.690923+00:00",
+      "started_at": "2026-10-01T06:24:39.949110+00:00",
+      "finished_at": "2026-10-01T06:24:43.574303+00:00",
+      "result_available": true,
+      "error": null,
+      "metrics": {
+        "ray_count": 197,
+        "valid_ray_count": 197.0,
+        "valid_ray_ratio": 1.0,
+        "spot_total_integration_weight.a.u.": 10.474968727635071,
+        "spot_centroid_x_um": -4.504498273306251e-17,
+        "spot_centroid_y_um": 0.0,
+        "rms_spot_x_um": 1.3237028681301122,
+        "rms_spot_y_um": 1.739400575062723,
+        "rms_spot_radius_um": 2.185795883339617,
+        "spot_valid_ray_count": 197.0,
+        "spot_total_ray_count": 197.0,
+        "total_ray_count": 197.0,
+        "spot_rms_method": "common_weighted_centroid_second_moment",
+        "spot_weight_semantics": "power_weight_times_quadrature_weight",
+        "real_ray_image_space_na": 0.2101319639600553,
+        "real_ray_marginal_angle_rad": 0.21170993540126545,
+        "real_ray_chief_index": 98.0,
+        "real_ray_marginal_index": 0.0,
+        "real_ray_airy_radius_um": 2.2642914054258134,
+        "real_ray_airy_diameter_um": 4.528582810851627,
+        "rms_um": 2.185795883339617,
+        "raw_metric_count": 20
+      },
+      "timings_ms": {
+        "queue_wait": 257.344,
+        "process_startup": 0.0,
+        "worker_ready_to_first_progress": 30.616,
+        "worker_compute": 1577.328,
+        "local_result_transport": 394.837,
+        "result_save": 1472.648,
+        "backend_total": 3883.231
+      },
+      "result_version": 5,
+      "partial_result_available": false,
+      "retry_available": true,
+      "retry_of": null,
+      "last_activity_at": "2026-10-01T06:24:41.670759+00:00"
+    },
+    "field_hash_encoding": "little-endian float64 [real,imag], signed zero normalized"
+  },
+  "coupling": {
+    "job_id": "job-3a985d9f833b",
+    "request_checks": {
+      "real_equals_original_loader": true,
+      "imag_equals_original_loader": true,
+      "options_equal": true,
+      "precision_equal": true,
+      "project_equal_except_fingerprint": false
+    },
+    "physics_equal_excluding_runtime_diagnostics": true,
+    "metrics_equal": true,
+    "metrics": {
+      "coupling_efficiency": 0.5710385847388167,
+      "mode_overlap_efficiency": 0.5710385847388167,
+      "total_coupling_efficiency": 0.5681617869124951,
+      "raw_metric_count": 208
+    },
+    "grid_size": 513,
+    "field_sha256": "1df82975e8c638aff4d3fbdbf2e860f94121009c1f0227284d641f4f08934d7f",
+    "request_differences": [
+      {
+        "path": "project/fingerprint",
+        "expected": "frontend-f69d729258300fe0",
+        "actual": "web-ae87ecab5d0c07b1"
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/0/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/2/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/4/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/a4",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/a6",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/a8",
+        "expected": null,
+        "actual": 0
+      },
+      {
+        "path": "project/surfaces/6/metadata/type_parameters/normalization_radius_mm",
+        "expected": null,
+        "actual": 1
+      }
+    ],
+    "excluded_runtime_diagnostics": [
+      "GlobalFiberModeCache_misses",
+      "GlobalFiberModeCache_size",
+      "coupling_output_window_plan_cache_hit",
+      "elapsed_ms"
+    ],
+    "job": {
+      "job_id": "job-3a985d9f833b",
+      "job_type": "teaching",
+      "status": "completed",
+      "progress": 1.0,
+      "stage": "completed",
+      "completed_items": 0,
+      "total_items": 1,
+      "created_at": "2026-10-01T06:24:46.733028+00:00",
+      "started_at": "2026-10-01T06:24:46.968060+00:00",
+      "finished_at": "2026-10-01T06:24:52.422067+00:00",
+      "result_available": true,
+      "error": null,
+      "metrics": {
+        "ray_count": 441,
+        "valid_ray_count": 441.0,
+        "valid_ray_ratio": 1.0,
+        "coupling_efficiency": 0.5710385847388167,
+        "total_coupling_efficiency": 0.5681617869124951,
+        "mode_overlap_efficiency": 0.5710385847388167,
+        "complex_field_overlap_efficiency": 0.5710385847388167,
+        "intensity_only_overlap": 0.6013332626948108,
+        "phase_only_penalty": 0.9496208178802023,
+        "wavefront_aberration_penalty": 0.9496208178802023,
+        "centered_intensity_overlap": 0.6419231026033506,
+        "centered_phase_matching_efficiency": 0.95097371289643,
+        "alignment_efficiency": 0.9354356906386094,
+        "polarization_overlap_efficiency": 1.0,
+        "transmission_efficiency": 0.999961975476688,
+        "fiber_interface_efficiency": 0.995,
+        "coupling_explanatory_factor_product": 0.5681617869124951,
+        "coupling_interaction_residual": 0.0,
+        "coupling_interaction_residual_relative": 0.0,
+        "coupling_overlap_abs": 0.7556709500429514,
+        "coupling_overlap_phase_rad": -2.9528105507583606,
+        "coupling_scalar_overlap_abs": 0.7556709500429514,
+        "coupling_scalar_overlap_phase_rad": -2.9528105507583606,
+        "coupling_vector_efficiency": 0.5710385847388167,
+        "coupling_input_power_a.u.": 1.0,
+        "coupling_mode_power_a.u.": 1.0,
+        "coupling_valid_ray_fraction": 1.0,
+        "coupling_coherent_efficiency": 0.5710385847388167,
+        "coupling_grid_size": 513,
+        "coupling_mode_offset_x_mm": 0.00123456789,
+        "coupling_mode_offset_y_mm": 0.0,
+        "coupling_mode_tilt_x_rad": 0.000123456789,
+        "coupling_mode_tilt_y_rad": 0.0,
+        "coupling_field_centroid_x_mm": 5.204843826441854e-16,
+        "coupling_field_centroid_y_mm": 3.4900686881516114e-16,
+        "coupling_field_rms_x_um": 1.6228625739821878,
+        "coupling_field_rms_y_um": 1.4199851557300345,
+        "coupling_field_rms_radius_um": 2.1563953200945654,
+        "coupling_mode_centroid_x_mm": 0.001234566823903862,
+        "coupling_mode_centroid_y_mm": 4.690497996636042e-20,
+        "coupling_mode_rms_x_um": 3.000102723043085,
+        "coupling_mode_rms_y_um": 2.9999999999998934,
+        "coupling_mode_rms_radius_um": 4.242713323901333,
+        "exit_plane_z_mm": 70.89204417257957,
+        "image_plane_z_mm": 79.86577474765723,
+        "exit_to_image_distance_mm": 8.973730575077653,
+        "exit_pupil_grid_size": 257,
+        "exit_pupil_amplitude_weighting": "quadrature",
+        "exit_pupil_quadrature_weight_reference": 1.0,
+        "exit_pupil_obliquity_reference": 1.0,
+        "exit_pupil_amplitude_sample_min": 1.2559704089352095e-05,
+        "exit_pupil_amplitude_sample_max": 0.9999997582593905,
+        "exit_pupil_extent_x_mm": 1.9549675416043937,
+        "exit_pupil_extent_y_mm": 1.9549675416043937,
+        "exit_pupil_valid_ray_count": 197,
+        "exit_pupil_mask_fraction": 0.7208133355539069,
+        "exit_pupil_physical_support_fraction": 0.7208133355539069,
+        "exit_pupil_support_fill_fraction": 0.03984920286453996,
+        "exit_pupil_support_fill_fraction_of_pupil": 0.055283664853284044,
+        "exit_pupil_reconstruction_fallback": false,
+        "exit_pupil_interpolation_method": "linear_nd",
+        "exit_pupil_duplicate_sample_count": 0,
+        "exit_pupil_zero_or_negligible_power": false,
+        "exit_pupil_power_a.u.": 0.860433122618827,
+        "exit_pupil_peak_intensity_a.u.": 0.9999995165188396,
+        "exit_pupil_opl_interpolation_rms_nm": 0.7526283354188361,
+        "exit_pupil_opl_fit_max_residual_nm": 2.3375931049016065,
+        "exit_pupil_opl_fit_degree": 8,
+        "exit_pupil_opl_fit_term_count": 45,
+        "exit_pupil_opl_fit_requested_degree": 8,
+        "exit_pupil_opl_fit_design_rank": 45,
+        "exit_pupil_opl_fit_condition_number": 3754.0362163261266,
+        "exit_pupil_opl_fit_automatic_order_reduction": false,
+        "exit_pupil_sample_phase_span_rad": 1586.1159394078961,
+        "exit_pupil_surface_phase_span_rad": 0.5210860595831992,
+        "exit_pupil_mean_polarization_x_power": 0.9872336839523166,
+        "exit_pupil_mean_polarization_y_power": 0.0003760864526575709,
+        "exit_pupil_mean_polarization_z_power": 0.012390229595025906,
+        "prepared_pupil_cache_hit": false,
+        "propagation_input_dx_mm": 0.015273183918784326,
+        "propagation_input_dy_mm": 0.015273183918784326,
+        "propagation_output_dx_mm": 9.375e-05,
+        "propagation_output_dy_mm": 9.375e-05,
+        "propagation_input_power_a.u.": 0.8604331226188305,
+        "propagation_output_power_a.u.": 0.8603471692237981,
+        "propagation_power_capture_ratio": 0.9999001045022873,
+        "propagation_energy_closure_error": 9.98954977126744e-05,
+        "propagation_energy_closure_pass": true,
+        "propagation_edge_power_fraction": 9.879218977605068e-06,
+        "propagation_nyquist_margin_min": 0.11721103491200575,
+        "propagation_nyquist_pass": false,
+        "propagation_input_chirp_phase_step_x_rad": 26.802874455876033,
+        "propagation_input_chirp_phase_step_y_rad": 26.802874455876033,
+        "propagation_output_chirp_phase_step_x_rad": 0.002019736702572301,
+        "propagation_output_chirp_phase_step_y_rad": 0.002019736702572301,
+        "propagation_kernel_phase_step_x_rad": 0.3290433080096613,
+        "propagation_kernel_phase_step_y_rad": 0.3290433080096613,
+        "propagation_fresnel_number_x": 546.0236747166932,
+        "propagation_estimated_na": 0.21286177576406318,
+        "raw_metric_count": 208
+      },
+      "timings_ms": {
+        "queue_wait": 234.405,
+        "process_startup": 0.0,
+        "worker_ready_to_first_progress": 28.349,
+        "worker_compute": 3360.822,
+        "local_result_transport": 422.761,
+        "result_save": 1539.21,
+        "backend_total": 5688.698
+      },
+      "result_version": 6,
+      "partial_result_available": false,
+      "retry_available": true,
+      "retry_of": null,
+      "last_activity_at": "2026-10-01T06:24:50.410976+00:00"
+    },
+    "field_hash_encoding": "little-endian float64 [real,imag], signed zero normalized"
+  }
+}

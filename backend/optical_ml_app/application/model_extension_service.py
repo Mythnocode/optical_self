@@ -1039,13 +1039,51 @@ class ModelExtensionService:
             )
 
         try:
-            attr = compute_design_variable_attribution(
-                self.model_registry,
-                self.dataset_store,
-                model_id,
-                sample_ids=sample_ids or None,
-                max_samples=max_samples,
-            )
+            if str(manifest.get('model_type') or '') == 'xgboost_physics_residual':
+                # The wrapper is not a TreeExplainer model. Reuse the existing
+                # KernelExplainer + chain-rule path, which predicts the complete
+                # analytical baseline and learned residual together.
+                from machine_learning.explainability.design_variable_attribution import DesignVariableAttribution, chain_rule_attribution_from_shap
+                from shared_contracts.project import ProjectSnapshot
+                feature_paths = [str(path) for path in manifest['feature_paths']]
+                explained = self.explain_shap(model_id, {
+                    'sample_ids': sample_ids,
+                    'max_samples': max_samples,
+                    'background_sample_count': int(body.get('background_sample_count', 80)),
+                    'random_seed': random_seed,
+                    'display_feature_paths': feature_paths,
+                    'top_k': len(feature_paths),
+                })
+                target = explained['targets'][0]
+                rows = target['sample_shap_values']
+                raw = np.asarray([[row['feature_values'][path] for path in feature_paths] for row in rows], dtype=float)
+                matrix = np.asarray([[row['shap_values'][path] for path in feature_paths] for row in rows], dtype=float)
+                chained = chain_rule_attribution_from_shap(manifest, matrix, raw) if rows else None
+                if chained is None:
+                    raise BackendApplicationError(
+                        code='SHAP_DESIGN_ATTRIBUTION_INCOMPLETE', stage='model.shap',
+                        message='The residual model did not return complete design-variable attribution',
+                        context={'model_id': model_id},
+                    )
+                ids = [row['sample_id'] for row in rows]
+                stored = {row['sample_id']: row for row in self.dataset_store.iter_samples(str(manifest['dataset_id']))}
+                target_name = str(target['target_name'])
+                attr = DesignVariableAttribution(
+                    total=chained[0],
+                    Xmat=raw[:, [feature_paths.index(path) for path in design_paths]],
+                    base=np.full(len(rows), float(target['base_value'])),
+                    targets=np.asarray([stored[sid]['target_values'][target_name] for sid in ids], dtype=float),
+                    sample_ids=ids, design_paths=design_paths, physics_paths=physics_paths,
+                    base_project=ProjectSnapshot.model_validate(manifest['source_project']), target_name=target_name,
+                )
+            else:
+                attr = compute_design_variable_attribution(
+                    self.model_registry,
+                    self.dataset_store,
+                    model_id,
+                    sample_ids=sample_ids or None,
+                    max_samples=max_samples,
+                )
             consistency = physics_consistency(attr)
         except BackendApplicationError:
             raise

@@ -1,0 +1,6975 @@
+{
+  "empty": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "请先在模型页训练，再选择该模型。",
+      "bounds": [
+        323,
+        489,
+        926,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "selected": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "请先在模型页训练，再选择该模型。",
+      "bounds": [
+        323,
+        489,
+        926,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "curve": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        537
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "数据点：80　｜　横轴：L2-r　｜　纵轴：SHAP（比例）　｜　数据来源：预览",
+      "bounds": [
+        315,
+        760,
+        942,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "curve-l1": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        537
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "数据点：80　｜　横轴：L1-r　｜　纵轴：SHAP（比例）　｜　数据来源：预览",
+      "bounds": [
+        315,
+        760,
+        942,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "curve-unavailable": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        562
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "chain-three": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QScrollArea",
+      "text": "ExplainChainScroll",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSelectionCard",
+      "bounds": [
+        305,
+        210,
+        950,
+        330
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "从贡献排序选择关键参数",
+      "bounds": [
+        316,
+        219,
+        187,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "生成物理链路",
+      "bounds": [
+        1114,
+        219,
+        130,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ExplainFeaturePicker",
+      "bounds": [
+        316,
+        261,
+        928,
+        270
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainChainCard",
+      "bounds": [
+        305,
+        548,
+        950,
+        1149
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "物理链路（已选择 3 个参数）",
+      "bounds": [
+        316,
+        557,
+        928,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第3表面曲率半径（mm）",
+      "bounds": [
+        326,
+        592,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第3表面曲率半径（mm） → 公式 1（表面光焦度） → 公式 2（近轴折射） → 共同输出：复场重叠 → 耦合效率",
+      "bounds": [
+        326,
+        617,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "bounds": [
+        326,
+        640,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        665,
+        908,
+        93
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        761,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "bounds": [
+        326,
+        788,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        813,
+        908,
+        75
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第7表面曲率半径（mm）",
+      "bounds": [
+        326,
+        910,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第7表面曲率半径（mm） → 公式 1（表面光焦度） → 公式 2（近轴折射） → 共同输出：复场重叠 → 耦合效率",
+      "bounds": [
+        326,
+        935,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "bounds": [
+        326,
+        958,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        983,
+        908,
+        93
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        1079,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "bounds": [
+        326,
+        1106,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1131,
+        908,
+        75
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第3表面厚度（mm）",
+      "bounds": [
+        326,
+        1228,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第3表面厚度（mm） → 公式 1（介质内传播） → 公式 2（光程与相位） → 共同输出：复场重叠 → 耦合效率",
+      "bounds": [
+        326,
+        1253,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 介质内传播",
+      "bounds": [
+        326,
+        1276,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1301,
+        908,
+        65
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        348,
+        59
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        1369,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 光程与相位",
+      "bounds": [
+        326,
+        1396,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1421,
+        908,
+        84
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        499,
+        78
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "共同输出公式 · 归一化复场重叠",
+      "bounds": [
+        326,
+        1527,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1551,
+        908,
+        105
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        370,
+        99
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "复场重叠结果进入当前模型解释的目标输出。",
+      "bounds": [
+        326,
+        1659,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "ranking-row",
+      "text": "1. 第3表面曲率半径（mm）    |SHAP| 0.00264",
+      "bounds": [
+        317,
+        262,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "2. 第7表面曲率半径（mm）    |SHAP| 0.002064",
+      "bounds": [
+        317,
+        295,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "3. 第3表面厚度（mm）    |SHAP| 0.001845",
+      "bounds": [
+        317,
+        328,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "4. 第5表面厚度（mm）    |SHAP| 0.001792",
+      "bounds": [
+        317,
+        361,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "5. 第1表面厚度（mm）    |SHAP| 0.001766",
+      "bounds": [
+        317,
+        394,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "6. 第7表面厚度（mm）    |SHAP| 0.001648",
+      "bounds": [
+        317,
+        427,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "7. 第1表面曲率半径（mm）    |SHAP| 0.001532",
+      "bounds": [
+        317,
+        460,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "8. 第5表面曲率半径（mm）    |SHAP| 0.001314",
+      "bounds": [
+        317,
+        493,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "chain-bottom": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QScrollArea",
+      "text": "ExplainChainScroll",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSelectionCard",
+      "bounds": [
+        305,
+        -698,
+        950,
+        330
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "从贡献排序选择关键参数",
+      "bounds": [
+        316,
+        -689,
+        187,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "生成物理链路",
+      "bounds": [
+        1114,
+        -689,
+        130,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ExplainFeaturePicker",
+      "bounds": [
+        316,
+        -647,
+        928,
+        270
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainChainCard",
+      "bounds": [
+        305,
+        -360,
+        950,
+        1149
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "物理链路（已选择 3 个参数）",
+      "bounds": [
+        316,
+        -351,
+        928,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第3表面曲率半径（mm）",
+      "bounds": [
+        326,
+        -316,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第3表面曲率半径（mm） → 公式 1（表面光焦度） → 公式 2（近轴折射） → 共同输出：复场重叠 → 耦合效率",
+      "bounds": [
+        326,
+        -291,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "bounds": [
+        326,
+        -268,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        -243,
+        908,
+        93
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        -147,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "bounds": [
+        326,
+        -120,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        -95,
+        908,
+        75
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第7表面曲率半径（mm）",
+      "bounds": [
+        326,
+        2,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第7表面曲率半径（mm） → 公式 1（表面光焦度） → 公式 2（近轴折射） → 共同输出：复场重叠 → 耦合效率",
+      "bounds": [
+        326,
+        27,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "bounds": [
+        326,
+        50,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        75,
+        908,
+        93
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        171,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "bounds": [
+        326,
+        198,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        223,
+        908,
+        75
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第3表面厚度（mm）",
+      "bounds": [
+        326,
+        320,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第3表面厚度（mm） → 公式 1（介质内传播） → 公式 2（光程与相位） → 共同输出：复场重叠 → 耦合效率",
+      "bounds": [
+        326,
+        345,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 介质内传播",
+      "bounds": [
+        326,
+        368,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        393,
+        908,
+        65
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        348,
+        59
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        461,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 光程与相位",
+      "bounds": [
+        326,
+        488,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        513,
+        908,
+        84
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        499,
+        78
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "共同输出公式 · 归一化复场重叠",
+      "bounds": [
+        326,
+        619,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        643,
+        908,
+        105
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        370,
+        99
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "复场重叠结果进入当前模型解释的目标输出。",
+      "bounds": [
+        326,
+        751,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "ranking-row",
+      "text": "1. 第3表面曲率半径（mm）    |SHAP| 0.00264",
+      "bounds": [
+        317,
+        -646,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "2. 第7表面曲率半径（mm）    |SHAP| 0.002064",
+      "bounds": [
+        317,
+        -613,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "3. 第3表面厚度（mm）    |SHAP| 0.001845",
+      "bounds": [
+        317,
+        -580,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "4. 第5表面厚度（mm）    |SHAP| 0.001792",
+      "bounds": [
+        317,
+        -547,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "5. 第1表面厚度（mm）    |SHAP| 0.001766",
+      "bounds": [
+        317,
+        -514,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "6. 第7表面厚度（mm）    |SHAP| 0.001648",
+      "bounds": [
+        317,
+        -481,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "7. 第1表面曲率半径（mm）    |SHAP| 0.001532",
+      "bounds": [
+        317,
+        -448,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "8. 第5表面曲率半径（mm）    |SHAP| 0.001314",
+      "bounds": [
+        317,
+        -415,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "chain-none": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QScrollArea",
+      "text": "ExplainChainScroll",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSelectionCard",
+      "bounds": [
+        305,
+        210,
+        962,
+        330
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "从贡献排序选择关键参数",
+      "bounds": [
+        316,
+        219,
+        187,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "生成物理链路",
+      "bounds": [
+        1126,
+        219,
+        130,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ExplainFeaturePicker",
+      "bounds": [
+        316,
+        261,
+        940,
+        270
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainChainCard",
+      "bounds": [
+        305,
+        548,
+        962,
+        39
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "物理链路",
+      "bounds": [
+        316,
+        557,
+        940,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "ranking-row",
+      "text": "1. 第3表面曲率半径（mm）    |SHAP| 0.00264",
+      "bounds": [
+        317,
+        262,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "2. 第7表面曲率半径（mm）    |SHAP| 0.002064",
+      "bounds": [
+        317,
+        295,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "3. 第3表面厚度（mm）    |SHAP| 0.001845",
+      "bounds": [
+        317,
+        328,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "4. 第5表面厚度（mm）    |SHAP| 0.001792",
+      "bounds": [
+        317,
+        361,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "5. 第1表面厚度（mm）    |SHAP| 0.001766",
+      "bounds": [
+        317,
+        394,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "6. 第7表面厚度（mm）    |SHAP| 0.001648",
+      "bounds": [
+        317,
+        427,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "7. 第1表面曲率半径（mm）    |SHAP| 0.001532",
+      "bounds": [
+        317,
+        460,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "8. 第5表面曲率半径（mm）    |SHAP| 0.001314",
+      "bounds": [
+        317,
+        493,
+        938,
+        33
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "chain-one": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "随机森林1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QScrollArea",
+      "text": "ExplainChainScroll",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSelectionCard",
+      "bounds": [
+        305,
+        210,
+        950,
+        330
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "从贡献排序选择关键参数",
+      "bounds": [
+        316,
+        219,
+        187,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "生成物理链路",
+      "bounds": [
+        1114,
+        219,
+        130,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ExplainFeaturePicker",
+      "bounds": [
+        316,
+        261,
+        928,
+        270
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainChainCard",
+      "bounds": [
+        305,
+        548,
+        950,
+        532
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "物理链路（已选择 1 个参数）",
+      "bounds": [
+        316,
+        557,
+        928,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第3表面曲率半径（mm）",
+      "bounds": [
+        326,
+        592,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第3表面曲率半径（mm） → 公式 1（表面光焦度） → 公式 2（近轴折射） → 共同输出：复场重叠 → 耦合效率",
+      "bounds": [
+        326,
+        617,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "bounds": [
+        326,
+        640,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        665,
+        908,
+        93
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        761,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "bounds": [
+        326,
+        788,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        813,
+        908,
+        75
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "共同输出公式 · 归一化复场重叠",
+      "bounds": [
+        326,
+        910,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        934,
+        908,
+        105
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        370,
+        99
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "复场重叠结果进入当前模型解释的目标输出。",
+      "bounds": [
+        326,
+        1042,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "ranking-row",
+      "text": "1. 第3表面曲率半径（mm）    |SHAP| 0.00264",
+      "bounds": [
+        317,
+        262,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "2. 第7表面曲率半径（mm）    |SHAP| 0.002064",
+      "bounds": [
+        317,
+        295,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "3. 第3表面厚度（mm）    |SHAP| 0.001845",
+      "bounds": [
+        317,
+        328,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "4. 第5表面厚度（mm）    |SHAP| 0.001792",
+      "bounds": [
+        317,
+        361,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "5. 第1表面厚度（mm）    |SHAP| 0.001766",
+      "bounds": [
+        317,
+        394,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "6. 第7表面厚度（mm）    |SHAP| 0.001648",
+      "bounds": [
+        317,
+        427,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "7. 第1表面曲率半径（mm）    |SHAP| 0.001532",
+      "bounds": [
+        317,
+        460,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "8. 第5表面曲率半径（mm）    |SHAP| 0.001314",
+      "bounds": [
+        317,
+        493,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "xgboost-curve": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        315,
+        218,
+        942,
+        537
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "数据点：80　｜　横轴：L1-r　｜　纵轴：SHAP（dB）　｜　数据来源：预览",
+      "bounds": [
+        315,
+        760,
+        942,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ],
+  "xgboost-chain-three": [
+    {
+      "kind": "QLabel",
+      "text": "解释模型",
+      "bounds": [
+        305,
+        162,
+        68,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        381,
+        162,
+        107,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "计算解释",
+      "bounds": [
+        496,
+        165,
+        128,
+        36
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "单参数贡献图",
+      "bounds": [
+        632,
+        162,
+        137,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "物理链路",
+      "bounds": [
+        777,
+        162,
+        103,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "L-x：第几面透镜　r：曲率半径　d：厚度",
+      "bounds": [
+        888,
+        162,
+        278,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QScrollArea",
+      "text": "ExplainChainScroll",
+      "bounds": [
+        305,
+        210,
+        962,
+        579
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainSelectionCard",
+      "bounds": [
+        305,
+        210,
+        950,
+        330
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "从贡献排序选择关键参数",
+      "bounds": [
+        316,
+        219,
+        187,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "生成物理链路",
+      "bounds": [
+        1114,
+        219,
+        130,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ExplainFeaturePicker",
+      "bounds": [
+        316,
+        261,
+        928,
+        270
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 11.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QFrame",
+      "text": "ExplainChainCard",
+      "bounds": [
+        305,
+        548,
+        950,
+        1130
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "物理链路（已选择 3 个参数）",
+      "bounds": [
+        316,
+        557,
+        928,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第5表面厚度（mm）",
+      "bounds": [
+        326,
+        592,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第5表面厚度（mm） → 公式 1（介质内传播） → 公式 2（光程与相位） → 共同输出：复场重叠 → 耦合损耗(dB)",
+      "bounds": [
+        326,
+        617,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 介质内传播",
+      "bounds": [
+        326,
+        640,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        665,
+        908,
+        65
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        348,
+        59
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        733,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 光程与相位",
+      "bounds": [
+        326,
+        760,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        785,
+        908,
+        84
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        499,
+        78
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第3表面厚度（mm）",
+      "bounds": [
+        326,
+        891,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第3表面厚度（mm） → 公式 1（介质内传播） → 公式 2（光程与相位） → 共同输出：复场重叠 → 耦合损耗(dB)",
+      "bounds": [
+        326,
+        916,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 介质内传播",
+      "bounds": [
+        326,
+        939,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        964,
+        908,
+        65
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        348,
+        59
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        1032,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 光程与相位",
+      "bounds": [
+        326,
+        1059,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1084,
+        908,
+        84
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        499,
+        78
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数：第3表面曲率半径（mm）",
+      "bounds": [
+        326,
+        1190,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "第3表面曲率半径（mm） → 公式 1（表面光焦度） → 公式 2（近轴折射） → 共同输出：复场重叠 → 耦合损耗(dB)",
+      "bounds": [
+        326,
+        1215,
+        908,
+        20
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 1 · 表面光焦度",
+      "bounds": [
+        326,
+        1238,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1263,
+        908,
+        93
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        224,
+        87
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "↓",
+      "bounds": [
+        326,
+        1359,
+        908,
+        24
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 16.0,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "公式 2 · 近轴折射",
+      "bounds": [
+        326,
+        1386,
+        908,
+        22
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1411,
+        908,
+        75
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        395,
+        69
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "共同输出公式 · 归一化复场重叠",
+      "bounds": [
+        326,
+        1508,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "FormulaImageLabel",
+      "text": "",
+      "bounds": [
+        326,
+        1532,
+        908,
+        105
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      },
+      "source_size": [
+        370,
+        99
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "复场重叠结果进入当前模型解释的目标输出。",
+      "bounds": [
+        326,
+        1640,
+        908,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "参数",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        189,
+        274,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 13.25,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        237,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        237,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        284,
+        52,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        284,
+        53,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        284,
+        67,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "QListWidget",
+      "text": "ObjectList",
+      "bounds": [
+        10,
+        333,
+        274,
+        459
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "point_size": 12.5,
+        "pixel_size": -1
+      }
+    },
+    {
+      "kind": "ranking-row",
+      "text": "1. 第5表面厚度（mm）    |SHAP| 4.873e-06",
+      "bounds": [
+        317,
+        262,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "2. 第3表面厚度（mm）    |SHAP| 3.741e-06",
+      "bounds": [
+        317,
+        295,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "3. 第3表面曲率半径（mm）    |SHAP| 2.877e-06",
+      "bounds": [
+        317,
+        328,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "4. 第7表面厚度（mm）    |SHAP| 8.62e-07",
+      "bounds": [
+        317,
+        361,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "5. 第7表面曲率半径（mm）    |SHAP| 1.67e-07",
+      "bounds": [
+        317,
+        394,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "6. 第1表面厚度（mm）    |SHAP| 1.739e-09",
+      "bounds": [
+        317,
+        427,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "7. 第1表面曲率半径（mm）    |SHAP| 4.206e-10",
+      "bounds": [
+        317,
+        460,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "ranking-row",
+      "text": "8. 第5表面曲率半径（mm）    |SHAP| 3.791e-10",
+      "bounds": [
+        317,
+        493,
+        926,
+        33
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        14,
+        337,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        375,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 前表面 / 厚度",
+      "bounds": [
+        14,
+        413,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L1 / L1 后表面 / 厚度",
+      "bounds": [
+        14,
+        451,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 曲率",
+      "bounds": [
+        14,
+        489,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        527,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 前表面 / 厚度",
+      "bounds": [
+        14,
+        565,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L2 / L2 后表面 / 厚度",
+      "bounds": [
+        14,
+        603,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 曲率",
+      "bounds": [
+        14,
+        641,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        679,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 前表面 / 厚度",
+      "bounds": [
+        14,
+        717,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L3 / L3 后表面 / 厚度",
+      "bounds": [
+        14,
+        755,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 曲率",
+      "bounds": [
+        14,
+        793,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 圆锥系数",
+      "bounds": [
+        14,
+        831,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 前表面 / 厚度",
+      "bounds": [
+        14,
+        869,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "L4 / L4 后表面 / 厚度",
+      "bounds": [
+        14,
+        907,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / 轴向位置",
+      "bounds": [
+        14,
+        945,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / X 偏移",
+      "bounds": [
+        14,
+        983,
+        254,
+        38
+      ]
+    },
+    {
+      "kind": "parameter-row",
+      "text": "光纤 / 接收端 / Y 偏移",
+      "bounds": [
+        14,
+        1021,
+        254,
+        38
+      ]
+    }
+  ]
+}

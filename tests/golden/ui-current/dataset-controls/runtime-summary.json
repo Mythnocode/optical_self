@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-10-02T15:05:11.692887+00:00",
+  "branch": "js",
+  "health": {
+    "code": "OK",
+    "message": "success",
+    "data": {
+      "status": "healthy",
+      "default_engine": "headless"
+    },
+    "error": null,
+    "request_id": "req-72b4aad6bcb94a499a35ff6745d4a68b"
+  },
+  "jobs_count": 96,
+  "active_jobs": [],
+  "datasets_count": 13,
+  "native_available": true,
+  "native_dll_sha256": "6ab259003daf527db3dd9d3b5565af77342a3482806e44507b8be3641996566d",
+  "reference_dataset_id": "dataset-0077c0bb0956",
+  "reference_trace_backend_sample_counts": {
+    "cpp_native": 17
+  },
+  "new_computation_submitted_this_slice": false,
+  "dataset_items_fetched": 13
+}

@@ -1,0 +1,7 @@
+{"time":"2026-10-02T13:52:53.850Z","channel":"main","event":"app-ready","data":{"version":"1.5.6","packaged":false}}
+{"time":"2026-10-02T13:52:53.881Z","channel":"main","event":"backend-status","data":{"state":"checking","message":"正在检查 http://127.0.0.1:8000…","owned":false}}
+{"time":"2026-10-02T13:52:53.912Z","channel":"main","event":"backend-status","data":{"state":"starting","message":"正在启动 Python 后端（D:/python/python3.12/python.exe）…","owned":false}}
+{"time":"2026-10-02T13:52:53.928Z","channel":"main","event":"renderer-resource","data":{"path":"index.html","status":200}}
+{"time":"2026-10-02T13:52:56.743Z","channel":"main","event":"backend-status","data":{"state":"connected","message":"Python 后端已就绪。","owned":true}}
+{"time":"2026-10-02T13:52:56.769Z","channel":"main","event":"api-request","data":{"request_id":"fb0a8056-1a3f-4df5-8161-9f925fdd8d62","method":"GET","route":"/api/v1/jobs","status":200,"elapsed_ms":23.833}}
+{"time":"2026-10-02T13:54:00.461Z","channel":"main","event":"backend-status","data":{"state":"error","message":"Python 后端意外退出（code=1, signal=null）。请查看后端日志。","owned":false}}

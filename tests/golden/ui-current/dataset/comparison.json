@@ -1,0 +1,83 @@
+{
+  "import-collapsed": {
+    "native_controls": 13,
+    "web_controls": 13,
+    "maximum_rectangle_difference_px": 0.020874023437613687,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.421162760416667
+  },
+  "import-expanded": {
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0.04168701171875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.8204931640625
+  },
+  "sequence-import": {
+    "native_controls": 13,
+    "web_controls": 13,
+    "maximum_rectangle_difference_px": 0.020874023437613687,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.078765299479167
+  },
+  "sequence-training-expanded": {
+    "native_controls": 18,
+    "web_controls": 18,
+    "maximum_rectangle_difference_px": 0.04168701171875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.3881966145833338
+  },
+  "sequence-generation-collapsed": {
+    "native_controls": 20,
+    "web_controls": 20,
+    "maximum_rectangle_difference_px": 0.04168701171875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.346079427083333
+  },
+  "sequence-generation-expanded": {
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0.04168701171875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.3292376302083335
+  },
+  "sequence-variables-expanded": {
+    "native_controls": 52,
+    "web_controls": 52,
+    "maximum_rectangle_difference_px": 0.04168701171875,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 8.996969401041667
+  },
+  "fixed-generation-expanded": {
+    "native_controls": 27,
+    "web_controls": 27,
+    "maximum_rectangle_difference_px": 0.03125,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.500256184895833
+  },
+  "fixed-generation-collapsed": {
+    "native_controls": 15,
+    "web_controls": 15,
+    "maximum_rectangle_difference_px": 0.03125,
+    "missing": [],
+    "extra": [],
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.43355078125
+  }
+}

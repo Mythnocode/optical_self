@@ -80,63 +80,21 @@ class ComponentItem(QGraphicsObject):
         return QRectF(-half, -half, half * 2.0, half * 2.0)
 
     def paint(self, painter: QPainter, option, widget=None) -> None:
-        selected = self.isSelected()
-        color = QColor(KIND_COLORS.get(self.kind, "#64748b"))
-        px_len = max(self._length * self.scale * 0.5, 11.0)
-        px_ap = max(self._aperture * self.scale * 0.42, 10.0)
-        mount = QColor("#2A3038")
+        from shared_presentation.teaching_canvas import component_primitives
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-        if selected or self._hovered:
-            accent = QColor("#d97706") if selected else QColor("#2563eb")
-            painter.setPen(QPen(accent, 1.8))
-            painter.setBrush(QColor(accent.red(), accent.green(), accent.blue(), 28))
-            painter.drawEllipse(QRectF(-px_ap - 7, -px_ap - 7, (px_ap + 7) * 2, (px_ap + 7) * 2))
-        if self.kind != "oscilloscope":
-            painter.setPen(QPen(QColor("#64748b"), 0.8))
-            painter.setBrush(QColor("#8B95A0"))
-            painter.drawEllipse(QRectF(-4.2, -4.2, 8.4, 8.4))
-        painter.setPen(QPen(QColor("#111827"), 0.9))
-        painter.setBrush(mount)
-        if self.kind in {"lens", "cylindrical_lens", "aperture", "waveplate", "isolator", "beam_expander"}:
-            painter.drawEllipse(QRectF(-px_ap - 3.2, -px_ap - 3.2, (px_ap + 3.2) * 2, (px_ap + 3.2) * 2))
-            painter.setPen(QPen(color.darker(150), 1.2))
-            painter.setBrush(QColor(color.red(), color.green(), color.blue(), 220))
-            painter.drawEllipse(QRectF(-px_ap, -px_ap, px_ap * 2, px_ap * 2))
-            painter.setPen(Qt.PenStyle.NoPen)
-            if self.kind == "aperture":
-                painter.setBrush(QColor("#e8edf2"))
-                painter.drawEllipse(QRectF(-px_ap * 0.34, -px_ap * 0.34, px_ap * 0.68, px_ap * 0.68))
-            else:
-                painter.setBrush(QColor(255, 255, 255, 45))
-                painter.drawEllipse(QRectF(-px_ap * 0.45, -px_ap * 0.55, px_ap * 0.7, px_ap * 0.5))
-        elif self.kind in {"mirror", "splitter", "beam_sampler", "grating", "pbs"}:
-            painter.drawRoundedRect(QRectF(-px_len * 0.22, -px_ap - 3, px_len * 0.95, (px_ap + 3) * 2), 2.0, 2.0)
-            painter.setPen(QPen(color.darker(140), 1.1))
-            painter.setBrush(QColor(color.red(), color.green(), color.blue(), 230))
-            painter.drawRoundedRect(QRectF(-px_len * 0.18, -px_ap, px_len * 0.48, px_ap * 2), 1.5, 1.5)
-        elif self.kind == "laser":
-            painter.drawRoundedRect(QRectF(-px_len * 0.12, -px_ap * 0.85, px_len * 0.95, px_ap * 1.7), 2.0, 2.0)
-            painter.setPen(QPen(color.darker(140), 1.0))
-            painter.setBrush(color)
-            painter.drawRoundedRect(QRectF(-px_len, -px_ap * 0.5, px_len * 1.55, px_ap), 3.0, 3.0)
-        elif self.kind == "fiber":
-            painter.drawRoundedRect(QRectF(-px_ap - 2, -px_ap - 2, (px_ap + 2) * 2, (px_ap + 2) * 2), 3.0, 3.0)
-            painter.setPen(QPen(color.darker(140), 1.0))
-            painter.setBrush(QColor(color.red(), color.green(), color.blue(), 220))
-            painter.drawRoundedRect(QRectF(-px_ap, -px_ap * 0.7, px_ap * 2, px_ap * 1.4), 3.0, 3.0)
-        elif self.kind == "ccd":
-            painter.drawRoundedRect(QRectF(-px_ap - 2, -px_ap * 0.85, px_ap * 2 + 4, px_ap * 1.7), 2.0, 2.0)
-            painter.setPen(QPen(color.darker(140), 1.0))
-            painter.setBrush(QColor(color.red(), color.green(), color.blue(), 220))
-            painter.drawRect(QRectF(-px_ap, -px_ap * 0.7, px_ap * 2, px_ap * 1.4))
-        else:
-            painter.drawRoundedRect(QRectF(-px_len - 2, -px_ap * 0.85, px_len * 2 + 4, px_ap * 1.7), 2.0, 2.0)
-            painter.setPen(QPen(color.darker(140), 1.0))
-            painter.setBrush(QColor(color.red(), color.green(), color.blue(), 210))
-            painter.drawRoundedRect(QRectF(-px_len, -px_ap * 0.7, px_len * 2, px_ap * 1.4), 3.0, 3.0)
-        painter.setPen(QColor("#0f172a"))
-        painter.setFont(QFont("Microsoft YaHei UI", 8))
-        painter.drawText(QRectF(-48, px_ap + 4, 96, 14), Qt.AlignmentFlag.AlignCenter, self.label)
+        for primitive in component_primitives(self.kind, self.label, self._length, self._aperture, self.scale, self.isSelected(), self._hovered):
+            if primitive['shape'] == 'text':
+                painter.setPen(QColor(*primitive['fill']))
+                painter.setFont(QFont('Microsoft YaHei UI', primitive['font_size']))
+                painter.drawText(QRectF(*primitive['bounds']), Qt.AlignmentFlag.AlignCenter, primitive['text'])
+                continue
+            stroke = primitive['stroke']
+            painter.setPen(QPen(QColor(*stroke), primitive['width']) if stroke else Qt.PenStyle.NoPen)
+            painter.setBrush(QColor(*primitive['fill']))
+            rect = QRectF(*primitive['bounds'])
+            if primitive['shape'] == 'ellipse': painter.drawEllipse(rect)
+            elif primitive['radius']: painter.drawRoundedRect(rect, primitive['radius'], primitive['radius'])
+            else: painter.drawRect(rect)
 
     def mousePressEvent(self, event) -> None:
         self.selected.emit(self.component_id)

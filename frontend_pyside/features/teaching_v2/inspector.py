@@ -412,13 +412,8 @@ class Inspector(QWidget):
 
     @staticmethod
     def _laser_presets() -> tuple[tuple[str, dict[str, float]], ...]:
-        return (
-            ("780 nm 外腔二极管 · 50 mW · 0.70 mm", {"wavelength_nm": 780.0, "power_mw": 50.0, "beam_radius_mm": 0.70}),
-            ("850 nm VCSEL · 10 mW · 0.35 mm", {"wavelength_nm": 850.0, "power_mw": 10.0, "beam_radius_mm": 0.35}),
-            ("1064 nm DPSS · 100 mW · 0.80 mm", {"wavelength_nm": 1064.0, "power_mw": 100.0, "beam_radius_mm": 0.80}),
-            ("1310 nm DFB · 10 mW · 0.45 mm", {"wavelength_nm": 1310.0, "power_mw": 10.0, "beam_radius_mm": 0.45}),
-            ("1550 nm DFB · 10 mW · 0.50 mm", {"wavelength_nm": 1550.0, "power_mw": 10.0, "beam_radius_mm": 0.50}),
-        )
+        from shared_presentation.teaching_inspector import LASER_PRESETS
+        return LASER_PRESETS
 
     def _apply_laser_preset(self, payload: object) -> None:
         if self._syncing or not self._bound_id or not isinstance(payload, dict):

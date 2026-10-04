@@ -1,0 +1,6 @@
+{
+  "max_prediction_additivity_error": 7.258549317157303e-11,
+  "mean_prediction_additivity_error": 9.077238960486511e-13,
+  "samples": 80,
+  "target_name": "coupling_loss_db"
+}

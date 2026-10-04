@@ -1,0 +1,708 @@
+{
+  "completed": [
+    {
+      "bounds": [
+        14,
+        12,
+        472,
+        54
+      ],
+      "class": "teaching-analysis-primary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "更新"
+    },
+    {
+      "bounds": [
+        14,
+        74,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "成像预览"
+    },
+    {
+      "bounds": [
+        14,
+        106,
+        472,
+        46
+      ],
+      "class": "teaching-analysis-summary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "19px",
+        "weight": "800"
+      },
+      "text": "RMS 光斑半径  338.691 μm"
+    },
+    {
+      "bounds": [
+        14,
+        158,
+        472,
+        168
+      ],
+      "class": "teaching-analysis-spot",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "接收面光斑 · RMS 半径 339 μm"
+    },
+    {
+      "bounds": [
+        14,
+        334,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        368,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：0.00499%"
+    }
+  ],
+  "completed-reload": [
+    {
+      "bounds": [
+        14,
+        12,
+        472,
+        54
+      ],
+      "class": "teaching-analysis-primary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "更新"
+    },
+    {
+      "bounds": [
+        14,
+        74,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "成像预览"
+    },
+    {
+      "bounds": [
+        14,
+        106,
+        472,
+        46
+      ],
+      "class": "teaching-analysis-summary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "19px",
+        "weight": "800"
+      },
+      "text": "RMS 光斑半径  338.691 μm"
+    },
+    {
+      "bounds": [
+        14,
+        158,
+        472,
+        168
+      ],
+      "class": "teaching-analysis-spot",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "接收面光斑 · RMS 半径 339 μm"
+    },
+    {
+      "bounds": [
+        14,
+        334,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        368,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：0.00499%"
+    }
+  ],
+  "stale": [
+    {
+      "bounds": [
+        14,
+        12,
+        156,
+        54
+      ],
+      "class": "teaching-analysis-primary with-status",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "更新"
+    },
+    {
+      "bounds": [
+        178,
+        12,
+        308,
+        54
+      ],
+      "class": "teaching-analysis-status",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "场景已修改，请点击更新"
+    },
+    {
+      "bounds": [
+        14,
+        74,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        108,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：—"
+    }
+  ],
+  "blocked": [
+    {
+      "bounds": [
+        14,
+        12,
+        156,
+        54
+      ],
+      "class": "teaching-analysis-primary with-status",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "更新"
+    },
+    {
+      "bounds": [
+        178,
+        12,
+        308,
+        54
+      ],
+      "class": "teaching-analysis-status",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "请先放一个启用的激光器。"
+    },
+    {
+      "bounds": [
+        14,
+        74,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        108,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：—"
+    }
+  ],
+  "running-update-spot": [
+    {
+      "bounds": [
+        14,
+        12,
+        156,
+        54
+      ],
+      "class": "teaching-analysis-primary with-status",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "正在计算"
+    },
+    {
+      "bounds": [
+        178,
+        12,
+        308,
+        54
+      ],
+      "class": "teaching-analysis-status",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "正在计算光斑，界面仍可继续操作"
+    },
+    {
+      "bounds": [
+        14,
+        87,
+        472,
+        34
+      ],
+      "class": "teaching-analysis-progress",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": ""
+    },
+    {
+      "bounds": [
+        14,
+        116,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "成像预览"
+    },
+    {
+      "bounds": [
+        14,
+        148,
+        472,
+        46
+      ],
+      "class": "teaching-analysis-summary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "19px",
+        "weight": "800"
+      },
+      "text": "RMS 光斑半径  338.691 μm"
+    },
+    {
+      "bounds": [
+        14,
+        200,
+        472,
+        168
+      ],
+      "class": "teaching-analysis-spot",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "接收面光斑 · RMS 半径 339 μm"
+    },
+    {
+      "bounds": [
+        14,
+        376,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        410,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：0.00499%"
+    }
+  ],
+  "engineering-completed": [
+    {
+      "bounds": [
+        14,
+        12,
+        472,
+        54
+      ],
+      "class": "teaching-analysis-primary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "更新"
+    },
+    {
+      "bounds": [
+        14,
+        74,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "成像预览"
+    },
+    {
+      "bounds": [
+        14,
+        106,
+        472,
+        46
+      ],
+      "class": "teaching-analysis-summary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "19px",
+        "weight": "800"
+      },
+      "text": "RMS 光斑半径  2.1858 μm"
+    },
+    {
+      "bounds": [
+        14,
+        158,
+        472,
+        168
+      ],
+      "class": "teaching-analysis-spot",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "接收面光斑 · RMS 半径 2.19 μm"
+    },
+    {
+      "bounds": [
+        14,
+        334,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        368,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：94.7%"
+    }
+  ],
+  "imported-completed": [
+    {
+      "bounds": [
+        14,
+        12,
+        472,
+        54
+      ],
+      "class": "teaching-analysis-primary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "更新"
+    },
+    {
+      "bounds": [
+        14,
+        74,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "成像预览"
+    },
+    {
+      "bounds": [
+        14,
+        106,
+        472,
+        46
+      ],
+      "class": "teaching-analysis-summary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "19px",
+        "weight": "800"
+      },
+      "text": "RMS 光斑半径  2.1858 μm"
+    },
+    {
+      "bounds": [
+        14,
+        158,
+        472,
+        168
+      ],
+      "class": "teaching-analysis-spot",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "接收面光斑 · RMS 半径 2.19 μm"
+    },
+    {
+      "bounds": [
+        14,
+        334,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        368,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：56.82%"
+    }
+  ],
+  "edited-source-completed": [
+    {
+      "bounds": [
+        14,
+        12,
+        472,
+        54
+      ],
+      "class": "teaching-analysis-primary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "16px",
+        "weight": "800"
+      },
+      "text": "更新"
+    },
+    {
+      "bounds": [
+        14,
+        74,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "成像预览"
+    },
+    {
+      "bounds": [
+        14,
+        106,
+        472,
+        46
+      ],
+      "class": "teaching-analysis-summary",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "19px",
+        "weight": "800"
+      },
+      "text": "RMS 光斑半径  3.36543 μm"
+    },
+    {
+      "bounds": [
+        14,
+        158,
+        472,
+        168
+      ],
+      "class": "teaching-analysis-spot",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "400"
+      },
+      "text": "接收面光斑 · RMS 半径 3.37 μm"
+    },
+    {
+      "bounds": [
+        14,
+        334,
+        472,
+        26
+      ],
+      "class": "teaching-analysis-title",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "750"
+      },
+      "text": "耦合数据"
+    },
+    {
+      "bounds": [
+        14,
+        368,
+        472,
+        33
+      ],
+      "class": "teaching-analysis-pill",
+      "font": {
+        "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+        "size": "17px",
+        "weight": "700"
+      },
+      "text": "总耦合效率：57.35%"
+    }
+  ]
+}

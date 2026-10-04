@@ -1,0 +1,63 @@
+{
+  "accepted": true,
+  "qt_transform": [
+    0.8578031538879827,
+    -61.0,
+    388.0
+  ],
+  "web_transform": "translate(-61,388) scale(0.8578031538879826)",
+  "actual": {
+    "component_id": "lens-007",
+    "kind": "lens",
+    "label": "透镜",
+    "pose": {
+      "x_mm": 103.46196513470682,
+      "y_mm": 10.054754358161649,
+      "z_mm": 25.0,
+      "yaw_rad": 0.0,
+      "pitch_rad": 0.0,
+      "roll_rad": 0.0
+    },
+    "params": {
+      "focal_length_mm": 25.0,
+      "focal_mm": 25.0,
+      "diameter_mm": 12.7,
+      "material": "N-BK7",
+      "radius1_mm": 0.0,
+      "radius2_mm": 0.0,
+      "center_thickness_mm": 2.0,
+      "clear_aperture_mm": 0.0
+    },
+    "enabled": true,
+    "category": "光学器件",
+    "asset_key": "lens"
+  },
+  "expected": {
+    "component_id": "lens-007",
+    "kind": "lens",
+    "label": "透镜",
+    "pose": {
+      "x_mm": 103.46196513470682,
+      "y_mm": 10.054754358161649,
+      "z_mm": 25,
+      "yaw_rad": 0,
+      "pitch_rad": 0,
+      "roll_rad": 0
+    },
+    "params": {
+      "focal_length_mm": 25,
+      "focal_mm": 25,
+      "diameter_mm": 12.7,
+      "material": "N-BK7",
+      "radius1_mm": 0,
+      "radius2_mm": 0,
+      "center_thickness_mm": 2,
+      "clear_aperture_mm": 0
+    },
+    "enabled": true,
+    "category": "光学器件",
+    "asset_key": "lens"
+  },
+  "component_equal": true,
+  "pose_max_difference": 0.0
+}

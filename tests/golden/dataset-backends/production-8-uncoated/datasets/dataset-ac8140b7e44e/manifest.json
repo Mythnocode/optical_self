@@ -1,0 +1,633 @@
+{
+  "dataset_id": "dataset-ac8140b7e44e",
+  "dataset_name": "native_benchmark",
+  "schema_version": "1.0",
+  "engine_name": "headless",
+  "engine_version": "native-optical-core-v3.2",
+  "feature_schema_version": "1.0",
+  "created_at": "2026-10-01T10:26:01.825493+00:00",
+  "sample_count": 16,
+  "valid_sample_count": 8,
+  "failed_sample_count": 8,
+  "feature_names": [
+    "surfaces[0].radius_mm",
+    "surfaces[0].distance_to_next_mm",
+    "surfaces[0].conic",
+    "surfaces[2].radius_mm",
+    "surfaces[2].distance_to_next_mm",
+    "surfaces[2].conic",
+    "surfaces[4].radius_mm",
+    "surfaces[4].distance_to_next_mm",
+    "surfaces[4].conic",
+    "surfaces[6].radius_mm",
+    "surfaces[6].distance_to_next_mm",
+    "surfaces[6].conic",
+    "size_log_mismatch",
+    "size_log_signed",
+    "size_ratio",
+    "fiber_mode_radius_um",
+    "beam_radius_at_receiver_um",
+    "lateral_mismatch",
+    "angular_mismatch",
+    "axial_mismatch",
+    "curvature_mismatch"
+  ],
+  "feature_paths": [
+    "surfaces[0].radius_mm",
+    "surfaces[0].distance_to_next_mm",
+    "surfaces[0].conic",
+    "surfaces[2].radius_mm",
+    "surfaces[2].distance_to_next_mm",
+    "surfaces[2].conic",
+    "surfaces[4].radius_mm",
+    "surfaces[4].distance_to_next_mm",
+    "surfaces[4].conic",
+    "surfaces[6].radius_mm",
+    "surfaces[6].distance_to_next_mm",
+    "surfaces[6].conic",
+    "size_log_mismatch",
+    "size_log_signed",
+    "size_ratio",
+    "fiber_mode_radius_um",
+    "beam_radius_at_receiver_um",
+    "lateral_mismatch",
+    "angular_mismatch",
+    "axial_mismatch",
+    "curvature_mismatch"
+  ],
+  "feature_units": [
+    "mm",
+    "mm",
+    "-",
+    "mm",
+    "mm",
+    "-",
+    "mm",
+    "mm",
+    "-",
+    "mm",
+    "mm",
+    "-",
+    "1",
+    "1",
+    "1",
+    "um",
+    "um",
+    "1",
+    "1",
+    "1",
+    "1"
+  ],
+  "target_names": [
+    "coupling_loss_db",
+    "coupling_efficiency"
+  ],
+  "train_ids": [
+    "sample-000002",
+    "sample-000010",
+    "sample-000012",
+    "sample-000016"
+  ],
+  "validation_ids": [
+    "sample-000006"
+  ],
+  "test_ids": [
+    "sample-000014",
+    "sample-000013",
+    "sample-000004"
+  ],
+  "random_seed": 99,
+  "source_project_fingerprint": "frontend-8b574da1f37cbf7a",
+  "status": "partial",
+  "variable_scheme_id": null,
+  "lens_count": null,
+  "design_variable_paths": [
+    "surfaces[0].radius_mm",
+    "surfaces[0].distance_to_next_mm",
+    "surfaces[0].conic",
+    "surfaces[2].radius_mm",
+    "surfaces[2].distance_to_next_mm",
+    "surfaces[2].conic",
+    "surfaces[4].radius_mm",
+    "surfaces[4].distance_to_next_mm",
+    "surfaces[4].conic",
+    "surfaces[6].radius_mm",
+    "surfaces[6].distance_to_next_mm",
+    "surfaces[6].conic"
+  ],
+  "physics_feature_paths": [
+    "size_log_mismatch",
+    "size_log_signed",
+    "size_ratio",
+    "fiber_mode_radius_um",
+    "beam_radius_at_receiver_um",
+    "lateral_mismatch",
+    "angular_mismatch",
+    "axial_mismatch",
+    "curvature_mismatch"
+  ],
+  "metadata": {
+    "sampling_method": "latin_hypercube",
+    "coupling_physics_features": [
+      "size_log_mismatch",
+      "size_log_signed",
+      "size_ratio",
+      "fiber_mode_radius_um",
+      "beam_radius_at_receiver_um",
+      "lateral_mismatch",
+      "angular_mismatch",
+      "axial_mismatch",
+      "curvature_mismatch"
+    ],
+    "analytic_coupling_baseline": true,
+    "source_project": {
+      "schema_version": "2.0",
+      "project_id": "frontend-780-nm-四透镜高效耦合系统",
+      "surfaces": [
+        {
+          "index": 0,
+          "surface_type": "aspheric",
+          "radius_mm": 5.11,
+          "distance_to_next_mm": 3.0,
+          "material_before": "AIR",
+          "material_after": "N-BK7",
+          "clear_aperture_mm": 3.0,
+          "conic": -1.068158491228596,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L1 前表面",
+            "group_id": "L1",
+            "element_id": "element_0833d8c67e904476b96892184010597b",
+            "surface_id": "surface_ccac123a795e4d4da78bb71e5a38c8d5",
+            "frontend_surface_type": "非球面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        },
+        {
+          "index": 1,
+          "surface_type": "plane",
+          "radius_mm": null,
+          "distance_to_next_mm": 14.843576053563464,
+          "material_before": "N-BK7",
+          "material_after": "AIR",
+          "clear_aperture_mm": 3.0,
+          "conic": 0.0,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L1 后表面",
+            "group_id": "L1",
+            "element_id": "element_45d26454ed9045a8bf0655c2d0d40603",
+            "surface_id": "surface_acf6722f12644d4eb420d271e71e5407",
+            "frontend_surface_type": "平面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        },
+        {
+          "index": 2,
+          "surface_type": "aspheric",
+          "radius_mm": 4.088,
+          "distance_to_next_mm": 4.0,
+          "material_before": "AIR",
+          "material_after": "N-BK7",
+          "clear_aperture_mm": 3.0,
+          "conic": -1.0118,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L2 前表面",
+            "group_id": "L2",
+            "element_id": "element_3d550fc8de044f6fadf049e74e8b8924",
+            "surface_id": "surface_cae046ba31144f4e8fbe15451abad605",
+            "frontend_surface_type": "非球面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        },
+        {
+          "index": 3,
+          "surface_type": "plane",
+          "radius_mm": null,
+          "distance_to_next_mm": 27.374376240007166,
+          "material_before": "N-BK7",
+          "material_after": "AIR",
+          "clear_aperture_mm": 3.0,
+          "conic": 0.0,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L2 后表面",
+            "group_id": "L2",
+            "element_id": "element_98b565a92baa4fd882f636d00f5ed980",
+            "surface_id": "surface_dae85a1615d34d00a9a5ea7be551e3ca",
+            "frontend_surface_type": "平面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        },
+        {
+          "index": 4,
+          "surface_type": "aspheric",
+          "radius_mm": 25.55,
+          "distance_to_next_mm": 3.0,
+          "material_before": "AIR",
+          "material_after": "N-BK7",
+          "clear_aperture_mm": 3.0,
+          "conic": -1.0118,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L3 前表面",
+            "group_id": "L3",
+            "element_id": "element_b15fc808b39c4187ad26300b7c415688",
+            "surface_id": "surface_2d108eadf8344bb591e0371fcb026a0e",
+            "frontend_surface_type": "非球面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        },
+        {
+          "index": 5,
+          "surface_type": "plane",
+          "radius_mm": null,
+          "distance_to_next_mm": 15.674091779008947,
+          "material_before": "N-BK7",
+          "material_after": "AIR",
+          "clear_aperture_mm": 3.0,
+          "conic": 0.0,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L3 后表面",
+            "group_id": "L3",
+            "element_id": "element_07e4dc85fed74da5a9608504c4540524",
+            "surface_id": "surface_76d7ec9a7d8a495aa8845c591580e1f7",
+            "frontend_surface_type": "平面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        },
+        {
+          "index": 6,
+          "surface_type": "aspheric",
+          "radius_mm": 6.132,
+          "distance_to_next_mm": 3.0,
+          "material_before": "AIR",
+          "material_after": "N-BK7",
+          "clear_aperture_mm": 3.0,
+          "conic": -0.8385398893571219,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L4 前表面",
+            "group_id": "L4",
+            "element_id": "element_9cb2fc6c2bed455b817dbbd6fff8aeb6",
+            "surface_id": "surface_b5cb259098444678b80db4b47f3691f6",
+            "frontend_surface_type": "非球面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        },
+        {
+          "index": 7,
+          "surface_type": "plane",
+          "radius_mm": null,
+          "distance_to_next_mm": 0.0,
+          "material_before": "N-BK7",
+          "material_after": "AIR",
+          "clear_aperture_mm": 3.0,
+          "conic": 0.0,
+          "asphere_a2": 0.0,
+          "asphere_coefficients": [],
+          "coating_layers": [],
+          "surface_absorption_fraction": 0.0,
+          "roughness_rms_nm": 0.0,
+          "grating_period_um": null,
+          "grating_orders": [],
+          "grating_efficiencies": [],
+          "aperture_type": "circular",
+          "mechanical_diameter_mm": 6.0,
+          "enabled": true,
+          "decenter_x_mm": 0.0,
+          "decenter_y_mm": 0.0,
+          "tilt_x_deg": 0.0,
+          "tilt_y_deg": 0.0,
+          "tilt_z_deg": 0.0,
+          "cylinder_axis_deg": 0.0,
+          "metadata": {
+            "name": "L4 后表面",
+            "group_id": "L4",
+            "element_id": "element_2b07105f2cd645ef92fd477d15d9d3bb",
+            "surface_id": "surface_1191472dfbfd4c45aeffa38de7ff55a9",
+            "frontend_surface_type": "平面",
+            "coating_preset": "自定义镀膜",
+            "note": "",
+            "type_parameters": {
+              "coating_layers": [
+                {
+                  "name": "780 nm 设计波长增透膜",
+                  "refractive_index": 1.229,
+                  "thickness_nm": 158.67
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "object_distance_mm": 18.182441199500627,
+      "image_distance_mm": 8.973730675077647,
+      "pupil_radius_mm": 3.0,
+      "source": {
+        "wavelength_nm": 780.0,
+        "source_type": "gaussian",
+        "object_na_x": 0.00018,
+        "object_na_y": 0.00018,
+        "field_x_deg": 0.0,
+        "field_y_deg": 0.0,
+        "waist_x_mm": 0.893,
+        "waist_y_mm": 1.05,
+        "beam_quality_m2": 2.19,
+        "beam_quality_m2_x": 3.05,
+        "beam_quality_m2_y": 1.33,
+        "waist_position_x_mm": 0.0,
+        "waist_position_y_mm": 0.0,
+        "center_x_mm": 0.0,
+        "center_y_mm": 0.0,
+        "axis_tilt_x_rad": 0.0,
+        "axis_tilt_y_rad": 0.0,
+        "spectral_wavelengths_nm": [
+          780.0
+        ],
+        "spectral_power_weights": [
+          1.0
+        ],
+        "power_value": 1.0,
+        "power_unit": "mW"
+      },
+      "receiver": {
+        "na_x": 0.13,
+        "na_y": 0.13,
+        "mode_field_diameter_x_um": 5.0,
+        "mode_field_diameter_y_um": 5.0,
+        "offset_x_mm": 0.0,
+        "offset_y_mm": 0.0,
+        "axial_offset_z_mm": 0.0,
+        "tilt_x_deg": 0.0,
+        "tilt_y_deg": 0.0,
+        "receiver_type": "single_mode_fiber",
+        "mode_model": "gaussian",
+        "core_diameter_um": 3.0,
+        "core_refractive_index": 1.45,
+        "cladding_refractive_index": 1.44,
+        "outside_refractive_index": 1.0,
+        "endface_transmission": 0.995,
+        "fiber_length_m": 0.0,
+        "attenuation_db_per_km": 0.0,
+        "connector_loss_db": 0.0
+      },
+      "aperture": {
+        "radius_mm": 3.0,
+        "type": "circular"
+      },
+      "analysis_settings": {
+        "frontend_version": "v1",
+        "system_field_x_deg": 0.0,
+        "system_field_y_deg": 0.0,
+        "auto_best_focus": false,
+        "thermal_compensation": false,
+        "requested_analyses": [
+          "raytrace",
+          "coupling"
+        ],
+        "calc_precision": "standard",
+        "calc_grid_size": 513,
+        "calc_layout_pupil": 9,
+        "calc_pupil": 49,
+        "calc_propagation": "scaled_fresnel",
+        "calc_zero_padding": 2.0,
+        "calc_output_extent_mm": 0.024,
+        "calc_auto_expand_output": true,
+        "calc_only_visible_results": true,
+        "calc_sampling_convergence": false,
+        "calc_save_large_arrays": false,
+        "calc_high_precision_coupling": true,
+        "incident_intensity_only": false,
+        "alignment_enabled": false,
+        "alignment_include_dz": true,
+        "alignment_max_offset_um": 20.0,
+        "alignment_max_axial_offset_um": 200.0,
+        "alignment_max_tilt_urad": 5000.0,
+        "alignment_max_iterations": 40,
+        "alignment_max_function_evaluations": 300,
+        "alignment_timeout_seconds": 60.0
+      },
+      "fingerprint": "frontend-8b574da1f37cbf7a"
+    },
+    "batch_workers": 1,
+    "trace_backend_sample_counts": {
+      "cpp_native": 16
+    },
+    "target_valid_sample_count": 8,
+    "max_sample_attempts": 24,
+    "high_precision_retry_count": 8,
+    "valid_sample_target_reached": true,
+    "variable_scheme_id": null,
+    "lens_count": null,
+    "design_variable_paths": [
+      "surfaces[0].radius_mm",
+      "surfaces[0].distance_to_next_mm",
+      "surfaces[0].conic",
+      "surfaces[2].radius_mm",
+      "surfaces[2].distance_to_next_mm",
+      "surfaces[2].conic",
+      "surfaces[4].radius_mm",
+      "surfaces[4].distance_to_next_mm",
+      "surfaces[4].conic",
+      "surfaces[6].radius_mm",
+      "surfaces[6].distance_to_next_mm",
+      "surfaces[6].conic"
+    ],
+    "physics_feature_paths": [
+      "size_log_mismatch",
+      "size_log_signed",
+      "size_ratio",
+      "fiber_mode_radius_um",
+      "beam_radius_at_receiver_um",
+      "lateral_mismatch",
+      "angular_mismatch",
+      "axial_mismatch",
+      "curvature_mismatch"
+    ]
+  }
+}

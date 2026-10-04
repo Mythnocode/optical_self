@@ -1,0 +1,228 @@
+{
+  "scope": "Selected and surrogate body headings; completed-result selector/canvas/summary/table/apply bounds. Not a whole-page pixel comparison.",
+  "count": 13,
+  "max_difference": 0.66668701171875,
+  "records": [
+    {
+      "state": "selected",
+      "text": "优化",
+      "native": [
+        311,
+        162,
+        950,
+        38
+      ],
+      "current": [
+        311,
+        162,
+        950,
+        38
+      ],
+      "max_difference": 0
+    },
+    {
+      "state": "selected",
+      "text": "1. 优化方式",
+      "native": [
+        330,
+        221,
+        912,
+        25
+      ],
+      "current": [
+        329.9895935058594,
+        220.98959350585935,
+        912.0208740234376,
+        25
+      ],
+      "max_difference": 0.020874023437613687
+    },
+    {
+      "state": "selected",
+      "text": "2. 优化目标",
+      "native": [
+        330,
+        370,
+        912,
+        25
+      ],
+      "current": [
+        329.9895935058594,
+        369.9895935058594,
+        912.0208740234376,
+        25
+      ],
+      "max_difference": 0.020874023437613687
+    },
+    {
+      "state": "selected",
+      "text": "3. 参数范围",
+      "native": [
+        330,
+        509,
+        912,
+        25
+      ],
+      "current": [
+        329.9895935058594,
+        508.9895935058594,
+        912.0208740234376,
+        25
+      ],
+      "max_difference": 0.020874023437613687
+    },
+    {
+      "state": "surrogate",
+      "text": "优化",
+      "native": [
+        311,
+        146,
+        950,
+        38
+      ],
+      "current": [
+        311,
+        146,
+        950,
+        38
+      ],
+      "max_difference": 0
+    },
+    {
+      "state": "surrogate",
+      "text": "1. 优化方式",
+      "native": [
+        330,
+        205,
+        912,
+        25
+      ],
+      "current": [
+        329.9895935058594,
+        204.98959350585935,
+        912.0208740234376,
+        25
+      ],
+      "max_difference": 0.020874023437613687
+    },
+    {
+      "state": "surrogate",
+      "text": "2. 优化目标",
+      "native": [
+        330,
+        406,
+        912,
+        25
+      ],
+      "current": [
+        329.9895935058594,
+        405.9895935058594,
+        912.0208740234376,
+        25
+      ],
+      "max_difference": 0.020874023437613687
+    },
+    {
+      "state": "surrogate",
+      "text": "3. 参数范围",
+      "native": [
+        330,
+        545,
+        912,
+        25
+      ],
+      "current": [
+        329.9895935058594,
+        544.9896240234375,
+        912.0208740234376,
+        25
+      ],
+      "max_difference": 0.020874023437613687
+    },
+    {
+      "state": "result-line",
+      "kind": "QComboBox",
+      "native": [
+        311,
+        176,
+        475,
+        42
+      ],
+      "current": [
+        311,
+        176,
+        475,
+        42
+      ],
+      "max_difference": 0
+    },
+    {
+      "state": "result-line",
+      "kind": "PlotCanvas",
+      "native": [
+        321,
+        232,
+        930,
+        331
+      ],
+      "current": [
+        320.66668701171875,
+        231.6666717529297,
+        930.6666870117188,
+        331.66668701171875
+      ],
+      "max_difference": 0.66668701171875
+    },
+    {
+      "state": "result-line",
+      "kind": "QLabel",
+      "native": [
+        321,
+        568,
+        930,
+        20
+      ],
+      "current": [
+        320.66668701171875,
+        568.3333740234375,
+        930.6666870117188,
+        20
+      ],
+      "max_difference": 0.66668701171875
+    },
+    {
+      "state": "result-line",
+      "kind": "QTableWidget",
+      "native": [
+        311,
+        603,
+        950,
+        140
+      ],
+      "current": [
+        311,
+        603,
+        950,
+        140
+      ],
+      "max_difference": 0
+    },
+    {
+      "state": "result-line",
+      "kind": "QPushButton",
+      "native": [
+        311,
+        749,
+        128,
+        36
+      ],
+      "current": [
+        311,
+        749,
+        128,
+        36
+      ],
+      "max_difference": 0
+    }
+  ]
+}

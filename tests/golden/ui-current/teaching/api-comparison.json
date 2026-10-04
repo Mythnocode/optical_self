@@ -1,0 +1,30 @@
+[
+  {
+    "lens_count": 1,
+    "status": 200,
+    "exact_scene_after_json_conversion": true
+  },
+  {
+    "lens_count": 2,
+    "status": 200,
+    "exact_scene_after_json_conversion": true
+  },
+  {
+    "lens_count": 3,
+    "status": 200,
+    "exact_scene_after_json_conversion": true
+  },
+  {
+    "lens_count": 4,
+    "status": 200,
+    "exact_scene_after_json_conversion": true
+  },
+  {
+    "legacy_degrees_status": 200,
+    "exact_legacy_restore_after_json_conversion": true
+  },
+  {
+    "nonfinite_numeric_string_status": 422,
+    "code": "TEACHING_SCENE_INVALID"
+  }
+]

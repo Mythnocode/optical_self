@@ -1,0 +1,81 @@
+{
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "models": [
+      {
+        "model_id": "bilstm-a5731ab91eec",
+        "name": "bilstm-a5731ab91eec",
+        "model_type": "bilstm_structure_sequence",
+        "status": "available",
+        "metrics": {
+          "coupling_efficiency": {
+            "r2": 0.40842610597610474,
+            "mae": 0.041105616837739944,
+            "rmse": 0.04334556825866331
+          }
+        },
+        "target_names": [
+          "coupling_efficiency"
+        ],
+        "numeric_feature_names": [
+          "radius_mm",
+          "thickness_mm"
+        ],
+        "element_types": [
+          "lens"
+        ],
+        "split_counts": {
+          "train": 21,
+          "validation": 4,
+          "test": 5
+        }
+      },
+      {
+        "model_id": "bilstm-fc64fc0d2049",
+        "name": "bilstm-fc64fc0d2049",
+        "model_type": "bilstm_structure_sequence",
+        "status": "available",
+        "metrics": {
+          "coupling_loss_db": {
+            "r2": -0.8072397708892822,
+            "mae": 2.3915328979492188,
+            "rmse": 2.720398414127183
+          },
+          "coupling_efficiency": {
+            "r2": -0.6824355125427246,
+            "mae": 0.16861891746520996,
+            "rmse": 0.198733589841436
+          }
+        },
+        "target_names": [
+          "coupling_loss_db",
+          "coupling_efficiency"
+        ],
+        "numeric_feature_names": [
+          "front_radius_mm",
+          "back_radius_mm",
+          "thickness_mm",
+          "front_conic",
+          "back_conic",
+          "front_semi_aperture_mm",
+          "back_semi_aperture_mm",
+          "air_gap_after_mm",
+          "receiver_offset_x_um",
+          "receiver_offset_y_um",
+          "receiver_axial_offset_z_um"
+        ],
+        "element_types": [
+          "N-BK7"
+        ],
+        "split_counts": {
+          "train": 9,
+          "validation": 2,
+          "test": 3
+        }
+      }
+    ]
+  },
+  "error": null,
+  "request_id": "req-4c5cc1d218374a7580d033641780490b"
+}

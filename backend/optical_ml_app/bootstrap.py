@@ -9,6 +9,7 @@ from backend.optical_ml_app.application.model_extension_service import ModelExte
 from backend.optical_ml_app.application.structure_model_service import StructureModelApplicationService
 from backend.optical_ml_app.application.prediction_service import PredictionApplicationService
 from backend.optical_ml_app.application.simulation_service import SimulationApplicationService
+from backend.optical_ml_app.application.teaching_service import TeachingApplicationService
 from backend.optical_ml_app.application.training_service import TrainingApplicationService
 from backend.optical_ml_app.engines.registry import EngineRegistry
 from backend.optical_ml_app.infrastructure.logging_config import configure_logging
@@ -49,6 +50,7 @@ def create_services():
         event_bus=event_bus,
         persistent_workers={
             "simulation": settings.simulation_worker_count,
+            "teaching": settings.analysis_worker_count,
             "training": settings.training_worker_count,
             "bilstm_structure_training": settings.training_worker_count,
             # These long-running research jobs used to spawn a fresh process
@@ -61,6 +63,7 @@ def create_services():
             "headless_dataset": settings.analysis_worker_count,
             "optimization": settings.analysis_worker_count,
             "verification": settings.analysis_worker_count,
+            "explainability": settings.analysis_worker_count,
         },
         internal_thread_limit=settings.native_thread_limit,
     )
@@ -82,6 +85,7 @@ def create_services():
             task_manager,
         ),
         "dataset_app": DatasetApplicationService(task_manager, dataset_store, dataset_registry),
+        "teaching_app": TeachingApplicationService(task_manager),
         "training_app": TrainingApplicationService(task_manager, training_service, dataset_registry),
         "prediction_app": PredictionApplicationService(predictor),
         "surrogate_preview_app": SurrogatePreviewService(model_registry),

@@ -1,0 +1,41 @@
+{
+  "coupling": {
+    "job_id": "job-6837a8eaf9cc",
+    "physics_equal_excluding_elapsed_ms": false,
+    "physics_equal_excluding_runtime_diagnostics": true,
+    "excluded_runtime_diagnostics": [
+      "GlobalFiberModeCache_misses",
+      "GlobalFiberModeCache_size",
+      "coupling_output_window_plan_cache_hit",
+      "elapsed_ms"
+    ],
+    "metrics": {
+      "coupling_efficiency": 0.9518450969477794,
+      "mode_overlap_efficiency": 0.9518450969477794,
+      "total_coupling_efficiency": 0.9470498589270048,
+      "raw_metric_count": 224
+    },
+    "calculation_scope": "engineering_project"
+  },
+  "spot": {
+    "job_id": "job-3587933326af",
+    "physics_equal_excluding_elapsed_ms": true,
+    "physics_equal_excluding_runtime_diagnostics": true,
+    "excluded_runtime_diagnostics": [
+      "GlobalFiberModeCache_misses",
+      "GlobalFiberModeCache_size",
+      "coupling_output_window_plan_cache_hit",
+      "elapsed_ms"
+    ],
+    "metrics": {
+      "rms_spot_radius_um": 2.1858016463646486,
+      "rms_um": 2.1858016463646486,
+      "valid_ray_count": 1793.0,
+      "raw_metric_count": 20
+    },
+    "calculation_scope": "engineering_project"
+  },
+  "prescription": {
+    "original_live_menu_equal": true
+  }
+}

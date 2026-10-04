@@ -1,0 +1,62 @@
+{
+  "jobs": {
+    "js": "job-3362be05ced1",
+    "original": "job-0740746d756e"
+  },
+  "status": {
+    "js": "completed",
+    "original": "completed"
+  },
+  "metrics": {
+    "coupling_efficiency": {
+      "js": 0.28351697488443417,
+      "original": 0.28351697488443417,
+      "equal": true
+    },
+    "total_coupling_efficiency": {
+      "js": 0.2820886633151803,
+      "original": 0.2820886633151803,
+      "equal": true
+    },
+    "transmission_efficiency": {
+      "js": 0.999961975476688,
+      "original": 0.999961975476688,
+      "equal": true
+    },
+    "coupling_field_rms_x_um": {
+      "js": 1.6231152942478113,
+      "original": 1.6231152942478113,
+      "equal": true
+    },
+    "coupling_field_rms_y_um": {
+      "js": 1.4202556465026608,
+      "original": 1.4202556465026608,
+      "equal": true
+    },
+    "coupling_valid_ray_fraction": {
+      "js": 1.0,
+      "original": 1.0,
+      "equal": true
+    }
+  },
+  "warnings": {
+    "js": [
+      "Exit-pupil support fill exceeds 5%; inspect sampling/support quality.",
+      "scaled Fresnel Nyquist 余量 0.117 小于要求 1。",
+      "估算 NA=0.213，scaled Fresnel 近轴误差可能不可忽略。",
+      "Sampling pre-flight: input field spectrum approaches or exceeds input Nyquist frequency",
+      "Sampling pre-flight: Fresnel quadratic phase changes too rapidly at a sampled edge",
+      "Sampling pre-flight: angular-spectrum maximum propagation angle exceeds sampling support",
+      "Sampling pre-flight: configured zero padding is below the estimated no-wrap requirement"
+    ],
+    "original": [
+      "Exit-pupil support fill exceeds 5%; inspect sampling/support quality.",
+      "scaled Fresnel Nyquist 余量 0.117 小于要求 1。",
+      "估算 NA=0.213，scaled Fresnel 近轴误差可能不可忽略。",
+      "Sampling pre-flight: input field spectrum approaches or exceeds input Nyquist frequency",
+      "Sampling pre-flight: Fresnel quadratic phase changes too rapidly at a sampled edge",
+      "Sampling pre-flight: angular-spectrum maximum propagation angle exceeds sampling support",
+      "Sampling pre-flight: configured zero padding is below the estimated no-wrap requirement"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "health": {
+    "status": "healthy",
+    "default_engine": "headless"
+  },
+  "total_jobs": 96,
+  "active_jobs": 0,
+  "listeners": [
+    {
+      "LocalPort": 8000,
+      "OwningProcess": 28788
+    },
+    {
+      "LocalPort": 5173,
+      "OwningProcess": 24784
+    }
+  ]
+}

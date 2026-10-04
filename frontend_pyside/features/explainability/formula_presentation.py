@@ -1,8 +1,76 @@
 
 from __future__ import annotations
 
+from functools import lru_cache
 from html import escape
+from shared_presentation.formula_images import _render_formula_png, render_formula_png
 
+from PySide6.QtCore import QRect, QSize
+from PySide6.QtGui import QPainter, QPixmap
+from PySide6.QtWidgets import QSizePolicy, QWidget
+
+
+
+
+
+
+@lru_cache(maxsize=128)
+def _render_formula_pixmap(latex: str, font_size: int, color: str) -> QPixmap:
+    pixmap = QPixmap()
+    pixmap.loadFromData(_render_formula_png(latex, font_size, color), "PNG")
+    return pixmap
+
+
+class FormulaImageLabel(QWidget):
+    """Paint a typeset equation without changing the layout during resize."""
+
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        self._source_pixmap = QPixmap()
+        self._fallback_text = ""
+        policy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        policy.setHeightForWidth(True)
+        self.setSizePolicy(policy)
+
+    def set_formula(self, latex: str, *, font_size: int = 19, color: str = "#173a55") -> None:
+        try:
+            self._source_pixmap = _render_formula_pixmap(str(latex), int(font_size), str(color))
+            self._fallback_text = "" if not self._source_pixmap.isNull() else str(latex)
+        except Exception:
+            # A rendering failure inside a Qt signal handler must not close
+            # the desktop application.
+            self._source_pixmap = QPixmap()
+            self._fallback_text = str(latex)
+        self.updateGeometry()
+        self.update()
+
+    def sizeHint(self) -> QSize:
+        if self._source_pixmap.isNull():
+            return QSize(300, 34)
+        width = min(self._source_pixmap.width(), 900)
+        return QSize(width, self.heightForWidth(width))
+
+    def heightForWidth(self, width: int) -> int:
+        if self._source_pixmap.isNull():
+            return 34
+        displayed_width = min(max(1, width), self._source_pixmap.width())
+        height = round(self._source_pixmap.height() * displayed_width / self._source_pixmap.width())
+        return max(34, height + 6)
+
+    def paintEvent(self, event) -> None:
+        if self._source_pixmap.isNull():
+            if self._fallback_text:
+                painter = QPainter(self)
+                painter.drawText(self.rect(), self._fallback_text)
+            return
+        width = min(self.width(), self._source_pixmap.width())
+        height = round(self._source_pixmap.height() * width / self._source_pixmap.width())
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        painter.drawPixmap(
+            QRect(0, max(0, (self.height() - height) // 2), width, height),
+            self._source_pixmap,
+        )
 
 
 
@@ -90,4 +158,4 @@ def _strip_html(text: str) -> str:
     )
 
 
-__all__ = ["formula_compact_text", "formula_html"]
+__all__ = ["FormulaImageLabel", "formula_compact_text", "formula_html", "render_formula_png"]

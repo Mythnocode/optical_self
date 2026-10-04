@@ -1,0 +1,41 @@
+appId: org.opticalml.platform
+productName: Optical ML Platform
+directories:
+  output: dist/desktop
+asar: true
+npmRebuild: false
+disableDefaultIgnoredFiles: true
+electronDist: node_modules/electron/dist
+afterPack: scripts/after-pack.cjs
+files:
+  - desktop-dist/**/*.cjs
+  - frontend_web/dist/**/*
+  - package.json
+  - '!**/*.map'
+extraResources:
+  - from: build/desktop-resources/backend
+    to: backend
+    filter:
+      - '**/*'
+      - '!**/__pycache__/**/*'
+      - '!**/*.pyc'
+  - from: build/desktop-resources/python
+    to: python
+    filter:
+      - '**/*'
+      - '!**/__pycache__/**/*'
+      - '!**/*.pyc'
+  - from: build/desktop-resources/resources-manifest.json
+    to: resources-manifest.json
+win:
+  target:
+    - target: nsis
+      arch: x64
+  signAndEditExecutable: false
+  artifactName: Optical-ML-Platform-${version}-${arch}-Setup.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  runAfterFinish: false
+  deleteAppDataOnUninstall: false

@@ -1,0 +1,315 @@
+{
+  "coupling": {
+    "elements": [
+      {
+        "name": "simulation-result-source completed",
+        "original": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "current": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-workspace populated",
+        "original": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "current": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-canvas",
+        "original": [
+          311,
+          209,
+          948,
+          529
+        ],
+        "current": [
+          310.66668701171875,
+          208.6666717529297,
+          948.6666870117188,
+          529.6666870117188
+        ],
+        "max_difference_px": 0.66668701171875
+      }
+    ],
+    "max_difference_px": 0.66668701171875
+  },
+  "spot": {
+    "elements": [
+      {
+        "name": "simulation-result-source completed",
+        "original": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "current": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-workspace populated",
+        "original": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "current": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-canvas",
+        "original": [
+          311,
+          209,
+          948,
+          529
+        ],
+        "current": [
+          310.66668701171875,
+          208.6666717529297,
+          948.6666870117188,
+          529.6666870117188
+        ],
+        "max_difference_px": 0.66668701171875
+      }
+    ],
+    "max_difference_px": 0.66668701171875
+  },
+  "ray_layout": {
+    "elements": [
+      {
+        "name": "simulation-result-source completed",
+        "original": [
+          1106,
+          162,
+          80,
+          33
+        ],
+        "current": [
+          1105.9896240234375,
+          162.5,
+          80,
+          33
+        ],
+        "max_difference_px": 0.5
+      },
+      {
+        "name": "simulation-result-workspace populated",
+        "original": [
+          301,
+          202,
+          968,
+          545
+        ],
+        "current": [
+          301,
+          202,
+          968,
+          545
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-canvas",
+        "original": [
+          311,
+          210,
+          948,
+          528
+        ],
+        "current": [
+          310.66668701171875,
+          209.6666717529297,
+          948.6666870117188,
+          528.6666870117188
+        ],
+        "max_difference_px": 0.66668701171875
+      },
+      {
+        "name": "文字",
+        "original": [
+          1077,
+          753,
+          60,
+          38
+        ],
+        "current": [
+          1077,
+          753,
+          60,
+          38
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "放大",
+        "original": [
+          1143,
+          753,
+          60,
+          38
+        ],
+        "current": [
+          1143,
+          753,
+          60,
+          38
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "导出",
+        "original": [
+          1209,
+          753,
+          60,
+          38
+        ],
+        "current": [
+          1209,
+          753,
+          60,
+          38
+        ],
+        "max_difference_px": 0
+      }
+    ],
+    "max_difference_px": 0.66668701171875
+  },
+  "wavefront": {
+    "elements": [
+      {
+        "name": "simulation-result-source completed",
+        "original": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "current": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-workspace populated",
+        "original": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "current": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-canvas",
+        "original": [
+          311,
+          209,
+          948,
+          529
+        ],
+        "current": [
+          310.66668701171875,
+          208.6666717529297,
+          948.6666870117188,
+          529.6666870117188
+        ],
+        "max_difference_px": 0.66668701171875
+      }
+    ],
+    "max_difference_px": 0.66668701171875
+  },
+  "layout_3d": {
+    "elements": [
+      {
+        "name": "simulation-result-source completed",
+        "original": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "current": [
+          1189,
+          162,
+          80,
+          33
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-result-workspace populated",
+        "original": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "current": [
+          301,
+          201,
+          968,
+          546
+        ],
+        "max_difference_px": 0
+      },
+      {
+        "name": "simulation-ray-3d",
+        "original": [
+          311,
+          209,
+          948,
+          529
+        ],
+        "current": [
+          310.66668701171875,
+          208.6666717529297,
+          948.6666870117188,
+          529.6666870117188
+        ],
+        "max_difference_px": 0.66668701171875
+      }
+    ],
+    "max_difference_px": 0.66668701171875
+  }
+}

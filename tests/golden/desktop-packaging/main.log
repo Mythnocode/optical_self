@@ -1,0 +1,11 @@
+{"time":"2026-10-02T09:56:02.657Z","event":"app-ready","data":{"version":"1.5.6","packaged":true}}
+{"time":"2026-10-02T09:56:02.758Z","event":"backend-status","data":{"state":"checking","message":"正在检查 http://127.0.0.1:8000…","owned":false}}
+{"time":"2026-10-02T09:56:02.823Z","event":"backend-status","data":{"state":"starting","message":"正在启动 Python 后端（D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe）…","owned":false}}
+{"time":"2026-10-02T09:56:02.862Z","event":"renderer-resource","data":{"path":"index.html","status":200}}
+{"time":"2026-10-02T09:56:04.230Z","event":"backend-status","data":{"state":"error","message":"Python 后端意外退出（code=1, signal=null）。请查看后端日志。","owned":false}}
+{"time":"2026-10-02T09:56:04.509Z","event":"backend-status","data":{"state":"error","message":"Python 后端在 45 秒内没有通过健康检查。请查看后端日志。","owned":false}}
+{"time":"2026-10-02T10:24:05.645Z","event":"app-ready","data":{"version":"1.5.6","packaged":true}}
+{"time":"2026-10-02T10:24:05.724Z","event":"backend-status","data":{"state":"checking","message":"正在检查 http://127.0.0.1:8000…","owned":false}}
+{"time":"2026-10-02T10:24:05.790Z","event":"backend-status","data":{"state":"starting","message":"正在启动 Python 后端（D:\\AAAWorkspace\\optical_self\\dist\\desktop\\win-unpacked\\resources\\python\\python.exe）…","owned":false}}
+{"time":"2026-10-02T10:24:05.817Z","event":"renderer-resource","data":{"path":"index.html","status":200}}
+{"time":"2026-10-02T10:24:22.489Z","event":"backend-status","data":{"state":"connected","message":"Python 后端已就绪。","owned":true}}

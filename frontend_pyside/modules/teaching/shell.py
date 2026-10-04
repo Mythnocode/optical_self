@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from frontend_pyside.modules import shared as _shared
+from shared_presentation.teaching_equipment import EQUIPMENT_PRESETS, equipment_groups
+from shared_presentation.teaching_sync import engineering_lens_groups, scene_from_engineering
 
 globals().update(
     {
@@ -68,24 +70,7 @@ TEACHING_ANALYSIS_INFO: dict[str, dict[str, Any]] = {
 }
 
 
-def _format_teaching_metric(key: str, value: Any, unit: str = "") -> str:
-    if value is None or value == "":
-        return "—"
-    if isinstance(value, bool):
-        return "是" if value else "否"
-    try:
-        number = float(value)
-    except (TypeError, ValueError):
-        return str(value)
-    if not math.isfinite(number):
-        return "无效"
-    if unit == "%":
-        return f"{number * 100:.4g}%"
-    if unit == "条":
-        return f"{int(number)} 条"
-    if unit:
-        return f"{number:.6g} {unit}"
-    return f"{number:.6g}"
+from shared_presentation.teaching_analysis import format_teaching_metric as _format_teaching_metric
 
 
 class TeachingAnalysisVisual(QWidget):
@@ -524,17 +509,7 @@ class TeachingEquipmentPopup(QFrame):
         catalog_layout.setContentsMargins(0, 0, 0, 0)
         catalog_layout.setSpacing(4)
         self._kind_buttons: list[QPushButton] = []
-        for group, values in (
-            ("光源", [item for item in PLACEABLE_KINDS if item[0] == "laser"]),
-            ("光学元件", [item for item in PLACEABLE_KINDS if item[0] in {
-                "isolator", "waveplate", "lens", "cylindrical_lens", "beam_expander",
-                "aperture", "pbs", "splitter", "beam_sampler", "grating", "mirror",
-            }]),
-            ("接收与测量", [item for item in PLACEABLE_KINDS if item[0] in {
-                "fiber", "ccd", "power_meter", "wavefront_sensor",
-            }]),
-            ("台面", [item for item in PLACEABLE_KINDS if item[0] == "oscilloscope"]),
-        ):
+        for group, values in equipment_groups():
             if not values:
                 continue
             label = QLabel(group)
@@ -566,43 +541,7 @@ class TeachingEquipmentPopup(QFrame):
     def _select_equipment(self, kind: str) -> None:
         kind = str(kind)
         self.addRequested.emit(kind)
-        presets: dict[str, tuple[str, list[tuple[str, object]]]] = {
-            "laser": (
-                "工业常用激光器规格",
-                [("780 nm 外腔二极管 · 50 mW · 0.70 mm", {"wavelength_nm": 780.0, "power_mw": 50.0, "beam_radius_mm": 0.70}),
-                 ("850 nm VCSEL · 10 mW · 0.35 mm", {"wavelength_nm": 850.0, "power_mw": 10.0, "beam_radius_mm": 0.35}),
-                 ("1064 nm DPSS · 100 mW · 0.80 mm", {"wavelength_nm": 1064.0, "power_mw": 100.0, "beam_radius_mm": 0.80}),
-                 ("1310 nm DFB · 10 mW · 0.45 mm", {"wavelength_nm": 1310.0, "power_mw": 10.0, "beam_radius_mm": 0.45}),
-                 ("1550 nm DFB · 10 mW · 0.50 mm", {"wavelength_nm": 1550.0, "power_mw": 10.0, "beam_radius_mm": 0.50}),
-                 ("自定义波长", None)],
-            ),
-            "lens": (
-                "工程常用透镜规格",
-                [("焦距 25 mm · 直径 12.7 mm", {"focal_length_mm": 25.0, "diameter_mm": 12.7}),
-                 ("焦距 50 mm · 直径 25.4 mm", {"focal_length_mm": 50.0, "diameter_mm": 25.4}),
-                 ("焦距 100 mm · 直径 25.4 mm", {"focal_length_mm": 100.0, "diameter_mm": 25.4})],
-            ),
-            "mirror": (
-                "工程常用反射镜规格",
-                [("圆形 12.7 mm", {"diameter_mm": 12.7}), ("圆形 25.4 mm", {"diameter_mm": 25.4})],
-            ),
-            "aperture": (
-                "工程常用光阑规格",
-                [("通光直径 4 mm", {"diameter_mm": 4.0}), ("通光直径 8 mm", {"diameter_mm": 8.0}),
-                 ("通光直径 12 mm", {"diameter_mm": 12.0})],
-            ),
-            "fiber": (
-                "工程常用光纤规格",
-                [("单模 · 模场 5.6 μm · NA 0.12", {"mfd_um": 5.6, "na": 0.12}),
-                 ("单模 · 模场 10.4 μm · NA 0.14", {"mfd_um": 10.4, "na": 0.14}),
-                 ("多模 · 芯径 50 μm · NA 0.22", {"core_diameter_um": 50.0, "na": 0.22})],
-            ),
-            "detector": (
-                "工程常用探测器规格",
-                [("小面阵 6.4 × 4.8 mm", {"sensor_width_mm": 6.4, "sensor_height_mm": 4.8}),
-                 ("大面阵 13.2 × 8.8 mm", {"sensor_width_mm": 13.2, "sensor_height_mm": 8.8})],
-            ),
-        }
+        presets = EQUIPMENT_PRESETS
         self._preset_kind = kind
         title, values = presets.get(kind, ("", []))
         self._preset_label.setText(title)
@@ -887,30 +826,9 @@ class TeachingShell(QWidget):
             "precision": str(self._engineering_contract.get("precision") or "standard"),
         }
 
-    @staticmethod
-    def _engineering_lens_groups(project: object) -> list[list[object]]:
-        """Return consecutive lens-surface groups, preserving prescription order."""
-        surfaces = list(getattr(project, "surfaces", ()) or ())
-        groups: list[list[object]] = []
-        current: list[object] = []
-        current_key = ""
-        for index, surface in enumerate(surfaces):
-            kind = str(getattr(surface, "surface_type", "") or "").strip().lower()
-            if kind in {"detector", "探测器/像面", "coordinate_break", "坐标断点"}:
-                continue
-            key = str(getattr(surface, "group_id", "") or "").strip() or f"pair-{index // 2 + 1}"
-            if current and key != current_key:
-                groups.append(current)
-                current = []
-            current.append(surface)
-            current_key = key
-        if current:
-            groups.append(current)
-        return groups
+    _engineering_lens_groups = staticmethod(engineering_lens_groups)
 
     def _sync_scene_from_engineering_project(self) -> None:
-        from frontend_pyside.features.teaching_v2.model import BENCH_ORIGIN_X_MM
-
         project_context = getattr(self.context, "project", None)
         project = getattr(project_context, "project", None)
         if project is None:
@@ -920,76 +838,7 @@ class TeachingShell(QWidget):
         stored_payload = getattr(project_context, "simulation_project_payload", {}) or {}
         if isinstance(stored_payload, dict) and stored_payload.get("surfaces"):
             serialized = dict(stored_payload)
-        source = dict(serialized.get("source") or {})
-        receiver = dict(serialized.get("receiver") or {})
-        system = dict(serialized)
-        axis_height = float(self.store.reference.axis_height_mm)
-        wavelength = float(source.get("wavelength_nm") or getattr(project, "wavelength_nm", 0.0) or 780.0)
-        waist = max(0.01, float(source.get("waist_x_mm") or 0.5))
-        mfd = float(receiver.get("mode_field_diameter_x_um") or getattr(project, "receiver_mfd_um", 0.0) or 5.0)
-        na = float(receiver.get("na_x") or 0.12)
-        # 整条光路一起右移一段台面留白（见 BENCH_ORIGIN_X_MM）：光源 x 是出光面，
-        # 摆在台面左端时管身会悬空，而相对间距不变，所以光学问题不变。
-        components: list[dict[str, Any]] = [
-            {
-                "component_id": "laser-001",
-                "kind": "laser",
-                "label": "工程光源",
-                "pose": {"x_mm": BENCH_ORIGIN_X_MM, "y_mm": 0.0, "z_mm": axis_height},
-                "params": {"wavelength_nm": wavelength, "beam_radius_mm": waist},
-            }
-        ]
-        axial = 0.0
-        for ordinal, group in enumerate(self._engineering_lens_groups(project), start=1):
-            front = group[0]
-            rear = group[-1] if len(group) > 1 else None
-            thickness = max(0.1, float(getattr(front, "thickness_mm", 0.0) or 0.0))
-            axial += thickness * 0.5
-            first_radius = float(getattr(front, "radius_mm", 0.0) or 0.0)
-            second_radius = float(getattr(rear, "radius_mm", 0.0) or 0.0) if rear is not None else 0.0
-            aperture = float(getattr(front, "semi_aperture_mm", 0.0) or 0.0)
-            label = str(getattr(front, "group_id", "") or f"L{ordinal}")
-            components.append(
-                {
-                    "component_id": f"lens-{ordinal + 1:03d}",
-                    "kind": "lens",
-                    "label": f"{label} 透镜",
-                    "pose": {"x_mm": BENCH_ORIGIN_X_MM + max(8.0, axial), "y_mm": 0.0, "z_mm": axis_height},
-                    "params": {
-                        "radius1_mm": first_radius,
-                        "radius2_mm": second_radius,
-                        "center_thickness_mm": thickness,
-                        "material": str(getattr(front, "material", "N-BK7") or "N-BK7"),
-                        "clear_aperture_mm": aperture,
-                        "diameter_mm": max(2.0 * aperture, 1.0),
-                        "conic": float(getattr(front, "conic", 0.0) or 0.0),
-                    },
-                }
-            )
-            axial += max(0.0, sum(float(getattr(item, "thickness_mm", 0.0) or 0.0) for item in group) - thickness * 0.5)
-        image_distance = max(4.0, float(system.get("image_distance_mm") or 8.0))
-        components.append(
-            {
-                "component_id": f"fiber-{len(components) + 1:03d}",
-                "kind": "fiber",
-                "label": "工程光纤接收端",
-                "pose": {"x_mm": BENCH_ORIGIN_X_MM + max(24.0, axial + image_distance), "y_mm": 0.0, "z_mm": axis_height},
-                "params": {"mfd_um": mfd, "na": na},
-            }
-        )
-        snapshot = self.store.to_dict()
-        snapshot.update(
-            {
-                "revision": int(self.store.revision) + 1,
-                "components": components,
-                # 基准线画在光源出光面上，和默认方案保持一致。
-                "baseline_x_mm": BENCH_ORIGIN_X_MM,
-                "selected_component_id": components[1]["component_id"] if len(components) > 2 else components[0]["component_id"],
-                "results": {},
-                "active_result_revision": None,
-            }
-        )
-        self.store.restore_dict(snapshot, reason="从仿真更新教学台")
+        scene_from_engineering(self.store, project, serialized)
         contract = serialized.get("calculation_contract") if isinstance(serialized, dict) else None
         if isinstance(contract, dict) and isinstance(contract.get("options"), dict):
             self._engineering_contract = {
@@ -1010,7 +859,7 @@ class TeachingShell(QWidget):
         if callable(reset_camera):
             reset_camera()
         self.controller.request_preview()
-        self.status.setText(f"已从仿真更新 {len(components) - 2} 片透镜、波长和光纤模场；{comparison}")
+        self.status.setText(f"已从仿真更新 {len(self.store.components) - 2} 片透镜、波长和光纤模场；{comparison}")
 
     def _flash_tool_button(self, key: str) -> None:
         """动作型按钮（计算/测量/显示等）点下去要看得出来。

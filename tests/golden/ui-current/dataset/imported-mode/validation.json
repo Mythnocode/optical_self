@@ -1,0 +1,30 @@
+{
+  "missing_mode_submit_status": 422,
+  "missing_mode_prepare_status": 422,
+  "legacy_nonimported_prepare_status": 200,
+  "legacy_payload_equal": true,
+  "jobs_before": 96,
+  "jobs_after": 96,
+  "dataset_entry": {
+    "dataset_id": "dataset-1620a42e0fce",
+    "dataset_name": "数据集11",
+    "dataset_type": "headless_lens20_coupling",
+    "target_column": "coupling_loss_db",
+    "max_surfaces": 20,
+    "sample_count": 6,
+    "output_dir": "C:\\Users\\qingxue\\AppData\\Local\\Temp\\optical-js-training-20260930\\datasets\\dataset-1620a42e0fce",
+    "manifest_path": "C:\\Users\\qingxue\\AppData\\Local\\Temp\\optical-js-training-20260930\\datasets\\dataset-1620a42e0fce\\manifest.json",
+    "samples_jsonl_path": "C:\\Users\\qingxue\\AppData\\Local\\Temp\\optical-js-training-20260930\\datasets\\dataset-1620a42e0fce\\samples.jsonl",
+    "samples_flat_csv_path": "C:\\Users\\qingxue\\AppData\\Local\\Temp\\optical-js-training-20260930\\datasets\\dataset-1620a42e0fce\\samples_flat.csv",
+    "created_at": "2026-10-02T08:37:16.406543+00:00",
+    "status": "ready",
+    "dataset_layout": "tabular"
+  },
+  "valid_imported_prepare_status": 200,
+  "valid_imported_request_roundtrip_equal": true,
+  "native_form_imported_mode_equal": true,
+  "invalid_hybrid_prepare_status": 422,
+  "zero_power_submit_status": 422,
+  "shape_mismatch_submit_status": 422,
+  "downloaded_csv_rows": 6
+}

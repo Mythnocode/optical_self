@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Request, status
+from fastapi import APIRouter, Request, Query, status
 from pydantic import BaseModel, Field
 
-from backend.optical_ml_app.api.responses import success
+from backend.optical_ml_app.api.responses import success, failure
 from shared_contracts.optimization import (
     OptimizationObjective,
     OptimizationRequest,
@@ -18,6 +18,44 @@ from shared_contracts.project import ProjectSnapshot
 from shared_contracts.simulation import SimulationRequest
 
 router = APIRouter()
+
+
+@router.get('/optimization/jobs/{job_id}/presentation')
+def read_optimization_result_presentation(job_id: str, request: Request, chart: str = Query(default='过程曲线', pattern='^(过程曲线|候选对照)$'), width: int = Query(default=900,ge=160,le=4096), height: int = Query(default=400,ge=100,le=4096)):
+    from backend.optical_ml_app.application.optimization_results import result_presentation
+    try:
+        result = request.app.state.services['task_manager'].get_result(job_id)
+        return success(request, result_presentation(result,chart,width,height))
+    except FileNotFoundError:
+        return failure(request,status_code=404,code='JOB_NOT_FOUND',stage='optimization.presentation',message='未找到任务')
+    except RuntimeError as exc:
+        return failure(request,status_code=409,code='JOB_RESULT_NOT_AVAILABLE',stage='optimization.presentation',message=str(exc))
+
+
+class OptimizationPrepareRequest(BaseModel):
+    simulation: SimulationRequest
+    config: Dict[str, Any] = Field(default_factory=dict)
+    variables: List[Dict[str, Any]] = Field(default_factory=list, max_length=256)
+
+
+@router.post('/optimization/presentation')
+def read_optimization_presentation(payload: ProjectSnapshot, request: Request):
+    from backend.optical_ml_app.application.optimization_presentation import optimization_presentation
+    try:
+        return success(request, optimization_presentation(payload.model_dump(mode='python')))
+    except (ValueError, TypeError, KeyError) as exc:
+        return failure(request, status_code=422, code='OPTIMIZATION_PROJECT_INVALID', stage='optimization.presentation', message=str(exc))
+
+
+@router.post('/optimization/prepare')
+def prepare_optimization(payload: OptimizationPrepareRequest, request: Request):
+    from backend.optical_ml_app.application.optimization_presentation import optimization_payload
+    try:
+        prepared = optimization_payload(payload.simulation.model_dump(mode='python', exclude_unset=True), payload.config, payload.variables)
+        OptimizationJobRequest.model_validate(prepared)
+        return success(request, prepared)
+    except (ValueError, TypeError, KeyError) as exc:
+        return failure(request, status_code=422, code='OPTIMIZATION_PARAMETERS_INVALID', stage='optimization.prepare', message=str(exc))
 
 
 class OptimizationJobRequest(BaseModel):

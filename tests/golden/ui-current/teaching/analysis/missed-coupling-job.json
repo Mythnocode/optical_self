@@ -1,0 +1,269 @@
+{
+  "status": "failed",
+  "request_id": "144bc060cdb0499086f3b91a238f56a7",
+  "analysis": "coupling",
+  "scene": {
+    "schema_version": 2,
+    "scene_id": "teaching-v2-scene",
+    "revision": 2,
+    "reference": {
+      "name": "实验台坐标系",
+      "origin": "bench",
+      "axial_axis": "+X_t → +Z_engine",
+      "lateral_axis": "+Y_t → +X_engine",
+      "vertical_axis": "+Z_t → +Y_engine",
+      "view_frame": "view3d_render",
+      "view_up": "+Z_t → +Y_render",
+      "view_depth": "+Y_t → −Z_render",
+      "unit": "mm",
+      "axis_height_mm": 25.0,
+      "origin_teaching_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pixels_per_mm": 8.0,
+      "render_units_per_mm": 1.0
+    },
+    "components": [
+      {
+        "component_id": "laser-001",
+        "kind": "laser",
+        "label": "780 nm 半导体激光器",
+        "pose": {
+          "x_mm": 50.0,
+          "y_mm": 0.0,
+          "z_mm": 25.0,
+          "yaw_rad": 0.0,
+          "pitch_rad": 0.0,
+          "roll_rad": 0.0
+        },
+        "params": {
+          "wavelength_nm": 780.0,
+          "power_mw": 100.0,
+          "beam_radius_mm": 0.5
+        },
+        "enabled": true,
+        "category": "实验对象",
+        "asset_key": "laser"
+      },
+      {
+        "component_id": "lens-002",
+        "kind": "lens",
+        "label": "L1 透镜",
+        "pose": {
+          "x_mm": 70.0,
+          "y_mm": 0.0,
+          "z_mm": 25.0,
+          "yaw_rad": 0.0,
+          "pitch_rad": 0.0,
+          "roll_rad": 0.0
+        },
+        "params": {
+          "focal_length_mm": 50.0,
+          "focal_mm": 50.0,
+          "diameter_mm": 12.7,
+          "material": "N-BK7",
+          "radius1_mm": 6.425,
+          "radius2_mm": -9.892,
+          "center_thickness_mm": 5.36,
+          "clear_aperture_mm": 6.35
+        },
+        "enabled": true,
+        "category": "光学器件",
+        "asset_key": "lens"
+      },
+      {
+        "component_id": "lens-003",
+        "kind": "lens",
+        "label": "L2 透镜",
+        "pose": {
+          "x_mm": 92.0,
+          "y_mm": 0.0,
+          "z_mm": 25.0,
+          "yaw_rad": 0.0,
+          "pitch_rad": 0.0,
+          "roll_rad": 0.0
+        },
+        "params": {
+          "focal_length_mm": 35.0,
+          "focal_mm": 35.0,
+          "diameter_mm": 12.7,
+          "material": "N-BK7",
+          "radius1_mm": 4.593,
+          "radius2_mm": 29.948,
+          "center_thickness_mm": 2.426,
+          "clear_aperture_mm": 6.35
+        },
+        "enabled": true,
+        "category": "光学器件",
+        "asset_key": "lens"
+      },
+      {
+        "component_id": "lens-004",
+        "kind": "lens",
+        "label": "L3 透镜",
+        "pose": {
+          "x_mm": 116.0,
+          "y_mm": 0.0,
+          "z_mm": 25.0,
+          "yaw_rad": 0.0,
+          "pitch_rad": 0.0,
+          "roll_rad": 0.0
+        },
+        "params": {
+          "focal_length_mm": 25.0,
+          "focal_mm": 25.0,
+          "diameter_mm": 12.7,
+          "material": "N-BK7",
+          "radius1_mm": 36.204,
+          "radius2_mm": -4.098,
+          "center_thickness_mm": 2.61,
+          "clear_aperture_mm": 6.35
+        },
+        "enabled": true,
+        "category": "光学器件",
+        "asset_key": "lens"
+      },
+      {
+        "component_id": "lens-005",
+        "kind": "lens",
+        "label": "L4 透镜",
+        "pose": {
+          "x_mm": 140.0,
+          "y_mm": 0.0,
+          "z_mm": 25.0,
+          "yaw_rad": 0.0,
+          "pitch_rad": 0.0,
+          "roll_rad": 0.0
+        },
+        "params": {
+          "focal_length_mm": 18.0,
+          "focal_mm": 18.0,
+          "diameter_mm": 12.7,
+          "material": "N-BK7",
+          "radius1_mm": 20.383,
+          "radius2_mm": -5.443,
+          "center_thickness_mm": 5.36,
+          "clear_aperture_mm": 6.35
+        },
+        "enabled": true,
+        "category": "光学器件",
+        "asset_key": "lens"
+      },
+      {
+        "component_id": "fiber-006",
+        "kind": "fiber",
+        "label": "单模光纤接收端",
+        "pose": {
+          "x_mm": 170.0,
+          "y_mm": 100.0,
+          "z_mm": 25.0,
+          "yaw_rad": 0.0,
+          "pitch_rad": 0.0,
+          "roll_rad": 0.0
+        },
+        "params": {
+          "mfd_um": 5.6,
+          "na": 0.12
+        },
+        "enabled": true,
+        "category": "实验对象",
+        "asset_key": "fiber"
+      }
+    ],
+    "baseline_enabled": true,
+    "baseline_x_mm": 50.0,
+    "selected_component_id": "lens-005",
+    "active_result_revision": null,
+    "results": {}
+  },
+  "scene_key": "0db3da7416b473fe2970470b189d2b9509d3125f859d96035062fa412366f948",
+  "engineering_request": null,
+  "physics": {
+    "success": false,
+    "analysis": "coupling",
+    "scene_revision": 2,
+    "source": "formal_engine",
+    "status": "missed",
+    "metrics": {
+      "sample_count": 21,
+      "path_count": 0,
+      "solver": "scene_ray_tree",
+      "mm_per_scene_unit": 1.0
+    },
+    "rays": [],
+    "warnings": [
+      "单模光纤接收端横向偏离光束 100.0 mm（口径约 1.6 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+      "单模光纤接收端偏离光轴较多，耦合计算可能失败或效率极低。"
+    ],
+    "errors": [
+      "光线追迹失败。"
+    ],
+    "elapsed_ms": 106.27339999973628,
+    "artifacts": {
+      "raytrace": {
+        "source": "formal_raytrace",
+        "status": "missed",
+        "metrics": {
+          "sample_count": 21,
+          "path_count": 0,
+          "solver": "scene_ray_tree",
+          "mm_per_scene_unit": 1.0
+        },
+        "rays": [],
+        "errors": [],
+        "warnings": [
+          "单模光纤接收端横向偏离光束 100.0 mm（口径约 1.6 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+          "单模光纤接收端偏离光轴较多，耦合计算可能失败或效率极低。"
+        ]
+      }
+    }
+  },
+  "artifacts": {
+    "raytrace": {
+      "source": "formal_raytrace",
+      "status": "missed",
+      "metrics": {
+        "sample_count": 21,
+        "path_count": 0,
+        "solver": "scene_ray_tree",
+        "mm_per_scene_unit": 1.0
+      },
+      "rays": [],
+      "errors": [],
+      "warnings": [
+        "单模光纤接收端横向偏离光束 100.0 mm（口径约 1.6 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "单模光纤接收端偏离光轴较多，耦合计算可能失败或效率极低。"
+      ]
+    }
+  },
+  "metrics": {
+    "sample_count": 21,
+    "path_count": 0,
+    "solver": "scene_ray_tree",
+    "mm_per_scene_unit": 1.0
+  },
+  "warnings": [
+    "单模光纤接收端横向偏离光束 100.0 mm（口径约 1.6 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+    "单模光纤接收端偏离光轴较多，耦合计算可能失败或效率极低。"
+  ],
+  "errors": [
+    {
+      "code": "TEACHING_CALCULATION_FAILED",
+      "stage": "teaching.coupling",
+      "message": "光线追迹失败。",
+      "retryable": false
+    }
+  ],
+  "metadata": {
+    "job_timings_ms": {
+      "queue_wait": 38.162,
+      "process_startup": 0.0,
+      "worker_ready_to_first_progress": 13.788,
+      "worker_compute": 108.658,
+      "local_result_transport": 2.042
+    },
+    "result_delivery": "summary_then_lazy_bundle"
+  }
+}

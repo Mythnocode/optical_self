@@ -1,0 +1,12 @@
+{
+  "coupling": {
+    "channels": 309123,
+    "differentChannels": 0,
+    "maxDifference": 0
+  },
+  "wavefront": {
+    "channels": 309123,
+    "differentChannels": 0,
+    "maxDifference": 0
+  }
+}

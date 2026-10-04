@@ -1,0 +1,40 @@
+{
+  "name": "optical-ml-platform-desktop",
+  "version": "1.5.6",
+  "description": "激光耦合仿真系统及智能优化平台",
+  "private": true,
+  "type": "module",
+  "main": "desktop-dist/main.cjs",
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "package:win": "node scripts/package-desktop.mjs",
+    "package:dir": "node scripts/package-desktop.mjs --dir",
+    "assets:teaching:sync": "node scripts/sync-teaching-assets.mjs",
+    "inventory:teaching-assets": "node scripts/inventory-glb.mjs",
+    "typecheck": "vue-tsc --noEmit -p frontend_web/tsconfig.json && tsc --noEmit -p desktop/tsconfig.json",
+    "test": "vitest run --config frontend_web/vite.config.ts"
+  },
+  "dependencies": {
+    "pinia": "4.0.3",
+    "three": "0.186.1",
+    "vue": "3.5.43",
+    "vue-router": "5.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.3",
+    "@types/three": "0.186.0",
+    "@vitejs/plugin-vue": "6.0.9",
+    "electron": "44.4.5",
+    "electron-builder": "26.15.3",
+    "esbuild": "0.28.2",
+    "typescript": "5.9.3",
+    "vite": "8.3.1",
+    "vitest": "5.0.2",
+    "vue-tsc": "3.3.11"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "job_id": "job-3bc1d93e5c4a",
+  "job_type": "dataset",
+  "status": "completed",
+  "progress": 1.0,
+  "stage": "completed",
+  "completed_items": 150,
+  "total_items": 150,
+  "created_at": "2026-10-01T18:19:46.057429+08:00",
+  "started_at": "2026-10-01T18:19:46.28866+08:00",
+  "finished_at": "2026-10-01T18:20:42.327052+08:00",
+  "result_available": true,
+  "error": null,
+  "metrics": {},
+  "timings_ms": {
+    "queue_wait": 231.484,
+    "process_startup": 0.0,
+    "worker_ready_to_first_progress": 1097.307,
+    "worker_compute": 55839.041,
+    "result_save": 152.782,
+    "backend_total": 56270.998
+  },
+  "result_version": 1,
+  "partial_result_available": false,
+  "retry_available": true,
+  "retry_of": null,
+  "last_activity_at": "2026-10-01T18:20:42.127887+08:00"
+}

@@ -1,0 +1,78 @@
+[
+  {
+    "model": "rf",
+    "model_id": "model-63d9d3ea55cf",
+    "payload": {
+      "top_k": 8,
+      "max_samples": 80,
+      "background_sample_count": 80,
+      "display_feature_paths": [
+        "surfaces[0].radius_mm",
+        "surfaces[0].distance_to_next_mm",
+        "surfaces[2].radius_mm",
+        "surfaces[2].distance_to_next_mm",
+        "surfaces[4].radius_mm",
+        "surfaces[4].distance_to_next_mm",
+        "surfaces[6].radius_mm",
+        "surfaces[6].distance_to_next_mm"
+      ],
+      "features": {
+        "surfaces[0].radius_mm": 5.11,
+        "surfaces[0].distance_to_next_mm": 3.0,
+        "surfaces[2].radius_mm": 4.088,
+        "surfaces[2].distance_to_next_mm": 4.0,
+        "surfaces[4].radius_mm": 25.55,
+        "surfaces[4].distance_to_next_mm": 3.0,
+        "surfaces[6].radius_mm": 6.132,
+        "surfaces[6].distance_to_next_mm": 3.0,
+        "size_log_mismatch": 0.8638389114595801,
+        "size_log_signed": 0.8638389114595801,
+        "size_ratio": 2.3722500939122773,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 5.930625234780693,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.05690202591146404
+      }
+    }
+  },
+  {
+    "model": "xgboost",
+    "model_id": "model-d8d744b63586",
+    "payload": {
+      "top_k": 8,
+      "max_samples": 80,
+      "background_sample_count": 80,
+      "display_feature_paths": [
+        "surfaces[0].radius_mm",
+        "surfaces[0].distance_to_next_mm",
+        "surfaces[2].radius_mm",
+        "surfaces[2].distance_to_next_mm",
+        "surfaces[4].radius_mm",
+        "surfaces[4].distance_to_next_mm",
+        "surfaces[6].radius_mm",
+        "surfaces[6].distance_to_next_mm"
+      ],
+      "features": {
+        "surfaces[0].radius_mm": 5.11,
+        "surfaces[0].distance_to_next_mm": 3.0,
+        "surfaces[2].radius_mm": 4.088,
+        "surfaces[2].distance_to_next_mm": 4.0,
+        "surfaces[4].radius_mm": 25.55,
+        "surfaces[4].distance_to_next_mm": 3.0,
+        "surfaces[6].radius_mm": 6.132,
+        "surfaces[6].distance_to_next_mm": 3.0,
+        "size_log_mismatch": 0.8638389114595801,
+        "size_log_signed": 0.8638389114595801,
+        "size_ratio": 2.3722500939122773,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 5.930625234780693,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.05690202591146404
+      }
+    }
+  }
+]

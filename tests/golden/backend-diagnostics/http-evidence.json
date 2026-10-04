@@ -1,0 +1,131 @@
+{
+  "native_available": true,
+  "native_sha256": "6ab259003daf527db3dd9d3b5565af77342a3482806e44507b8be3641996566d",
+  "requests": [
+    {
+      "route": "/api/v1/health",
+      "requested_id": "diag-3933718f120142b3810609d8a87e3bac",
+      "header_id": "diag-3933718f120142b3810609d8a87e3bac",
+      "body_id": "diag-3933718f120142b3810609d8a87e3bac",
+      "status": 200,
+      "code": "OK"
+    },
+    {
+      "route": "/api/v1/jobs/job-750ccde62dd1",
+      "requested_id": "diag-588da3e78c31415eb5a0b43fb087f8a2",
+      "header_id": "diag-588da3e78c31415eb5a0b43fb087f8a2",
+      "body_id": "diag-588da3e78c31415eb5a0b43fb087f8a2",
+      "status": 200,
+      "code": "OK"
+    },
+    {
+      "route": "/api/v1/jobs/job-diagnostics-missing",
+      "requested_id": "diag-2b78d7eae0dc4a869e88b59653387c5c",
+      "header_id": "diag-2b78d7eae0dc4a869e88b59653387c5c",
+      "body_id": "diag-2b78d7eae0dc4a869e88b59653387c5c",
+      "status": 404,
+      "code": "JOB_NOT_FOUND"
+    },
+    {
+      "route": "/api/v1/jobs?limit=invalid",
+      "requested_id": "diag-f9cfd279a63b4978873179cc7a08a848",
+      "header_id": "diag-f9cfd279a63b4978873179cc7a08a848",
+      "body_id": "diag-f9cfd279a63b4978873179cc7a08a848",
+      "status": 422,
+      "code": "INVALID_REQUEST"
+    },
+    {
+      "route": "/api/v1/headless-datasets/dataset-0077c0bb0956/files/manifest",
+      "requested_id": "diag-8f212c98669a46459befa96efca829da",
+      "header_id": "diag-8f212c98669a46459befa96efca829da",
+      "body_id": null,
+      "status": 200,
+      "code": null,
+      "trace_backend_sample_counts": {
+        "cpp_native": 17
+      }
+    }
+  ],
+  "http_log_records": [
+    {
+      "timestamp": "2026-10-02T14:03:57.738031+00:00",
+      "level": "INFO",
+      "logger": "backend.optical_ml_app.http",
+      "event": "http.request",
+      "message": "HTTP GET /api/v1/health status=200 elapsed_ms=0.444 request_id=diag-3933718f120142b3810609d8a87e3bac job_id=-",
+      "trace_id": "",
+      "job_id": "",
+      "request_id": "diag-3933718f120142b3810609d8a87e3bac",
+      "project_fingerprint": "",
+      "engine": "",
+      "elapsed_ms": 0.444,
+      "method": "GET",
+      "route": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "timestamp": "2026-10-02T14:03:57.740021+00:00",
+      "level": "INFO",
+      "logger": "backend.optical_ml_app.http",
+      "event": "http.request",
+      "message": "HTTP GET /api/v1/jobs/job-750ccde62dd1 status=200 elapsed_ms=0.967 request_id=diag-588da3e78c31415eb5a0b43fb087f8a2 job_id=job-750ccde62dd1",
+      "trace_id": "",
+      "job_id": "job-750ccde62dd1",
+      "request_id": "diag-588da3e78c31415eb5a0b43fb087f8a2",
+      "project_fingerprint": "",
+      "engine": "",
+      "elapsed_ms": 0.967,
+      "method": "GET",
+      "route": "/api/v1/jobs/job-750ccde62dd1",
+      "status": 200
+    },
+    {
+      "timestamp": "2026-10-02T14:03:57.742031+00:00",
+      "level": "INFO",
+      "logger": "backend.optical_ml_app.http",
+      "event": "http.request",
+      "message": "HTTP GET /api/v1/jobs/job-diagnostics-missing status=404 elapsed_ms=0.49 request_id=diag-2b78d7eae0dc4a869e88b59653387c5c job_id=job-diagnostics-missing",
+      "trace_id": "",
+      "job_id": "job-diagnostics-missing",
+      "request_id": "diag-2b78d7eae0dc4a869e88b59653387c5c",
+      "project_fingerprint": "",
+      "engine": "",
+      "elapsed_ms": 0.49,
+      "method": "GET",
+      "route": "/api/v1/jobs/job-diagnostics-missing",
+      "status": 404
+    },
+    {
+      "timestamp": "2026-10-02T14:03:57.771870+00:00",
+      "level": "INFO",
+      "logger": "backend.optical_ml_app.http",
+      "event": "http.request",
+      "message": "HTTP GET /api/v1/jobs status=422 elapsed_ms=6.914 request_id=diag-f9cfd279a63b4978873179cc7a08a848 job_id=-",
+      "trace_id": "",
+      "job_id": "",
+      "request_id": "diag-f9cfd279a63b4978873179cc7a08a848",
+      "project_fingerprint": "",
+      "engine": "",
+      "elapsed_ms": 6.914,
+      "method": "GET",
+      "route": "/api/v1/jobs",
+      "status": 422
+    },
+    {
+      "timestamp": "2026-10-02T14:03:57.804674+00:00",
+      "level": "INFO",
+      "logger": "backend.optical_ml_app.http",
+      "event": "http.request",
+      "message": "HTTP GET /api/v1/headless-datasets/dataset-0077c0bb0956/files/manifest status=200 elapsed_ms=9.52 request_id=diag-8f212c98669a46459befa96efca829da job_id=-",
+      "trace_id": "",
+      "job_id": "",
+      "request_id": "diag-8f212c98669a46459befa96efca829da",
+      "project_fingerprint": "",
+      "engine": "",
+      "elapsed_ms": 9.52,
+      "method": "GET",
+      "route": "/api/v1/headless-datasets/dataset-0077c0bb0956/files/manifest",
+      "status": 200
+    }
+  ]
+}

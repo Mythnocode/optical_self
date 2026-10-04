@@ -1,0 +1,40 @@
+{
+  "coupling": {
+    "job_id": "job-048ef1c53548",
+    "physics_equal_excluding_runtime_diagnostics": true,
+    "metrics_equal": true,
+    "metrics": {
+      "coupling_efficiency": 0.5798821393738031,
+      "mode_overlap_efficiency": 0.5798821393738031,
+      "total_coupling_efficiency": 0.5734582466091375,
+      "raw_metric_count": 224
+    },
+    "precision": "standard",
+    "submitted_grid": 129,
+    "excluded_runtime_diagnostics": [
+      "GlobalFiberModeCache_misses",
+      "GlobalFiberModeCache_size",
+      "coupling_output_window_plan_cache_hit",
+      "elapsed_ms"
+    ]
+  },
+  "spot": {
+    "job_id": "job-449c5a97ded7",
+    "physics_equal_excluding_runtime_diagnostics": true,
+    "metrics_equal": true,
+    "metrics": {
+      "rms_spot_radius_um": 3.3654331420884467,
+      "rms_um": 3.3654331420884467,
+      "valid_ray_count": 197.0,
+      "raw_metric_count": 20
+    },
+    "precision": "standard",
+    "submitted_grid": 129,
+    "excluded_runtime_diagnostics": [
+      "GlobalFiberModeCache_misses",
+      "GlobalFiberModeCache_size",
+      "coupling_output_window_plan_cache_hit",
+      "elapsed_ms"
+    ]
+  }
+}

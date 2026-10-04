@@ -1,0 +1,8274 @@
+{
+  "laser-collapsed": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 25,
+    "web_controls": 25,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.9846716343628485,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 0,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 0,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "laser-expanded": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.534031937160138,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 386,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 386,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "lens-collapsed": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 25,
+    "web_controls": 25,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.9642893677279054,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 0,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 0,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "lens-expanded": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 53,
+    "web_controls": 53,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.409051045894294,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 586,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 586,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "fiber-collapsed": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 25,
+    "web_controls": 25,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.078559023287943,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 0,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 0,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "fiber-expanded": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 35,
+    "web_controls": 35,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.4935582014687006,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 283,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 283,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "isolator-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.942256735944938,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "isolator-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 42,
+    "web_controls": 42,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.096173892977361,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 391,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 391,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "waveplate-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.878891948971862,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "waveplate-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.922339107358748,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 337,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 337,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "cylindrical_lens-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.949645080540381,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "cylindrical_lens-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.079011342373119,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 340,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 340,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "laser-bottom": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.482963054914767,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 386,
+      "page_step": 467,
+      "value": 386
+    },
+    "web_scrollbar": {
+      "maximum": 386,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 386
+    }
+  },
+  "isolator-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 42,
+    "web_controls": 42,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -369,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -368.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "隔离器\n隔离器",
+        "web_text": "隔离器\n隔离器",
+        "native_bounds": [
+          24,
+          -341,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -340.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -291,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -290.6666717529297,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "隔离器横向偏离光束 40.0 mm（口径约 1.8 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "隔离器横向偏离光束 40.0 mm（口径约 1.8 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -254,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -253.6666717529297,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -163,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -162.66666793823242,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -135,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -134.6666669845581,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -135,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -134.6666669845581,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -135,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -134.6666669845581,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -135,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -134.6666669845581,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -135,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -134.6666669845581,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -135,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -134.6666669845581,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -135,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -134.6666669845581,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -135,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -134.6666669845581,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -135,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -134.6666669845581,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          -84,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -83.66666412353516,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          -84,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          -83.66666412353516,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          -84,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          -83.66666412353516,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          -84,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -83.66666412353516,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          -84,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          -83.66666412353516,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          -84,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          -83.66666412353516,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          -84,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -83.66666412353516,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          -84,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          -83.66666412353516,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          -84,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          -83.66666412353516,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          -19,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          -18.666664123535156,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          42,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          42.333343505859375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "隔离度",
+        "web_text": "隔离度",
+        "native_bounds": [
+          24,
+          70,
+          102,
+          45
+        ],
+        "web_bounds": [
+          24,
+          70.33334350585938,
+          102,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "38.00",
+        "web_text": "38.00",
+        "native_bounds": [
+          134,
+          70,
+          186,
+          45
+        ],
+        "web_bounds": [
+          134,
+          70.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "dB",
+        "web_text": "dB",
+        "native_bounds": [
+          328,
+          70,
+          35,
+          45
+        ],
+        "web_bounds": [
+          328,
+          70.33334350585938,
+          35,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "插损",
+        "web_text": "插损",
+        "native_bounds": [
+          24,
+          121,
+          102,
+          45
+        ],
+        "web_bounds": [
+          24,
+          121.33334350585938,
+          102,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "0.40",
+        "web_text": "0.40",
+        "native_bounds": [
+          134,
+          121,
+          186,
+          45
+        ],
+        "web_bounds": [
+          134,
+          121.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "dB",
+        "web_text": "dB",
+        "native_bounds": [
+          328,
+          121,
+          35,
+          45
+        ],
+        "web_bounds": [
+          328,
+          121.33334350585938,
+          35,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "通光孔径半径",
+        "web_text": "通光孔径半径",
+        "native_bounds": [
+          24,
+          172,
+          102,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          102,
+          45
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "1.8",
+        "web_text": "1.8",
+        "native_bounds": [
+          134,
+          173,
+          186,
+          42
+        ],
+        "web_bounds": [
+          134,
+          173.33334350585938,
+          186,
+          42
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          328,
+          172,
+          46,
+          45
+        ],
+        "web_bounds": [
+          328,
+          172.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "外壳外径",
+        "web_text": "外壳外径",
+        "native_bounds": [
+          24,
+          223,
+          102,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          102,
+          45
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          134,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          134,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 36,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          328,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          328,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 37,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 38,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 39,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 40,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 41,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.6457256660696995,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 391,
+      "page_step": 535,
+      "value": 391
+    },
+    "web_scrollbar": {
+      "maximum": 391,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 390.6666564941406
+    }
+  },
+  "waveplate-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -315,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -314.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "波片\n波片",
+        "web_text": "波片\n波片",
+        "native_bounds": [
+          24,
+          -287,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -286.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -237,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -236.6666717529297,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "波片横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "波片横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -200,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -199.6666717529297,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -109,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -108.6666660308838,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -81,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -80.66666412353516,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -81,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -80.66666412353516,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -81,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -80.66666412353516,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -81,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -80.66666412353516,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -81,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -80.66666412353516,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -81,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -80.66666412353516,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -81,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -80.66666412353516,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -81,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -80.66666412353516,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -81,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -80.66666412353516,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          -30,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -29.666664123535156,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          -30,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          -29.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          -30,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          -29.666664123535156,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          -30,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -29.666664123535156,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          -30,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          -29.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          -30,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          -29.666664123535156,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          -30,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -29.666664123535156,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          -30,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          -29.666664123535156,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          -30,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          -29.666664123535156,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          35,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          35.333343505859375,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          96,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          96.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "类型",
+        "web_text": "类型",
+        "native_bounds": [
+          24,
+          124,
+          34,
+          42
+        ],
+        "web_bounds": [
+          24,
+          124.33334350585938,
+          34,
+          42
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "hwp",
+        "web_text": "hwp",
+        "native_bounds": [
+          66,
+          124,
+          186,
+          42
+        ],
+        "web_bounds": [
+          66,
+          124.33334350585938,
+          186,
+          42
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "",
+        "web_text": "",
+        "native_bounds": [
+          260,
+          124,
+          46,
+          42
+        ],
+        "web_bounds": [
+          260,
+          124.33334350585938,
+          46,
+          42
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "延迟",
+        "web_text": "延迟",
+        "native_bounds": [
+          24,
+          172,
+          34,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "0.50",
+        "web_text": "0.50",
+        "native_bounds": [
+          66,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          66,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "λ",
+        "web_text": "λ",
+        "native_bounds": [
+          260,
+          172,
+          34,
+          45
+        ],
+        "web_bounds": [
+          260,
+          172.33334350585938,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "外径",
+        "web_text": "外径",
+        "native_bounds": [
+          24,
+          223,
+          34,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "12.70",
+        "web_text": "12.70",
+        "native_bounds": [
+          66,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          66,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          260,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          260,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 36,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 37,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 38,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.301427202632675,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 337,
+      "page_step": 535,
+      "value": 337
+    },
+    "web_scrollbar": {
+      "maximum": 337,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 336.6666564941406
+    }
+  },
+  "lens-bottom": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 53,
+    "web_controls": 53,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.2464929007460737,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 586,
+      "page_step": 467,
+      "value": 586
+    },
+    "web_scrollbar": {
+      "maximum": 586,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 586
+    }
+  },
+  "cylindrical_lens-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.196742265765698,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 340,
+      "page_step": 535,
+      "value": 340
+    },
+    "web_scrollbar": {
+      "maximum": 340,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 340
+    }
+  },
+  "beam_expander-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.936630196497458,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "beam_expander-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.9927751942651035,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "beam_expander-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -267,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -266.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "扩束器\n扩束器",
+        "web_text": "扩束器\n扩束器",
+        "native_bounds": [
+          24,
+          -239,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -238.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -189,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -188.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "扩束器横向偏离光束 40.0 mm（口径约 12.5 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "扩束器横向偏离光束 40.0 mm（口径约 12.5 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -152,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -151.66666793823242,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -61,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -60.66666412353515,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -33,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -32.666664123535156,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -33,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -32.666664123535156,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -33,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -32.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          18,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          18.333343505859375,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          18,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          18.333343505859375,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          83,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          83.33334350585938,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          144,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          144.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "倍率",
+        "web_text": "倍率",
+        "native_bounds": [
+          24,
+          172,
+          34,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "2.00",
+        "web_text": "2.00",
+        "native_bounds": [
+          66,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          66,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "×",
+        "web_text": "×",
+        "native_bounds": [
+          260,
+          172,
+          34,
+          45
+        ],
+        "web_bounds": [
+          260,
+          172.33334350585938,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "外径",
+        "web_text": "外径",
+        "native_bounds": [
+          24,
+          223,
+          34,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          66,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          66,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          260,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          260,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.880938692993413,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 289
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 288.6666564941406
+    }
+  },
+  "aperture-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.919128528501412,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "aperture-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.986821577096532,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 286,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 286,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "aperture-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 3.6089655414591078,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 286,
+      "page_step": 535,
+      "value": 286
+    },
+    "web_scrollbar": {
+      "maximum": 286,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 286
+    }
+  },
+  "pbs-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.834275939219729,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "pbs-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.907507236343752,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "pbs-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -267,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -266.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "PBS\nPBS",
+        "web_text": "PBS\nPBS",
+        "native_bounds": [
+          24,
+          -239,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -238.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -189,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -188.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "PBS横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "PBS横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -152,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -151.66666793823242,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -61,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -60.66666412353515,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -33,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -32.666664123535156,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -33,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -32.666664123535156,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -33,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -32.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          18,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          18.333343505859375,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          18,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          18.333343505859375,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          83,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          83.33334350585938,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          144,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          144.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "透射比",
+        "web_text": "透射比",
+        "native_bounds": [
+          24,
+          172,
+          68,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          68,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "0.50",
+        "web_text": "0.50",
+        "native_bounds": [
+          100,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          100,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "",
+        "web_text": "",
+        "native_bounds": [
+          294,
+          172,
+          46,
+          45
+        ],
+        "web_bounds": [
+          294,
+          172.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "立方边长",
+        "web_text": "立方边长",
+        "native_bounds": [
+          24,
+          223,
+          68,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          68,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "12.70",
+        "web_text": "12.70",
+        "native_bounds": [
+          100,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          100,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          294,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          294,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.920480984845064,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 289
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 288.6666564941406
+    }
+  },
+  "splitter-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.940558139068229,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "splitter-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.018292273039665,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "splitter-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -267,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -266.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "分束镜\n分束镜",
+        "web_text": "分束镜\n分束镜",
+        "native_bounds": [
+          24,
+          -239,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -238.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -189,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -188.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "分束镜横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "分束镜横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -152,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -151.66666793823242,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -61,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -60.66666412353515,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -33,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -32.666664123535156,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -33,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -32.666664123535156,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -33,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -32.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          18,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          18.333343505859375,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          18,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          18.333343505859375,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          83,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          83.33334350585938,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          144,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          144.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "透射比",
+        "web_text": "透射比",
+        "native_bounds": [
+          24,
+          172,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "0.50",
+        "web_text": "0.50",
+        "native_bounds": [
+          83,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "",
+        "web_text": "",
+        "native_bounds": [
+          277,
+          172,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          172.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "外径",
+        "web_text": "外径",
+        "native_bounds": [
+          24,
+          223,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "12.70",
+        "web_text": "12.70",
+        "native_bounds": [
+          83,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          277,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.9056089815943533,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 289
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 288.6666564941406
+    }
+  },
+  "beam_sampler-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.9782844472537,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "beam_sampler-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.063668788658631,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "beam_sampler-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -267,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -266.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "取样镜\n取样镜",
+        "web_text": "取样镜\n取样镜",
+        "native_bounds": [
+          24,
+          -239,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -238.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -189,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -188.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "取样镜横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "取样镜横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -152,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -151.66666793823242,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -61,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -60.66666412353515,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -33,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -32.666664123535156,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -33,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -32.666664123535156,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -33,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -32.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          18,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          18.333343505859375,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          18,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          18.333343505859375,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          83,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          83.33334350585938,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          144,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          144.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "取样比",
+        "web_text": "取样比",
+        "native_bounds": [
+          24,
+          172,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "0.05",
+        "web_text": "0.05",
+        "native_bounds": [
+          83,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "",
+        "web_text": "",
+        "native_bounds": [
+          277,
+          172,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          172.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "外径",
+        "web_text": "外径",
+        "native_bounds": [
+          24,
+          223,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "12.70",
+        "web_text": "12.70",
+        "native_bounds": [
+          83,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          277,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.9133755725114248,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 289
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 288.6666564941406
+    }
+  },
+  "grating-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.90698351066765,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "grating-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.1619606603759385,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "grating-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -267,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -266.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "光栅\n光栅",
+        "web_text": "光栅\n光栅",
+        "native_bounds": [
+          24,
+          -239,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -238.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -189,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -188.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "光栅横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "光栅横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -152,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -151.66666793823242,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -61,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -60.66666412353515,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -33,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -32.666664123535156,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -33,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -32.666664123535156,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -33,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -32.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          18,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          18.333343505859375,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          18,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          18.333343505859375,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          83,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          83.33334350585938,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          144,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          144.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "线密度",
+        "web_text": "线密度",
+        "native_bounds": [
+          24,
+          172,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "600.00",
+        "web_text": "600.00",
+        "native_bounds": [
+          83,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "/mm",
+        "web_text": "/mm",
+        "native_bounds": [
+          277,
+          172,
+          54,
+          45
+        ],
+        "web_bounds": [
+          277,
+          172.33334350585938,
+          54,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "边长",
+        "web_text": "边长",
+        "native_bounds": [
+          24,
+          223,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "12.70",
+        "web_text": "12.70",
+        "native_bounds": [
+          83,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          277,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 4.09064668081328,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 289
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 288.6666564941406
+    }
+  },
+  "mirror-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.9522265866028565,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "mirror-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.85029672771783,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 238,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 238,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "mirror-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.344531230404182,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 238,
+      "page_step": 535,
+      "value": 238
+    },
+    "web_scrollbar": {
+      "maximum": 238,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 238
+    }
+  },
+  "fiber-bottom": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 35,
+    "web_controls": 35,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -261,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -260.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "工程光纤接收端\n光纤架",
+        "web_text": "工程光纤接收端\n光纤架",
+        "native_bounds": [
+          24,
+          -233,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -232.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -183,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -182.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -123,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -122.66666650772096,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -95,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -94.66666412353516,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "124.89",
+        "web_text": "124.89",
+        "native_bounds": [
+          54,
+          -95,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -94.66666412353516,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -95,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -94.66666412353516,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -95,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -94.66666412353516,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "0.00",
+        "web_text": "0.00",
+        "native_bounds": [
+          239,
+          -95,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -94.66666412353516,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -95,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -94.66666412353516,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -95,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -94.66666412353516,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -95,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -94.66666412353516,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -95,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -94.66666412353516,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          -44,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -43.66666412353515,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          -44,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          -43.66666412353515,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          -44,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          -43.66666412353515,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          -44,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -43.66666412353515,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          -44,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          -43.66666412353515,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          -44,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          -43.66666412353515,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          -44,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -43.66666412353515,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          -44,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          -43.66666412353515,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          -44,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          -43.66666412353515,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          21,
+          115,
+          38
+        ],
+        "web_bounds": [
+          12,
+          21.333343505859375,
+          115,
+          38
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          79,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          79.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "模场直径",
+        "web_text": "模场直径",
+        "native_bounds": [
+          24,
+          107,
+          68,
+          45
+        ],
+        "web_bounds": [
+          24,
+          107.33334350585938,
+          68,
+          45
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "9.00",
+        "web_text": "9.00",
+        "native_bounds": [
+          100,
+          107,
+          186,
+          45
+        ],
+        "web_bounds": [
+          100,
+          107.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "µm",
+        "web_text": "µm",
+        "native_bounds": [
+          294,
+          107,
+          40,
+          45
+        ],
+        "web_bounds": [
+          294,
+          107.33334350585938,
+          40,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "数值孔径",
+        "web_text": "数值孔径",
+        "native_bounds": [
+          24,
+          158,
+          68,
+          42
+        ],
+        "web_bounds": [
+          24,
+          158.33334350585938,
+          68,
+          42
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "0.12",
+        "web_text": "0.12",
+        "native_bounds": [
+          100,
+          158,
+          186,
+          42
+        ],
+        "web_bounds": [
+          100,
+          158.33334350585938,
+          186,
+          42
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "",
+        "web_text": "",
+        "native_bounds": [
+          294,
+          158,
+          40,
+          42
+        ],
+        "web_bounds": [
+          294,
+          158.33334350585938,
+          40,
+          42
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          230,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          230.33334350585935,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          258,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          258.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          303,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          303.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          363,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          363.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          391,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          391.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.3854906950521886,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 283,
+      "page_step": 467,
+      "value": 283
+    },
+    "web_scrollbar": {
+      "maximum": 283,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 282.6666564941406
+    }
+  },
+  "ccd-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.781306404603168,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "ccd-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.819801245102613,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "ccd-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -267,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -266.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "CCD 相机\nCCD 相机",
+        "web_text": "CCD 相机\nCCD 相机",
+        "native_bounds": [
+          24,
+          -239,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -238.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -189,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -188.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "CCD 相机横向偏离光束 40.0 mm（口径约 3.1 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "CCD 相机横向偏离光束 40.0 mm（口径约 3.1 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -152,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -151.66666793823242,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -61,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -60.66666412353515,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -33,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -32.666664123535156,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -33,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -32.666664123535156,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -33,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -32.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          18,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          18.333343505859375,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          18,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          18.333343505859375,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          83,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          83.33334350585938,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          144,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          144.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "靶面宽",
+        "web_text": "靶面宽",
+        "native_bounds": [
+          24,
+          172,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "4.97",
+        "web_text": "4.97",
+        "native_bounds": [
+          83,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          277,
+          172,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          172.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "靶面高",
+        "web_text": "靶面高",
+        "native_bounds": [
+          24,
+          223,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "3.73",
+        "web_text": "3.73",
+        "native_bounds": [
+          83,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          277,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.846762081057083,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 289
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 288.6666564941406
+    }
+  },
+  "power_meter-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.92932211637345,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "power_meter-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.830052021410548,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 238,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 238,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "power_meter-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 33,
+    "web_controls": 33,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.344546279992575,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 238,
+      "page_step": 535,
+      "value": 238
+    },
+    "web_scrollbar": {
+      "maximum": 238,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 238
+    }
+  },
+  "wavefront_sensor-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.041876984664469,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "wavefront_sensor-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.080371825163915,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "wavefront_sensor-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 36,
+    "web_controls": 36,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -267,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -266.6666717529297,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "波前传感器\n波前传感器",
+        "web_text": "波前传感器\n波前传感器",
+        "native_bounds": [
+          24,
+          -239,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -238.6666717529297,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -189,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -188.6666679382324,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "波前传感器横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "波前传感器横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          -152,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          -151.66666793823242,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          -61,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -60.66666412353515,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          -33,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          -32.666664123535156,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          -33,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          -32.666664123535156,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          -33,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          -32.666664123535156,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          -33,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          -32.666664123535156,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          -33,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          -32.666664123535156,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          18,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          18.333343505859375,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          18,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          18.333343505859375,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          18,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          18.333343505859375,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          18,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          18.333343505859375,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          18,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          18.333343505859375,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          83,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          83.33334350585938,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "光学参数",
+        "web_text": "光学参数",
+        "native_bounds": [
+          24,
+          144,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          144.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "靶面宽",
+        "web_text": "靶面宽",
+        "native_bounds": [
+          24,
+          172,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "4.97",
+        "web_text": "4.97",
+        "native_bounds": [
+          83,
+          172,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          172.33334350585938,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          277,
+          172,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          172.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "靶面高",
+        "web_text": "靶面高",
+        "native_bounds": [
+          24,
+          223,
+          51,
+          45
+        ],
+        "web_bounds": [
+          24,
+          223.33334350585935,
+          51,
+          45
+        ]
+      },
+      {
+        "index": 29,
+        "native_text": "3.73",
+        "web_text": "3.73",
+        "native_bounds": [
+          83,
+          223,
+          186,
+          45
+        ],
+        "web_bounds": [
+          83,
+          223.33334350585935,
+          186,
+          45
+        ]
+      },
+      {
+        "index": 30,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          277,
+          223,
+          46,
+          45
+        ],
+        "web_bounds": [
+          277,
+          223.33334350585935,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 31,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 32,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 33,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 34,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 35,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 3.846762081057083,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 289,
+      "page_step": 535,
+      "value": 289
+    },
+    "web_scrollbar": {
+      "maximum": 289,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 288.6666564941406
+    }
+  },
+  "oscilloscope-collapsed": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 26,
+    "web_controls": 26,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.948614685388354,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 2,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 2,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "oscilloscope-expanded": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 29,
+    "web_controls": 29,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 5.088834710370672,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 135,
+      "page_step": 535,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 135,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 0
+    }
+  },
+  "oscilloscope-bottom": {
+    "native_size": [
+      621,
+      535
+    ],
+    "web_size": [
+      621,
+      535
+    ],
+    "native_controls": 29,
+    "web_controls": 29,
+    "maximum_rectangle_difference_px": 0.3333740234375,
+    "differences": [
+      {
+        "index": 0,
+        "native_text": "当前对象",
+        "web_text": "当前对象",
+        "native_bounds": [
+          24,
+          -113,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          -112.6666660308838,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 1,
+        "native_text": "示波器\n示波器",
+        "web_text": "示波器\n示波器",
+        "native_bounds": [
+          24,
+          -85,
+          561,
+          43
+        ],
+        "web_bounds": [
+          24,
+          -84.66666412353516,
+          561,
+          43
+        ]
+      },
+      {
+        "index": 2,
+        "native_text": "启用",
+        "web_text": "启用",
+        "native_bounds": [
+          24,
+          -35,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          -34.666664123535156,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 3,
+        "native_text": "示波器横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "web_text": "示波器横向偏离光束 40.0 mm（口径约 6.3 mm）。这是位置失配：示意红线会从旁边过去，不是程序坏了。",
+        "native_bounds": [
+          24,
+          2,
+          561,
+          61
+        ],
+        "web_bounds": [
+          24,
+          2.333343505859375,
+          561,
+          61
+        ]
+      },
+      {
+        "index": 4,
+        "native_text": "位置与朝向",
+        "web_text": "位置与朝向",
+        "native_bounds": [
+          24,
+          93,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          93.33334350585938,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 5,
+        "native_text": "X",
+        "web_text": "X",
+        "native_bounds": [
+          24,
+          121,
+          26,
+          45
+        ],
+        "web_bounds": [
+          24,
+          121.33334350585938,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 6,
+        "native_text": "180.00",
+        "web_text": "180.00",
+        "native_bounds": [
+          54,
+          121,
+          97,
+          45
+        ],
+        "web_bounds": [
+          54,
+          121.33334350585938,
+          97,
+          45
+        ]
+      },
+      {
+        "index": 7,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          155,
+          121,
+          46,
+          45
+        ],
+        "web_bounds": [
+          155,
+          121.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 8,
+        "native_text": "Y",
+        "web_text": "Y",
+        "native_bounds": [
+          209,
+          121,
+          26,
+          45
+        ],
+        "web_bounds": [
+          209,
+          121.33334350585938,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 9,
+        "native_text": "40.00",
+        "web_text": "40.00",
+        "native_bounds": [
+          239,
+          121,
+          98,
+          45
+        ],
+        "web_bounds": [
+          239,
+          121.33334350585938,
+          98,
+          45
+        ]
+      },
+      {
+        "index": 10,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          341,
+          121,
+          46,
+          45
+        ],
+        "web_bounds": [
+          341,
+          121.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 11,
+        "native_text": "Z",
+        "web_text": "Z",
+        "native_bounds": [
+          395,
+          121,
+          26,
+          45
+        ],
+        "web_bounds": [
+          395,
+          121.33334350585938,
+          26,
+          45
+        ]
+      },
+      {
+        "index": 12,
+        "native_text": "25.00",
+        "web_text": "25.00",
+        "native_bounds": [
+          425,
+          121,
+          100,
+          45
+        ],
+        "web_bounds": [
+          425,
+          121.33334350585938,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 13,
+        "native_text": "mm",
+        "web_text": "mm",
+        "native_bounds": [
+          529,
+          121,
+          46,
+          45
+        ],
+        "web_bounds": [
+          529,
+          121.33334350585938,
+          46,
+          45
+        ]
+      },
+      {
+        "index": 14,
+        "native_text": "绕Z",
+        "web_text": "绕Z",
+        "native_bounds": [
+          24,
+          172,
+          28,
+          45
+        ],
+        "web_bounds": [
+          24,
+          172.33334350585938,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 15,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          56,
+          172,
+          100,
+          45
+        ],
+        "web_bounds": [
+          56,
+          172.33334350585938,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 16,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          160,
+          172,
+          34,
+          45
+        ],
+        "web_bounds": [
+          160,
+          172.33334350585938,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 17,
+        "native_text": "绕Y",
+        "web_text": "绕Y",
+        "native_bounds": [
+          209,
+          172,
+          28,
+          45
+        ],
+        "web_bounds": [
+          209,
+          172.33334350585938,
+          28,
+          45
+        ]
+      },
+      {
+        "index": 18,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          241,
+          172,
+          100,
+          45
+        ],
+        "web_bounds": [
+          241,
+          172.33334350585938,
+          100,
+          45
+        ]
+      },
+      {
+        "index": 19,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          345,
+          172,
+          34,
+          45
+        ],
+        "web_bounds": [
+          345,
+          172.33334350585938,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 20,
+        "native_text": "绕光轴",
+        "web_text": "绕光轴",
+        "native_bounds": [
+          395,
+          172,
+          49,
+          45
+        ],
+        "web_bounds": [
+          395,
+          172.33334350585938,
+          49,
+          45
+        ]
+      },
+      {
+        "index": 21,
+        "native_text": "0.0",
+        "web_text": "0.0",
+        "native_bounds": [
+          448,
+          172,
+          99,
+          45
+        ],
+        "web_bounds": [
+          448,
+          172.33334350585938,
+          99,
+          45
+        ]
+      },
+      {
+        "index": 22,
+        "native_text": "°",
+        "web_text": "°",
+        "native_bounds": [
+          551,
+          172,
+          34,
+          45
+        ],
+        "web_bounds": [
+          551,
+          172.33334350585938,
+          34,
+          45
+        ]
+      },
+      {
+        "index": 23,
+        "native_text": "收起参数",
+        "web_text": "收起参数",
+        "native_bounds": [
+          12,
+          237,
+          115,
+          41
+        ],
+        "web_bounds": [
+          12,
+          237.33334350585935,
+          115,
+          41
+        ]
+      },
+      {
+        "index": 24,
+        "native_text": "基准线",
+        "web_text": "基准线",
+        "native_bounds": [
+          24,
+          298,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          298.3333435058594,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 25,
+        "native_text": "设置当前对象为基准位置",
+        "web_text": "设置当前对象为基准位置",
+        "native_bounds": [
+          24,
+          326,
+          561,
+          38
+        ],
+        "web_bounds": [
+          24,
+          326.3333435058594,
+          561,
+          38
+        ]
+      },
+      {
+        "index": 26,
+        "native_text": "显示基准线",
+        "web_text": "显示基准线",
+        "native_bounds": [
+          24,
+          371,
+          561,
+          30
+        ],
+        "web_bounds": [
+          24,
+          371.3333435058594,
+          561,
+          30
+        ]
+      },
+      {
+        "index": 27,
+        "native_text": "下一步",
+        "web_text": "下一步",
+        "native_bounds": [
+          24,
+          431,
+          561,
+          21
+        ],
+        "web_bounds": [
+          24,
+          431.3333740234375,
+          561,
+          21
+        ]
+      },
+      {
+        "index": 28,
+        "native_text": "同步到仿真",
+        "web_text": "同步到仿真",
+        "native_bounds": [
+          24,
+          459,
+          561,
+          54
+        ],
+        "web_bounds": [
+          24,
+          459.3333740234375,
+          561,
+          54
+        ]
+      }
+    ],
+    "mean_absolute_rgb_difference": 5.260473259389689,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 135,
+      "page_step": 535,
+      "value": 135
+    },
+    "web_scrollbar": {
+      "maximum": 135,
+      "minimum": 0,
+      "page_step": 535,
+      "value": 134.6666717529297
+    }
+  },
+  "empty-collapsed": {
+    "native_size": [
+      440,
+      320
+    ],
+    "web_size": [
+      440,
+      320
+    ],
+    "native_controls": 1,
+    "web_controls": 1,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 2.054580965909091,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 0,
+      "page_step": 320,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 0,
+      "minimum": 0,
+      "page_step": 320,
+      "value": 0
+    }
+  },
+  "laser-edited-warning": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 40,
+    "web_controls": 40,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 6.155558314109659,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 545,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 545,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "laser-edited-disabled": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.5776826076611945,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 386,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 386,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "laser-reopened": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.5776826076611945,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 386,
+      "page_step": 467,
+      "value": 0
+    },
+    "web_scrollbar": {
+      "maximum": 386,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 0
+    }
+  },
+  "laser-reopened-bottom": {
+    "native_size": [
+      621,
+      467
+    ],
+    "web_size": [
+      621,
+      467
+    ],
+    "native_controls": 39,
+    "web_controls": 39,
+    "maximum_rectangle_difference_px": 0,
+    "differences": [],
+    "mean_absolute_rgb_difference": 4.485558394567487,
+    "native_scrollbar": {
+      "minimum": 0,
+      "maximum": 386,
+      "page_step": 467,
+      "value": 386
+    },
+    "web_scrollbar": {
+      "maximum": 386,
+      "minimum": 0,
+      "page_step": 467,
+      "value": 386
+    }
+  }
+}

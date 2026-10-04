@@ -1,0 +1,10 @@
+{
+  "missing": {
+    "status": 404,
+    "code": "JOB_NOT_FOUND"
+  },
+  "wrong_type": {
+    "status": 422,
+    "code": "PRESENTATION_INVALID"
+  }
+}

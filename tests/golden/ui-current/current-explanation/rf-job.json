@@ -1,0 +1,34 @@
+{
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "job_id": "job-82386dac5439",
+    "job_type": "explainability",
+    "status": "completed",
+    "progress": 1.0,
+    "stage": "completed",
+    "completed_items": 1,
+    "total_items": 1,
+    "created_at": "2026-10-01T20:17:29.850976+00:00",
+    "started_at": "2026-10-01T20:17:29.951909+00:00",
+    "finished_at": "2026-10-01T20:17:32.024103+00:00",
+    "result_available": true,
+    "error": null,
+    "metrics": {},
+    "timings_ms": {
+      "queue_wait": 101.268,
+      "process_startup": 0.0,
+      "worker_ready_to_first_progress": 8.843,
+      "worker_compute": 1979.157,
+      "result_save": 59.846,
+      "backend_total": 2173.494
+    },
+    "result_version": 1,
+    "partial_result_available": false,
+    "retry_available": true,
+    "retry_of": null,
+    "last_activity_at": "2026-10-01T20:17:31.946110+00:00"
+  },
+  "error": null,
+  "request_id": "req-50e59ad94fa742dfbc021bc2d99fba97"
+}

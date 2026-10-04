@@ -1,0 +1,3446 @@
+{
+  "default": {
+    "size": [
+      420,
+      560
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          28
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          163,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          205,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          237,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          279,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          321,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          363,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          405,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          447,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          489,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          531,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          573,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          615,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          657,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          699,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          731,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          773,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          815,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          857,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          899,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          931,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "search-lens": {
+    "size": [
+      420,
+      560
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "lens",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          28
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          398,
+          81
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          216,
+          398,
+          81
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          301,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          343,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          385,
+          398,
+          81
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          470,
+          398,
+          81
+        ],
+        "object_name": "PopupGroupTitle"
+      }
+    ]
+  },
+  "search-empty": {
+    "size": [
+      420,
+      560
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "no-such-equipment",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          28
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          398,
+          102
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          237,
+          398,
+          102
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          343,
+          398,
+          102
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          449,
+          398,
+          102
+        ],
+        "object_name": "PopupGroupTitle"
+      }
+    ]
+  },
+  "preset-laser": {
+    "size": [
+      420,
+      720
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          31
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          31
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          46,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          94,
+          398,
+          23
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QLabel",
+        "text": "工业常用激光器规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          123,
+          398,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "780 nm 外腔二极管 · 50 mW · 0.70 mm",
+        "placeholder": "",
+        "bounds": [
+          11,
+          157,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "780.000 nm",
+        "placeholder": "",
+        "bounds": [
+          11,
+          205,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "780.000 nm",
+        "placeholder": "",
+        "bounds": [
+          19,
+          207,
+          368,
+          38
+        ],
+        "object_name": "qt_spinbox_lineedit"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "应用当前规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          253,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          297,
+          398,
+          414
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          297,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          329,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          371,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          403,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          445,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          487,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          529,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          571,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          613,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          655,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          697,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          739,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          781,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          823,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          865,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          897,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          939,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          981,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1023,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1065,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1097,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "preset-laser-custom": {
+    "size": [
+      420,
+      720
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          31
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          31
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          46,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          94,
+          398,
+          23
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QLabel",
+        "text": "工业常用激光器规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          123,
+          398,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "自定义波长",
+        "placeholder": "",
+        "bounds": [
+          11,
+          157,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QDoubleSpinBox",
+        "text": "780.000 nm",
+        "placeholder": "",
+        "bounds": [
+          11,
+          205,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "780.000 nm",
+        "placeholder": "",
+        "bounds": [
+          19,
+          207,
+          368,
+          38
+        ],
+        "object_name": "qt_spinbox_lineedit"
+      },
+      {
+        "kind": "QPushButton",
+        "text": "应用当前规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          253,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          297,
+          398,
+          414
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          297,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          329,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          371,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          403,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          445,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          487,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          529,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          571,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          613,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          655,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          697,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          739,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          781,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          823,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          865,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          897,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          939,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          981,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1023,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1065,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1097,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "preset-lens": {
+    "size": [
+      420,
+      681
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          23
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QLabel",
+        "text": "工程常用透镜规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          126,
+          398,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "焦距 25 mm · 直径 12.7 mm",
+        "placeholder": "",
+        "bounds": [
+          11,
+          160,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QPushButton",
+        "text": "应用当前规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          208,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          284,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          326,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          358,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          400,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          442,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          484,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          526,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          568,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          610,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          652,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          694,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          736,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          778,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          820,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          852,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          894,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          936,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          978,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1020,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1052,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "preset-mirror": {
+    "size": [
+      420,
+      681
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          23
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QLabel",
+        "text": "工程常用反射镜规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          126,
+          398,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "圆形 12.7 mm",
+        "placeholder": "",
+        "bounds": [
+          11,
+          160,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QPushButton",
+        "text": "应用当前规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          208,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          284,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          326,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          358,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          400,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          442,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          484,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          526,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          568,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          610,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          652,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          694,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          736,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          778,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          820,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          852,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          894,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          936,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          978,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1020,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1052,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "preset-aperture": {
+    "size": [
+      420,
+      681
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          23
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QLabel",
+        "text": "工程常用光阑规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          126,
+          398,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "通光直径 4 mm",
+        "placeholder": "",
+        "bounds": [
+          11,
+          160,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QPushButton",
+        "text": "应用当前规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          208,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          284,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          326,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          358,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          400,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          442,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          484,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          526,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          568,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          610,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          652,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          694,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          736,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          778,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          820,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          852,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          894,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          936,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          978,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1020,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1052,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "preset-fiber": {
+    "size": [
+      420,
+      681
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          23
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QLabel",
+        "text": "工程常用光纤规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          126,
+          398,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "QComboBox",
+        "text": "单模 · 模场 5.6 μm · NA 0.12",
+        "placeholder": "",
+        "bounds": [
+          11,
+          160,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QPushButton",
+        "text": "应用当前规格",
+        "placeholder": "",
+        "bounds": [
+          11,
+          208,
+          398,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          252,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          284,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          326,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          358,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          400,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          442,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          484,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          526,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          568,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          610,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          652,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          694,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          736,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          778,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          820,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          852,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          894,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          936,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          978,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1020,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          1052,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "preset-ccd": {
+    "size": [
+      420,
+      560
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          28
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          163,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          205,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          237,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          279,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          321,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          363,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          405,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          447,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          489,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          531,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          573,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          615,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          657,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          699,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          731,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          773,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          815,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          857,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          899,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          931,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  },
+  "preset-oscilloscope": {
+    "size": [
+      420,
+      560
+    ],
+    "screen": [
+      1920,
+      1080
+    ],
+    "controls": [
+      {
+        "kind": "QLabel",
+        "text": "器材库",
+        "placeholder": "",
+        "bounds": [
+          11,
+          9,
+          51,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QToolButton",
+        "text": "×",
+        "placeholder": "",
+        "bounds": [
+          386,
+          9,
+          23,
+          34
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLineEdit",
+        "text": "",
+        "placeholder": "搜索器材…",
+        "bounds": [
+          11,
+          49,
+          398,
+          42
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "拖到台上放置，或点击添加",
+        "placeholder": "",
+        "bounds": [
+          11,
+          97,
+          398,
+          28
+        ],
+        "object_name": "TeachingHint"
+      },
+      {
+        "kind": "QScrollArea",
+        "text": "",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          398,
+          420
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光源",
+        "placeholder": "",
+        "bounds": [
+          11,
+          131,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "激光器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          163,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "光学元件",
+        "placeholder": "",
+        "bounds": [
+          11,
+          205,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "隔离器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          237,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波片",
+        "placeholder": "",
+        "bounds": [
+          11,
+          279,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "透镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          321,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "柱面镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          363,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "扩束器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          405,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光阑",
+        "placeholder": "",
+        "bounds": [
+          11,
+          447,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "PBS",
+        "placeholder": "",
+        "bounds": [
+          11,
+          489,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "分束镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          531,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "取样镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          573,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光栅",
+        "placeholder": "",
+        "bounds": [
+          11,
+          615,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "反射镜",
+        "placeholder": "",
+        "bounds": [
+          11,
+          657,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "接收与测量",
+        "placeholder": "",
+        "bounds": [
+          11,
+          699,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "光纤架",
+        "placeholder": "",
+        "bounds": [
+          11,
+          731,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "CCD 相机",
+        "placeholder": "",
+        "bounds": [
+          11,
+          773,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "功率计",
+        "placeholder": "",
+        "bounds": [
+          11,
+          815,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "波前传感器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          857,
+          386,
+          38
+        ],
+        "object_name": ""
+      },
+      {
+        "kind": "QLabel",
+        "text": "台面",
+        "placeholder": "",
+        "bounds": [
+          11,
+          899,
+          386,
+          28
+        ],
+        "object_name": "PopupGroupTitle"
+      },
+      {
+        "kind": "KindDragButton",
+        "text": "示波器",
+        "placeholder": "",
+        "bounds": [
+          11,
+          931,
+          386,
+          38
+        ],
+        "object_name": ""
+      }
+    ]
+  }
+}

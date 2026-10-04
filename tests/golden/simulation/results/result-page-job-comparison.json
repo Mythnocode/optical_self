@@ -1,0 +1,67 @@
+{
+  "job": "job-40bde1e3574e",
+  "reference_job": "job-26c22bd6effc",
+  "metrics": {
+    "coupling_efficiency": {
+      "current": 0.6285964749347567,
+      "original": 0.6285964749347567,
+      "exact_equal": true
+    },
+    "total_coupling_efficiency": {
+      "current": 0.6254297099579786,
+      "original": 0.6254297099579786,
+      "exact_equal": true
+    },
+    "transmission_efficiency": {
+      "current": 0.999961975426811,
+      "original": 0.999961975426811,
+      "exact_equal": true
+    },
+    "coupling_field_rms_x_um": {
+      "current": 1.6485943606264717,
+      "original": 1.6485943606264717,
+      "exact_equal": true
+    },
+    "coupling_field_rms_y_um": {
+      "current": 1.4359410648204272,
+      "original": 1.4359410648204272,
+      "exact_equal": true
+    },
+    "trace_valid_fraction": {
+      "current": 1.0,
+      "original": 1.0,
+      "exact_equal": true
+    }
+  },
+  "plots": {
+    "ray_layout": {
+      "original_equal": true,
+      "labels": [
+        "光线数量：1793",
+        "聚焦位置：z=79.87 mm"
+      ]
+    },
+    "spot": {
+      "original_equal": true,
+      "labels": [
+        "光斑半径：2.19 μm",
+        "峰值位置：x=-19.03 μm, y=-24.00 μm"
+      ]
+    },
+    "coupling": {
+      "original_equal": true,
+      "labels": [
+        "系统效率：100.00%",
+        "端面接收效率：99.50%",
+        "总耦合效率：62.54%"
+      ]
+    },
+    "wavefront": {
+      "original_equal": true,
+      "labels": [
+        "波前 RMS：55.09 nm",
+        "斯特列尔：0.82"
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "imported_radius": 4.123456789,
+  "edited_thickness": 3.25,
+  "undo_radius_exact": 4.123456789,
+  "undo_addition_rows": 8,
+  "redo_addition_rows": 10,
+  "undo_deletion_rows": 10,
+  "new_edit_cleared_redo": true,
+  "invalid_file_preserved_project": true
+}

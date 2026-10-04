@@ -1,0 +1,13 @@
+{
+  "original_equal_nan_aware": true,
+  "qt_imported": false,
+  "differences": [],
+  "keys": [
+    "光路",
+    "3D光路",
+    "点列图",
+    "PSF",
+    "波前",
+    "端面匹配"
+  ]
+}

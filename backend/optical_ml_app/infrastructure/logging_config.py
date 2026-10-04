@@ -44,7 +44,7 @@ class JsonFormatter(logging.Formatter):
             "project_fingerprint": getattr(record, "project_fingerprint", ""),
             "engine": getattr(record, "engine", ""),
         }
-        for key in ("stage", "error_code", "elapsed_ms", "cache_status"):
+        for key in ("stage", "error_code", "elapsed_ms", "cache_status", "method", "route", "status"):
             value = getattr(record, key, None)
             if value is not None:
                 payload[key] = value

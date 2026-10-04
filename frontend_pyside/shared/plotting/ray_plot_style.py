@@ -1,30 +1,4 @@
+"""Compatibility facade for the shared presentation implementation."""
+import shared_presentation.plotting.ray_plot_style as _implementation
 
-"""光线追迹图的集中样式常量。
-
-修改这里可以统一改变 2D/3D 光线颜色、线宽、透明度和角色区分；数据适配和
-光线绘制逻辑分别位于适配器与画布模块。
-"""
-
-from __future__ import annotations
-
-RAY_LINEWIDTH_2D = 0.85
-RAY_ALPHA_2D = 0.58
-RAY_LINEWIDTH_3D = 0.78
-RAY_ALPHA_3D = 0.60
-SURFACE_LINEWIDTH_2D = 1.35
-SURFACE_ALPHA_2D = 0.88
-SURFACE_LINEWIDTH_3D = 0.95
-SURFACE_ALPHA_3D = 0.68
-SECTION_PLANE_ALPHA = 0.08
-
-__all__ = [
-    "RAY_ALPHA_2D",
-    "RAY_ALPHA_3D",
-    "RAY_LINEWIDTH_2D",
-    "RAY_LINEWIDTH_3D",
-    "SECTION_PLANE_ALPHA",
-    "SURFACE_ALPHA_2D",
-    "SURFACE_ALPHA_3D",
-    "SURFACE_LINEWIDTH_2D",
-    "SURFACE_LINEWIDTH_3D",
-]
+globals().update({name: value for name, value in vars(_implementation).items() if not name.startswith("__")})

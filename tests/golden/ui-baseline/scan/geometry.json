@@ -1,0 +1,1504 @@
+{
+  "empty": [
+    {
+      "kind": "QLabel",
+      "text": "设置",
+      "bounds": [
+        320,
+        173,
+        932,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模式",
+      "bounds": [
+        320,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "一维扫描",
+      "bounds": [
+        400,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "响应量",
+      "bounds": [
+        792,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "耦合效率",
+      "bounds": [
+        872,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样尺度",
+      "bounds": [
+        320,
+        243,
+        72,
+        45
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "线性采样",
+      "bounds": [
+        400,
+        244,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样点数",
+      "bounds": [
+        792,
+        243,
+        374,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "21",
+      "bounds": [
+        1174,
+        243,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "变量",
+      "bounds": [
+        320,
+        294,
+        72,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "（未勾选）",
+      "bounds": [
+        400,
+        294,
+        380,
+        21
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "运行",
+      "bounds": [
+        320,
+        515,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "勾选 1～2 个变量并运行后，这里显示响应曲线。",
+      "bounds": [
+        329,
+        665,
+        914,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        238,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        286,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        333,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        333,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        333,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        320,
+        319,
+        932,
+        192
+      ]
+    }
+  ],
+  "one": [
+    {
+      "kind": "QLabel",
+      "text": "设置",
+      "bounds": [
+        320,
+        173,
+        932,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模式",
+      "bounds": [
+        320,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "一维扫描",
+      "bounds": [
+        400,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "响应量",
+      "bounds": [
+        792,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "耦合效率",
+      "bounds": [
+        872,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样尺度",
+      "bounds": [
+        320,
+        243,
+        72,
+        45
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "线性采样",
+      "bounds": [
+        400,
+        244,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样点数",
+      "bounds": [
+        792,
+        243,
+        374,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "21",
+      "bounds": [
+        1174,
+        243,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "变量",
+      "bounds": [
+        320,
+        294,
+        72,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        400,
+        294,
+        380,
+        21
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "运行",
+      "bounds": [
+        320,
+        515,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "勾选 1～2 个变量并运行后，这里显示响应曲线。",
+      "bounds": [
+        329,
+        665,
+        914,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        238,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        286,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        333,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        333,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        333,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        320,
+        319,
+        932,
+        192
+      ]
+    }
+  ],
+  "progress": [
+    {
+      "kind": "QLabel",
+      "text": "设置",
+      "bounds": [
+        320,
+        173,
+        932,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模式",
+      "bounds": [
+        320,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "一维扫描",
+      "bounds": [
+        400,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "响应量",
+      "bounds": [
+        792,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "耦合效率",
+      "bounds": [
+        872,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样尺度",
+      "bounds": [
+        320,
+        243,
+        72,
+        45
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "线性采样",
+      "bounds": [
+        400,
+        244,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样点数",
+      "bounds": [
+        792,
+        243,
+        374,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "21",
+      "bounds": [
+        1174,
+        243,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "变量",
+      "bounds": [
+        320,
+        294,
+        72,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        400,
+        294,
+        380,
+        21
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "运行",
+      "bounds": [
+        320,
+        515,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "扫描中 42%",
+      "bounds": [
+        320,
+        557,
+        128,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "正在扫描…",
+      "bounds": [
+        329,
+        679,
+        914,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        238,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        286,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        333,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        333,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        333,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        320,
+        319,
+        932,
+        192
+      ]
+    }
+  ],
+  "two": [
+    {
+      "kind": "QLabel",
+      "text": "设置",
+      "bounds": [
+        320,
+        173,
+        932,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模式",
+      "bounds": [
+        320,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "二维扫描",
+      "bounds": [
+        400,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "响应量",
+      "bounds": [
+        792,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "耦合效率",
+      "bounds": [
+        872,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样尺度",
+      "bounds": [
+        320,
+        243,
+        72,
+        45
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "线性采样",
+      "bounds": [
+        400,
+        244,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样点数",
+      "bounds": [
+        792,
+        243,
+        374,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "21",
+      "bounds": [
+        1174,
+        243,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "变量",
+      "bounds": [
+        320,
+        294,
+        72,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L1 / L1 前表面 / 曲率、L1 / L1 前表面 / 厚度",
+      "bounds": [
+        400,
+        294,
+        380,
+        21
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "运行",
+      "bounds": [
+        320,
+        515,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "勾选 1～2 个变量并运行后，这里显示响应曲线。",
+      "bounds": [
+        329,
+        665,
+        914,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        238,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        286,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        333,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        333,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        333,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        320,
+        319,
+        932,
+        192
+      ]
+    }
+  ],
+  "line": [
+    {
+      "kind": "QLabel",
+      "text": "设置",
+      "bounds": [
+        320,
+        173,
+        932,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模式",
+      "bounds": [
+        320,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "一维扫描",
+      "bounds": [
+        400,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "响应量",
+      "bounds": [
+        792,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "耦合效率",
+      "bounds": [
+        872,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样尺度",
+      "bounds": [
+        320,
+        243,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "线性采样",
+      "bounds": [
+        400,
+        243,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样点数",
+      "bounds": [
+        792,
+        243,
+        374,
+        42
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "5",
+      "bounds": [
+        1174,
+        243,
+        78,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "变量",
+      "bounds": [
+        320,
+        291,
+        72,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L1 / L1 前表面 / 曲率",
+      "bounds": [
+        400,
+        291,
+        380,
+        21
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "运行",
+      "bounds": [
+        320,
+        486,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "扫描完成 100%",
+      "bounds": [
+        320,
+        528,
+        128,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "数据点：5　｜　横轴：参数　｜　纵轴：耦合效率　｜　数据来源：正式参数扫描",
+      "bounds": [
+        321,
+        756,
+        930,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        238,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        286,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        333,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        333,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        333,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        320,
+        316,
+        932,
+        166
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        321,
+        573,
+        930,
+        178
+      ]
+    }
+  ],
+  "heatmap": [
+    {
+      "kind": "QLabel",
+      "text": "设置",
+      "bounds": [
+        320,
+        173,
+        932,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模式",
+      "bounds": [
+        320,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "二维扫描",
+      "bounds": [
+        400,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "响应量",
+      "bounds": [
+        792,
+        195,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "耦合效率",
+      "bounds": [
+        872,
+        195,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样尺度",
+      "bounds": [
+        320,
+        243,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "线性采样",
+      "bounds": [
+        400,
+        243,
+        380,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "采样点数",
+      "bounds": [
+        792,
+        243,
+        374,
+        42
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "5",
+      "bounds": [
+        1174,
+        243,
+        78,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "变量",
+      "bounds": [
+        320,
+        291,
+        72,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "L1 / L1 前表面 / 曲率、L1 / L1 前表面 / 厚度",
+      "bounds": [
+        400,
+        291,
+        380,
+        21
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "运行",
+      "bounds": [
+        320,
+        486,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "扫描完成 100%",
+      "bounds": [
+        320,
+        528,
+        128,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "网格：5 × 5　｜　数据来源：正式二维参数扫描",
+      "bounds": [
+        321,
+        756,
+        930,
+        20
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        160,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        189,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        238,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        286,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        286,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        333,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        333,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        333,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        320,
+        316,
+        932,
+        166
+      ]
+    },
+    {
+      "kind": "FastHeatmapWidget",
+      "text": "",
+      "bounds": [
+        321,
+        573,
+        930,
+        178
+      ]
+    }
+  ]
+}

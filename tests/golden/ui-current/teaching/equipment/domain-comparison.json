@@ -1,0 +1,11 @@
+{
+  "original_presets_equal": true,
+  "kinds": [
+    "laser",
+    "lens",
+    "mirror",
+    "aperture",
+    "fiber",
+    "detector"
+  ]
+}

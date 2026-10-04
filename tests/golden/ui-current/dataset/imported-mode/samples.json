@@ -1,0 +1,1568 @@
+[
+  {
+    "sample_id": "sample-000001",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000001",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:29fe2c00414f",
+    "feature_values": {
+      "surfaces[0].radius_mm": 4.932813557398489,
+      "surfaces[0].distance_to_next_mm": 3.058542058509298,
+      "surfaces[2].radius_mm": 4.146325646292528,
+      "surfaces[2].distance_to_next_mm": 4.115131598547032,
+      "surfaces[4].radius_mm": 25.839297109518384,
+      "surfaces[4].distance_to_next_mm": 3.0759141618136217,
+      "surfaces[6].radius_mm": 5.84370864184244,
+      "surfaces[6].distance_to_next_mm": 2.9705225885521145,
+      "size_log_mismatch": 3.332972070357584,
+      "size_log_signed": 3.332972070357584,
+      "size_ratio": 28.021499935298216,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 70.05374983824554,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.015553812094962151
+    },
+    "target_values": {
+      "coupling_loss_db": 9.253293203642283,
+      "coupling_efficiency": 0.11876013418766422
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 3463.9435000008234,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:29fe2c00414f",
+      "random_seed": 42,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.332972070357584,
+        "size_log_signed": 3.332972070357584,
+        "size_ratio": 28.021499935298216,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 70.05374983824554,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.015553812094962151
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000002",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000002",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:5b5721bd40fe",
+    "feature_values": {
+      "surfaces[0].radius_mm": 4.91019174171285,
+      "surfaces[0].distance_to_next_mm": 2.9456105273289164,
+      "surfaces[2].radius_mm": 4.222352220961715,
+      "surfaces[2].distance_to_next_mm": 3.90366175055757,
+      "surfaces[4].radius_mm": 24.38624057727424,
+      "surfaces[4].distance_to_next_mm": 2.894146439502344,
+      "surfaces[6].radius_mm": 6.404612301659885,
+      "surfaces[6].distance_to_next_mm": 3.1414785479330707,
+      "size_log_mismatch": 1.091282771032836,
+      "size_log_signed": 1.091282771032836,
+      "size_ratio": 2.9780918333200086,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 7.445229583300021,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.0954333180694345
+    },
+    "target_values": {
+      "coupling_loss_db": 1.9047169468615093,
+      "coupling_efficiency": 0.6449533535870606
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_EDGE_CHECK_FAILED",
+    "failure_message": "optical quality check failed: edge",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 3590.2243000000453,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:5b5721bd40fe",
+      "random_seed": 43,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.091282771032836,
+        "size_log_signed": 1.091282771032836,
+        "size_ratio": 2.9780918333200086,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 7.445229583300021,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.0954333180694345
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000003",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000003",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:b5837c574a10",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.266200896729364,
+      "surfaces[0].distance_to_next_mm": 2.9976068528960935,
+      "surfaces[2].radius_mm": 4.096808047111179,
+      "surfaces[2].distance_to_next_mm": 3.8684167800438964,
+      "surfaces[4].radius_mm": 24.669135728010236,
+      "surfaces[4].distance_to_next_mm": 2.98670527619513,
+      "surfaces[6].radius_mm": 5.904295996430131,
+      "surfaces[6].distance_to_next_mm": 3.0415079579504174,
+      "size_log_mismatch": 1.9586521393916139,
+      "size_log_signed": 1.9586521393916139,
+      "size_ratio": 7.089764607736996,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 17.72441151934249,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.06286568834251466
+    },
+    "target_values": {
+      "coupling_loss_db": 5.232740421132137,
+      "coupling_efficiency": 0.29972706285475875
+    },
+    "valid": true,
+    "failure_code": "",
+    "failure_message": "",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4998.295499999585,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 1.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": 1.0,
+        "quality_nyquist_accepted_by_convergence": true
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:b5837c574a10",
+      "random_seed": 44,
+      "precision": "high",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.9586521393916139,
+        "size_log_signed": 1.9586521393916139,
+        "size_ratio": 7.089764607736996,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 17.72441151934249,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.06286568834251466
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000004",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000004",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:d235b4e31f75",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.124155754124414,
+      "surfaces[0].distance_to_next_mm": 2.9177010484555512,
+      "surfaces[2].radius_mm": 4.268550556709548,
+      "surfaces[2].distance_to_next_mm": 3.8478098117106385,
+      "surfaces[4].radius_mm": 26.139473793470927,
+      "surfaces[4].distance_to_next_mm": 3.124385664253408,
+      "surfaces[6].radius_mm": 6.228213980749666,
+      "surfaces[6].distance_to_next_mm": 2.8887183850337173,
+      "size_log_mismatch": 3.246703900022,
+      "size_log_signed": 3.246703900022,
+      "size_ratio": 25.70547232123537,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 64.26368080308842,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.018831904282840928
+    },
+    "target_values": {
+      "coupling_loss_db": 9.52823453542832,
+      "coupling_efficiency": 0.11147476011561898
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 3956.708100000469,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:d235b4e31f75",
+      "random_seed": 45,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.246703900022,
+        "size_log_signed": 3.246703900022,
+        "size_ratio": 25.70547232123537,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 64.26368080308842,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.018831904282840928
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000005",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000005",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:bf622e1d1e29",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.0891879052489255,
+      "surfaces[0].distance_to_next_mm": 3.1361077610236925,
+      "surfaces[2].radius_mm": 4.064005698043806,
+      "surfaces[2].distance_to_next_mm": 3.990526432045786,
+      "surfaces[4].radius_mm": 25.508506319233483,
+      "surfaces[4].distance_to_next_mm": 2.8696610652665275,
+      "surfaces[6].radius_mm": 6.344557398395249,
+      "surfaces[6].distance_to_next_mm": 3.087381975199406,
+      "size_log_mismatch": 1.080175507098694,
+      "size_log_signed": 1.080175507098694,
+      "size_ratio": 2.94519640858487,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 7.362991021462175,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.08419235811484473
+    },
+    "target_values": {
+      "coupling_loss_db": 2.281255440821395,
+      "coupling_efficiency": 0.5913906526592221
+    },
+    "valid": true,
+    "failure_code": "",
+    "failure_message": "",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4866.426200000205,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 1.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": 1.0,
+        "quality_nyquist_accepted_by_convergence": true
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:bf622e1d1e29",
+      "random_seed": 46,
+      "precision": "high",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.080175507098694,
+        "size_log_signed": 1.080175507098694,
+        "size_ratio": 2.94519640858487,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 7.362991021462175,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.08419235811484473
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000006",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000006",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:c8b675f7b8ef",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.20982692118203,
+      "surfaces[0].distance_to_next_mm": 2.8562745676478314,
+      "surfaces[2].radius_mm": 3.898916453287685,
+      "surfaces[2].distance_to_next_mm": 4.084381667930898,
+      "surfaces[4].radius_mm": 26.242322025929408,
+      "surfaces[4].distance_to_next_mm": 3.00732133659387,
+      "surfaces[6].radius_mm": 6.025649782247337,
+      "surfaces[6].distance_to_next_mm": 3.026687696102616,
+      "size_log_mismatch": 1.4910338572925106,
+      "size_log_signed": 1.4910338572925106,
+      "size_ratio": 4.441685214699923,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 11.104213036749808,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.07767462840940358
+    },
+    "target_values": {
+      "coupling_loss_db": 2.713316202812785,
+      "coupling_efficiency": 0.5353876879644633
+    },
+    "valid": true,
+    "failure_code": "",
+    "failure_message": "",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4909.7727999997005,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 1.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": 1.0,
+        "quality_nyquist_accepted_by_convergence": true
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:c8b675f7b8ef",
+      "random_seed": 47,
+      "precision": "high",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.4910338572925106,
+        "size_log_signed": 1.4910338572925106,
+        "size_ratio": 4.441685214699923,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 11.104213036749808,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.07767462840940358
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000007",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000007",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:ff819f4ee3d5",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.002530599683599,
+      "surfaces[0].distance_to_next_mm": 3.032259281864651,
+      "surfaces[2].radius_mm": 4.026684690853521,
+      "surfaces[2].distance_to_next_mm": 4.19963188651245,
+      "surfaces[4].radius_mm": 24.979301026935254,
+      "surfaces[4].distance_to_next_mm": 3.050068092877799,
+      "surfaces[6].radius_mm": 6.154599073728291,
+      "surfaces[6].distance_to_next_mm": 2.858222661336676,
+      "size_log_mismatch": 2.5928639485926355,
+      "size_log_signed": 2.5928639485926355,
+      "size_ratio": 13.368002102780457,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 33.42000525695114,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.02876905609295049
+    },
+    "target_values": {
+      "coupling_loss_db": 6.232136680050678,
+      "coupling_efficiency": 0.23811476832255715
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 3952.2434000009525,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:ff819f4ee3d5",
+      "random_seed": 48,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 2.5928639485926355,
+        "size_log_signed": 2.5928639485926355,
+        "size_ratio": 13.368002102780457,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 33.42000525695114,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.02876905609295049
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000008",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000008",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:266093fca3da",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.336186754837488,
+      "surfaces[0].distance_to_next_mm": 3.0911722051517665,
+      "surfaces[2].radius_mm": 3.9786563733956766,
+      "surfaces[2].distance_to_next_mm": 4.044273496323202,
+      "surfaces[4].radius_mm": 26.614028804078167,
+      "surfaces[4].distance_to_next_mm": 2.9448338922696324,
+      "surfaces[6].radius_mm": 6.0886746524382165,
+      "surfaces[6].distance_to_next_mm": 2.933812542846899,
+      "size_log_mismatch": 2.545325542801416,
+      "size_log_signed": 2.545325542801416,
+      "size_ratio": 12.747377227560673,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 31.868443068901684,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.033873324302782275
+    },
+    "target_values": {
+      "coupling_loss_db": 7.835295266487292,
+      "coupling_efficiency": 0.1646154044426063
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4205.385000001115,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:266093fca3da",
+      "random_seed": 49,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 2.545325542801416,
+        "size_log_signed": 2.545325542801416,
+        "size_ratio": 12.747377227560673,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 31.868443068901684,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.033873324302782275
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000009",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000009",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:5d969017f400",
+    "feature_values": {
+      "surfaces[0].radius_mm": 4.978425400889187,
+      "surfaces[0].distance_to_next_mm": 2.859979839924985,
+      "surfaces[2].radius_mm": 4.165843331335338,
+      "surfaces[2].distance_to_next_mm": 3.882124072308791,
+      "surfaces[4].radius_mm": 26.706478051906785,
+      "surfaces[4].distance_to_next_mm": 3.051184599404987,
+      "surfaces[6].radius_mm": 6.185345202642885,
+      "surfaces[6].distance_to_next_mm": 3.1166653436008884,
+      "size_log_mismatch": 1.2855870971555252,
+      "size_log_signed": 1.2855870971555252,
+      "size_ratio": 3.6167907415726526,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 9.041976853931631,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.09768043211311606
+    },
+    "target_values": {
+      "coupling_loss_db": 3.629009782898467,
+      "coupling_efficiency": 0.43360973270070235
+    },
+    "valid": true,
+    "failure_code": "",
+    "failure_message": "",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4601.965100000598,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 1.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": 1.0,
+        "quality_nyquist_accepted_by_convergence": true
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:5d969017f400",
+      "random_seed": 50,
+      "precision": "high",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.2855870971555252,
+        "size_log_signed": 1.2855870971555252,
+        "size_ratio": 3.6167907415726526,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 9.041976853931631,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.09768043211311606
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000010",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000010",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:5a4b4335bfca",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.119979065231997,
+      "surfaces[0].distance_to_next_mm": 2.954042052156464,
+      "surfaces[2].radius_mm": 4.0482088551396975,
+      "surfaces[2].distance_to_next_mm": 4.088214586588997,
+      "surfaces[4].radius_mm": 26.14865888631932,
+      "surfaces[4].distance_to_next_mm": 3.142490580575631,
+      "surfaces[6].radius_mm": 6.424930815319031,
+      "surfaces[6].distance_to_next_mm": 2.8509255958772566,
+      "size_log_mismatch": 3.0437198751389865,
+      "size_log_signed": 3.0437198751389865,
+      "size_ratio": 20.983152947038292,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 52.45788236759573,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.019567476756099086
+    },
+    "target_values": {
+      "coupling_loss_db": 9.342454879807246,
+      "coupling_efficiency": 0.11634681850073969
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4194.775899999513,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:5a4b4335bfca",
+      "random_seed": 51,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.0437198751389865,
+        "size_log_signed": 3.0437198751389865,
+        "size_ratio": 20.983152947038292,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 52.45788236759573,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.019567476756099086
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000011",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000011",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:99c34a38abe5",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.306332379633184,
+      "surfaces[0].distance_to_next_mm": 3.096474444273141,
+      "surfaces[2].radius_mm": 4.04588704439527,
+      "surfaces[2].distance_to_next_mm": 4.152024105958865,
+      "surfaces[4].radius_mm": 24.568765573462723,
+      "surfaces[4].distance_to_next_mm": 2.8875761469423518,
+      "surfaces[6].radius_mm": 5.984033723943793,
+      "surfaces[6].distance_to_next_mm": 3.0263155138734223,
+      "size_log_mismatch": 1.5050127116334082,
+      "size_log_signed": 1.5050127116334082,
+      "size_ratio": 4.504210885802151,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 11.260527214505379,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.08568748148819097
+    },
+    "target_values": {
+      "coupling_loss_db": 3.2325736701405035,
+      "coupling_efficiency": 0.47505362124504674
+    },
+    "valid": true,
+    "failure_code": "",
+    "failure_message": "",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4944.191299999147,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 1.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": 1.0,
+        "quality_nyquist_accepted_by_convergence": true
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:99c34a38abe5",
+      "random_seed": 52,
+      "precision": "high",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.5050127116334082,
+        "size_log_signed": 1.5050127116334082,
+        "size_ratio": 4.504210885802151,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 11.260527214505379,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.08568748148819097
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000012",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000012",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:5e350d1d69c8",
+    "feature_values": {
+      "surfaces[0].radius_mm": 4.9326002460671985,
+      "surfaces[0].distance_to_next_mm": 3.0152542526425923,
+      "surfaces[2].radius_mm": 3.9286816014169084,
+      "surfaces[2].distance_to_next_mm": 4.013466187860414,
+      "surfaces[4].radius_mm": 24.900137730627957,
+      "surfaces[4].distance_to_next_mm": 3.0016144325003347,
+      "surfaces[6].radius_mm": 6.220249728582954,
+      "surfaces[6].distance_to_next_mm": 2.9625082214666087,
+      "size_log_mismatch": 3.2488737074169745,
+      "size_log_signed": 3.2488737074169745,
+      "size_ratio": 25.761308800465258,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 64.40327200116315,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.013483870216302374
+    },
+    "target_values": {
+      "coupling_loss_db": 8.491553920272262,
+      "coupling_efficiency": 0.14152872947942657
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4085.5436000001646,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:5e350d1d69c8",
+      "random_seed": 53,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.2488737074169745,
+        "size_log_signed": 3.2488737074169745,
+        "size_ratio": 25.761308800465258,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 64.40327200116315,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.013483870216302374
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000013",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000013",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:fa74223dfefd",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.204143607491436,
+      "surfaces[0].distance_to_next_mm": 3.047594562313766,
+      "surfaces[2].radius_mm": 4.236513373261997,
+      "surfaces[2].distance_to_next_mm": 3.877061439299827,
+      "surfaces[4].radius_mm": 25.715111963271323,
+      "surfaces[4].distance_to_next_mm": 2.9334572393319074,
+      "surfaces[6].radius_mm": 5.915025509631583,
+      "surfaces[6].distance_to_next_mm": 3.0629111873222654,
+      "size_log_mismatch": 0.8668513645022906,
+      "size_log_signed": 0.8668513645022906,
+      "size_ratio": 2.3794071606770744,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 5.948517901692686,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.1292307375896783
+    },
+    "target_values": {
+      "coupling_loss_db": 2.9478533218602028,
+      "coupling_efficiency": 0.5072413711175342
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_EDGE_CHECK_FAILED",
+    "failure_message": "optical quality check failed: edge",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4017.8876999998465,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:fa74223dfefd",
+      "random_seed": 54,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 0.8668513645022906,
+        "size_log_signed": 0.8668513645022906,
+        "size_ratio": 2.3794071606770744,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 5.948517901692686,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.1292307375896783
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000014",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000014",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:27bd2d4f26f3",
+    "feature_values": {
+      "surfaces[0].radius_mm": 4.883073044751508,
+      "surfaces[0].distance_to_next_mm": 3.062935438828366,
+      "surfaces[2].radius_mm": 3.9901112185843783,
+      "surfaces[2].distance_to_next_mm": 4.035987046585072,
+      "surfaces[4].radius_mm": 24.70451379380929,
+      "surfaces[4].distance_to_next_mm": 2.8746777095985685,
+      "surfaces[6].radius_mm": 6.294654892122881,
+      "surfaces[6].distance_to_next_mm": 2.855291401056633,
+      "size_log_mismatch": 3.1480742486399045,
+      "size_log_signed": 3.1480742486399045,
+      "size_ratio": 23.291168366184873,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 58.227920915462185,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.014976335417172427
+    },
+    "target_values": {
+      "coupling_loss_db": 8.11431966957409,
+      "coupling_efficiency": 0.1543718230731382
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 3983.9009000006627,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:27bd2d4f26f3",
+      "random_seed": 55,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.1480742486399045,
+        "size_log_signed": 3.1480742486399045,
+        "size_ratio": 23.291168366184873,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 58.227920915462185,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.014976335417172427
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000015",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000015",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:1cb3d046942a",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.1836205744876445,
+      "surfaces[0].distance_to_next_mm": 2.9008904783593015,
+      "surfaces[2].radius_mm": 4.246288363863439,
+      "surfaces[2].distance_to_next_mm": 3.8530777476293716,
+      "surfaces[4].radius_mm": 25.93982002021211,
+      "surfaces[4].distance_to_next_mm": 3.11600020503584,
+      "surfaces[6].radius_mm": 6.2175005477639145,
+      "surfaces[6].distance_to_next_mm": 3.05287610950202,
+      "size_log_mismatch": 3.171731376492627,
+      "size_log_signed": 3.171731376492627,
+      "size_ratio": 23.848739779220757,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 59.6218494480519,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.020468998103187447
+    },
+    "target_values": {
+      "coupling_loss_db": 9.410163243030983,
+      "coupling_efficiency": 0.11454698846032321
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4062.575099998867,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:1cb3d046942a",
+      "random_seed": 56,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.171731376492627,
+        "size_log_signed": 3.171731376492627,
+        "size_ratio": 23.848739779220757,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 59.6218494480519,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.020468998103187447
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000016",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000016",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:e56b7c06f0bd",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.26521120070021,
+      "surfaces[0].distance_to_next_mm": 2.9992322907259013,
+      "surfaces[2].radius_mm": 4.0224898639232025,
+      "surfaces[2].distance_to_next_mm": 4.150622497137169,
+      "surfaces[4].radius_mm": 26.45990292180184,
+      "surfaces[4].distance_to_next_mm": 2.9976878061532677,
+      "surfaces[6].radius_mm": 6.018072247495274,
+      "surfaces[6].distance_to_next_mm": 3.047586645612002,
+      "size_log_mismatch": 1.5955450304064154,
+      "size_log_signed": 1.5955450304064154,
+      "size_ratio": 4.9310158934494,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 12.327539733623501,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.08039079941333876
+    },
+    "target_values": {
+      "coupling_loss_db": 4.111211658960376,
+      "coupling_efficiency": 0.3880420891673916
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4183.3456000003935,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:e56b7c06f0bd",
+      "random_seed": 57,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.5955450304064154,
+        "size_log_signed": 1.5955450304064154,
+        "size_ratio": 4.9310158934494,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 12.327539733623501,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.08039079941333876
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000017",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000017",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:9381fbb4ba6d",
+    "feature_values": {
+      "surfaces[0].radius_mm": 4.97219832330355,
+      "surfaces[0].distance_to_next_mm": 2.862016639076923,
+      "surfaces[2].radius_mm": 3.9867414047860437,
+      "surfaces[2].distance_to_next_mm": 4.038877271251286,
+      "surfaces[4].radius_mm": 26.107149318560538,
+      "surfaces[4].distance_to_next_mm": 3.135942702531315,
+      "surfaces[6].radius_mm": 6.171790029034227,
+      "surfaces[6].distance_to_next_mm": 3.1361518812278084,
+      "size_log_mismatch": 2.651768406431536,
+      "size_log_signed": 2.651768406431536,
+      "size_ratio": 14.1790908830889,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 35.44772720772225,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.02707516537857583
+    },
+    "target_values": {
+      "coupling_loss_db": 6.449796616994163,
+      "coupling_efficiency": 0.2264750364881527
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4124.842899998839,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:9381fbb4ba6d",
+      "random_seed": 58,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 2.651768406431536,
+        "size_log_signed": 2.651768406431536,
+        "size_ratio": 14.1790908830889,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 35.44772720772225,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.02707516537857583
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000018",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000018",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:659868d5deb0",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.275807210507883,
+      "surfaces[0].distance_to_next_mm": 3.057498305896952,
+      "surfaces[2].radius_mm": 4.219593266202407,
+      "surfaces[2].distance_to_next_mm": 4.163993399011582,
+      "surfaces[4].radius_mm": 25.16628455146075,
+      "surfaces[4].distance_to_next_mm": 2.9078054906161,
+      "surfaces[6].radius_mm": 5.976477491439291,
+      "surfaces[6].distance_to_next_mm": 2.894007554262611,
+      "size_log_mismatch": 2.2465145716221655,
+      "size_log_signed": 2.2465145716221655,
+      "size_ratio": 9.454724575245192,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 23.636811438112982,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.05138696145978608
+    },
+    "target_values": {
+      "coupling_loss_db": 6.917965880007266,
+      "coupling_efficiency": 0.2033309135932802
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4348.887400001331,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:659868d5deb0",
+      "random_seed": 59,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 2.2465145716221655,
+        "size_log_signed": 2.2465145716221655,
+        "size_ratio": 9.454724575245192,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 23.636811438112982,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.05138696145978608
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000019",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000019",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:2b93f3c981c2",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.034640151075705,
+      "surfaces[0].distance_to_next_mm": 2.9615372710933516,
+      "surfaces[2].radius_mm": 4.094803761283826,
+      "surfaces[2].distance_to_next_mm": 3.9057929437442307,
+      "surfaces[4].radius_mm": 24.675519492038138,
+      "surfaces[4].distance_to_next_mm": 3.0491355757865053,
+      "surfaces[6].radius_mm": 6.298999933487478,
+      "surfaces[6].distance_to_next_mm": 3.0408220550751506,
+      "size_log_mismatch": 1.0409730346110568,
+      "size_log_signed": 1.0409730346110568,
+      "size_ratio": 2.8319712802094075,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 7.0799282005235185,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.08809095934224573
+    },
+    "target_values": {
+      "coupling_loss_db": 1.7261271198015398,
+      "coupling_efficiency": 0.6720278758049193
+    },
+    "valid": true,
+    "failure_code": "",
+    "failure_message": "",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4682.539899999028,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 1.0,
+        "quality_edge": 1.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": 1.0,
+        "quality_nyquist_accepted_by_convergence": true
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:2b93f3c981c2",
+      "random_seed": 60,
+      "precision": "high",
+      "coupling_physics_features": {
+        "size_log_mismatch": 1.0409730346110568,
+        "size_log_signed": 1.0409730346110568,
+        "size_ratio": 2.8319712802094075,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 7.0799282005235185,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.08809095934224573
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000020",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000020",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:e591453785b8",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.014347370724763,
+      "surfaces[0].distance_to_next_mm": 3.03420965727116,
+      "surfaces[2].radius_mm": 3.9508183496444844,
+      "surfaces[2].distance_to_next_mm": 3.8581690326918685,
+      "surfaces[4].radius_mm": 26.27338080673734,
+      "surfaces[4].distance_to_next_mm": 2.850409714802226,
+      "surfaces[6].radius_mm": 6.132584730292179,
+      "surfaces[6].distance_to_next_mm": 3.007840079792329,
+      "size_log_mismatch": 2.8042226511617647,
+      "size_log_signed": 2.8042226511617647,
+      "size_ratio": 16.514233594932158,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 41.2855839873304,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.022443529446299983
+    },
+    "target_values": {
+      "coupling_loss_db": 7.0517464413961495,
+      "coupling_efficiency": 0.19716297193173868
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4231.413800000155,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:e591453785b8",
+      "random_seed": 61,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 2.8042226511617647,
+        "size_log_signed": 2.8042226511617647,
+        "size_ratio": 16.514233594932158,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 41.2855839873304,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.022443529446299983
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000021",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000021",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:5a93dbb55f00",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.316367935612157,
+      "surfaces[0].distance_to_next_mm": 2.8971820361268836,
+      "surfaces[2].radius_mm": 4.155835075526792,
+      "surfaces[2].distance_to_next_mm": 4.079069861556502,
+      "surfaces[4].radius_mm": 24.817829772328047,
+      "surfaces[4].distance_to_next_mm": 3.0516547411621575,
+      "surfaces[6].radius_mm": 6.0587520744251,
+      "surfaces[6].distance_to_next_mm": 2.930246794093888,
+      "size_log_mismatch": 2.7901019276708627,
+      "size_log_signed": 2.7901019276708627,
+      "size_ratio": 16.28267937279276,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 40.7066984319819,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.030274025866361912
+    },
+    "target_values": {
+      "coupling_loss_db": 8.636852464129701,
+      "coupling_efficiency": 0.13687204421382343
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 3948.783199999525,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:5a93dbb55f00",
+      "random_seed": 62,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 2.7901019276708627,
+        "size_log_signed": 2.7901019276708627,
+        "size_ratio": 16.28267937279276,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 40.7066984319819,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.030274025866361912
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000022",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000022",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:510189611795",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.2223997204806825,
+      "surfaces[0].distance_to_next_mm": 3.0011611696710565,
+      "surfaces[2].radius_mm": 4.252197100275442,
+      "surfaces[2].distance_to_next_mm": 4.098942477555477,
+      "surfaces[4].radius_mm": 25.29401568876481,
+      "surfaces[4].distance_to_next_mm": 2.9741507841275694,
+      "surfaces[6].radius_mm": 6.325887769680529,
+      "surfaces[6].distance_to_next_mm": 3.106828074804622,
+      "size_log_mismatch": 3.2854902686645757,
+      "size_log_signed": 3.2854902686645757,
+      "size_ratio": 26.7220821034143,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 66.80520525853575,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.017947652160848572
+    },
+    "target_values": {
+      "coupling_loss_db": 9.551534503819818,
+      "coupling_efficiency": 0.11087829769118465
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4218.352299998514,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:510189611795",
+      "random_seed": 63,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.2854902686645757,
+        "size_log_signed": 3.2854902686645757,
+        "size_ratio": 26.7220821034143,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 66.80520525853575,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.017947652160848572
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000023",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000023",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:eb63c4c44cb9",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.004290431884764,
+      "surfaces[0].distance_to_next_mm": 2.8515770072991753,
+      "surfaces[2].radius_mm": 3.9868855738774935,
+      "surfaces[2].distance_to_next_mm": 3.9024087705092296,
+      "surfaces[4].radius_mm": 26.59562239664604,
+      "surfaces[4].distance_to_next_mm": 3.093782468011344,
+      "surfaces[6].radius_mm": 6.0291841890592925,
+      "surfaces[6].distance_to_next_mm": 2.951681937702203,
+      "size_log_mismatch": 2.5257288203530153,
+      "size_log_signed": 2.5257288203530153,
+      "size_ratio": 12.500002200559694,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 31.250005501399233,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": 0.03179236812209698
+    },
+    "target_values": {
+      "coupling_loss_db": 6.338441296616879,
+      "coupling_efficiency": 0.2323570587167462
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4111.576199999035,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:eb63c4c44cb9",
+      "random_seed": 64,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 2.5257288203530153,
+        "size_log_signed": 2.5257288203530153,
+        "size_ratio": 12.500002200559694,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 31.250005501399233,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": 0.03179236812209698
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  },
+  {
+    "sample_id": "sample-000024",
+    "split": "unassigned",
+    "request_id": "dataset-1620a42e0fce-sample-000024",
+    "project_fingerprint": "web-f7726daa9b6ea8f5:3307e4bbdfaf",
+    "feature_values": {
+      "surfaces[0].radius_mm": 5.341282950928166,
+      "surfaces[0].distance_to_next_mm": 2.994533346738124,
+      "surfaces[2].radius_mm": 4.139157819293815,
+      "surfaces[2].distance_to_next_mm": 4.108528590674429,
+      "surfaces[4].radius_mm": 24.42139724124242,
+      "surfaces[4].distance_to_next_mm": 2.9716495359263493,
+      "surfaces[6].radius_mm": 6.267608662501735,
+      "surfaces[6].distance_to_next_mm": 3.1370647558508042,
+      "size_log_mismatch": 3.0465867792286514,
+      "size_log_signed": 3.0465867792286514,
+      "size_ratio": 21.043395948227328,
+      "fiber_mode_radius_um": 2.5,
+      "beam_radius_at_receiver_um": 52.60848987056832,
+      "lateral_mismatch": 0.0,
+      "angular_mismatch": 0.0,
+      "axial_mismatch": 0.0,
+      "curvature_mismatch": -0.02237435136112259
+    },
+    "target_values": {
+      "coupling_loss_db": 9.17569338158992,
+      "coupling_efficiency": 0.12090121402684055
+    },
+    "valid": false,
+    "failure_code": "OPTICAL_ENERGY_CHECK_FAILED",
+    "failure_message": "optical quality check failed: energy",
+    "engine_name": "headless",
+    "engine_version": "native-optical-core-v3.2",
+    "elapsed_ms": 4113.62409999856,
+    "converged": true,
+    "metadata": {
+      "source": "unknown",
+      "simulation_quality_checks": {
+        "status": "completed",
+        "converged": true,
+        "quality_energy": 0.0,
+        "quality_edge": 0.0,
+        "quality_nyquist": 0.0,
+        "quality_sampling_convergence": null
+      },
+      "algorithm_version": "coupling-research-task-graph-v5-unpolarized-fresnel",
+      "project_fingerprint": "web-f7726daa9b6ea8f5:3307e4bbdfaf",
+      "random_seed": 65,
+      "precision": "standard",
+      "coupling_physics_features": {
+        "size_log_mismatch": 3.0465867792286514,
+        "size_log_signed": 3.0465867792286514,
+        "size_ratio": 21.043395948227328,
+        "fiber_mode_radius_um": 2.5,
+        "beam_radius_at_receiver_um": 52.60848987056832,
+        "lateral_mismatch": 0.0,
+        "angular_mismatch": 0.0,
+        "axial_mismatch": 0.0,
+        "curvature_mismatch": -0.02237435136112259
+      },
+      "trace_backends": [
+        "cpp_native"
+      ]
+    }
+  }
+]

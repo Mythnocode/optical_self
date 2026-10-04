@@ -1,0 +1,580 @@
+[
+  {
+    "key": "spherical",
+    "name": "球面",
+    "category": "折射面",
+    "group_prefix": "S",
+    "parameters": [],
+    "disabled_common_fields": []
+  },
+  {
+    "key": "cylindrical",
+    "name": "柱面",
+    "category": "折射面",
+    "group_prefix": "CYL",
+    "parameters": [
+      {
+        "key": "cylinder_axis_deg",
+        "label": "柱轴方位角（零光焦度轴）",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "°",
+        "minimum": -360.0,
+        "maximum": 360.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "0°：柱轴沿局部 X、光焦度作用于 Y；90°：柱轴沿局部 Y、光焦度作用于 X。",
+        "column_width": 240
+      }
+    ],
+    "disabled_common_fields": []
+  },
+  {
+    "key": "aspheric",
+    "name": "非球面",
+    "category": "折射面",
+    "group_prefix": "A",
+    "parameters": [
+      {
+        "key": "a4",
+        "label": "非球面 A4",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "",
+        "minimum": -1.0,
+        "maximum": 1.0,
+        "decimals": 12,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "a6",
+        "label": "非球面 A6",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "",
+        "minimum": -1.0,
+        "maximum": 1.0,
+        "decimals": 12,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "a8",
+        "label": "非球面 A8",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "",
+        "minimum": -1.0,
+        "maximum": 1.0,
+        "decimals": 12,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "normalization_radius_mm",
+        "label": "归一化半径",
+        "kind": "float",
+        "default": 1.0,
+        "unit": "mm",
+        "minimum": 1e-06,
+        "maximum": 1000000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 150
+      }
+    ],
+    "disabled_common_fields": []
+  },
+  {
+    "key": "plane",
+    "name": "平面",
+    "category": "折射面",
+    "group_prefix": "P",
+    "parameters": [],
+    "disabled_common_fields": [
+      "radius"
+    ]
+  },
+  {
+    "key": "stop",
+    "name": "光阑",
+    "category": "孔径元件",
+    "group_prefix": "ST",
+    "parameters": [
+      {
+        "key": "stop_role",
+        "label": "光阑角色",
+        "kind": "choice",
+        "default": "孔径光阑",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [
+          "孔径光阑",
+          "视场光阑",
+          "遮拦",
+          "普通孔径"
+        ],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "aperture_shape",
+        "label": "孔径形状",
+        "kind": "choice",
+        "default": "圆形",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [
+          "圆形",
+          "矩形",
+          "椭圆",
+          "用户孔径"
+        ],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "width_mm",
+        "label": "矩形宽度",
+        "kind": "float",
+        "default": 6.0,
+        "unit": "mm",
+        "minimum": 0.001,
+        "maximum": 100000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 134
+      },
+      {
+        "key": "height_mm",
+        "label": "矩形高度",
+        "kind": "float",
+        "default": 6.0,
+        "unit": "mm",
+        "minimum": 0.001,
+        "maximum": 100000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 134
+      }
+    ],
+    "disabled_common_fields": [
+      "radius",
+      "material"
+    ]
+  },
+  {
+    "key": "mirror",
+    "name": "反射镜",
+    "category": "反射元件",
+    "group_prefix": "M",
+    "parameters": [
+      {
+        "key": "mirror_mode",
+        "label": "反射模型",
+        "kind": "choice",
+        "default": "理想反射",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [
+          "理想反射",
+          "金属膜",
+          "介质高反膜",
+          "用户模型"
+        ],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "reflectivity",
+        "label": "标称反射率",
+        "kind": "float",
+        "default": 0.98,
+        "unit": "",
+        "minimum": 0.0,
+        "maximum": 1.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "design_incidence_deg",
+        "label": "设计入射角",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "°",
+        "minimum": -89.9,
+        "maximum": 89.9,
+        "decimals": 4,
+        "choices": [],
+        "helper": "",
+        "column_width": 129
+      }
+    ],
+    "disabled_common_fields": []
+  },
+  {
+    "key": "grating",
+    "name": "衍射光栅",
+    "category": "衍射元件",
+    "group_prefix": "G",
+    "parameters": [
+      {
+        "key": "grating_mode",
+        "label": "光栅形式",
+        "kind": "choice",
+        "default": "反射式",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [
+          "反射式",
+          "透射式"
+        ],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "groove_density_lpm",
+        "label": "沟槽密度",
+        "kind": "float",
+        "default": 600.0,
+        "unit": "线/mm",
+        "minimum": 0.001,
+        "maximum": 1000000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 156
+      },
+      {
+        "key": "diffraction_order",
+        "label": "衍射级次 m",
+        "kind": "int",
+        "default": 1,
+        "unit": "",
+        "minimum": -100,
+        "maximum": 100,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "groove_angle_deg",
+        "label": "沟槽方向角",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "°",
+        "minimum": -360.0,
+        "maximum": 360.0,
+        "decimals": 5,
+        "choices": [],
+        "helper": "",
+        "column_width": 129
+      },
+      {
+        "key": "blaze_angle_deg",
+        "label": "闪耀角",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "°",
+        "minimum": -89.9,
+        "maximum": 89.9,
+        "decimals": 5,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "efficiency_model",
+        "label": "效率模型",
+        "kind": "choice",
+        "default": "标量近似",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [
+          "理想",
+          "标量近似",
+          "RCWA 数据表",
+          "用户模型"
+        ],
+        "helper": "",
+        "column_width": 120
+      }
+    ],
+    "disabled_common_fields": []
+  },
+  {
+    "key": "coordinate_break",
+    "name": "坐标断点",
+    "category": "坐标变换",
+    "group_prefix": "CB",
+    "parameters": [
+      {
+        "key": "decenter_x_mm",
+        "label": "X 偏心",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "mm",
+        "minimum": -100000.0,
+        "maximum": 100000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "decenter_y_mm",
+        "label": "Y 偏心",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "mm",
+        "minimum": -100000.0,
+        "maximum": 100000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "tilt_x_deg",
+        "label": "X 倾斜",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "°",
+        "minimum": -360,
+        "maximum": 360,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "tilt_y_deg",
+        "label": "Y 倾斜",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "°",
+        "minimum": -360,
+        "maximum": 360,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "tilt_z_deg",
+        "label": "Z 旋转",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "°",
+        "minimum": -360,
+        "maximum": 360,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "return_to_previous",
+        "label": "后续恢复原坐标",
+        "kind": "bool",
+        "default": false,
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 140
+      }
+    ],
+    "disabled_common_fields": [
+      "radius",
+      "material",
+      "aperture"
+    ]
+  },
+  {
+    "key": "binary_diffractive",
+    "name": "二元衍射面",
+    "category": "衍射元件",
+    "group_prefix": "DOE",
+    "parameters": [
+      {
+        "key": "diffraction_order",
+        "label": "衍射级次 m",
+        "kind": "int",
+        "default": 1,
+        "unit": "",
+        "minimum": -100,
+        "maximum": 100,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "phase_a2",
+        "label": "相位系数 A2",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "",
+        "minimum": -1000000000.0,
+        "maximum": 1000000000.0,
+        "decimals": 12,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "phase_a4",
+        "label": "相位系数 A4",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "",
+        "minimum": -1000000000.0,
+        "maximum": 1000000000.0,
+        "decimals": 12,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "phase_a6",
+        "label": "相位系数 A6",
+        "kind": "float",
+        "default": 0.0,
+        "unit": "",
+        "minimum": -1000000000.0,
+        "maximum": 1000000000.0,
+        "decimals": 12,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      }
+    ],
+    "disabled_common_fields": []
+  },
+  {
+    "key": "detector",
+    "name": "探测器/像面",
+    "category": "接收面",
+    "group_prefix": "IMG",
+    "parameters": [
+      {
+        "key": "pixel_pitch_um",
+        "label": "像元尺寸",
+        "kind": "float",
+        "default": 5.0,
+        "unit": "μm",
+        "minimum": 0.001,
+        "maximum": 1000000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 129
+      },
+      {
+        "key": "pixels_x",
+        "label": "X 像元数",
+        "kind": "int",
+        "default": 1024,
+        "unit": "",
+        "minimum": 1,
+        "maximum": 1000000,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "pixels_y",
+        "label": "Y 像元数",
+        "kind": "int",
+        "default": 1024,
+        "unit": "",
+        "minimum": 1,
+        "maximum": 1000000,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 120
+      },
+      {
+        "key": "sampling_mode",
+        "label": "采样模式",
+        "kind": "choice",
+        "default": "中心采样",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [
+          "中心采样",
+          "面积积分",
+          "用户响应"
+        ],
+        "helper": "",
+        "column_width": 120
+      }
+    ],
+    "disabled_common_fields": [
+      "radius",
+      "material"
+    ]
+  },
+  {
+    "key": "user_defined",
+    "name": "用户自定义面",
+    "category": "扩展",
+    "group_prefix": "USR",
+    "parameters": [
+      {
+        "key": "plugin_id",
+        "label": "插件/模型标识",
+        "kind": "text",
+        "default": "",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 130
+      },
+      {
+        "key": "parameter_note",
+        "label": "扩展参数说明",
+        "kind": "text",
+        "default": "",
+        "unit": "",
+        "minimum": -1000000000000.0,
+        "maximum": 1000000000000.0,
+        "decimals": 6,
+        "choices": [],
+        "helper": "",
+        "column_width": 124
+      }
+    ],
+    "disabled_common_fields": []
+  }
+]

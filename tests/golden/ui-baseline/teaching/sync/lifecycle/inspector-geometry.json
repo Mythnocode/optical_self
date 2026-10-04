@@ -1,0 +1,728 @@
+{
+  "size": [
+    621,
+    720
+  ],
+  "controls": [
+    {
+      "kind": "QLabel",
+      "text": "当前对象",
+      "bounds": [
+        24,
+        22,
+        561,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "工程光源\n激光器",
+      "bounds": [
+        24,
+        50,
+        561,
+        43
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "启用",
+      "bounds": [
+        24,
+        100,
+        561,
+        30
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "位置与朝向",
+      "bounds": [
+        24,
+        160,
+        561,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "X",
+      "bounds": [
+        24,
+        188,
+        26,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "50.00",
+      "bounds": [
+        54,
+        188,
+        97,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "50.00",
+      "bounds": [
+        62,
+        190,
+        67,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "mm",
+      "bounds": [
+        155,
+        188,
+        46,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "Y",
+      "bounds": [
+        209,
+        188,
+        26,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "0.00",
+      "bounds": [
+        239,
+        188,
+        98,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "0.00",
+      "bounds": [
+        247,
+        190,
+        68,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "mm",
+      "bounds": [
+        341,
+        188,
+        46,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "Z",
+      "bounds": [
+        395,
+        188,
+        26,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "25.00",
+      "bounds": [
+        425,
+        188,
+        100,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "25.00",
+      "bounds": [
+        433,
+        190,
+        70,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "mm",
+      "bounds": [
+        529,
+        188,
+        46,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "绕Z",
+      "bounds": [
+        24,
+        239,
+        28,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "0.0",
+      "bounds": [
+        56,
+        239,
+        100,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "0.0",
+      "bounds": [
+        64,
+        241,
+        70,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "°",
+      "bounds": [
+        160,
+        239,
+        34,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "绕Y",
+      "bounds": [
+        209,
+        239,
+        28,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "0.0",
+      "bounds": [
+        241,
+        239,
+        100,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "0.0",
+      "bounds": [
+        249,
+        241,
+        70,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "°",
+      "bounds": [
+        345,
+        239,
+        34,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "绕光轴",
+      "bounds": [
+        395,
+        239,
+        49,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "0.0",
+      "bounds": [
+        448,
+        239,
+        99,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "0.0",
+      "bounds": [
+        456,
+        241,
+        69,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "°",
+      "bounds": [
+        551,
+        239,
+        34,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QToolButton",
+      "text": "收起参数",
+      "bounds": [
+        12,
+        304,
+        115,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "光学参数",
+      "bounds": [
+        24,
+        362,
+        561,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "波长",
+      "bounds": [
+        24,
+        390,
+        68,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "850.0",
+      "bounds": [
+        100,
+        390,
+        186,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "850.0",
+      "bounds": [
+        108,
+        392,
+        156,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "nm",
+      "bounds": [
+        294,
+        390,
+        40,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "功率",
+      "bounds": [
+        24,
+        441,
+        68,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "100.00",
+      "bounds": [
+        100,
+        441,
+        186,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "100.00",
+      "bounds": [
+        108,
+        443,
+        156,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "mW",
+      "bounds": [
+        294,
+        441,
+        47,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "束腰半径",
+      "bounds": [
+        24,
+        492,
+        68,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QDoubleSpinBox",
+      "text": "0.50",
+      "bounds": [
+        100,
+        492,
+        186,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "0.50",
+      "bounds": [
+        108,
+        494,
+        156,
+        41
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "mm",
+      "bounds": [
+        294,
+        492,
+        46,
+        45
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QComboBox",
+      "text": "选择工业常用激光器规格…",
+      "bounds": [
+        24,
+        544,
+        561,
+        42
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "基准线",
+      "bounds": [
+        24,
+        616,
+        561,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "设置当前对象为基准位置",
+      "bounds": [
+        24,
+        644,
+        561,
+        38
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 18
+      }
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "显示基准线",
+      "bounds": [
+        24,
+        689,
+        561,
+        30
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QLabel",
+      "text": "下一步",
+      "bounds": [
+        24,
+        749,
+        561,
+        21
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 17
+      }
+    },
+    {
+      "kind": "QPushButton",
+      "text": "同步到仿真",
+      "bounds": [
+        24,
+        777,
+        561,
+        54
+      ],
+      "font": {
+        "family": "Microsoft YaHei UI",
+        "resolved_family": "Microsoft YaHei UI",
+        "pixel_size": 16
+      }
+    }
+  ]
+}

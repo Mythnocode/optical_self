@@ -6,7 +6,8 @@ from typing import Any
 from fastapi import APIRouter, Request, status
 from pydantic import BaseModel, Field
 
-from backend.optical_ml_app.api.responses import success
+from backend.optical_ml_app.api.responses import failure, success
+from backend.optical_ml_app.domain.errors import BackendApplicationError
 
 router = APIRouter()
 
@@ -65,6 +66,15 @@ def submit_bilstm_training(payload: BiLSTMTrainRequest, request: Request):
         payload.model_dump()
     )
     return success(request, {"job_id": job_id}, status_code=status.HTTP_202_ACCEPTED)
+
+
+@router.get("/structure-models/{model_id}")
+def get_bilstm_structure_model(model_id: str, request: Request):
+    try:
+        result = request.app.state.services["structure_model_app"].model_details(model_id)
+    except BackendApplicationError as exc:
+        return failure(request, status_code=404 if exc.code == "MODEL_NOT_FOUND" else 422, **exc.to_dict())
+    return success(request, result)
 
 
 @router.post("/structure-models/{model_id}/predict")

@@ -1,0 +1,22 @@
+{
+  "poseEdit": 140.25,
+  "poseUndo": "140.00",
+  "poseRedo": "140.25",
+  "opticalParameterEdit": 19.25,
+  "opticalParameterRestored": 18,
+  "baselineExport": {
+    "enabled": false,
+    "x": 140
+  },
+  "dragPose": {
+    "x_mm": 143.93446909667196,
+    "y_mm": 2.040095087163233,
+    "z_mm": 25,
+    "yaw_rad": 0,
+    "pitch_rad": 0,
+    "roll_rad": 0
+  },
+  "dragUndo": "140.00",
+  "dragRedo": "143.93",
+  "source": "Actual browser controls; copy completion observed before clipboard read."
+}

@@ -1,0 +1,27 @@
+{
+  "raytrace": {
+    "equal_except_elapsed": true,
+    "ray_count": 4851,
+    "status": "completed"
+  },
+  "coupling": {
+    "equal_except_elapsed": true,
+    "ray_count": 4851,
+    "status": "completed"
+  },
+  "field": {
+    "equal_except_elapsed": true,
+    "ray_count": 4851,
+    "status": "completed"
+  },
+  "spot": {
+    "equal_except_elapsed": true,
+    "ray_count": 4851,
+    "status": "completed"
+  },
+  "wavefront": {
+    "equal_except_elapsed": true,
+    "ray_count": 4851,
+    "status": "completed"
+  }
+}

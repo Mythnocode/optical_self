@@ -1,0 +1,2778 @@
+{
+  "empty": [
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        311,
+        162,
+        950,
+        38
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "1. 优化方式",
+      "bounds": [
+        330,
+        221,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "当前仿真（推荐）",
+      "bounds": [
+        346,
+        268,
+        419,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于当前镜头和仿真设置直接搜索。",
+      "bounds": [
+        346,
+        303,
+        419,
+        19
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "训练模型辅助",
+      "bounds": [
+        806,
+        267,
+        421,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于已训练的模型快速筛选候选方案。",
+      "bounds": [
+        806,
+        302,
+        421,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "2. 优化目标",
+      "bounds": [
+        330,
+        370,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "提高耦合效率",
+      "bounds": [
+        330,
+        418,
+        502,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "当前值",
+      "bounds": [
+        874,
+        414,
+        88,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "—",
+      "bounds": [
+        874,
+        433,
+        88,
+        31
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "同时减小 RMS 光斑",
+      "bounds": [
+        991,
+        405,
+        251,
+        68
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "3. 参数范围",
+      "bounds": [
+        330,
+        509,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "开始优化",
+      "bounds": [
+        1133,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        156,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        234,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        282,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        282,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        282,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        329,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        329,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        329,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        330,
+        544,
+        912,
+        184
+      ]
+    }
+  ],
+  "selected": [
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        311,
+        162,
+        950,
+        38
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "1. 优化方式",
+      "bounds": [
+        330,
+        221,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "当前仿真（推荐）",
+      "bounds": [
+        346,
+        268,
+        419,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于当前镜头和仿真设置直接搜索。",
+      "bounds": [
+        346,
+        303,
+        419,
+        19
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "训练模型辅助",
+      "bounds": [
+        806,
+        267,
+        421,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于已训练的模型快速筛选候选方案。",
+      "bounds": [
+        806,
+        302,
+        421,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "2. 优化目标",
+      "bounds": [
+        330,
+        370,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "提高耦合效率",
+      "bounds": [
+        330,
+        418,
+        502,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "当前值",
+      "bounds": [
+        874,
+        414,
+        88,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "—",
+      "bounds": [
+        874,
+        433,
+        88,
+        31
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "同时减小 RMS 光斑",
+      "bounds": [
+        991,
+        405,
+        251,
+        68
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "3. 参数范围",
+      "bounds": [
+        330,
+        509,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "开始优化",
+      "bounds": [
+        1133,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        156,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLineEdit",
+      "text": "",
+      "bounds": [
+        10,
+        234,
+        274,
+        42
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "全部",
+      "bounds": [
+        29,
+        282,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L1",
+      "bounds": [
+        119,
+        282,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L2",
+      "bounds": [
+        195,
+        282,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L3",
+      "bounds": [
+        29,
+        329,
+        52,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "L4",
+      "bounds": [
+        119,
+        329,
+        53,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "光纤",
+      "bounds": [
+        195,
+        329,
+        67,
+        43
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        330,
+        544,
+        912,
+        184
+      ]
+    }
+  ],
+  "advanced": [
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        311,
+        162,
+        950,
+        38
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "1. 优化方式",
+      "bounds": [
+        330,
+        221,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "当前仿真（推荐）",
+      "bounds": [
+        346,
+        268,
+        419,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于当前镜头和仿真设置直接搜索。",
+      "bounds": [
+        346,
+        303,
+        419,
+        19
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "训练模型辅助",
+      "bounds": [
+        806,
+        267,
+        421,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于已训练的模型快速筛选候选方案。",
+      "bounds": [
+        806,
+        302,
+        421,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "2. 优化目标",
+      "bounds": [
+        330,
+        370,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "提高耦合效率",
+      "bounds": [
+        330,
+        418,
+        502,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "当前值",
+      "bounds": [
+        874,
+        414,
+        88,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "—",
+      "bounds": [
+        874,
+        433,
+        88,
+        31
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "同时减小 RMS 光斑",
+      "bounds": [
+        991,
+        405,
+        251,
+        68
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "3. 参数范围",
+      "bounds": [
+        330,
+        509,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "开始优化",
+      "bounds": [
+        1133,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        156,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "打开优化页面后可配置更多参数。",
+      "bounds": [
+        10,
+        234,
+        636,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价",
+      "bounds": [
+        21,
+        243,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "目标",
+      "bounds": [
+        21,
+        265,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "最大化耦合效率",
+      "bounds": [
+        101,
+        265,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "面",
+      "bounds": [
+        21,
+        301,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光纤模场",
+      "bounds": [
+        101,
+        301,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "方式",
+      "bounds": [
+        21,
+        337,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光学仿真",
+      "bounds": [
+        101,
+        337,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "工程约束",
+      "bounds": [
+        21,
+        389,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大系统总长",
+      "bounds": [
+        21,
+        411,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "80.00",
+      "bounds": [
+        191,
+        411,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小边缘厚度",
+      "bounds": [
+        21,
+        449,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        449,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小厚度",
+      "bounds": [
+        21,
+        487,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        487,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小空气厚度",
+      "bounds": [
+        21,
+        525,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.10",
+      "bounds": [
+        191,
+        525,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "半口径不超过机械口径",
+      "bounds": [
+        21,
+        561,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "准直约束",
+      "bounds": [
+        21,
+        613,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "启用",
+      "bounds": [
+        21,
+        635,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大评价次数",
+      "bounds": [
+        19,
+        691,
+        166,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "300",
+      "bounds": [
+        193,
+        691,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        330,
+        544,
+        912,
+        184
+      ]
+    }
+  ],
+  "collimation": [
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        311,
+        162,
+        950,
+        38
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "1. 优化方式",
+      "bounds": [
+        330,
+        221,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "当前仿真（推荐）",
+      "bounds": [
+        346,
+        268,
+        419,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于当前镜头和仿真设置直接搜索。",
+      "bounds": [
+        346,
+        303,
+        419,
+        19
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "训练模型辅助",
+      "bounds": [
+        806,
+        267,
+        421,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于已训练的模型快速筛选候选方案。",
+      "bounds": [
+        806,
+        302,
+        421,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "2. 优化目标",
+      "bounds": [
+        330,
+        370,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "提高耦合效率",
+      "bounds": [
+        330,
+        418,
+        502,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "当前值",
+      "bounds": [
+        874,
+        414,
+        88,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "—",
+      "bounds": [
+        874,
+        433,
+        88,
+        31
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "同时减小 RMS 光斑",
+      "bounds": [
+        991,
+        405,
+        251,
+        68
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "3. 参数范围",
+      "bounds": [
+        330,
+        509,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "开始优化",
+      "bounds": [
+        1133,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        156,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        185,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "打开优化页面后可配置更多参数。",
+      "bounds": [
+        10,
+        149,
+        636,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价",
+      "bounds": [
+        21,
+        158,
+        236,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "目标",
+      "bounds": [
+        21,
+        180,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "最大化耦合效率",
+      "bounds": [
+        101,
+        180,
+        156,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "面",
+      "bounds": [
+        21,
+        216,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光纤模场",
+      "bounds": [
+        101,
+        216,
+        156,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "方式",
+      "bounds": [
+        21,
+        252,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光学仿真",
+      "bounds": [
+        101,
+        252,
+        156,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "工程约束",
+      "bounds": [
+        21,
+        304,
+        236,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大系统总长",
+      "bounds": [
+        21,
+        326,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "80.00",
+      "bounds": [
+        179,
+        326,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小边缘厚度",
+      "bounds": [
+        21,
+        362,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        179,
+        362,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小厚度",
+      "bounds": [
+        21,
+        398,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        179,
+        398,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小空气厚度",
+      "bounds": [
+        21,
+        434,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.10",
+      "bounds": [
+        179,
+        434,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "半口径不超过机械口径",
+      "bounds": [
+        21,
+        468,
+        236,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "准直约束",
+      "bounds": [
+        21,
+        520,
+        236,
+        18
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "启用",
+      "bounds": [
+        21,
+        542,
+        236,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价面",
+      "bounds": [
+        21,
+        576,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "自动识别准直输出面",
+      "bounds": [
+        101,
+        576,
+        156,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价段",
+      "bounds": [
+        21,
+        612,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "10.00",
+      "bounds": [
+        179,
+        612,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大半径变化",
+      "bounds": [
+        21,
+        648,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "2.00",
+      "bounds": [
+        179,
+        648,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大归一化曲率",
+      "bounds": [
+        21,
+        684,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.05",
+      "bounds": [
+        179,
+        684,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大质心漂移",
+      "bounds": [
+        21,
+        720,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "1.00",
+      "bounds": [
+        179,
+        720,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大光轴倾角",
+      "bounds": [
+        21,
+        756,
+        150,
+        30
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "1.00",
+      "bounds": [
+        179,
+        756,
+        78,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大评价次数",
+      "bounds": [
+        19,
+        812,
+        154,
+        42
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "300",
+      "bounds": [
+        181,
+        812,
+        78,
+        42
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        330,
+        544,
+        912,
+        184
+      ]
+    }
+  ],
+  "surrogate": [
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        311,
+        146,
+        950,
+        38
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "1. 优化方式",
+      "bounds": [
+        330,
+        205,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "当前仿真（推荐）",
+      "bounds": [
+        346,
+        252,
+        419,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于当前镜头和仿真设置直接搜索。",
+      "bounds": [
+        346,
+        287,
+        419,
+        19
+      ]
+    },
+    {
+      "kind": "QRadioButton",
+      "text": "训练模型辅助",
+      "bounds": [
+        806,
+        251,
+        421,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "基于已训练的模型快速筛选候选方案。",
+      "bounds": [
+        806,
+        286,
+        421,
+        21
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "训练模型",
+      "bounds": [
+        330,
+        328,
+        72,
+        42
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "",
+      "bounds": [
+        410,
+        328,
+        832,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "2. 优化目标",
+      "bounds": [
+        330,
+        406,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "提高耦合效率",
+      "bounds": [
+        330,
+        454,
+        502,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "当前值",
+      "bounds": [
+        874,
+        450,
+        88,
+        19
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "—",
+      "bounds": [
+        874,
+        469,
+        88,
+        31
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "同时减小 RMS 光斑",
+      "bounds": [
+        991,
+        441,
+        251,
+        68
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "3. 参数范围",
+      "bounds": [
+        330,
+        545,
+        912,
+        25
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "开始优化",
+      "bounds": [
+        1133,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        140,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "打开优化页面后可配置更多参数。",
+      "bounds": [
+        10,
+        218,
+        636,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价",
+      "bounds": [
+        21,
+        227,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "目标",
+      "bounds": [
+        21,
+        249,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "最大化耦合效率",
+      "bounds": [
+        101,
+        249,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "面",
+      "bounds": [
+        21,
+        285,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光纤模场",
+      "bounds": [
+        101,
+        285,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "方式",
+      "bounds": [
+        21,
+        321,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "已训练模型",
+      "bounds": [
+        101,
+        321,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "模型",
+      "bounds": [
+        21,
+        357,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "XGBoost物理残差1",
+      "bounds": [
+        101,
+        357,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "工程约束",
+      "bounds": [
+        21,
+        409,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大系统总长",
+      "bounds": [
+        21,
+        431,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "80.00",
+      "bounds": [
+        191,
+        431,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小边缘厚度",
+      "bounds": [
+        21,
+        469,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        469,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小厚度",
+      "bounds": [
+        21,
+        507,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        507,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小空气厚度",
+      "bounds": [
+        21,
+        545,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.10",
+      "bounds": [
+        191,
+        545,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "半口径不超过机械口径",
+      "bounds": [
+        21,
+        581,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "准直约束",
+      "bounds": [
+        21,
+        633,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "启用",
+      "bounds": [
+        21,
+        655,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大评价次数",
+      "bounds": [
+        19,
+        711,
+        166,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "300",
+      "bounds": [
+        193,
+        711,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        330,
+        580,
+        912,
+        148
+      ]
+    }
+  ],
+  "result-empty": [
+    {
+      "kind": "QLabel",
+      "text": "优化已提交 0%",
+      "bounds": [
+        311,
+        148,
+        128,
+        20
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "过程曲线",
+      "bounds": [
+        311,
+        176,
+        475,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "开始优化后，这里显示过程曲线。",
+      "bounds": [
+        329,
+        374,
+        914,
+        21
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "应用方案",
+      "bounds": [
+        311,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "",
+      "bounds": [
+        447,
+        756,
+        360,
+        22
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        140,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "打开优化页面后可配置更多参数。",
+      "bounds": [
+        10,
+        218,
+        636,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价",
+      "bounds": [
+        21,
+        227,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "目标",
+      "bounds": [
+        21,
+        249,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "最大化耦合效率",
+      "bounds": [
+        101,
+        249,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "面",
+      "bounds": [
+        21,
+        285,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光纤模场",
+      "bounds": [
+        101,
+        285,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "方式",
+      "bounds": [
+        21,
+        321,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光学仿真",
+      "bounds": [
+        101,
+        321,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "工程约束",
+      "bounds": [
+        21,
+        373,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大系统总长",
+      "bounds": [
+        21,
+        395,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "80.00",
+      "bounds": [
+        191,
+        395,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小边缘厚度",
+      "bounds": [
+        21,
+        433,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        433,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小厚度",
+      "bounds": [
+        21,
+        471,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        471,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小空气厚度",
+      "bounds": [
+        21,
+        509,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.10",
+      "bounds": [
+        191,
+        509,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "半口径不超过机械口径",
+      "bounds": [
+        21,
+        545,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "准直约束",
+      "bounds": [
+        21,
+        597,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "启用",
+      "bounds": [
+        21,
+        619,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大评价次数",
+      "bounds": [
+        19,
+        675,
+        166,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "300",
+      "bounds": [
+        193,
+        675,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        311,
+        551,
+        950,
+        192
+      ]
+    }
+  ],
+  "result-line": [
+    {
+      "kind": "QLabel",
+      "text": "优化完成 100%",
+      "bounds": [
+        311,
+        148,
+        128,
+        20
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "过程曲线",
+      "bounds": [
+        311,
+        176,
+        475,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "数据点：6　｜　横轴：评价次数　｜　纵轴：评价函数　｜　数据来源：正式优化过程",
+      "bounds": [
+        321,
+        568,
+        930,
+        20
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "应用方案",
+      "bounds": [
+        311,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "",
+      "bounds": [
+        447,
+        756,
+        360,
+        22
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        140,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "打开优化页面后可配置更多参数。",
+      "bounds": [
+        10,
+        218,
+        636,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价",
+      "bounds": [
+        21,
+        227,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "目标",
+      "bounds": [
+        21,
+        249,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "最大化耦合效率",
+      "bounds": [
+        101,
+        249,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "面",
+      "bounds": [
+        21,
+        285,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光纤模场",
+      "bounds": [
+        101,
+        285,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "方式",
+      "bounds": [
+        21,
+        321,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光学仿真",
+      "bounds": [
+        101,
+        321,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "工程约束",
+      "bounds": [
+        21,
+        373,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大系统总长",
+      "bounds": [
+        21,
+        395,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "80.00",
+      "bounds": [
+        191,
+        395,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小边缘厚度",
+      "bounds": [
+        21,
+        433,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        433,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小厚度",
+      "bounds": [
+        21,
+        471,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        471,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小空气厚度",
+      "bounds": [
+        21,
+        509,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.10",
+      "bounds": [
+        191,
+        509,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "半口径不超过机械口径",
+      "bounds": [
+        21,
+        545,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "准直约束",
+      "bounds": [
+        21,
+        597,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "启用",
+      "bounds": [
+        21,
+        619,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大评价次数",
+      "bounds": [
+        19,
+        675,
+        166,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "300",
+      "bounds": [
+        193,
+        675,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        321,
+        232,
+        930,
+        331
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        311,
+        603,
+        950,
+        140
+      ]
+    }
+  ],
+  "result-bar": [
+    {
+      "kind": "QLabel",
+      "text": "优化完成 100%",
+      "bounds": [
+        311,
+        148,
+        128,
+        20
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "候选对照",
+      "bounds": [
+        311,
+        176,
+        475,
+        42
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "候选方案的正式评价结果；过程曲线使用独立的评价历史。",
+      "bounds": [
+        321,
+        568,
+        930,
+        20
+      ]
+    },
+    {
+      "kind": "QPushButton",
+      "text": "应用方案",
+      "bounds": [
+        311,
+        749,
+        128,
+        36
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "",
+      "bounds": [
+        447,
+        756,
+        360,
+        22
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "优化",
+      "bounds": [
+        10,
+        140,
+        274,
+        23
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "优化变量",
+      "bounds": [
+        36,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QToolButton",
+      "text": "更多参数",
+      "bounds": [
+        161,
+        169,
+        95,
+        43
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "打开优化页面后可配置更多参数。",
+      "bounds": [
+        10,
+        218,
+        636,
+        23
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "评价",
+      "bounds": [
+        21,
+        227,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "目标",
+      "bounds": [
+        21,
+        249,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "最大化耦合效率",
+      "bounds": [
+        101,
+        249,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "面",
+      "bounds": [
+        21,
+        285,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光纤模场",
+      "bounds": [
+        101,
+        285,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "方式",
+      "bounds": [
+        21,
+        321,
+        72,
+        30
+      ]
+    },
+    {
+      "kind": "QComboBox",
+      "text": "光学仿真",
+      "bounds": [
+        101,
+        321,
+        168,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "工程约束",
+      "bounds": [
+        21,
+        373,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大系统总长",
+      "bounds": [
+        21,
+        395,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "80.00",
+      "bounds": [
+        191,
+        395,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小边缘厚度",
+      "bounds": [
+        21,
+        433,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        433,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小厚度",
+      "bounds": [
+        21,
+        471,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.30",
+      "bounds": [
+        191,
+        471,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最小空气厚度",
+      "bounds": [
+        21,
+        509,
+        162,
+        32
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "0.10",
+      "bounds": [
+        191,
+        509,
+        78,
+        32
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "半口径不超过机械口径",
+      "bounds": [
+        21,
+        545,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "准直约束",
+      "bounds": [
+        21,
+        597,
+        248,
+        18
+      ]
+    },
+    {
+      "kind": "QCheckBox",
+      "text": "启用",
+      "bounds": [
+        21,
+        619,
+        248,
+        30
+      ]
+    },
+    {
+      "kind": "QLabel",
+      "text": "最大评价次数",
+      "bounds": [
+        19,
+        675,
+        166,
+        45
+      ]
+    },
+    {
+      "kind": "UnitAwareDoubleSpinBox",
+      "text": "300",
+      "bounds": [
+        193,
+        675,
+        78,
+        45
+      ]
+    },
+    {
+      "kind": "PlotCanvas",
+      "text": "",
+      "bounds": [
+        321,
+        232,
+        930,
+        331
+      ]
+    },
+    {
+      "kind": "QTableWidget",
+      "text": "",
+      "bounds": [
+        311,
+        603,
+        950,
+        140
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3253 @@
+{
+  "wavelength_nm": 780.0,
+  "records": [
+    {
+      "name": "AIR",
+      "canonical": "AIR",
+      "n": 1.0,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "constant",
+      "type": "constant",
+      "wl_min_um": 0.2,
+      "wl_max_um": 20.0,
+      "coeffs": [],
+      "comments": "n = 1"
+    },
+    {
+      "name": "Al2O3",
+      "canonical": "Al2O3",
+      "n": 1.7607364563109729,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Malitson",
+      "type": "formula1",
+      "wl_min_um": 0.2652,
+      "wl_max_um": 5.577,
+      "coeffs": [
+        1.023798,
+        0.06144821,
+        1.058264,
+        0.1106997,
+        5.280792,
+        17.92656
+      ],
+      "comments": "Synthetic sapphire, Ordinary ray (o), 24 °C"
+    },
+    {
+      "name": "BAFN6",
+      "canonical": "glass_BAFN6",
+      "n": 1.580943204915305,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.36719201,
+        0.09395853894138627,
+        0.10907994,
+        0.20945921941991477,
+        1.02108011,
+        10.657674230337498
+      ],
+      "comments": "BAFN6. n_d = 1.58900, v_d = 48.45. Schott catalog data, supplementary."
+    },
+    {
+      "name": "BK7G18",
+      "canonical": "glass_BK7G18",
+      "n": 1.5140632041092394,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.26538542,
+        0.09017228387924972,
+        0.0144191073,
+        0.23308865823973504,
+        1.00323028,
+        10.140077218640892
+      ],
+      "comments": "BK7G18. n_d = 1.51975, v_d = 63.58. Schott catalog data, supplementary."
+    },
+    {
+      "name": "CaF2",
+      "canonical": "CaF2",
+      "n": 1.430744893002,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Malitson",
+      "type": "formula1",
+      "wl_min_um": 0.23,
+      "wl_max_um": 9.7,
+      "coeffs": [
+        0.5675888,
+        0.050263605,
+        0.4710914,
+        0.1003909,
+        3.8484723,
+        34.64904
+      ],
+      "comments": "24 °C"
+    },
+    {
+      "name": "F2",
+      "canonical": "glass_F2",
+      "n": 1.6091097372398435,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34533359,
+        0.09988712985164805,
+        0.209073176,
+        0.2168987706281435,
+        0.937357162,
+        10.577653993206622
+      ],
+      "comments": "F2. n_d = 1.62004, v_d = 36.37. Schott catalog data, supplementary."
+    },
+    {
+      "name": "F2G12",
+      "canonical": "glass_F2G12",
+      "n": 1.6098362952511984,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34702224,
+        0.09903789946278142,
+        0.210037763,
+        0.2172068180329522,
+        19.5350768,
+        47.74049329447696
+      ],
+      "comments": "F2G12. n_d = 1.62072, v_d = 36.56. Schott catalog data, supplementary."
+    },
+    {
+      "name": "F2HT",
+      "canonical": "glass_F2HT",
+      "n": 1.6091097372398435,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34533359,
+        0.09988712985164805,
+        0.209073176,
+        0.2168987706281435,
+        0.937357162,
+        10.577653993206622
+      ],
+      "comments": "F2HT. n_d = 1.62004, v_d = 36.37. Schott catalog data, supplementary."
+    },
+    {
+      "name": "F2HTi",
+      "canonical": "glass_F2HTi",
+      "n": 1.6091097372398435,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34533359,
+        0.09988712985164805,
+        0.209073176,
+        0.2168987706281435,
+        0.937357162,
+        10.577653993206622
+      ],
+      "comments": "F2HTi. n_d = 1.62004, v_d = 36.37. Schott catalog data, supplementary."
+    },
+    {
+      "name": "F5",
+      "canonical": "glass_F5",
+      "n": 1.5931936810338265,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.3104463,
+        0.09790980788460368,
+        0.19603426,
+        0.21392232866159624,
+        0.96612977,
+        10.724359328183665
+      ],
+      "comments": "F5. n_d = 1.60342, v_d = 38.03. Schott catalog data, supplementary."
+    },
+    {
+      "name": "FK3",
+      "canonical": "glass_FK3",
+      "n": 1.459557000506092,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.973346627,
+        0.08004970137358415,
+        0.146642231,
+        0.14340604241105046,
+        0.679304225,
+        8.971986340827765
+      ],
+      "comments": "FK3. n_d = 1.46450, v_d = 65.77. Schott catalog data, supplementary."
+    },
+    {
+      "name": "FK5HTi",
+      "canonical": "glass_FK5HTi",
+      "n": 1.4825901928106828,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.90936218,
+        0.07212090334986106,
+        0.279077054,
+        0.1260707920178183,
+        0.891813298,
+        9.79341333754478
+      ],
+      "comments": "FK5HTi. n_d = 1.48748, v_d = 70.47. Schott catalog data, supplementary."
+    },
+    {
+      "name": "K10",
+      "canonical": "glass_K10",
+      "n": 1.4953225261827223,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.15687082,
+        0.08996800825849154,
+        0.0642625444,
+        0.19648187804477033,
+        0.872376139,
+        10.234633847871647
+      ],
+      "comments": "K10. n_d = 1.50137, v_d = 56.41. Schott catalog data, supplementary."
+    },
+    {
+      "name": "K5G20",
+      "canonical": "glass_K5G20",
+      "n": 1.5172020742685475,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.14094396,
+        0.083363389926274,
+        0.14500119,
+        0.17623122424814508,
+        37.4705786,
+        67.35173524119479
+      ],
+      "comments": "K5G20. n_d = 1.52344, v_d = 56.76. Schott catalog data, supplementary."
+    },
+    {
+      "name": "K7",
+      "canonical": "glass_K7",
+      "n": 1.5053259349873063,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.1273555,
+        0.0848729466320099,
+        0.124412303,
+        0.16426683049234256,
+        0.827100531,
+        10.019210946975814
+      ],
+      "comments": "K7. n_d = 1.51112, v_d = 60.41. Schott catalog data, supplementary."
+    },
+    {
+      "name": "KZFS12",
+      "canonical": "glass_KZFS12",
+      "n": 1.683528086969506,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.55624873,
+        0.10100135840670658,
+        0.239769276,
+        0.2166282458498891,
+        0.947887658,
+        8.356857794649853
+      ],
+      "comments": "KZFS12. n_d = 1.69600, v_d = 36.29. Schott catalog data, supplementary."
+    },
+    {
+      "name": "KZFSN5",
+      "canonical": "glass_KZFSN5",
+      "n": 1.6432439719253784,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.47727858,
+        0.09876681299910411,
+        0.191686941,
+        0.21224877007888643,
+        0.897333608,
+        8.238850010772135
+      ],
+      "comments": "KZFSN5. n_d = 1.65412, v_d = 39.63. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LAFN7",
+      "canonical": "glass_LAFN7",
+      "n": 1.7357012716112792,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.66842615,
+        0.10156771091247453,
+        0.298512803,
+        0.21661402263011506,
+        1.0774376,
+        9.083383229832373
+      ],
+      "comments": "LAFN7. n_d = 1.74950, v_d = 34.95. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LAK9G15",
+      "canonical": "glass_LAK9G15",
+      "n": 1.68203848523723,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28773667,
+        0.07466872973340312,
+        0.518244853,
+        0.14955919363248787,
+        26.1756109,
+        43.50003793101795
+      ],
+      "comments": "LAK9G15. n_d = 1.69064, v_d = 54.76. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LF5",
+      "canonical": "glass_LF5",
+      "n": 1.572201489398075,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28035628,
+        0.09642895913572852,
+        0.163505973,
+        0.21192823525901405,
+        0.893930112,
+        10.511597642604096
+      ],
+      "comments": "LF5. n_d = 1.58144, v_d = 40.85. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LF5G15",
+      "canonical": "glass_LF5G15",
+      "n": 1.5746951708605874,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28887331,
+        0.0959174467967116,
+        0.162818811,
+        0.21376489608913807,
+        10.5579792,
+        35.7133049436761
+      ],
+      "comments": "LF5G15. n_d = 1.58397, v_d = 40.83. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LF5G19",
+      "canonical": "glass_LF5G19",
+      "n": 1.5869079689884376,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34611327,
+        0.09857706883449112,
+        0.142428018,
+        0.22403384097051054,
+        0.900477176,
+        10.581101218682297
+      ],
+      "comments": "LF5G19. n_d = 1.59655, v_d = 39.89. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LF5HTi",
+      "canonical": "glass_LF5HTi",
+      "n": 1.5722108264840373,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28552924,
+        0.09694773127825117,
+        0.158357622,
+        0.21273614149927605,
+        0.892175122,
+        10.514030102677088
+      ],
+      "comments": "LF5HTi. n_d = 1.58144, v_d = 40.89. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LLF1",
+      "canonical": "glass_LLF1",
+      "n": 1.5402444807362803,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.21640125,
+        0.0926178842340938,
+        0.13366454,
+        0.2049739015094361,
+        0.883399468,
+        10.372707457554174
+      ],
+      "comments": "LLF1. n_d = 1.54814, v_d = 45.75. Schott catalog data, supplementary."
+    },
+    {
+      "name": "LLF1HTi",
+      "canonical": "glass_LLF1HTi",
+      "n": 1.5402740952216334,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.22510445,
+        0.09329695053966126,
+        0.125155671,
+        0.20671846434220625,
+        0.892236751,
+        10.394708653925804
+      ],
+      "comments": "LLF1HTi. n_d = 1.54815, v_d = 45.9. Schott catalog data, supplementary."
+    },
+    {
+      "name": "MgF2",
+      "canonical": "MgF2",
+      "n": 1.3752388268093751,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Dodge-o",
+      "type": "formula1",
+      "wl_min_um": 0.2,
+      "wl_max_um": 7.0,
+      "coeffs": [
+        0.48755108,
+        0.04338408,
+        0.39875031,
+        0.09461442,
+        2.3120353,
+        23.793604
+      ],
+      "comments": "19 °C. Ordinary ray (o)."
+    },
+    {
+      "name": "MIRROR",
+      "canonical": "MIRROR",
+      "n": null,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "ideal",
+      "type": "mirror",
+      "wl_min_um": null,
+      "wl_max_um": null,
+      "coeffs": [],
+      "comments": "理想反射"
+    },
+    {
+      "name": "N-BAF10",
+      "canonical": "glass_N-BAF10",
+      "n": 1.6606343213443118,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.5851495,
+        0.09626428631636968,
+        0.143559385,
+        0.20603150365902784,
+        1.08521269,
+        10.276846452098036
+      ],
+      "comments": "N-BAF10. n_d = 1.67003, v_d = 47.11. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAF3",
+      "canonical": "glass_N-BAF3",
+      "n": 1.5744504697791828,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34859634,
+        0.09335378578290224,
+        0.10764424,
+        0.21872504109040647,
+        1.13207084,
+        10.62714053732235
+      ],
+      "comments": "N-BAF3. n_d = 1.58272, v_d = 46.64. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAF4",
+      "canonical": "glass_N-BAF4",
+      "n": 1.5965916232582402,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.42056328,
+        0.09705747688869724,
+        0.102721269,
+        0.23045331219142848,
+        1.14380976,
+        10.50137400533854
+      ],
+      "comments": "N-BAF4. n_d = 1.60568, v_d = 43.72. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAF51",
+      "canonical": "glass_N-BAF51",
+      "n": 1.6427295970222258,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.51503623,
+        0.09709452687973714,
+        0.153621958,
+        0.20756360470949622,
+        1.15427909,
+        11.17541354939494
+      ],
+      "comments": "N-BAF51. n_d = 1.65224, v_d = 44.96. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAF52",
+      "canonical": "glass_N-BAF52",
+      "n": 1.5999965489703296,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.43903433,
+        0.0952785457487676,
+        0.0967046052,
+        0.22543559612448075,
+        1.09875818,
+        10.280654453875979
+      ],
+      "comments": "N-BAF52. n_d = 1.60863, v_d = 46.6. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAK1",
+      "canonical": "glass_N-BAK1",
+      "n": 1.5657810018446268,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.12365662,
+        0.08029587486290936,
+        0.309276848,
+        0.14909205277277526,
+        0.881511957,
+        10.358462772052619
+      ],
+      "comments": "N-BAK1. n_d = 1.57250, v_d = 57.55. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAK2",
+      "canonical": "glass_N-BAK2",
+      "n": 1.533799667653144,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.01662154,
+        0.07696647081684335,
+        0.319903051,
+        0.14276848917040483,
+        0.937232995,
+        10.635714221433368
+      ],
+      "comments": "N-BAK2. n_d = 1.53996, v_d = 59.71. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAK4",
+      "canonical": "glass_N-BAK4",
+      "n": 1.561955074398346,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28834642,
+        0.08831651181970447,
+        0.132817724,
+        0.17766011848470661,
+        0.945395373,
+        10.29397275108109
+      ],
+      "comments": "N-BAK4. n_d = 1.56883, v_d = 55.98. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BAK4HT",
+      "canonical": "glass_N-BAK4HT",
+      "n": 1.561955074398346,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28834642,
+        0.08831651181970447,
+        0.132817724,
+        0.17766011848470661,
+        0.945395373,
+        10.29397275108109
+      ],
+      "comments": "N-BAK4HT. n_d = 1.56883, v_d = 55.98. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BALF4",
+      "canonical": "glass_N-BALF4",
+      "n": 1.5723285978145043,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.31004128,
+        0.08925225207242672,
+        0.142038259,
+        0.18184390888891494,
+        0.964929351,
+        10.449752150170836
+      ],
+      "comments": "N-BALF4. n_d = 1.57956, v_d = 53.87. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BALF5",
+      "canonical": "glass_N-BALF5",
+      "n": 1.5404831534282182,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28385965,
+        0.0908744174671838,
+        0.0719300942,
+        0.21021893991741086,
+        1.05048927,
+        10.34878369664764
+      ],
+      "comments": "N-BALF5. n_d = 1.54739, v_d = 53.63. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BASF2",
+      "canonical": "glass_N-BASF2",
+      "n": 1.652664430827455,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.53652081,
+        0.1041324776426644,
+        0.156971102,
+        0.23712417885993828,
+        1.30196815,
+        11.460353397692412
+      ],
+      "comments": "N-BASF2. n_d = 1.66446, v_d = 36. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BASF64",
+      "canonical": "glass_N-BASF64",
+      "n": 1.6924066335708094,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.65554268,
+        0.10221821951100499,
+        0.17131977,
+        0.22347142009661997,
+        1.33664448,
+        10.906946043691606
+      ],
+      "comments": "N-BASF64. n_d = 1.70400, v_d = 39.38. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BK10",
+      "canonical": "glass_N-BK10",
+      "n": 1.4925801268086258,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.888308131,
+        0.07189581503815086,
+        0.328964475,
+        0.12696064153902184,
+        0.984610769,
+        9.987869297302604
+      ],
+      "comments": "N-BK10. n_d = 1.49782, v_d = 66.95. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BK7",
+      "canonical": "glass_N-BK7",
+      "n": 1.5111833144579327,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.03961212,
+        0.07746417668832478,
+        0.231792344,
+        0.14148467902921502,
+        1.01046945,
+        10.176475470417055
+      ],
+      "comments": "N-BK7. n_d = 1.51680, v_d = 64.17. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BK7HT",
+      "canonical": "glass_N-BK7HT",
+      "n": 1.5111833144579327,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.03961212,
+        0.07746417668832478,
+        0.231792344,
+        0.14148467902921502,
+        1.01046945,
+        10.176475470417055
+      ],
+      "comments": "N-BK7HT. n_d = 1.51680, v_d = 64.17. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BK7HTi",
+      "canonical": "glass_N-BK7HTi",
+      "n": 1.5111833144579327,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.03961212,
+        0.07746417668832478,
+        0.231792344,
+        0.14148467902921502,
+        1.01046945,
+        10.176475470417055
+      ],
+      "comments": "N-BK7HTi. n_d = 1.51680, v_d = 64.17. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-BK7HTSultra",
+      "canonical": "glass_N-BK7HTSultra",
+      "n": 1.5111833144579327,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.03961212,
+        0.07746417668832478,
+        0.231792344,
+        0.14148467902921502,
+        1.01046945,
+        10.176475470417055
+      ],
+      "comments": "N-BK7HTSultra. n_d = 1.51680, v_d = 64.17. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-F2",
+      "canonical": "glass_N-F2",
+      "n": 1.6091144211175303,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.39757037,
+        0.09979509722426248,
+        0.159201403,
+        0.23386572044658446,
+        1.2686543,
+        10.920089102200587
+      ],
+      "comments": "N-F2. n_d = 1.62005, v_d = 36.43. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-FK5",
+      "canonical": "glass_N-FK5",
+      "n": 1.4825966997701647,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.844309338,
+        0.06892836535128335,
+        0.344147824,
+        0.12239887622033137,
+        0.910790213,
+        9.892422822544535
+      ],
+      "comments": "N-FK5. n_d = 1.48749, v_d = 70.41. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-FK51A",
+      "canonical": "glass_N-FK51A",
+      "n": 1.4825957830693415,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.971247817,
+        0.06872423117067225,
+        0.216901417,
+        0.12392562769661487,
+        0.904651666,
+        12.987737678287163
+      ],
+      "comments": "N-FK51A. n_d = 1.48656, v_d = 84.47. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-FK58",
+      "canonical": "glass_N-FK58",
+      "n": 1.4525405657861217,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.738042712,
+        0.058229340284773966,
+        0.363371967,
+        0.10842102609733963,
+        0.989296264,
+        14.589110493789537
+      ],
+      "comments": "N-FK58. n_d = 1.45600, v_d = 90.9. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-K5",
+      "canonical": "glass_N-K5",
+      "n": 1.5164936194991794,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.08511833,
+        0.08130802561863128,
+        0.199562005,
+        0.155276740048212,
+        0.930511663,
+        10.58219150270869
+      ],
+      "comments": "N-K5. n_d = 1.52249, v_d = 59.48. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-KF9",
+      "canonical": "glass_N-KF9",
+      "n": 1.5166529533401376,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.19286778,
+        0.09160538717782923,
+        0.0893346571,
+        0.20100019552229298,
+        0.920819805,
+        10.61001630535976
+      ],
+      "comments": "N-KF9. n_d = 1.52346, v_d = 51.54. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-KZFS11",
+      "canonical": "glass_N-KZFS11",
+      "n": 1.6277263824628418,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.3322245,
+        0.09166779587183277,
+        0.28924161,
+        0.1855369828363068,
+        1.15161734,
+        9.403778666046962
+      ],
+      "comments": "N-KZFS11. n_d = 1.63775, v_d = 42.41. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-KZFS2",
+      "canonical": "glass_N-KZFS2",
+      "n": 1.551196126061941,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.23697554,
+        0.08643902504077658,
+        0.153569376,
+        0.17551454526619725,
+        0.903976272,
+        8.376939082982519
+      ],
+      "comments": "N-KZFS2. n_d = 1.55836, v_d = 54.01. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-KZFS4",
+      "canonical": "glass_N-KZFS4",
+      "n": 1.604142450926277,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.35055424,
+        0.09360993910904974,
+        0.197575506,
+        0.19281265544564236,
+        1.09962992,
+        9.50719198291483
+      ],
+      "comments": "N-KZFS4. n_d = 1.61336, v_d = 44.49. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-KZFS4HT",
+      "canonical": "glass_N-KZFS4HT",
+      "n": 1.604142450926277,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.35055424,
+        0.09360993910904974,
+        0.197575506,
+        0.19281265544564236,
+        1.09962992,
+        9.50719198291483
+      ],
+      "comments": "N-KZFS4HT. n_d = 1.61336, v_d = 44.49. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-KZFS5",
+      "canonical": "glass_N-KZFS5",
+      "n": 1.6433211979772098,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.47460789,
+        0.09930477410477302,
+        0.193584488,
+        0.21106339876918498,
+        1.26589974,
+        10.316794948044668
+      ],
+      "comments": "N-KZFS5. n_d = 1.65412, v_d = 39.7. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-KZFS8",
+      "canonical": "glass_N-KZFS8",
+      "n": 1.707117244443685,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.62693651,
+        0.10431137521862129,
+        0.24369876,
+        0.22230783904307108,
+        1.62007141,
+        11.445923422773717
+      ],
+      "comments": "N-KZFS8. n_d = 1.72047, v_d = 34.7. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF2",
+      "canonical": "glass_N-LAF2",
+      "n": 1.7330897549517308,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.80984227,
+        0.10085217994669228,
+        0.15729555,
+        0.21034062018545063,
+        1.0930037,
+        10.034328477780663
+      ],
+      "comments": "N-LAF2. n_d = 1.74397, v_d = 44.85. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF21",
+      "canonical": "glass_N-LAF21",
+      "n": 1.7769080846298497,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.87134529,
+        0.09660860624188718,
+        0.25078301,
+        0.18591335670144843,
+        1.22048639,
+        9.12362244944408
+      ],
+      "comments": "N-LAF21. n_d = 1.78800, v_d = 47.49. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF3",
+      "canonical": "glass_N-LAF3",
+      "n": 1.7071030921763821,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.73155854,
+        0.09766442105495736,
+        0.150874455,
+        0.20196217739963096,
+        1.06586596,
+        9.903325426340388
+      ],
+      "comments": "N-LAF3. n_d = 1.71700, v_d = 47.96. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF33",
+      "canonical": "glass_N-LAF33",
+      "n": 1.7740561027117387,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.79653417,
+        0.0962971179734887,
+        0.311577903,
+        0.18926203554860124,
+        1.15981863,
+        9.34584780530905
+      ],
+      "comments": "N-LAF33. n_d = 1.78582, v_d = 44.05. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF34",
+      "canonical": "glass_N-LAF34",
+      "n": 1.7620469266614753,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.75836958,
+        0.09342430229870598,
+        0.313537785,
+        0.17117851267025308,
+        1.18925231,
+        9.229196303037442
+      ],
+      "comments": "N-LAF34. n_d = 1.77250, v_d = 49.62. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF35",
+      "canonical": "glass_N-LAF35",
+      "n": 1.7332018521160217,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.51697436,
+        0.08665697911882228,
+        0.455875464,
+        0.16125964002192242,
+        1.07469242,
+        8.977444842492769
+      ],
+      "comments": "N-LAF35. n_d = 1.74330, v_d = 49.4. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF36",
+      "canonical": "glass_N-LAF36",
+      "n": 1.7871388193209954,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.85744228,
+        0.09911595184429195,
+        0.294098729,
+        0.1960380417163975,
+        1.16615417,
+        9.455076065267798
+      ],
+      "comments": "N-LAF36. n_d = 1.79952, v_d = 42.37. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAF7",
+      "canonical": "glass_N-LAF7",
+      "n": 1.7357467468653152,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.74028764,
+        0.10388723694467959,
+        0.226710554,
+        0.23208331241172855,
+        1.32525548,
+        10.308669409773504
+      ],
+      "comments": "N-LAF7. n_d = 1.74950, v_d = 34.82. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK10",
+      "canonical": "glass_N-LAK10",
+      "n": 1.7104129547762055,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.72878017,
+        0.09412835040517814,
+        0.169257825,
+        0.19063486276124836,
+        1.19386956,
+        9.104993514550134
+      ],
+      "comments": "N-LAK10. n_d = 1.72003, v_d = 50.62. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK12",
+      "canonical": "glass_N-LAK12",
+      "n": 1.669634027803536,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.17365704,
+        0.07596260902575688,
+        0.588992398,
+        0.14156329962246572,
+        0.978014394,
+        9.771762799004078
+      ],
+      "comments": "N-LAK12. n_d = 1.67790, v_d = 55.2. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK14",
+      "canonical": "glass_N-LAK14",
+      "n": 1.6881811463223262,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.50781212,
+        0.08637700660476723,
+        0.318866829,
+        0.15557147360618526,
+        1.14287213,
+        8.997583925699166
+      ],
+      "comments": "N-LAK14. n_d = 1.69680, v_d = 55.41. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK21",
+      "canonical": "glass_N-LAK21",
+      "n": 1.6331825359037557,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.22718116,
+        0.07759353594211311,
+        0.420783743,
+        0.1403078362031145,
+        1.01284843,
+        9.404095379142005
+      ],
+      "comments": "N-LAK21. n_d = 1.64049, v_d = 60.1. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK22",
+      "canonical": "glass_N-LAK22",
+      "n": 1.6432516153196488,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.14229781,
+        0.07653617406168145,
+        0.535138441,
+        0.14090640404183197,
+        1.04088385,
+        10.041614262657175
+      ],
+      "comments": "N-LAK22. n_d = 1.65113, v_d = 55.89. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK28",
+      "canonical": "glass_N-LAK28",
+      "n": 1.7343907303531896,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.50441986,
+        0.08483310627343549,
+        0.474120561,
+        0.15784271506788017,
+        1.17784354,
+        9.118350782899284
+      ],
+      "comments": "N-LAK28. n_d = 1.74429, v_d = 50.77. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK33A",
+      "canonical": "glass_N-LAK33A",
+      "n": 1.7441567522670456,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.44116999,
+        0.08251871769483576,
+        0.571749501,
+        0.14909454181827045,
+        1.16605226,
+        8.996552423011828
+      ],
+      "comments": "N-LAK33A. n_d = 1.75393, v_d = 52.27. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK33B",
+      "canonical": "glass_N-LAK33B",
+      "n": 1.7452196824629314,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.42288601,
+        0.08187084047449372,
+        0.593661336,
+        0.14812704344582053,
+        1.1613526,
+        8.985586797755614
+      ],
+      "comments": "N-LAK33B. n_d = 1.75500, v_d = 52.3. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK34",
+      "canonical": "glass_N-LAK34",
+      "n": 1.7200355004768983,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.26661442,
+        0.07676444893308361,
+        0.665919318,
+        0.14053790983218728,
+        1.1249612,
+        8.881971481602493
+      ],
+      "comments": "N-LAK34. n_d = 1.72916, v_d = 54.5. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK7",
+      "canonical": "glass_N-LAK7",
+      "n": 1.6440010327565149,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.23679889,
+        0.0781092528449735,
+        0.445051837,
+        0.14191135754406692,
+        1.01745888,
+        9.52040114701056
+      ],
+      "comments": "N-LAK7. n_d = 1.65160, v_d = 58.52. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK8",
+      "canonical": "glass_N-LAK8",
+      "n": 1.7039645635607448,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.33183167,
+        0.07874159453554391,
+        0.546623206,
+        0.14712764492100047,
+        1.19084015,
+        9.087506456668958
+      ],
+      "comments": "N-LAK8. n_d = 1.71300, v_d = 53.83. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LAK9",
+      "canonical": "glass_N-LAK9",
+      "n": 1.6823807016622827,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.46231905,
+        0.08510406312274403,
+        0.344399589,
+        0.15599779838190025,
+        1.15508372,
+        9.244927625460353
+      ],
+      "comments": "N-LAK9. n_d = 1.69100, v_d = 54.71. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF31A",
+      "canonical": "glass_N-LASF31A",
+      "n": 1.8688675360229052,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.96485075,
+        0.09909894827898023,
+        0.475231259,
+        0.18566460028772314,
+        1.48360109,
+        10.523300955498707
+      ],
+      "comments": "N-LASF31A. n_d = 1.88300, v_d = 40.76. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF40",
+      "canonical": "glass_N-LASF40",
+      "n": 1.8196200221144163,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.98550331,
+        0.10468204717142286,
+        0.274057042,
+        0.21784205356174918,
+        1.28945661,
+        9.8442129497487
+      ],
+      "comments": "N-LASF40. n_d = 1.83404, v_d = 37.3. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF41",
+      "canonical": "glass_N-LASF41",
+      "n": 1.8222508895350935,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.86348331,
+        0.09541321810944225,
+        0.413307255,
+        0.18418666292649966,
+        1.35784815,
+        9.66219744675092
+      ],
+      "comments": "N-LASF41. n_d = 1.83501, v_d = 43.13. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF43",
+      "canonical": "glass_N-LASF43",
+      "n": 1.7931114581401546,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.93502827,
+        0.10198108304974997,
+        0.23662935,
+        0.21154320882505304,
+        1.26291344,
+        9.350805794154855
+      ],
+      "comments": "N-LASF43. n_d = 1.80610, v_d = 40.61. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF44",
+      "canonical": "glass_N-LASF44",
+      "n": 1.7927000006252238,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.78897105,
+        0.0934080444608493,
+        0.38675867,
+        0.17552350925160992,
+        1.30506243,
+        9.631945930080795
+      ],
+      "comments": "N-LASF44. n_d = 1.80420, v_d = 46.5. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF45",
+      "canonical": "glass_N-LASF45",
+      "n": 1.7864465550909867,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.87140198,
+        0.10591124586180639,
+        0.267777879,
+        0.22475207941196007,
+        1.73030008,
+        12.12874704988112
+      ],
+      "comments": "N-LASF45. n_d = 1.80107, v_d = 34.97. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF45HT",
+      "canonical": "glass_N-LASF45HT",
+      "n": 1.7864465550909867,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.87140198,
+        0.10591124586180639,
+        0.267777879,
+        0.22475207941196007,
+        1.73030008,
+        12.12874704988112
+      ],
+      "comments": "N-LASF45HT. n_d = 1.80107, v_d = 34.97. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF46A",
+      "canonical": "glass_N-LASF46A",
+      "n": 1.88540058345009,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.16701566,
+        0.11117352382649387,
+        0.319812761,
+        0.23677210181945002,
+        1.66004486,
+        10.346386712277866
+      ],
+      "comments": "N-LASF46A. n_d = 1.90366, v_d = 31.32. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF46B",
+      "canonical": "glass_N-LASF46B",
+      "n": 1.8854197798565173,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.17988922,
+        0.11216299924663213,
+        0.306495184,
+        0.2381577978987881,
+        1.56882437,
+        10.262384615672909
+      ],
+      "comments": "N-LASF46B. n_d = 1.90366, v_d = 31.32. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF55",
+      "canonical": "glass_N-LASF55",
+      "n": 1.934140249420476,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.30861228,
+        0.11421339457349125,
+        0.354736638,
+        0.23611950808859483,
+        1.92227125,
+        11.5410947920897
+      ],
+      "comments": "N-LASF55. n_d = 1.95380, v_d = 30.56. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF9",
+      "canonical": "glass_N-LASF9",
+      "n": 1.8335617729235885,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.00029547,
+        0.1101934739446942,
+        0.298926886,
+        0.23210692277482806,
+        1.80691843,
+        12.511228117175389
+      ],
+      "comments": "N-LASF9. n_d = 1.85025, v_d = 32.17. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-LASF9HT",
+      "canonical": "glass_N-LASF9HT",
+      "n": 1.8335617729235885,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.00029547,
+        0.1101934739446942,
+        0.298926886,
+        0.23210692277482806,
+        1.80691843,
+        12.511228117175389
+      ],
+      "comments": "N-LASF9HT. n_d = 1.85025, v_d = 32.17. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-PK51",
+      "canonical": "glass_N-PK51",
+      "n": 1.5238786326380769,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.15610775,
+        0.07652433612910339,
+        0.153229344,
+        0.13930987617538104,
+        0.785618966,
+        11.854832179326706
+      ],
+      "comments": "N-PK51. n_d = 1.52855, v_d = 76.98. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-PK52A",
+      "canonical": "glass_N-PK52A",
+      "n": 1.4928282480896082,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.029607,
+        0.07188881380298329,
+        0.1880506,
+        0.12909639731611414,
+        0.736488165,
+        11.788304755137611
+      ],
+      "comments": "N-PK52A. n_d = 1.49700, v_d = 81.61. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-PSK3",
+      "canonical": "glass_N-PSK3",
+      "n": 1.5462855161816336,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.88727211,
+        0.06854371357024654,
+        0.489592425,
+        0.12720788615490786,
+        1.04865296,
+        10.21640714732924
+      ],
+      "comments": "N-PSK3. n_d = 1.55232, v_d = 63.46. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-PSK53",
+      "canonical": "glass_N-PSK53",
+      "n": 1.6134813290696046,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.3434087,
+        0.08216290628988242,
+        0.241417935,
+        0.14829380061216316,
+        0.952896897,
+        10.176023634013434
+      ],
+      "comments": "N-PSK53. n_d = 1.62014, v_d = 63.48. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-PSK53A",
+      "canonical": "glass_N-PSK53A",
+      "n": 1.6113561528867575,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.38121836,
+        0.084048577441858,
+        0.196745645,
+        0.15272568382560936,
+        0.886089205,
+        9.87343580016602
+      ],
+      "comments": "N-PSK53A. n_d = 1.61800, v_d = 63.39. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF1",
+      "canonical": "glass_N-SF1",
+      "n": 1.7021674483140863,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.60865158,
+        0.10938687261275916,
+        0.237725916,
+        0.24302051806380465,
+        1.51530653,
+        11.641377753513542
+      ],
+      "comments": "N-SF1. n_d = 1.71736, v_d = 29.62. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF10",
+      "canonical": "glass_N-SF10",
+      "n": 1.7123323624777618,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.62153902,
+        0.11056285859184357,
+        0.256287842,
+        0.24407719578035142,
+        1.64447552,
+        12.143672961670205
+      ],
+      "comments": "N-SF10. n_d = 1.72828, v_d = 28.53. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF11",
+      "canonical": "glass_N-SF11",
+      "n": 1.7658347145118318,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.73759695,
+        0.11484209594046949,
+        0.313747346,
+        0.24961332937165034,
+        1.89878101,
+        12.459385618881855
+      ],
+      "comments": "N-SF11. n_d = 1.78472, v_d = 25.68. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF14",
+      "canonical": "glass_N-SF14",
+      "n": 1.7440153887846679,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.69022361,
+        0.11424189818100888,
+        0.288870052,
+        0.24772805250919808,
+        1.7045187,
+        12.227742596244001
+      ],
+      "comments": "N-SF14. n_d = 1.76182, v_d = 26.53. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF15",
+      "canonical": "glass_N-SF15",
+      "n": 1.6843765486492197,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.57055634,
+        0.1079384148484681,
+        0.218987094,
+        0.24451112387783097,
+        1.50824017,
+        11.519953949560737
+      ],
+      "comments": "N-SF15. n_d = 1.69892, v_d = 30.2. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF19",
+      "canonical": "glass_N-SF19",
+      "n": 1.6540090775320933,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.52005444,
+        0.10469689584701163,
+        0.17573947,
+        0.24356692837903918,
+        1.43623424,
+        11.260335296961632
+      ],
+      "comments": "N-SF19. n_d = 1.66679, v_d = 33.12. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF2",
+      "canonical": "glass_N-SF2",
+      "n": 1.6355008211780182,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.47343127,
+        0.10441221097170579,
+        0.163681849,
+        0.24200902607134306,
+        1.36920899,
+        11.287379368126155
+      ],
+      "comments": "N-SF2. n_d = 1.64769, v_d = 33.82. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF4",
+      "canonical": "glass_N-SF4",
+      "n": 1.737979145714284,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.67780282,
+        0.1126025976609776,
+        0.282849893,
+        0.24536471201050897,
+        1.63539276,
+        12.0731311597282
+      ],
+      "comments": "N-SF4. n_d = 1.75513, v_d = 27.38. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF5",
+      "canonical": "glass_N-SF5",
+      "n": 1.659500187052985,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.52481889,
+        0.1060884348079469,
+        0.187085527,
+        0.24269227264171392,
+        1.42729015,
+        11.364051874221623
+      ],
+      "comments": "N-SF5. n_d = 1.67271, v_d = 32.25. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF56",
+      "canonical": "glass_N-SF56",
+      "n": 1.7660892104145722,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.73562085,
+        0.11385286206327885,
+        0.317487012,
+        0.24756499914163957,
+        1.95398203,
+        12.710603486853014
+      ],
+      "comments": "N-SF56. n_d = 1.78470, v_d = 26.1. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF57",
+      "canonical": "glass_N-SF57",
+      "n": 1.8248277082548028,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.87543831,
+        0.11905860657676118,
+        0.37375749,
+        0.25308297591896617,
+        2.30001797,
+        13.318776032353723
+      ],
+      "comments": "N-SF57. n_d = 1.84666, v_d = 23.78. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF57HT",
+      "canonical": "glass_N-SF57HT",
+      "n": 1.8248277082548028,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.87543831,
+        0.11905860657676118,
+        0.37375749,
+        0.25308297591896617,
+        2.30001797,
+        13.318776032353723
+      ],
+      "comments": "N-SF57HT. n_d = 1.84666, v_d = 23.78. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF57HTultra",
+      "canonical": "glass_N-SF57HTultra",
+      "n": 1.8248277082548028,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.87543831,
+        0.11905860657676118,
+        0.37375749,
+        0.25308297591896617,
+        2.30001797,
+        13.318776032353723
+      ],
+      "comments": "N-SF57HTultra. n_d = 1.84666, v_d = 23.78. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF6",
+      "canonical": "glass_N-SF6",
+      "n": 1.7855891845391045,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.77931763,
+        0.11563484855353943,
+        0.338149866,
+        0.24850223761568024,
+        2.08734474,
+        13.191572688652403
+      ],
+      "comments": "N-SF6. n_d = 1.80518, v_d = 25.36. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF64",
+      "canonical": "glass_N-SF64",
+      "n": 1.691236049788629,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.59163762,
+        0.10891438564303615,
+        0.219908428,
+        0.24384123912906938,
+        1.46929315,
+        11.546027975022406
+      ],
+      "comments": "N-SF64. n_d = 1.70591, v_d = 30.23. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF66",
+      "canonical": "glass_N-SF66",
+      "n": 1.8961968306435093,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.0245976,
+        0.12126550416338523,
+        0.470187196,
+        0.263248604174837,
+        2.59970433,
+        12.720754733898456
+      ],
+      "comments": "N-SF66. n_d = 1.92286, v_d = 20.88. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF6HT",
+      "canonical": "glass_N-SF6HT",
+      "n": 1.7855891845391045,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.77931763,
+        0.11563484855353943,
+        0.338149866,
+        0.24850223761568024,
+        2.08734474,
+        13.191572688652403
+      ],
+      "comments": "N-SF6HT. n_d = 1.80518, v_d = 25.36. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF6HTultra",
+      "canonical": "glass_N-SF6HTultra",
+      "n": 1.7855891845391045,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.77931763,
+        0.11563484855353943,
+        0.338149866,
+        0.24850223761568024,
+        2.08734474,
+        13.191572688652403
+      ],
+      "comments": "N-SF6HTultra. n_d = 1.80518, v_d = 25.36. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SF8",
+      "canonical": "glass_N-SF8",
+      "n": 1.6750508897482046,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.55075812,
+        0.10692910922662734,
+        0.209816918,
+        0.2413971110017682,
+        1.46205491,
+        11.543034696300621
+      ],
+      "comments": "N-SF8. n_d = 1.68894, v_d = 31.31. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK10",
+      "canonical": "glass_N-SK10",
+      "n": 1.6153982752914118,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34972093,
+        0.08580630915031831,
+        0.238587973,
+        0.15930013402379797,
+        0.9667336,
+        10.173637943233482
+      ],
+      "comments": "N-SK10. n_d = 1.62278, v_d = 56.98. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK11",
+      "canonical": "glass_N-SK11",
+      "n": 1.5574857769174089,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.17963631,
+        0.0824792144118747,
+        0.229817295,
+        0.14823535509452526,
+        0.935789652,
+        10.075377511537718
+      ],
+      "comments": "N-SK11. n_d = 1.56384, v_d = 60.8. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK14",
+      "canonical": "glass_N-SK14",
+      "n": 1.596297922929935,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.936155374,
+        0.06794972590084525,
+        0.594052018,
+        0.12994586180406054,
+        1.04374583,
+        10.185100146783045
+      ],
+      "comments": "N-SK14. n_d = 1.60311, v_d = 60.6. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK15",
+      "canonical": "glass_N-SK15",
+      "n": 1.6156723741367056,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.30417786,
+        0.08336973527605807,
+        0.28584116,
+        0.15232324280949378,
+        0.974781572,
+        9.950722787817979
+      ],
+      "comments": "N-SK15. n_d = 1.62296, v_d = 58.02. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK16",
+      "canonical": "glass_N-SK16",
+      "n": 1.6133593838986813,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.34317774,
+        0.08394565736236746,
+        0.241144399,
+        0.15132911154169906,
+        0.994317969,
+        9.630724406813851
+      ],
+      "comments": "N-SK16. n_d = 1.62041, v_d = 60.32. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK2",
+      "canonical": "glass_N-SK2",
+      "n": 1.6001511767445007,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28189012,
+        0.08527553224694642,
+        0.257738258,
+        0.15582795865954222,
+        0.96818604,
+        10.506082666722168
+      ],
+      "comments": "N-SK2. n_d = 1.60738, v_d = 56.65. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK2HT",
+      "canonical": "glass_N-SK2HT",
+      "n": 1.6001511767445007,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.28189012,
+        0.08527553224694642,
+        0.257738258,
+        0.15582795865954222,
+        0.96818604,
+        10.506082666722168
+      ],
+      "comments": "N-SK2HT. n_d = 1.60738, v_d = 56.65. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK4",
+      "canonical": "glass_N-SK4",
+      "n": 1.6056118942836526,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.32993741,
+        0.08466841837426752,
+        0.228542996,
+        0.15698913720382057,
+        0.988465211,
+        10.044220427688751
+      ],
+      "comments": "N-SK4. n_d = 1.61272, v_d = 58.63. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK5",
+      "canonical": "glass_N-SK5",
+      "n": 1.5825251781025993,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.991463823,
+        0.07230010145221098,
+        0.495982121,
+        0.1314281727788985,
+        0.987393925,
+        9.917633684503578
+      ],
+      "comments": "N-SK5. n_d = 1.58913, v_d = 61.27. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SK5HTi",
+      "canonical": "glass_N-SK5HTi",
+      "n": 1.5825251781025993,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.991463823,
+        0.07230010145221098,
+        0.495982121,
+        0.1314281727788985,
+        0.987393925,
+        9.917633684503578
+      ],
+      "comments": "N-SK5HTi. n_d = 1.58913, v_d = 61.27. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SSK2",
+      "canonical": "glass_N-SSK2",
+      "n": 1.6144590729911832,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.4306027,
+        0.09077350797451865,
+        0.153150554,
+        0.18268465753861216,
+        1.01390904,
+        10.337834492774586
+      ],
+      "comments": "N-SSK2. n_d = 1.62229, v_d = 53.27. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SSK20",
+      "canonical": "glass_N-SSK20",
+      "n": 1.6174020336425081,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.18391813,
+        0.08292385881035687,
+        0.406466985,
+        0.1570708502555455,
+        1.10391305,
+        11.491884440769494
+      ],
+      "comments": "N-SSK20. n_d = 1.62568, v_d = 50.2. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SSK5",
+      "canonical": "glass_N-SSK5",
+      "n": 1.649826952829322,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.59222659,
+        0.09593146647477041,
+        0.103520774,
+        0.2057984625792914,
+        1.05174016,
+        10.340569326686031
+      ],
+      "comments": "N-SSK5. n_d = 1.65844, v_d = 50.88. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-SSK8",
+      "canonical": "glass_N-SSK8",
+      "n": 1.6094867169387257,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.44857867,
+        0.09323680330212958,
+        0.117965926,
+        0.2053208691292729,
+        1.06937528,
+        10.549913080210661
+      ],
+      "comments": "N-SSK8. n_d = 1.61773, v_d = 49.83. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-ZK7",
+      "canonical": "glass_N-ZK7",
+      "n": 1.5026994989387696,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.07715032,
+        0.08225579961315797,
+        0.168079109,
+        0.15186929149765596,
+        0.851889892,
+        9.436624279900096
+      ],
+      "comments": "N-ZK7. n_d = 1.50847, v_d = 61.19. Schott catalog data, supplementary."
+    },
+    {
+      "name": "N-ZK7A",
+      "canonical": "glass_N-ZK7A",
+      "n": 1.5022716572268233,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.07509891,
+        0.08225579961315797,
+        0.168895044,
+        0.15186929149765596,
+        0.860503983,
+        9.436624279900096
+      ],
+      "comments": "N-ZK7A. n_d = 1.50805, v_d = 61.04. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-BK7",
+      "canonical": "glass_P-BK7",
+      "n": 1.5107570596342854,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.18318503,
+        0.08497893597827641,
+        0.0871756426,
+        0.16377325941679247,
+        1.03133701,
+        10.08475889647343
+      ],
+      "comments": "P-BK7. n_d = 1.51640, v_d = 64.06. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-LAF37",
+      "canonical": "glass_P-LAF37",
+      "n": 1.7445060379611086,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.76003244,
+        0.0968507303018413,
+        0.248286745,
+        0.18987824098616463,
+        1.15935122,
+        9.296906437089705
+      ],
+      "comments": "P-LAF37. n_d = 1.75550, v_d = 45.66. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-LAK35",
+      "canonical": "glass_P-LAK35",
+      "n": 1.6846972843459613,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.3932426,
+        0.08461440155198169,
+        0.418882766,
+        0.15285203498808905,
+        1.043807,
+        9.398321264991957
+      ],
+      "comments": "P-LAK35. n_d = 1.69350, v_d = 53.2. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-LASF47",
+      "canonical": "glass_P-LASF47",
+      "n": 1.7931900711574633,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.85543101,
+        0.10016396707399323,
+        0.315854649,
+        0.19674734254876228,
+        1.28561839,
+        9.723278803983767
+      ],
+      "comments": "P-LASF47. n_d = 1.80610, v_d = 40.9. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-LASF50",
+      "canonical": "glass_P-LASF50",
+      "n": 1.795527114845124,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.84910553,
+        0.09996173052723728,
+        0.329828674,
+        0.19683444515632928,
+        1.30400901,
+        9.792689523312786
+      ],
+      "comments": "P-LASF50. n_d = 1.80860, v_d = 40.46. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-LASF51",
+      "canonical": "glass_P-LASF51",
+      "n": 1.7970394399933278,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.84568806,
+        0.09942311456598008,
+        0.3390016,
+        0.19444726843028676,
+        1.32418921,
+        9.891488411760891
+      ],
+      "comments": "P-LASF51. n_d = 1.81000, v_d = 40.93. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-PK53",
+      "canonical": "glass_P-PK53",
+      "n": 1.521460822051958,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        0.960316767,
+        0.07287201012734587,
+        0.340437227,
+        0.13231531808524666,
+        0.777865595,
+        10.338052524532849
+      ],
+      "comments": "P-PK53. n_d = 1.52690, v_d = 66.22. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SF67",
+      "canonical": "glass_P-SF67",
+      "n": 1.8811070663235128,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.97464225,
+        0.12073620997861413,
+        0.467095921,
+        0.25880308325056717,
+        2.43154209,
+        12.547704770196022
+      ],
+      "comments": "P-SF67. n_d = 1.90680, v_d = 21.4. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SF68",
+      "canonical": "glass_P-SF68",
+      "n": 1.9764961685094675,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.3330067,
+        0.12993783859984742,
+        0.452961396,
+        0.26759789330261924,
+        1.25172339,
+        10.895296186887258
+      ],
+      "comments": "P-SF68. n_d = 2.00520, v_d = 21. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SF69",
+      "canonical": "glass_P-SF69",
+      "n": 1.7070104397805934,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.62594647,
+        0.11031621684956387,
+        0.235927609,
+        0.24509394219360053,
+        1.67434623,
+        12.068633228332029
+      ],
+      "comments": "P-SF69. n_d = 1.72250, v_d = 29.23. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SF8",
+      "canonical": "glass_P-SF8",
+      "n": 1.6750190296681637,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.55370411,
+        0.10797345507114237,
+        0.206332561,
+        0.24126494917413926,
+        1.39708831,
+        11.434510396164761
+      ],
+      "comments": "P-SF8. n_d = 1.68893, v_d = 31.25. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SK57",
+      "canonical": "glass_P-SK57",
+      "n": 1.5802405334112153,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.31053414,
+        0.08607422581702376,
+        0.169376189,
+        0.1595504587896882,
+        1.10987714,
+        10.380322104828926
+      ],
+      "comments": "P-SK57. n_d = 1.58700, v_d = 59.6. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SK57Q1",
+      "canonical": "glass_P-SK57Q1",
+      "n": 1.5792414135639432,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.30536483,
+        0.08581426635472682,
+        0.171434328,
+        0.1599331257119675,
+        1.10117219,
+        10.330830557123663
+      ],
+      "comments": "P-SK57Q1. n_d = 1.58600, v_d = 59.5. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SK58A",
+      "canonical": "glass_P-SK58A",
+      "n": 1.582474185213364,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.3167841,
+        0.08489508218972404,
+        0.171154756,
+        0.15673531669665264,
+        1.12501473,
+        10.136060773298471
+      ],
+      "comments": "P-SK58A. n_d = 1.58913, v_d = 61.15. Schott catalog data, supplementary."
+    },
+    {
+      "name": "P-SK60",
+      "canonical": "glass_P-SK60",
+      "n": 1.6031302632003248,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.40790442,
+        0.08856536444908925,
+        0.143381417,
+        0.16963766238662922,
+        1.16513947,
+        10.26515450443879
+      ],
+      "comments": "P-SK60. n_d = 1.61035, v_d = 57.9. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SCHOTT RealView#U00ae 2.0",
+      "canonical": "glass_SCHOTT RealView#U00ae 2.0 ",
+      "n": 1.9794971342661707,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        2.41000782,
+        0.11557690643030726,
+        0.420635256,
+        0.2367516109765676,
+        2.03850726,
+        11.750928048456428
+      ],
+      "comments": "SCHOTT RealView® 2.0 . n_d = 2.00102, v_d = 29.14. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF1",
+      "canonical": "glass_SF1",
+      "n": 1.7021274827511748,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.55912923,
+        0.11021841996690027,
+        0.284246288,
+        0.23120316650080724,
+        0.968842926,
+        10.59126097308531
+      ],
+      "comments": "SF1. n_d = 1.71736, v_d = 29.51. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF10",
+      "canonical": "glass_SF10",
+      "n": 1.7122684989254886,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.61625977,
+        0.11293119985194526,
+        0.259229334,
+        0.2412434359728778,
+        1.07762317,
+        10.798503600036442
+      ],
+      "comments": "SF10. n_d = 1.72825, v_d = 28.41. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF11",
+      "canonical": "glass_SF11",
+      "n": 1.7659512391830892,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.73848403,
+        0.11664844791080592,
+        0.311168974,
+        0.2481855078363763,
+        1.17490871,
+        11.041861754251409
+      ],
+      "comments": "SF11. n_d = 1.78472, v_d = 25.76. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF2",
+      "canonical": "glass_SF2",
+      "n": 1.6355278382796123,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.40301821,
+        0.10285692295611414,
+        0.231767504,
+        0.2220871401049597,
+        0.939056586,
+        10.60216746707955
+      ],
+      "comments": "SF2. n_d = 1.64769, v_d = 33.85. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF3",
+      "canonical": "glass_SF3",
+      "n": 1.723643455778041,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.57230542,
+        0.10971881470376901,
+        0.339661149,
+        0.23056530159588196,
+        1.03593712,
+        10.954696755273511
+      ],
+      "comments": "SF3. n_d = 1.74000, v_d = 28.2. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF4",
+      "canonical": "glass_SF4",
+      "n": 1.7381676743287369,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.61957826,
+        0.11202772156926159,
+        0.339493189,
+        0.23335805578552457,
+        1.02566931,
+        10.846760898996529
+      ],
+      "comments": "SF4. n_d = 1.75520, v_d = 27.58. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF5",
+      "canonical": "glass_SF5",
+      "n": 1.6594897266742334,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.46141885,
+        0.1057478727918439,
+        0.247713019,
+        0.22552043565938765,
+        0.949995832,
+        10.584984081235078
+      ],
+      "comments": "SF5. n_d = 1.67270, v_d = 32.21. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF56A",
+      "canonical": "glass_SF56A",
+      "n": 1.7661052460365845,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.70579259,
+        0.1157042345811077,
+        0.344223052,
+        0.24074085818572635,
+        1.09601828,
+        11.027965542202242
+      ],
+      "comments": "SF56A. n_d = 1.78470, v_d = 26.08. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF57",
+      "canonical": "glass_SF57",
+      "n": 1.8248985394548778,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.81651371,
+        0.11987668580670721,
+        0.428893641,
+        0.24347508537836063,
+        1.07186278,
+        11.019071739488767
+      ],
+      "comments": "SF57. n_d = 1.84666, v_d = 23.83. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF57HT",
+      "canonical": "glass_SF57HT",
+      "n": 1.8248985394548778,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.81651371,
+        0.11987668580670721,
+        0.428893641,
+        0.24347508537836063,
+        1.07186278,
+        11.019071739488767
+      ],
+      "comments": "SF57HT. n_d = 1.84666, v_d = 23.83. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF57HTultra",
+      "canonical": "glass_SF57HTultra",
+      "n": 1.8248985394548778,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.81651371,
+        0.11987668580670721,
+        0.428893641,
+        0.24347508537836063,
+        1.07186278,
+        11.019071739488767
+      ],
+      "comments": "SF57HTultra. n_d = 1.84666, v_d = 23.83. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF6",
+      "canonical": "glass_SF6",
+      "n": 1.7856551804860141,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.72448482,
+        0.11613438207524936,
+        0.390104889,
+        0.2386038757019676,
+        1.04572858,
+        10.888396805774486
+      ],
+      "comments": "SF6. n_d = 1.80518, v_d = 25.43. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF6G05",
+      "canonical": "glass_SF6G05",
+      "n": 1.789358440166442,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.62113942,
+        0.1065265187641087,
+        0.506586092,
+        0.23148222890753406,
+        10.4032298,
+        33.449014634216056
+      ],
+      "comments": "SF6G05. n_d = 1.80906, v_d = 25.27. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SF6HT",
+      "canonical": "glass_SF6HT",
+      "n": 1.7856551804860141,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.72448482,
+        0.11613438207524936,
+        0.390104889,
+        0.2386038757019676,
+        1.04572858,
+        10.888396805774486
+      ],
+      "comments": "SF6HT. n_d = 1.80518, v_d = 25.43. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SFL57",
+      "canonical": "glass_SFL57",
+      "n": 1.8246899482785526,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.88742326,
+        0.12080535625542438,
+        0.360534025,
+        0.25459751491324495,
+        2.26189313,
+        13.268843619547258
+      ],
+      "comments": "SFL57. n_d = 1.84666, v_d = 23.62. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SFL6",
+      "canonical": "glass_SFL6",
+      "n": 1.7856153578059184,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.78922056,
+        0.11625985420599838,
+        0.328427448,
+        0.24954550667162895,
+        2.01639441,
+        12.96204895068677
+      ],
+      "comments": "SFL6. n_d = 1.80518, v_d = 25.39. Schott catalog data, supplementary."
+    },
+    {
+      "name": "SiO2",
+      "canonical": "SiO2",
+      "n": 1.453671248235113,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Malitson",
+      "type": "formula1",
+      "wl_min_um": 0.21,
+      "wl_max_um": 6.7,
+      "coeffs": [
+        0.6961663,
+        0.0684043,
+        0.4079426,
+        0.1162414,
+        0.8974794,
+        9.896161
+      ],
+      "comments": "Fused silica, 20 °C"
+    }
+  ],
+  "used": [
+    {
+      "name": "N-BK7",
+      "canonical": "glass_N-BK7",
+      "n": 1.5111833144579327,
+      "wavelength_nm": 780.0,
+      "custom": false,
+      "source": "Schott",
+      "type": "formula1",
+      "wl_min_um": 0.3,
+      "wl_max_um": 2.5,
+      "coeffs": [
+        1.03961212,
+        0.07746417668832478,
+        0.231792344,
+        0.14148467902921502,
+        1.01046945,
+        10.176475470417055
+      ],
+      "comments": "N-BK7. n_d = 1.51680, v_d = 64.17. Schott catalog data, supplementary."
+    }
+  ]
+}

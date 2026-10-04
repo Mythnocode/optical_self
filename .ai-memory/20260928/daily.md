@@ -1,0 +1,5 @@
+## [19:10] - Feature implementation: Start the JS/Three.js migration on branch `js`
+
+- **Files**: Electron main/preload and bridge; Vue 3/Vite workbench; Pinia jobs and Teaching stores; Three.js Teaching PoC; GLB sync/AABB inventory scripts; OpenAPI and migration-baseline artifacts; `.gitignore` and npm manifests.
+- **Decision**: Keep all optical computation in Python. Create `js` from `0914` at `45bcc7a` and preserve `migration-baseline-js-20260928`. The browser/desktop API boundary is preload IPC restricted to local `/api/v1/` paths. Externalize the breadboard texture only in the frontend copy; leave the legacy GLB untouched.
+- **Verification**: `npm run typecheck` passed; `npm test` passed (3 tests); `npm run build` passed (Three.js route chunk 689 KiB, build warning); `npm audit` reported 0 vulnerabilities. Python baseline: 197 passed, 6 failed, 3 collection errors under Python 3.12.4. Electron dev smoke with `OPTICAL_PYTHON_EXECUTABLE=D:\python\python3.12\python.exe` returned healthy FastAPI health/version/jobs; browser preview confirmed offline messaging and textured Three.js scene.

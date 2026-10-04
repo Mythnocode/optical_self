@@ -1,0 +1,65 @@
+{
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "request_id": "623c78ff-5e5c-42f1-bcff-95129e4796e6:scan",
+    "status": "completed",
+    "mode": "line_1d",
+    "parameter_paths": [
+      "surfaces[0].radius_mm"
+    ],
+    "parameter_labels": [
+      "L1 / L1 前表面 / 曲率"
+    ],
+    "parameter_units": [
+      "mm"
+    ],
+    "parameter_grid": [
+      [
+        5.1099
+      ],
+      [
+        5.1099499999999995
+      ],
+      [
+        5.109999999999999
+      ],
+      [
+        5.11005
+      ],
+      [
+        5.1101
+      ]
+    ],
+    "response_metrics": [
+      "coupling_efficiency"
+    ],
+    "response_values": {
+      "coupling_efficiency": [
+        0.5710397898600461,
+        0.5710394547756515,
+        0.5710385847388989,
+        0.5710371802156369,
+        0.5710352409218524
+      ]
+    },
+    "warnings": [],
+    "errors": [],
+    "metadata": {
+      "total_points": 5,
+      "completed_points": 5,
+      "successful_points": 5,
+      "failed_points": 0,
+      "failure_examples": [],
+      "job_timings_ms": {
+        "queue_wait": 278.848,
+        "process_startup": 0.0,
+        "worker_ready_to_first_progress": 40.83,
+        "worker_compute": 9845.867
+      },
+      "result_delivery": "summary_then_lazy_bundle"
+    }
+  },
+  "error": null,
+  "request_id": "req-82a59dc8a10e4ca4b0c34867fcda7eb8"
+}

@@ -112,6 +112,7 @@ class DatasetRegistryEntry:
     def to_list_item(self) -> Dict[str, Any]:
         return {
             "dataset_id": self.dataset_id,
+            "dataset_name": str((self.metadata or {}).get("dataset_name", self.dataset_id)),
             "dataset_type": self.dataset_type,
             "target_column": self.target_column,
             "sample_count": self.sample_count,

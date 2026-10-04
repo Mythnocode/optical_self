@@ -1,0 +1,5910 @@
+{
+  "import-collapsed": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "导入"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "采样方式"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          236.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "按照镜头"
+      },
+      {
+        "background": "rgb(248, 250, 252)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          313.9895935058594,
+          284.9895935058594,
+          860.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLineEdit",
+        "text": ""
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgba(0, 0, 0, 0)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1182.010498046875,
+          286.9895935058594,
+          96,
+          38
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "选择文件"
+      },
+      {
+        "background": "rgb(230, 234, 240)",
+        "border": {
+          "color": "rgb(199, 205, 214)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1286.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": false,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(152, 162, 179)",
+        "kind": "button",
+        "text": "导入"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1356.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "内置"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          350.9895935058594,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(255, 138, 0)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          373.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "固定镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          372.9895935058594,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          375.9895935058594,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          344,
+          1122,
+          80
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "import-expanded": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "导入"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "采样方式"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          236.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "按照镜头"
+      },
+      {
+        "background": "rgb(248, 250, 252)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          313.9895935058594,
+          284.9895935058594,
+          860.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLineEdit",
+        "text": ""
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgba(0, 0, 0, 0)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1182.010498046875,
+          286.9895935058594,
+          96,
+          38
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "选择文件"
+      },
+      {
+        "background": "rgb(230, 234, 240)",
+        "border": {
+          "color": "rgb(199, 205, 214)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1286.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": false,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(152, 162, 179)",
+        "kind": "button",
+        "text": "导入"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1356.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "内置"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          350.9895935058594,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(255, 138, 0)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          700.9896240234375,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "固定镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          699.9896240234375,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          702.9896240234375,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          379.9791870117187,
+          1086.041748046875,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "随机森林 · 直接效率基准"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          401.9791870117187,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "树数量"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          401.9791870117187,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "300"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          401.9791870117187,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "最大深度（0=自动）"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1331.0208740234375,
+          401.9791870117187,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "0"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          452.9791870117187,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "叶节点最小样本"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          452.9791870117187,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "1"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          452.9791870117187,
+          72,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "最大特征"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          952,
+          453.9791870117187,
+          457.0208435058594,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "sqrt"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          517.9791870117188,
+          1086.041748046875,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "XGBoost · 物理公式残差主模型"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          539.9791870117188,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "迭代轮数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          539.9791870117188,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "300"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          539.9791870117188,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "学习率"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1331.0208740234375,
+          539.9791870117188,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "0.05"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          590.9791870117188,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "最大深度"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          590.9791870117188,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "4"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          590.9791870117188,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "样本采样率"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1331.0208740234375,
+          590.9791870117188,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "0.90"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          641.9791870117188,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "特征采样率"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          641.9791870117188,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "0.95"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          344,
+          1122,
+          406.9791870117187
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-import": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "导入"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "采样方式"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          236.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "按照元件"
+      },
+      {
+        "background": "rgb(248, 250, 252)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          313.9895935058594,
+          284.9895935058594,
+          860.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLineEdit",
+        "text": ""
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgba(0, 0, 0, 0)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1182.010498046875,
+          286.9895935058594,
+          96,
+          38
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "选择文件"
+      },
+      {
+        "background": "rgb(230, 234, 240)",
+        "border": {
+          "color": "rgb(199, 205, 214)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1286.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": false,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(152, 162, 179)",
+        "kind": "button",
+        "text": "导入"
+      },
+      {
+        "background": "rgb(230, 234, 240)",
+        "border": {
+          "color": "rgb(199, 205, 214)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1356.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": false,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(152, 162, 179)",
+        "kind": "button",
+        "text": "内置"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          350.9895935058594,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          373.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          372.9895935058594,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          375.9895935058594,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          344,
+          1122,
+          80
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-training-expanded": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "导入"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "采样方式"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          236.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "按照元件"
+      },
+      {
+        "background": "rgb(248, 250, 252)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          313.9895935058594,
+          284.9895935058594,
+          860.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLineEdit",
+        "text": ""
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgba(0, 0, 0, 0)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1182.010498046875,
+          286.9895935058594,
+          96,
+          38
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "选择文件"
+      },
+      {
+        "background": "rgb(230, 234, 240)",
+        "border": {
+          "color": "rgb(199, 205, 214)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1286.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": false,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(152, 162, 179)",
+        "kind": "button",
+        "text": "导入"
+      },
+      {
+        "background": "rgb(230, 234, 240)",
+        "border": {
+          "color": "rgb(199, 205, 214)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1356.010498046875,
+          285.9895935058594,
+          62,
+          40
+        ],
+        "enabled": false,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(152, 162, 179)",
+        "kind": "button",
+        "text": "内置"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          350.9895935058594,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          460.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          459.9895935058594,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          462.9895935058594,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          379.9791870117187,
+          1086.041748046875,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          401.9791870117187,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "最大轮数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          401.9791870117187,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "200"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          401.9791870117187,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "批大小"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1331.0208740234375,
+          401.9791870117187,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "32"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          174
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          344,
+          1122,
+          166.9791717529297
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-generation-collapsed": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "生成"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          51,
+          43
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "样本数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          376.9895935058594,
+          236.98959350585935,
+          78,
+          43
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "50"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          466.9895935058594,
+          236.98959350585935,
+          68,
+          43
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "目标变量"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          546.9896240234375,
+          236.98959350585935,
+          871.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          285.9895935058594,
+          68,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "镜头结构"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          389.9895935058594,
+          285.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          1317.010498046875,
+          331.9895935058594,
+          101,
+          33
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 700
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          370.9895935058594,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "生成数据集"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          430.96875,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          540.96875,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          539.96875,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          542.96875,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          459.9583435058594,
+          1086.041748046875,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          481.9583435058594,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "最大轮数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          481.9583435058594,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "200"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          481.9583435058594,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "批大小"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1331.0208740234375,
+          481.9583435058594,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "32"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          253.9791717529297
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          423.9791870117187,
+          1122,
+          166.9791717529297
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-generation-expanded": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "生成"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          51,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "样本数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          376.9895935058594,
+          236.98959350585935,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "50"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          466.9895935058594,
+          236.98959350585935,
+          68,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "目标变量"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          546.9896240234375,
+          237.98959350585935,
+          871.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          287.9895935058594,
+          68,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "镜头结构"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          389.9895935058594,
+          287.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          1317.010498046875,
+          333.9895935058594,
+          101,
+          34
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 700
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          373.9895935058594,
+          119,
+          21
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "当前系统镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          444.9895935058594,
+          373.9895935058594,
+          973.0208740234376,
+          21
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(102, 112, 133)",
+        "kind": "QLabel",
+        "text": "已识别 4 个实体镜片（每个系统样本保留此序列长度）"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          400.9895935058594,
+          68,
+          37
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "变量方案"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          389.9895935058594,
+          400.9895935058594,
+          903.0208740234376,
+          37
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(102, 112, 133)",
+        "kind": "QLabel",
+        "text": "已选择 12 个变量"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          1301.010498046875,
+          400.9895935058594,
+          117,
+          37
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "选择变量"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          443.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "采样方法"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          708,
+          444.9895935058594,
+          185,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "Latin Hypercube"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          903,
+          443.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "验证集比例"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1297.010498046875,
+          443.9895935058594,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "0.15"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          494.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "随机种子"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          708,
+          494.9895935058594,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "42"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          903,
+          494.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "计算精度"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1297.010498046875,
+          495.9895935058594,
+          121,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "257×257"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          545.9896240234375,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "生成数据集"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          605.96875,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          715.96875,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          714.96875,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          717.96875,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          634.9583740234375,
+          1086.041748046875,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          656.9583740234375,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "最大轮数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          782,
+          656.9583740234375,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "200"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          656.9583740234375,
+          451.0208435058594,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "批大小"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1331.0208740234375,
+          656.9583740234375,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "32"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          428.9791870117187
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          598.9791870117188,
+          1122,
+          166.9791717529297
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "sequence-variables-expanded": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1092.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1016.0208740234376,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "生成"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          51,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "样本数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          376.9895935058594,
+          236.98959350585935,
+          78,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "50"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          466.9895935058594,
+          236.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "目标变量"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          546.9896240234375,
+          236.98959350585935,
+          859.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          284.9895935058594,
+          68,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "镜头结构"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          389.9895935058594,
+          284.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          1305.010498046875,
+          330.9895935058594,
+          101,
+          31
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 700
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          367.9895935058594,
+          119,
+          21
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "当前系统镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          444.9895935058594,
+          367.9895935058594,
+          961.0208740234376,
+          21
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(102, 112, 133)",
+        "kind": "QLabel",
+        "text": "已识别 4 个实体镜片（每个系统样本保留此序列长度）"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          394.9895935058594,
+          68,
+          34
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "变量方案"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          389.9895935058594,
+          394.9895935058594,
+          891.0208740234375,
+          34
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(102, 112, 133)",
+        "kind": "QLabel",
+        "text": "已选择 12 个变量"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          1289.010498046875,
+          394.9895935058594,
+          117,
+          34
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "选择变量"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          434.9895935058594,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L1 / L1 前表面 / 曲率"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          434.9895935058594,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L1 / L1 前表面 / 圆锥系数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          468.9895935058594,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L1 / L1 前表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          468.9895935058594,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L1 / L1 后表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          502.9895935058594,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L2 / L2 前表面 / 曲率"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          502.9895935058594,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L2 / L2 前表面 / 圆锥系数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          536.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L2 / L2 前表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          536.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L2 / L2 后表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          570.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L3 / L3 前表面 / 曲率"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          570.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L3 / L3 前表面 / 圆锥系数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          604.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L3 / L3 前表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          604.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L3 / L3 后表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          638.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L4 / L4 前表面 / 曲率"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          638.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L4 / L4 前表面 / 圆锥系数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          672.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L4 / L4 前表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          672.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "L4 / L4 后表面 / 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          706.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "光纤 / 接收端 / 轴向位置"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          706.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "光纤 / 接收端 / X 偏移"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          740.9896240234375,
+          540.0104370117188,
+          30
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QCheckBox",
+        "text": "光纤 / 接收端 / Y 偏移"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          776.9896240234375,
+          378.0104370117187,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "采样方法"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          702,
+          776.9896240234375,
+          185,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "Latin Hypercube"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          897,
+          776.9896240234375,
+          378.0104370117187,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "验证集比例"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1285.010498046875,
+          776.9896240234375,
+          78,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "0.15"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          824.9896240234375,
+          378.0104370117187,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "随机种子"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          702,
+          824.9896240234375,
+          78,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "42"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          897,
+          824.9896240234375,
+          378.0104370117187,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "计算精度"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1285.010498046875,
+          824.9896240234375,
+          121,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "257×257"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          872.9896240234375,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "生成数据集"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          932.96875,
+          1092.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(22, 163, 74)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1011.0104370117188,
+          1039.96875,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "任意镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1151.010498046875,
+          1038.96875,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1278.010498046875,
+          1041.96875,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          961.9583740234376,
+          1074.041748046875,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "BiLSTM · 序列模型"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          322.97918701171875,
+          983.9583740234376,
+          445.0208435058594,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "最大轮数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          776,
+          983.9583740234376,
+          78,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "200"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          866,
+          983.9583740234376,
+          445.0208435058594,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "批大小"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1319.0208740234375,
+          983.9583740234376,
+          78,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "32"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1110,
+          755.9791870117188
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          925.9791870117188,
+          1110,
+          163.9791717529297
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "fixed-generation-expanded": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "生成"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          51,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "样本数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          376.9895935058594,
+          236.98959350585935,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "50"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          466.9895935058594,
+          236.98959350585935,
+          68,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "目标变量"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          546.9896240234375,
+          237.98959350585935,
+          871.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          287.9895935058594,
+          68,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "镜头结构"
+      },
+      {
+        "background": "rgb(255, 138, 0)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          389.9895935058594,
+          287.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "固定镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          1317.010498046875,
+          333.9895935058594,
+          101,
+          34
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 700
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          373.9895935058594,
+          92,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "研究对象"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          417.9895935058594,
+          373.9895935058594,
+          442.0104370117187,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "四透镜"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          872,
+          373.9895935058594,
+          92,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "变量方案"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          976,
+          373.9895935058594,
+          442.0104370117187,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "曲率半径 + 厚度"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          421.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "采样方法"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          708,
+          422.9895935058594,
+          185,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "Latin Hypercube"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          903,
+          421.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "验证集比例"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1297.010498046875,
+          421.9895935058594,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "0.15"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          472.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "随机种子"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          708,
+          472.9895935058594,
+          78,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "42"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          903,
+          472.9895935058594,
+          384.0104370117187,
+          45
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "计算精度"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          1297.010498046875,
+          473.9895935058594,
+          121,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "257×257"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          523.9896240234375,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "生成数据集"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          583.96875,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(255, 138, 0)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          606.96875,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "固定镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          605.96875,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          608.96875,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          406.9791870117187
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          576.9791870117188,
+          1122,
+          80
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  },
+  "fixed-generation-collapsed": {
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          168.98959350585938,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "1. 数据"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          190.98959350585935,
+          68,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "数据来源"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "7px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          389.9895935058594,
+          190.98959350585935,
+          1028.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "生成"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          236.98959350585935,
+          51,
+          43
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "样本数"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          376.9895935058594,
+          236.98959350585935,
+          78,
+          43
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "number",
+        "text": "50"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          466.9895935058594,
+          236.98959350585935,
+          68,
+          43
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "目标变量"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": {
+          "color": "rgb(102, 112, 133)",
+          "radius": "6px",
+          "width": "0.666667px"
+        },
+        "bounds": [
+          546.9896240234375,
+          236.98959350585935,
+          871.0208740234375,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QComboBox",
+        "text": "耦合损耗(dB)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          285.9895935058594,
+          68,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 400
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "QLabel",
+        "text": "镜头结构"
+      },
+      {
+        "background": "rgb(255, 138, 0)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          389.9895935058594,
+          285.9895935058594,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "固定镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(16, 24, 40)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          1317.010498046875,
+          331.9895935058594,
+          101,
+          33
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 700
+        },
+        "foreground": "rgb(16, 24, 40)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "6px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          370.9895935058594,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "生成数据集"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "0px",
+          "width": "0px"
+        },
+        "bounds": [
+          313.9895935058594,
+          430.96875,
+          1104.0208740234375,
+          18
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 14,
+          "weight": 700
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "QLabel",
+        "text": "2. 训练"
+      },
+      {
+        "background": "rgb(255, 138, 0)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1023.0104370117188,
+          453.96875,
+          132,
+          40
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "固定镜头数"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": {
+          "color": "rgb(52, 64, 84)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1163.010498046875,
+          452.96875,
+          119,
+          42
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 17,
+          "weight": 650
+        },
+        "foreground": "rgb(52, 64, 84)",
+        "kind": "button",
+        "text": "更多参数"
+      },
+      {
+        "background": "rgb(21, 94, 239)",
+        "border": {
+          "color": "rgb(255, 255, 255)",
+          "radius": "7px",
+          "width": "0px"
+        },
+        "bounds": [
+          1290.010498046875,
+          455.96875,
+          128,
+          36
+        ],
+        "enabled": true,
+        "font": {
+          "family": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+          "pixel_size": 18,
+          "weight": 700
+        },
+        "foreground": "rgb(255, 255, 255)",
+        "kind": "button",
+        "text": "开始训练"
+      }
+    ],
+    "device_pixel_ratio": 1.0000000298023224,
+    "frames": [
+      {
+        "bounds": [
+          0,
+          0,
+          1440,
+          58
+        ],
+        "name": "PrimaryBar"
+      },
+      {
+        "bounds": [
+          0,
+          58,
+          1440,
+          94
+        ],
+        "name": "SecondaryBar"
+      },
+      {
+        "bounds": [
+          293,
+          152,
+          1146,
+          747
+        ],
+        "name": "DatasetTab"
+      },
+      {
+        "bounds": [
+          305,
+          162,
+          1122,
+          253.9791717529297
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          305,
+          423.9791870117187,
+          1122,
+          80
+        ],
+        "name": "FieldGroup"
+      },
+      {
+        "bounds": [
+          0,
+          152,
+          292,
+          748
+        ],
+        "name": "ObjectRail"
+      }
+    ],
+    "rail": [
+      {
+        "bounds": [
+          10,
+          160,
+          274.01043701171875,
+          23
+        ],
+        "kind": "QLabel",
+        "text": "数据集"
+      }
+    ],
+    "rail_list": [
+      10,
+      189,
+      274.01043701171875,
+      703
+    ],
+    "scroll_top": 0,
+    "window_size": [
+      1440,
+      900
+    ]
+  }
+}
